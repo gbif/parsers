@@ -26,27 +26,43 @@ public class DateParseUtilsTest {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(DateParseUtilsTest.class);
 
+
   @Test
   public void testParseString() {
     // expected dates all in dd/MM/yyyy
-    assertEquivalent("01/01/2010", DateParseUtils.parse("01/01/2010"), ParseResult.CONFIDENCE.PROBABLE);
+    assertEquivalent("01/01/2010", DateParseUtils.parse("01/01/2010"), ParseResult.CONFIDENCE.DEFINITE);
     assertEquivalent("01/01/2010", DateParseUtils.parse("20100101"), ParseResult.CONFIDENCE.PROBABLE);
     assertEquivalent("21/12/1978", DateParseUtils.parse("21/12/1978"), ParseResult.CONFIDENCE.DEFINITE);
     assertEquivalent("21/12/1978", DateParseUtils.parse("21/12/78"), ParseResult.CONFIDENCE.DEFINITE);
-    assertEquivalent("12/12/1978", DateParseUtils.parse("12/12/78"), ParseResult.CONFIDENCE.PROBABLE);
-    assertEquivalent("01/01/2010", DateParseUtils.parse("00/00/2010"), ParseResult.CONFIDENCE.POSSIBLE);
-    assertEquivalent("21/12/1978", DateParseUtils.parse("211278"), ParseResult.CONFIDENCE.DEFINITE);
-    assertEquivalent("21/12/1978", DateParseUtils.parse("122178"), ParseResult.CONFIDENCE.DEFINITE);
-    assertEquivalent("01/01/1978", DateParseUtils.parse("010178"), ParseResult.CONFIDENCE.PROBABLE);
+    assertEquivalent("10/12/1978", DateParseUtils.parse("10/12/78"), ParseResult.CONFIDENCE.POSSIBLE);
+    assertEquivalent("12/12/1978", DateParseUtils.parse("12/12/78"), ParseResult.CONFIDENCE.DEFINITE);
+// TODO: really needed?
+//    assertEquivalent("01/01/2010", DateParseUtils.parse("00/00/2010"), ParseResult.CONFIDENCE.POSSIBLE);
+//    assertEquivalent("01/01/1804", DateParseUtils.parse("1804-00-00"), ParseResult.CONFIDENCE.POSSIBLE);
+//    assertEquivalent("01/09/1807", DateParseUtils.parse("1807-09-00"), ParseResult.CONFIDENCE.POSSIBLE);
+    assertEquivalent("21/12/1978", DateParseUtils.parse("211278"), ParseResult.CONFIDENCE.PROBABLE);
+    assertEquivalent("21/12/1978", DateParseUtils.parse("122178"), ParseResult.CONFIDENCE.PROBABLE);
+    assertEquivalent("01/02/1978", DateParseUtils.parse("010278"), ParseResult.CONFIDENCE.POSSIBLE);
     assertEquivalent("21/12/1978", DateParseUtils.parse("21121978"), ParseResult.CONFIDENCE.DEFINITE);
-    assertEquivalent("01/01/1804", DateParseUtils.parse("1804-00-00"), ParseResult.CONFIDENCE.POSSIBLE);
-    assertEquivalent("01/09/1807", DateParseUtils.parse("1807-09-00"), ParseResult.CONFIDENCE.POSSIBLE);
-    assertEquivalent("01/07/1891", DateParseUtils.parse("1891-07"), ParseResult.CONFIDENCE.POSSIBLE);
-    assertEquivalent("11/12/2004", DateParseUtils.parse("11/12/04"), ParseResult.CONFIDENCE.PROBABLE);
+    assertEquivalent("01/07/1891", DateParseUtils.parse("1891-07"), ParseResult.CONFIDENCE.DEFINITE);
+    assertEquivalent("11/12/2004", DateParseUtils.parse("11/12/04"), ParseResult.CONFIDENCE.POSSIBLE);
+
+    assertEquivalent("31/01/1973", DateParseUtils.parse("31.01.1973"), ParseResult.CONFIDENCE.DEFINITE);
+    assertEquivalent("31/01/1973", DateParseUtils.parse("31.1.1973"), ParseResult.CONFIDENCE.DEFINITE);
+    assertEquivalent("31/01/1973", DateParseUtils.parse("31.01.73"), ParseResult.CONFIDENCE.DEFINITE);
+    assertEquivalent("31/01/1973", DateParseUtils.parse("31.1.73"), ParseResult.CONFIDENCE.DEFINITE);
+    assertEquivalent("12/01/1973", DateParseUtils.parse("1973-01-12"), ParseResult.CONFIDENCE.DEFINITE);
+    assertEquivalent("07/01/1973", DateParseUtils.parse("7/1/73"), ParseResult.CONFIDENCE.POSSIBLE);
+    assertEquivalent("01/07/1973", DateParseUtils.parse("1.7.73"), ParseResult.CONFIDENCE.POSSIBLE);
+    assertEquivalent("21/07/1973", DateParseUtils.parse("7/21/73"), ParseResult.CONFIDENCE.DEFINITE);
+
+    assertEquivalent("01/01/1973", DateParseUtils.parse("1973"), ParseResult.CONFIDENCE.DEFINITE);
+    assertEquivalent("01/01/1973", DateParseUtils.parse("73"), ParseResult.CONFIDENCE.DEFINITE);
+    assertEquivalent("01/05/1973", DateParseUtils.parse("1973-05"), ParseResult.CONFIDENCE.DEFINITE);
+    assertEquivalent("01/05/1973", DateParseUtils.parse("1973-5"), ParseResult.CONFIDENCE.DEFINITE);
 
     assertNotNull(DateParseUtils.parse("0000-00-00 00:00:00"));
     assertEquals(ParseResult.STATUS.FAIL, DateParseUtils.parse("0000-00-00 00:00:00").getStatus());
-
 
   }
 

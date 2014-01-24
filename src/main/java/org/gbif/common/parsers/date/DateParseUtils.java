@@ -142,15 +142,12 @@ public class DateParseUtils {
       return ParseResult.fail();
     }
 
-    try {
-      month = normalizeMonth(month);
-      Date d =
-        STRING_TO_DATE_PARSER.fallbackParse(day + "/" + month + "/" + year, new String[] {"dd/MM/yyyy", "dd/mm/yyyy"});
+    month = normalizeMonth(month);
+    Date d = STRING_TO_DATE_PARSER.strictParse(day + "/" + month + "/" + year, new String[]{"dd/MM/yyyy", "dd/mm/yyyy"});
+    if (d != null) {
       return ParseResult.success(ParseResult.CONFIDENCE.DEFINITE, d);
-    } catch (ParseException e) {
-      LOGGER.debug("Exception caught trying to parse a date", e);
-      return ParseResult.fail();
     }
+    return ParseResult.fail();
   }
 
   /**
@@ -171,13 +168,6 @@ public class DateParseUtils {
   }
 
 
-  /**
-   * Note that YearMonthDay can be sparsely populated
-   *
-   * @param input To convert to a YearMonthDay()
-   *
-   * @return The result of the parsing
-   */
   public static YearMonthDay normalize(String year, String month, String day) {
     YearMonthDay ymd = new YearMonthDay();
     // normalize float values

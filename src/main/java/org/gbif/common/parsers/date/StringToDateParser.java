@@ -8,6 +8,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.regex.Pattern;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,111 +20,188 @@ class StringToDateParser implements Parsable<String, Date> {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(StringToDateParser.class);
 
+  // see also http://en.wikipedia.org/wiki/Date_format_by_country
   protected static String[] allPatterns =
     {"dd/MM/yy", "ddMMyy", "dd\\MM\\yy", "dd.MM.yy", "dd-MM-yy", "dd_MM_yy", "MM/dd/yy", "MMddyy", "MM\\dd\\yy",
       "MM.dd.yy", "MM-dd-yy", "MM_dd_yy", "dd/MM/yyyy", "ddMMyyyy", "dd\\MM\\yyyy", "dd.MM.yyyy", "dd-MM-yyyy",
       "dd_MM_yyyy", "MM/dd/yyyy", "MMddyyyy", "MM\\dd\\yyyy", "MM.dd.yyyy", "MM-dd-yyyy", "MM_dd_yyyy", "yyyy-MM-dd",
       "yyyy-MM-dd HH:mm:ss", "yyyy-MM-dd'T'HH:mm:ssZZ", "yyyy-MM-dd'T'HH:mm:ss'Z'", "yyyy-MM"};
 
+  private static Pattern FULL_YEAR = Pattern.compile("\\d\\d\\d\\d");
+  private static String[] ASIAN = {"yyyy年mm月dd日", "yyyy年m月d日", "yy年m月d日"};
+  private  static String[] TIME_FORMATS = {"yyyy-MM-dd HH:mm:ss", "yyyy-MM-dd'T'HH:mm:ssZZ", "yyyy-MM-dd'T'HH:mm:ss'Z'"};
+  private  static String[] FREQUENT_FULL = {"yyyy-MM-dd", "dd.MM.yyyy", "dd-MM-yyyy"};
+
+  private  static String[] CHAR6_ONLY_DIGITS = {"ddMMyy", "MMddyy", "yyMMdd"};
+  private  static String[] CHAR8_ONLY_DIGITS = {"yyyyMMdd", "ddMMyyyy"};
+
   private static final Pattern DOUBLE_ZERO_PATTERN = Pattern.compile("00");
   private static final Pattern DOUBLE_ZERO_ONE_PATTERN = Pattern.compile("0101");
 
-  @Override
-  public ParseResult<Date> parse(String input) {
-    if (input.length() == 6) { // looks likely to be a 2 digit year
-      // now try and get common 2 digit years
-      Date ddmm = strictParse(input, new String[] {"ddMMyy"});
-      Date mmdd = strictParse(input, new String[] {"MMddyy"});
-
-      if (ddmm != null && mmdd == null) {
-        return ParseResult.success(ParseResult.CONFIDENCE.DEFINITE, ddmm);
-      } else if (ddmm == null && mmdd != null) {
-        return ParseResult.success(ParseResult.CONFIDENCE.DEFINITE, mmdd);
-      } else if (ddmm != null) {
-        // dilema - could be ddMM or MMdd
-        // since we see 50% split on "MM/dd/yyyy" "dd/MM/yyyy" but
-        // it is much more common to see yyyyMMdd than yyyyddMM we
-        // assume ddmm format
-        // Hint: consider looking at several records and inferring
-        // the format by looking at outliers on 1-31 and 1-12 range
-        return ParseResult.success(ParseResult.CONFIDENCE.PROBABLE, ddmm);
-      } else {
-        // ignore and continue
-      }
-    } else {
-      // starts with the most commonly seen dates, before dropping back into
-      // a catch as many as possible algorithm
-      Date ddmm = strictParse(input, new String[] {"dd/MM/yy", "dd/MM/yyyy", "yyyyMMdd", "yyyy-MM-dd", "ddMMyyyy"});
-      Date mmdd = strictParse(input, new String[] {"MM/dd/yy", "MM/dd/yyyy", "yyyyddMM", "yyyy-dd-MM", "MMddyyyy"});
-
-      if (ddmm != null && mmdd == null) {
-        return ParseResult.success(ParseResult.CONFIDENCE.DEFINITE, ddmm);
-      } else if (ddmm == null && mmdd != null) {
-        return ParseResult.success(ParseResult.CONFIDENCE.DEFINITE, mmdd);
-      } else if (ddmm != null) {
-        // dilemma - could be ddMM or MMdd
-        // since we see 50% split on "MM/dd/yyyy" "dd/MM/yyyy" but
-        // it is much more common to see yyyyMMdd than yyyyddMM we
-        // assume ddmm format
-        // Hint: consider looking at several records and inferring
-        // the format by looking at outliers on 1-31 and 1-12 range
-        return ParseResult.success(ParseResult.CONFIDENCE.PROBABLE, ddmm);
-      } else {
-        // ignore and continue
-      }
-
+  /**
+   * Verifies if day and year cannot be confused with the month and returns appropriate confidence level.
+   */
+  private static ParseResult.CONFIDENCE checkMonthDay(Date d, boolean verifyYear) {
+    if (d == null) {
+      return ParseResult.CONFIDENCE.DEFINITE;
     }
-    // now try and catch something that looks reasonable
-    try {
-      Date d;
-      try {
-        d = fallbackParse(input, allPatterns);
-      } catch (ParseException e) {
-        // sometime we see 00 instead of 01 for days and months
-        // but if it has not separators, we might have just made
-        // 00000000 become 01010101
-        // 00/00/0000 should become 01/01/0000 though - see below
-        input = DOUBLE_ZERO_PATTERN.matcher(input).replaceAll("01");
-        input = DOUBLE_ZERO_ONE_PATTERN.matcher(input).replaceAll("00"); // so catch stupidity
-        d = fallbackParse(input, allPatterns);
+
+    Calendar cal = Calendar.getInstance();
+    cal.setTime(d);
+    int day = cal.get(Calendar.DAY_OF_MONTH);
+    int month = cal.get(Calendar.MONTH) + 1;
+
+    if (day > 12 || day == month) {
+      if (verifyYear) {
+        int year = cal.get(Calendar.YEAR);
+        int yearInCentury = year % 100;
+        if (yearInCentury > 31) {
+          return ParseResult.CONFIDENCE.DEFINITE;
+        } else if (year < 1700) {
+          return ParseResult.CONFIDENCE.POSSIBLE;
+        }
+        return ParseResult.CONFIDENCE.PROBABLE;
       }
-      Calendar calendar = Calendar.getInstance();
-      calendar.setTime(d);
-      LOGGER.debug("Day[{}] Month[{}] Year[{}]",
-        new Object[] {calendar.get(Calendar.DAY_OF_MONTH), calendar.get(Calendar.DAY_OF_MONTH),
-          calendar.get(Calendar.YEAR)});
-      if (d != null && !(calendar.get(Calendar.DAY_OF_MONTH) == 1 // remember above 0 becomes 1
-                         && calendar.get(Calendar.MONTH) == 1 && calendar.get(Calendar.YEAR) == 0)) {
-        // possible as this is not an exact sciensce by any means
-        return ParseResult.success(ParseResult.CONFIDENCE.POSSIBLE, d);
-      } else {
-        return ParseResult.fail();
-      }
-    } catch (ParseException e) {
-      return ParseResult.fail();
+      return ParseResult.CONFIDENCE.DEFINITE;
     }
+    // day and month might have been confused
+    return ParseResult.CONFIDENCE.POSSIBLE;
   }
 
   /**
-   * Tries strict and then lenient parsing of the date
-   *
-   * @param input    To parse
-   * @param patterns to use in parsing
-   *
-   * @return The date if possible
-   *
-   * @throws ParseException On error
+   * Parses a numerical date or datetime string trying various formats.
+   * Parsing is done based on the string length and delimiters found in the input primarily.
+   * There is no cleaning done that removes question marks.
+   * Only superflous whitespace is removed.
    */
-  Date fallbackParse(String input, String[] patterns) throws ParseException {
-    Date d;
-    try {
-      d = DateUtils.parseDateStrictly(input, patterns);
-    } catch (RuntimeException e) {
-      // try leniently
-      d = DateUtils.parseDate(input, patterns);
+  @Override
+  public ParseResult<Date> parse(String input) {
+
+    final int len = input.length();
+    Date d = null;
+    ParseResult.CONFIDENCE confidence = ParseResult.CONFIDENCE.DEFINITE;
+
+    if (input.contains("年")) {
+      d = strictParse(input, ASIAN);
+
+    } if (StringUtils.isNumeric(input)) {
+      if (len<=4) {
+        // year only
+        d = strictParse(input, "yy", "yyyy");
+
+      } else if (len==6) {
+        // no delimiter, year as 2 digits
+        d = strictParse(input, CHAR6_ONLY_DIGITS);
+        confidence = checkMonthDay(d, true);
+        confidence = confidence == ParseResult.CONFIDENCE.DEFINITE ? ParseResult.CONFIDENCE.PROBABLE : confidence;
+      } else if (len==8) {
+        // no delimiter, year as 2 digits
+        d = strictParse(input, CHAR8_ONLY_DIGITS);
+        confidence = checkMonthDay(d, true);
+      }
+
+    } else {
+      // find what delimiter exists how often
+      Character del = null;
+      int delimCount = 0;
+      for (char c : input.toCharArray()) {
+        if (!Character.isDigit(c)) {
+          delimCount++;
+          if (del == null) {
+            del = c;
+          } else if (!del.equals(c)) {
+            // different delimiters in use - we dont understand this at all
+            return ParseResult.fail();
+          }
+        }
+      }
+
+      if (Character.isLetter(del)) {
+        confidence = ParseResult.CONFIDENCE.POSSIBLE;
+      }
+
+      // check if full year is given
+      boolean fullYear = FULL_YEAR.matcher(input).find();
+
+      if (delimCount == 1) {
+        // year & month only
+        if (fullYear) {
+          String[] formats = new String[]{"yyyy" + del + "MM", "MM" + del + "yyyy"};
+          d = strictParse(input, formats);
+
+        } else {
+          String[] formats = new String[]{"yy" + del + "MM", "MM" + del + "yy"};
+          d = strictParse(input, formats);
+          confidence = ParseResult.CONFIDENCE.POSSIBLE;
+        }
+      } else if (delimCount == 2) {
+        if (fullYear) {
+          // first try very common formats (main US, European, Chinese, etc)
+          d = strictParse(input, FREQUENT_FULL);
+          if (d == null) {
+            String[] formats = new String[]{"yyyy" + del + "MM"+ del + "dd", "dd" + del + "MM" + del + "yyyy", "MM" + del + "dd" + del + "yyyy"};
+            d = strictParse(input, formats);
+            confidence = checkMonthDay(d, false);
+          }
+
+        } else {
+          String[] formats;
+          if (del=='-') {
+            // iso formats use dash and start with years
+            formats = new String[]{"yy" + del + "MM" + del + "dd", "dd" + del + "MM" + del + "yy", "MM" + del + "dd" + del + "yy"};
+          } else {
+            formats = new String[]{"dd" + del + "MM" + del + "yy", "MM" + del + "dd" + del + "yy", "yy" + del + "MM" + del + "dd"};
+          }
+          d = strictParse(input, formats);
+          confidence = checkMonthDay(d, true);
+        }
+
+      } else {
+        // more than 3 delimiters, with time?
+        d = strictParse(input, TIME_FORMATS);
+      }
     }
-    return d;
+
+    if (d != null) {
+      return ParseResult.success(confidence, d);
+    }
+    return ParseResult.fail();
+
+
+    // old code tried to parse strings with 00, see commented out code below.
+    //TODO: verify we dont need this anymore or enable it again
+/*
+    if (d == null) {
+      try {
+        try {
+          d = DateUtils.parseDate(input, ALL);
+        } catch (ParseException e) {
+          // sometime we see 00 instead of 01 for days and months
+          // but if it has not separators, we might have just made
+          // 00000000 become 01010101
+          // 00/00/0000 should become 01/01/0000 though - see below
+          input = DOUBLE_ZERO_PATTERN.matcher(input).replaceAll("01");
+          input = DOUBLE_ZERO_ONE_PATTERN.matcher(input).replaceAll("00"); // so catch stupidity
+          d = DateUtils.parseDate(input, ALL);
+        }
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(d);
+        LOGGER.debug("Day[{}] Month[{}] Year[{}]",
+                     new Object[] {cal.get(Calendar.DAY_OF_MONTH), cal.get(Calendar.DAY_OF_MONTH),
+                       cal.get(Calendar.YEAR)});
+        if (d != null && !(cal.get(Calendar.DAY_OF_MONTH) == 1 // remember above 0 becomes 1
+                           && cal.get(Calendar.MONTH) == 1 && cal.get(Calendar.YEAR) == 0)) {
+          // possible as this is not an exact sciensce by any means
+          return ParseResult.success(ParseResult.CONFIDENCE.POSSIBLE, d);
+        } else {
+          return ParseResult.fail();
+        }
+      } catch (ParseException e) {
+      }
+    }
+*/
   }
+
 
   /**
    * Parses strictly swallowing errors
@@ -133,7 +211,7 @@ class StringToDateParser implements Parsable<String, Date> {
    *
    * @return null on error or the date
    */
-  Date strictParse(String input, String[] patterns) {
+  Date strictParse(String input, String ... patterns) {
     try {
       return DateUtils.parseDateStrictly(input, patterns);
     } catch (ParseException e) {
