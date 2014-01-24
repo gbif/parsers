@@ -1,0 +1,122 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en">
+<head>
+<title>Source code</title>
+<link rel="stylesheet" type="text/css" href="../../../../../../stylesheet.css" title="Style">
+</head>
+<body>
+<div class="sourceContainer">
+<pre><span class="sourceLineNo">001</span>package org.gbif.common.parsers.basisofrecord;<a name="line.1"></a>
+<span class="sourceLineNo">002</span><a name="line.2"></a>
+<span class="sourceLineNo">003</span><a name="line.3"></a>
+<span class="sourceLineNo">004</span>import org.gbif.common.parsers.FileBasedDictionaryParserTest;<a name="line.4"></a>
+<span class="sourceLineNo">005</span><a name="line.5"></a>
+<span class="sourceLineNo">006</span>import org.junit.Before;<a name="line.6"></a>
+<span class="sourceLineNo">007</span>import org.junit.Test;<a name="line.7"></a>
+<span class="sourceLineNo">008</span><a name="line.8"></a>
+<span class="sourceLineNo">009</span>public class BasisOfRecordParserTest extends FileBasedDictionaryParserTest {<a name="line.9"></a>
+<span class="sourceLineNo">010</span><a name="line.10"></a>
+<span class="sourceLineNo">011</span>  private BasisOfRecordParser borp = null;<a name="line.11"></a>
+<span class="sourceLineNo">012</span><a name="line.12"></a>
+<span class="sourceLineNo">013</span>  @Before<a name="line.13"></a>
+<span class="sourceLineNo">014</span>  public void setupBasisOfRecordParser() {<a name="line.14"></a>
+<span class="sourceLineNo">015</span>    borp = BasisOfRecordParser.getInstance();<a name="line.15"></a>
+<span class="sourceLineNo">016</span>  }<a name="line.16"></a>
+<span class="sourceLineNo">017</span><a name="line.17"></a>
+<span class="sourceLineNo">018</span>  @Test<a name="line.18"></a>
+<span class="sourceLineNo">019</span>  public void testParse() {<a name="line.19"></a>
+<span class="sourceLineNo">020</span>    // run a few basic tests to check it bootstraps and appears to work<a name="line.20"></a>
+<span class="sourceLineNo">021</span>    assertParseSuccess(borp, "Living", "living organism");<a name="line.21"></a>
+<span class="sourceLineNo">022</span>    assertParseSuccess(borp, "Specimen", "SpeCImen");<a name="line.22"></a>
+<span class="sourceLineNo">023</span>    assertParseSuccess(borp, "Observation", "sound recording");<a name="line.23"></a>
+<span class="sourceLineNo">024</span>    assertParseSuccess(borp, "Observation", "Observation");<a name="line.24"></a>
+<span class="sourceLineNo">025</span>    assertParseSuccess(borp, "Observation", "O");<a name="line.25"></a>
+<span class="sourceLineNo">026</span>  }<a name="line.26"></a>
+<span class="sourceLineNo">027</span><a name="line.27"></a>
+<span class="sourceLineNo">028</span>  /**<a name="line.28"></a>
+<span class="sourceLineNo">029</span>   * This tests if all the names defined in the lookup_basis_of_record table are successfully parsed.<a name="line.29"></a>
+<span class="sourceLineNo">030</span>   */<a name="line.30"></a>
+<span class="sourceLineNo">031</span>  @Test<a name="line.31"></a>
+<span class="sourceLineNo">032</span>  public void testDefaultNames() {<a name="line.32"></a>
+<span class="sourceLineNo">033</span>    assertParseSuccess(borp, "Unknown", "unknown");<a name="line.33"></a>
+<span class="sourceLineNo">034</span>    assertParseSuccess(borp, "Observation", "observation");<a name="line.34"></a>
+<span class="sourceLineNo">035</span>    assertParseSuccess(borp, "Specimen", "specimen");<a name="line.35"></a>
+<span class="sourceLineNo">036</span>    assertParseSuccess(borp, "Living", "living");<a name="line.36"></a>
+<span class="sourceLineNo">037</span>    assertParseSuccess(borp, "Germplasm", "germplasm");<a name="line.37"></a>
+<span class="sourceLineNo">038</span>    assertParseSuccess(borp, "Fossil", "fossil");<a name="line.38"></a>
+<span class="sourceLineNo">039</span>    assertParseSuccess(borp, "Literature", "literature");<a name="line.39"></a>
+<span class="sourceLineNo">040</span>    assertParseSuccess(borp, "Regional Checklist", "regional_checklist");<a name="line.40"></a>
+<span class="sourceLineNo">041</span>    assertParseSuccess(borp, "Legislative List", "legislative_list");<a name="line.41"></a>
+<span class="sourceLineNo">042</span>  }<a name="line.42"></a>
+<span class="sourceLineNo">043</span><a name="line.43"></a>
+<span class="sourceLineNo">044</span>  @Test<a name="line.44"></a>
+<span class="sourceLineNo">045</span>  public void testFailures() {<a name="line.45"></a>
+<span class="sourceLineNo">046</span>    assertParseFailure(borp, null);<a name="line.46"></a>
+<span class="sourceLineNo">047</span>    assertParseFailure(borp, "");<a name="line.47"></a>
+<span class="sourceLineNo">048</span>    assertParseFailure(borp, "Tim");<a name="line.48"></a>
+<span class="sourceLineNo">049</span>  }<a name="line.49"></a>
+<span class="sourceLineNo">050</span>}<a name="line.50"></a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</pre>
+</div>
+</body>
+</html>

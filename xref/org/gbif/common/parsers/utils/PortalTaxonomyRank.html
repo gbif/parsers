@@ -1,0 +1,96 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+<title>PortalTaxonomyRank xref</title>
+<link type="text/css" rel="stylesheet" href="../../../../../stylesheet.css" />
+</head>
+<body>
+<div id="overview"><a href="../../../../../../apidocs/org/gbif/common/parsers/utils/PortalTaxonomyRank.html">View Javadoc</a></div><pre>
+
+<a class="jxr_linenumber" name="1" href="#1">1</a>   <strong class="jxr_keyword">package</strong> org.gbif.common.parsers.utils;
+<a class="jxr_linenumber" name="2" href="#2">2</a>   
+<a class="jxr_linenumber" name="3" href="#3">3</a>   <strong class="jxr_keyword">public</strong> enum <a href="../../../../../org/gbif/common/parsers/utils/PortalTaxonomyRank.html">PortalTaxonomyRank</a> {
+<a class="jxr_linenumber" name="4" href="#4">4</a>   
+<a class="jxr_linenumber" name="5" href="#5">5</a>     SUPERKINGDOM(800, <span class="jxr_string">"superkingdom"</span>),
+<a class="jxr_linenumber" name="6" href="#6">6</a>     KINGDOM(1000, <span class="jxr_string">"kingdom"</span>),
+<a class="jxr_linenumber" name="7" href="#7">7</a>     SUBKINGDOM(1200, <span class="jxr_string">"subkingdom"</span>),
+<a class="jxr_linenumber" name="8" href="#8">8</a>   
+<a class="jxr_linenumber" name="9" href="#9">9</a>     SUPERPHYLUM(1800, <span class="jxr_string">"superphylum"</span>),
+<a class="jxr_linenumber" name="10" href="#10">10</a>    PHYLUM(2000, <span class="jxr_string">"phylum"</span>),
+<a class="jxr_linenumber" name="11" href="#11">11</a>    SUBPHYLUM(2200, <span class="jxr_string">"subphylum"</span>),
+<a class="jxr_linenumber" name="12" href="#12">12</a>  
+<a class="jxr_linenumber" name="13" href="#13">13</a>    SUPERCLASS(2800, <span class="jxr_string">"superclass"</span>),
+<a class="jxr_linenumber" name="14" href="#14">14</a>    CLASS(3000, <span class="jxr_string">"class"</span>),
+<a class="jxr_linenumber" name="15" href="#15">15</a>    SUBCLASS(3200, <span class="jxr_string">"subclass"</span>),
+<a class="jxr_linenumber" name="16" href="#16">16</a>    INFRACLASS(3350, <span class="jxr_string">"infraclass"</span>),
+<a class="jxr_linenumber" name="17" href="#17">17</a>  
+<a class="jxr_linenumber" name="18" href="#18">18</a>    SUPERORDER(3800, <span class="jxr_string">"superorder"</span>),
+<a class="jxr_linenumber" name="19" href="#19">19</a>    ORDER(4000, <span class="jxr_string">"order"</span>),
+<a class="jxr_linenumber" name="20" href="#20">20</a>    SUBORDER(4200, <span class="jxr_string">"suborder"</span>),
+<a class="jxr_linenumber" name="21" href="#21">21</a>    INFRAORDER(4350, <span class="jxr_string">"infraorder"</span>),
+<a class="jxr_linenumber" name="22" href="#22">22</a>    PARVORDER(4400, <span class="jxr_string">"parvorder"</span>),
+<a class="jxr_linenumber" name="23" href="#23">23</a>  
+<a class="jxr_linenumber" name="24" href="#24">24</a>    SUPERFAMILY(4500, <span class="jxr_string">"superfamily"</span>),
+<a class="jxr_linenumber" name="25" href="#25">25</a>    FAMILY(5000, <span class="jxr_string">"family"</span>),
+<a class="jxr_linenumber" name="26" href="#26">26</a>    SUBFAMILY(5500, <span class="jxr_string">"subfamily"</span>),
+<a class="jxr_linenumber" name="27" href="#27">27</a>  
+<a class="jxr_linenumber" name="28" href="#28">28</a>    TRIBE(5600, <span class="jxr_string">"tribe"</span>),
+<a class="jxr_linenumber" name="29" href="#29">29</a>    SUBTRIBE(5700, <span class="jxr_string">"subtribe"</span>),
+<a class="jxr_linenumber" name="30" href="#30">30</a>  
+<a class="jxr_linenumber" name="31" href="#31">31</a>    GENUS(6000, <span class="jxr_string">"genus"</span>),
+<a class="jxr_linenumber" name="32" href="#32">32</a>    NOTHOGENUS(6001, <span class="jxr_string">"nothogenus"</span>),
+<a class="jxr_linenumber" name="33" href="#33">33</a>    SUBGENUS(6500, <span class="jxr_string">"subgenus"</span>),
+<a class="jxr_linenumber" name="34" href="#34">34</a>  
+<a class="jxr_linenumber" name="35" href="#35">35</a>    SECTION(6600, <span class="jxr_string">"section"</span>),
+<a class="jxr_linenumber" name="36" href="#36">36</a>    SUBSECTION(6700, <span class="jxr_string">"subsection"</span>),
+<a class="jxr_linenumber" name="37" href="#37">37</a>  
+<a class="jxr_linenumber" name="38" href="#38">38</a>    SERIES(6800, <span class="jxr_string">"series"</span>),
+<a class="jxr_linenumber" name="39" href="#39">39</a>    SUBSERIES(6900, <span class="jxr_string">"subseries"</span>),
+<a class="jxr_linenumber" name="40" href="#40">40</a>  
+<a class="jxr_linenumber" name="41" href="#41">41</a>    SPECIES_GROUP(6950, <span class="jxr_string">"species group"</span>),
+<a class="jxr_linenumber" name="42" href="#42">42</a>    SPECIES_SUBGROUP(6975, <span class="jxr_string">"species subgroup"</span>),
+<a class="jxr_linenumber" name="43" href="#43">43</a>    SPECIES(7000, <span class="jxr_string">"species"</span>),
+<a class="jxr_linenumber" name="44" href="#44">44</a>    NOTHOSPECIES(7001, <span class="jxr_string">"nothospecies"</span>),
+<a class="jxr_linenumber" name="45" href="#45">45</a>    SUBSPECIES(8000, <span class="jxr_string">"subspecies"</span>),
+<a class="jxr_linenumber" name="46" href="#46">46</a>    NOTHOSUBSPECIES(8001, <span class="jxr_string">"nothosubspecies"</span>),
+<a class="jxr_linenumber" name="47" href="#47">47</a>    VARIETY(8010, <span class="jxr_string">"variety"</span>),
+<a class="jxr_linenumber" name="48" href="#48">48</a>    NOTHOVARIETY(8011, <span class="jxr_string">"nothovariety"</span>),
+<a class="jxr_linenumber" name="49" href="#49">49</a>    FORM(8020, <span class="jxr_string">"form"</span>),
+<a class="jxr_linenumber" name="50" href="#50">50</a>    NOTHOFORM(8021, <span class="jxr_string">"nothoform"</span>),
+<a class="jxr_linenumber" name="51" href="#51">51</a>    BIOVAR(8030, <span class="jxr_string">"biovar"</span>),
+<a class="jxr_linenumber" name="52" href="#52">52</a>    SEROVAR(8040, <span class="jxr_string">"serovar"</span>),
+<a class="jxr_linenumber" name="53" href="#53">53</a>    CULTIVAR(8050, <span class="jxr_string">"cultivar"</span>),
+<a class="jxr_linenumber" name="54" href="#54">54</a>    PATHOVAR(8080, <span class="jxr_string">"pathovar"</span>),
+<a class="jxr_linenumber" name="55" href="#55">55</a>  
+<a class="jxr_linenumber" name="56" href="#56">56</a>  
+<a class="jxr_linenumber" name="57" href="#57">57</a>    INFRASPECIFIC(8090, <span class="jxr_string">"infraspecific"</span>),
+<a class="jxr_linenumber" name="58" href="#58">58</a>    ABERRATION(8100, <span class="jxr_string">"abberation"</span>),
+<a class="jxr_linenumber" name="59" href="#59">59</a>    MUTATION(8110, <span class="jxr_string">"mutation"</span>),
+<a class="jxr_linenumber" name="60" href="#60">60</a>    RACE(8120, <span class="jxr_string">"race"</span>),
+<a class="jxr_linenumber" name="61" href="#61">61</a>    CONFERSUBSPECIES(8130, <span class="jxr_string">"confersubspecies"</span>),
+<a class="jxr_linenumber" name="62" href="#62">62</a>    FORMASPECIALIS(8140, <span class="jxr_string">"formaspecialis"</span>),
+<a class="jxr_linenumber" name="63" href="#63">63</a>    HYBRID(8150, <span class="jxr_string">"hybrid"</span>),
+<a class="jxr_linenumber" name="64" href="#64">64</a>  
+<a class="jxr_linenumber" name="65" href="#65">65</a>    UNKNOWN(0, <span class="jxr_string">"unranked"</span>);
+<a class="jxr_linenumber" name="66" href="#66">66</a>  
+<a class="jxr_linenumber" name="67" href="#67">67</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> id;
+<a class="jxr_linenumber" name="68" href="#68">68</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> String name;
+<a class="jxr_linenumber" name="69" href="#69">69</a>  
+<a class="jxr_linenumber" name="70" href="#70">70</a>    <a href="../../../../../org/gbif/common/parsers/utils/PortalTaxonomyRank.html">PortalTaxonomyRank</a>(<strong class="jxr_keyword">int</strong> id, String name) {
+<a class="jxr_linenumber" name="71" href="#71">71</a>      <strong class="jxr_keyword">this</strong>.id = id;
+<a class="jxr_linenumber" name="72" href="#72">72</a>      <strong class="jxr_keyword">this</strong>.name = name;
+<a class="jxr_linenumber" name="73" href="#73">73</a>    }
+<a class="jxr_linenumber" name="74" href="#74">74</a>  
+<a class="jxr_linenumber" name="75" href="#75">75</a>    <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">int</strong> getId() {
+<a class="jxr_linenumber" name="76" href="#76">76</a>      <strong class="jxr_keyword">return</strong> id;
+<a class="jxr_linenumber" name="77" href="#77">77</a>    }
+<a class="jxr_linenumber" name="78" href="#78">78</a>  
+<a class="jxr_linenumber" name="79" href="#79">79</a>    <strong class="jxr_keyword">public</strong> String getName() {
+<a class="jxr_linenumber" name="80" href="#80">80</a>      <strong class="jxr_keyword">return</strong> name;
+<a class="jxr_linenumber" name="81" href="#81">81</a>    }
+<a class="jxr_linenumber" name="82" href="#82">82</a>  }
+</pre>
+<hr/><div id="footer">This page was automatically generated by <a href="http://maven.apache.org/">Maven</a></div></body>
+</html>
+
