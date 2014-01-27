@@ -212,7 +212,7 @@
 <a class="jxr_linenumber" name="202" href="#202">202</a>   @Test
 <a class="jxr_linenumber" name="203" href="#203">203</a>   <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testIssue42() {
 <a class="jxr_linenumber" name="204" href="#204">204</a>     assertEquals(<strong class="jxr_keyword">new</strong> YearMonthDay(<strong class="jxr_keyword">null</strong>, <strong class="jxr_keyword">null</strong>, <strong class="jxr_keyword">null</strong>), DateParseUtils.normalize(<span class="jxr_string">"2007"</span>, <span class="jxr_string">"02"</span>, <span class="jxr_string">"29"</span>));
-<a class="jxr_linenumber" name="205" href="#205">205</a>     <em class="jxr_comment">//assertEquals(STATUS.FAIL, DateParseUtils.parse("2007", "02", "29").getStatus());</em>
+<a class="jxr_linenumber" name="205" href="#205">205</a>     <em class="jxr_comment">//assertEquals(STATUS.FAIL, DateParseUtils.parse("2007", "02", "29").getIssues());</em>
 <a class="jxr_linenumber" name="206" href="#206">206</a>   }
 <a class="jxr_linenumber" name="207" href="#207">207</a> 
 <a class="jxr_linenumber" name="208" href="#208">208</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> assertEquivalent(String expected, ParseResult&lt;Date&gt; found, ParseResult.CONFIDENCE c) {
