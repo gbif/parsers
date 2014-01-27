@@ -115,7 +115,9 @@ public class MappingUtils {
    * Case insensitive CoL kingdom lookup.
    *
    * @return the clean CoL kingdom or null if unknown
+   * @deprecated use checklistbanks HigherTaxaLookup instead which is included in the nub lookup service
    */
+  @Deprecated
   public static String mapKingdom(String k) {
     if (k == null) {
       return null;
@@ -127,7 +129,9 @@ public class MappingUtils {
    * Case insensitive pyhlum lookup.
    *
    * @return the clean phylum or null if unknown
+   * @deprecated use checklistbanks HigherTaxaLookup instead which is included in the nub lookup service
    */
+  @Deprecated
   public static String mapPhylum(String p) {
     if (p == null) {
       return null;
