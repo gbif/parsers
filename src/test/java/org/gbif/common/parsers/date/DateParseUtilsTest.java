@@ -202,7 +202,7 @@ public class DateParseUtilsTest {
   @Test
   public void testIssue42() {
     assertEquals(new YearMonthDay(null, null, null), DateParseUtils.normalize("2007", "02", "29"));
-    //assertEquals(STATUS.FAIL, DateParseUtils.parse("2007", "02", "29").getStatus());
+    //assertEquals(STATUS.FAIL, DateParseUtils.parse("2007", "02", "29").getIssues());
   }
 
   private void assertEquivalent(String expected, ParseResult<Date> found, ParseResult.CONFIDENCE c) {
