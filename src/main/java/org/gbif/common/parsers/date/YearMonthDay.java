@@ -2,6 +2,7 @@ package org.gbif.common.parsers.date;
 
 import javax.annotation.Nullable;
 
+import com.google.common.base.Strings;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -26,8 +27,22 @@ public class YearMonthDay {
     return year;
   }
 
+  /**
+   * @return day value or null, catching exceptions
+   */
   public Integer getIntegerYear() {
-    return year == null ? null : Integer.valueOf(year);
+    return parseInt(year);
+  }
+
+  private static Integer parseInt(String x) {
+    if (!Strings.isNullOrEmpty(x)) {
+      try {
+        return Integer.valueOf(x);
+      } catch (NumberFormatException e) {
+        // swallow
+      }
+    }
+    return null;
   }
 
   public void setYear(@Nullable String year) {
@@ -43,8 +58,11 @@ public class YearMonthDay {
     return month;
   }
 
+  /**
+   * @return day value or null, catching exceptions
+   */
   public Integer getIntegerMonth() {
-    return month == null ? null : Integer.valueOf(month);
+    return parseInt(month);
   }
 
   public void setMonth(@Nullable String month) {
@@ -58,6 +76,13 @@ public class YearMonthDay {
 
   public String getDay() {
     return day;
+  }
+
+  /**
+   * @return day value or null, catching exceptions
+   */
+  public Integer getIntegerDay() {
+    return parseInt(day);
   }
 
   public void setDay(@Nullable String day) {
