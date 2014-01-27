@@ -8,29 +8,29 @@ import com.google.common.base.Objects;
 import com.google.common.collect.Sets;
 
 /**
- * Simple container class.
+ * Simple container class for integer based values with an accurracy (e.g. depth in meters).
  */
-public class LongPrecisionIssue {
+public class IntPrecisionIssue {
 
-  private final Long value;
-  private final Long precision;
+  private final Integer value;
+  private final Integer precision;
   private final Set<OccurrenceValidationRule> issues;
 
-  public LongPrecisionIssue(Long value, Long precision, Set<OccurrenceValidationRule> issues) {
+  public IntPrecisionIssue(Integer value, Integer precision, Set<OccurrenceValidationRule> issues) {
     this.value = value;
     this.precision = precision;
     this.issues = issues;
   }
 
-  public LongPrecisionIssue(Long value, Long precision, OccurrenceValidationRule ... issue) {
+  public IntPrecisionIssue(Integer value, Integer precision, OccurrenceValidationRule... issue) {
     this(value, precision, Sets.newHashSet(issue));
   }
 
-  public Long getValue() {
+  public Integer getValue() {
     return value;
   }
 
-  public Long getPrecision() {
+  public Integer getPrecision() {
     return precision;
   }
 
@@ -57,11 +57,11 @@ public class LongPrecisionIssue {
     if (this == object) {
       return true;
     }
-    if (!(object instanceof LongPrecisionIssue)) {
+    if (!(object instanceof IntPrecisionIssue)) {
       return false;
     }
 
-    LongPrecisionIssue that = (LongPrecisionIssue) object;
+    IntPrecisionIssue that = (IntPrecisionIssue) object;
     return Objects.equal(this.value, that.value)
            && Objects.equal(this.issues, that.issues)
            && Objects.equal(this.precision, that.precision);

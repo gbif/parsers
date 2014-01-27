@@ -51,12 +51,12 @@ public class GeospatialParseUtils {
   /**
    * The min value that will be synced with OR
    */
-  private static final int MIN_RECORD_DEPTH_IN_CENTIMETRES = 0;
+  private static final int MIN_RECORD_DEPTH_IN_METERS = 0;
 
   /**
    * The max value that will be synced with OR - tied to the data type for occurrence_record.depth_centimetres
    */
-  private static final int MAX_RECORD_DEPTH_IN_CENTIMETRES = 16777215;
+  private static final int MAX_RECORD_DEPTH_IN_METRES = 167772;
 
   /**
    * The highest depth value recognised as valid
@@ -151,8 +151,8 @@ public class GeospatialParseUtils {
   }
 
   /**
-   * Attempts to parse the depth information provided, and return the depth in centimetres. This unit (centimetres) is
-   * defined by the previous implementation of the portal and this implementation is a port of the existing code
+   * Attempts to parse the depth information provided, and return the depth in metres. This unit (metres) is
+   * defined by the Darwin Core standard for depth and used in our Occurrence class.
    *
    * @param minimum           verbatim minimum depth
    * @param maximum           verbatim maximum depth
@@ -160,11 +160,11 @@ public class GeospatialParseUtils {
    *
    * @return The parse result
    */
-  public static ParseResult<LongPrecisionIssue> parseDepth(final String minimum, final String maximum,
+  public static ParseResult<IntPrecisionIssue> parseDepth(final String minimum, final String maximum,
     final String precisionAsString) {
-    return new Parsable<Void, LongPrecisionIssue>() {
+    return new Parsable<Void, IntPrecisionIssue>() {
       @Override
-      public ParseResult<LongPrecisionIssue> parse(Void v) {
+      public ParseResult<IntPrecisionIssue> parse(Void v) {
 
         Set<OccurrenceValidationRule> issues = Sets.newHashSet();
 
@@ -211,23 +211,32 @@ public class GeospatialParseUtils {
           issues.add(OccurrenceValidationRule.DEPTH_OUT_OF_RANGE);
         }
 
-        long depthInCentimetres = Math.round(depth * 100);
-        if (depthInCentimetres <= MAX_RECORD_DEPTH_IN_CENTIMETRES
-            && depthInCentimetres >= MIN_RECORD_DEPTH_IN_CENTIMETRES) {
+        long depthInMetres = Math.round(depth);
+        if (depthInMetres <= MAX_RECORD_DEPTH_IN_METRES
+            && depthInMetres >= MIN_RECORD_DEPTH_IN_METERS) {
           if (precision != null) {
-            return ParseResult.success(ParseResult.CONFIDENCE.DEFINITE,
-              new LongPrecisionIssue(Math.round(depth * 100), Math.round(precision * 100), issues));
+            return ParseResult
+              .success(ParseResult.CONFIDENCE.DEFINITE,
+                       new IntPrecisionIssue(roundedInt(depth), roundedInt(precision), issues));
           } else {
             return ParseResult
-              .success(ParseResult.CONFIDENCE.DEFINITE, new LongPrecisionIssue(Math.round(depth * 100), null, issues));
+              .success(ParseResult.CONFIDENCE.DEFINITE,
+              new IntPrecisionIssue(roundedInt(depth), null, issues));
           }
         }
 
         // we get no value during parsing
-        return ParseResult.success(ParseResult.CONFIDENCE.DEFINITE, new LongPrecisionIssue(null, null, issues));
+        return ParseResult.success(ParseResult.CONFIDENCE.DEFINITE, new IntPrecisionIssue(null, null, issues));
       }
 
     }.parse(null);
+  }
+
+  private static Integer roundedInt(Double x) {
+    if (x == null) return null;
+
+    Long xl = Math.round(x);
+    return xl.intValue();
   }
 
   /**
@@ -240,11 +249,11 @@ public class GeospatialParseUtils {
    *
    * @return The parse result
    */
-  public static ParseResult<LongPrecisionIssue> parseAltitude(final String minimum, final String maximum,
+  public static ParseResult<IntPrecisionIssue> parseAltitude(final String minimum, final String maximum,
     final String precisionAsString) {
-    return new Parsable<Void, LongPrecisionIssue>() {
+    return new Parsable<Void, IntPrecisionIssue>() {
       @Override
-      public ParseResult<LongPrecisionIssue> parse(Void v) {
+      public ParseResult<IntPrecisionIssue> parse(Void v) {
 
         Set<OccurrenceValidationRule> issues = Sets.newHashSet();
 
@@ -281,26 +290,26 @@ public class GeospatialParseUtils {
                      + "precisionParsed[{}]", new Object[] {minimum, min, maximum, max, precisionAsString, precision});
 
         // determine the altitude
-        Long altitude = null;
+        Integer altitude = null;
         if (max != null && min != null) {
           // avoid divide by 0
           if (max + min == 0) {
-            altitude = 0L;
+            altitude = 0;
 
           } else if (max == 0 && min > 0) {
             // if max is supplied as 0 and min is above
-            altitude = Math.round(min);
+            altitude = roundedInt(min);
           } else {
             // average of the 2
-            altitude = Math.round((max + min) / 2);
+            altitude = roundedInt((max + min) / 2);
           }
         } else if (min != null) {
           // if only min altitude supplied, use this
-          altitude = Math.round(min);
+          altitude = roundedInt(min);
 
         } else if (max != null) {
           // if only max altitude supplied, use this
-          altitude = Math.round(max);
+          altitude = roundedInt(max);
         }
 
         // record the number of records with altitude 0
@@ -323,16 +332,16 @@ public class GeospatialParseUtils {
           issues.add(OccurrenceValidationRule.ALTITUDE_MIN_MAX_SWAPPED);
         }
 
-        Long precisionAsLong = null;
+        Integer precisionAsInt = null;
         if (precision != null) {
-          precisionAsLong = Math.round(precision);
+          precisionAsInt = roundedInt(precision);
         }
         if (altitude != null && altitude <= MAX_TO_RECORD_ALTITUDE_IN_METRES && altitude >= MIN_TO_RECORD_ALTITUDE_IN_METRES) {
           return ParseResult
-            .success(ParseResult.CONFIDENCE.DEFINITE, new LongPrecisionIssue(altitude, precisionAsLong, issues));
+            .success(ParseResult.CONFIDENCE.DEFINITE, new IntPrecisionIssue(altitude, precisionAsInt, issues));
         } else if (altitude != null) {
           return ParseResult
-            .success(ParseResult.CONFIDENCE.DEFINITE, new LongPrecisionIssue(null, precisionAsLong, issues));
+            .success(ParseResult.CONFIDENCE.DEFINITE, new IntPrecisionIssue(null, precisionAsInt, issues));
         } else {
           return ParseResult.fail();
         }

@@ -43,26 +43,26 @@ public class GeospatialParseUtilsTest {
 
   @Test
   public void testParseDepth() {
-    assertExpected(GeospatialParseUtils.parseDepth("10", "20", null), new LongPrecisionIssue(1500l, null),
+    assertExpected(GeospatialParseUtils.parseDepth("10", "20", null), new IntPrecisionIssue(15, null),
       ParseResult.CONFIDENCE.DEFINITE);
-    assertExpected(GeospatialParseUtils.parseDepth("10", "20", "1"), new LongPrecisionIssue(1500l, 100l),
+    assertExpected(GeospatialParseUtils.parseDepth("10", "20", "1"), new IntPrecisionIssue(15, 1),
       ParseResult.CONFIDENCE.DEFINITE);
-    assertExpected(GeospatialParseUtils.parseDepth("10", "10", "1"), new LongPrecisionIssue(1000l, 100l),
+    assertExpected(GeospatialParseUtils.parseDepth("10", "10", "1"), new IntPrecisionIssue(10, 1),
       ParseResult.CONFIDENCE.DEFINITE);
-    assertExpected(GeospatialParseUtils.parseDepth("10", null, "1"), new LongPrecisionIssue(1000l, 100l),
+    assertExpected(GeospatialParseUtils.parseDepth("10", null, "1"), new IntPrecisionIssue(10, 1),
       ParseResult.CONFIDENCE.DEFINITE);
 
     // check units are removed
     assertExpected(GeospatialParseUtils.parseDepth("10m", null, "1"),
-      new LongPrecisionIssue(1000l, 100l, OccurrenceValidationRule.DEPTH_NON_NUMERIC),
+      new IntPrecisionIssue(10, 1, OccurrenceValidationRule.DEPTH_NON_NUMERIC),
       ParseResult.CONFIDENCE.DEFINITE);
     assertExpected(GeospatialParseUtils.parseDepth("3.27ft", null, "1"),
-      new LongPrecisionIssue(100l, 100l,OccurrenceValidationRule.DEPTH_PRESUMED_IN_FEET, OccurrenceValidationRule.DEPTH_NON_NUMERIC),
+      new IntPrecisionIssue(1, 1,OccurrenceValidationRule.DEPTH_PRESUMED_IN_FEET, OccurrenceValidationRule.DEPTH_NON_NUMERIC),
       ParseResult.CONFIDENCE.DEFINITE);
 
     // check out of range
     assertExpected(GeospatialParseUtils.parseDepth("100000000", null, "1"),
-      new LongPrecisionIssue(null, null, OccurrenceValidationRule.DEPTH_OUT_OF_RANGE),
+      new IntPrecisionIssue(null, null, OccurrenceValidationRule.DEPTH_OUT_OF_RANGE),
       ParseResult.CONFIDENCE.DEFINITE);
 
     // nonsense
@@ -71,31 +71,31 @@ public class GeospatialParseUtilsTest {
 
   @Test
   public void testParseAltitude() {
-    assertExpected(GeospatialParseUtils.parseAltitude("10", "20", null), new LongPrecisionIssue(15L, null),
+    assertExpected(GeospatialParseUtils.parseAltitude("10", "20", null), new IntPrecisionIssue(15, null),
       ParseResult.CONFIDENCE.DEFINITE);
-    assertExpected(GeospatialParseUtils.parseAltitude("10", "20", "1"), new LongPrecisionIssue(15L, 1L),
+    assertExpected(GeospatialParseUtils.parseAltitude("10", "20", "1"), new IntPrecisionIssue(15, 1),
       ParseResult.CONFIDENCE.DEFINITE);
-    assertExpected(GeospatialParseUtils.parseAltitude("10", "10", "1"), new LongPrecisionIssue(10L, 1L),
+    assertExpected(GeospatialParseUtils.parseAltitude("10", "10", "1"), new IntPrecisionIssue(10, 1),
       ParseResult.CONFIDENCE.DEFINITE);
-    assertExpected(GeospatialParseUtils.parseAltitude("10", null, "1"), new LongPrecisionIssue(10L, 1L),
+    assertExpected(GeospatialParseUtils.parseAltitude("10", null, "1"), new IntPrecisionIssue(10, 1),
       ParseResult.CONFIDENCE.DEFINITE);
-    assertExpected(GeospatialParseUtils.parseAltitude(null, "10000", "1"), new LongPrecisionIssue(10000L, 1L),
+    assertExpected(GeospatialParseUtils.parseAltitude(null, "10000", "1"), new IntPrecisionIssue(10000, 1),
       ParseResult.CONFIDENCE.DEFINITE);
     assertExpected(GeospatialParseUtils.parseAltitude("4061987", "4061987", null),
-      new LongPrecisionIssue(null, null, OccurrenceValidationRule.ALTITUDE_OUT_OF_RANGE),
+      new IntPrecisionIssue(null, null, OccurrenceValidationRule.ALTITUDE_OUT_OF_RANGE),
       ParseResult.CONFIDENCE.DEFINITE);
 
     // check units are removed
     assertExpected(GeospatialParseUtils.parseAltitude("1000m", null, "1"),
-      new LongPrecisionIssue(1000L, 1L, OccurrenceValidationRule.ALTITUDE_NON_NUMERIC),
+      new IntPrecisionIssue(1000, 1, OccurrenceValidationRule.ALTITUDE_NON_NUMERIC),
       ParseResult.CONFIDENCE.DEFINITE);
     assertExpected(GeospatialParseUtils.parseAltitude("3280ft", null, "1"),
-      new LongPrecisionIssue(1000L, 1L, OccurrenceValidationRule.ALTITUDE_PRESUMED_IN_FEET, OccurrenceValidationRule.ALTITUDE_NON_NUMERIC),
+      new IntPrecisionIssue(1000, 1, OccurrenceValidationRule.ALTITUDE_PRESUMED_IN_FEET, OccurrenceValidationRule.ALTITUDE_NON_NUMERIC),
       ParseResult.CONFIDENCE.DEFINITE);
 
     // check out of range
     assertExpected(GeospatialParseUtils.parseAltitude("100000000000", null, "1"),
-      new LongPrecisionIssue(null, 1L, OccurrenceValidationRule.ALTITUDE_OUT_OF_RANGE),
+      new IntPrecisionIssue(null, 1, OccurrenceValidationRule.ALTITUDE_OUT_OF_RANGE),
       ParseResult.CONFIDENCE.DEFINITE);
 
     // nonsense
