@@ -1,6 +1,6 @@
 package org.gbif.common.parsers.geospatial;
 
-import org.gbif.api.vocabulary.OccurrenceValidationRule;
+import org.gbif.api.vocabulary.OccurrenceIssue;
 import org.gbif.common.parsers.Parsable;
 import org.gbif.common.parsers.ParseResult;
 
@@ -95,7 +95,7 @@ public class GeospatialParseUtils {
 
   /**
    * This parses string representations of latitude and longitude values. It tries its best to interpret the values and
-   * indicates any problems in its result as {@link org.gbif.api.vocabulary.OccurrenceValidationRule}.
+   * indicates any problems in its result as {@link org.gbif.api.vocabulary.OccurrenceIssue}.
    * When the {@link ParseResult.STATUS} is either SUCCESS or FAIL the payload will always be non-null and the
    * {@link LatLngIssue#getIssue()} method should return any issues there were. In case the issue is ERROR the payload
    * will usually be {@code null}.
@@ -121,7 +121,7 @@ public class GeospatialParseUtils {
         // 0,0 is too suspicious
         if (Double.compare(lat, 0) == 0 && Double.compare(lng, 0) == 0) {
           return ParseResult
-            .success(ParseResult.CONFIDENCE.POSSIBLE, new LatLngIssue(0, 0, OccurrenceValidationRule.ZERO_COORDINATE));
+            .success(ParseResult.CONFIDENCE.POSSIBLE, new LatLngIssue(0, 0, OccurrenceIssue.ZERO_COORDINATE));
         }
 
         // if everything falls in range
@@ -140,12 +140,12 @@ public class GeospatialParseUtils {
           // try and swap
           if (Double.compare(lng, 90) <= 0 && Double.compare(lng, -90) >= 0 && Double.compare(lat, 180) <= 0
               && Double.compare(lat, -180) >= 0) {
-            return ParseResult.fail(new LatLngIssue(lat, lng, OccurrenceValidationRule.PRESUMED_SWAPPED_COORDINATE));
+            return ParseResult.fail(new LatLngIssue(lat, lng, OccurrenceIssue.PRESUMED_SWAPPED_COORDINATE));
           }
         }
 
         // then something is out of range
-        return ParseResult.fail(new LatLngIssue(OccurrenceValidationRule.COORDINATES_OUT_OF_RANGE));
+        return ParseResult.fail(new LatLngIssue(OccurrenceIssue.COORDINATES_OUT_OF_RANGE));
       }
     }.parse(null);
   }
@@ -166,7 +166,7 @@ public class GeospatialParseUtils {
       @Override
       public ParseResult<IntPrecisionIssue> parse(Void v) {
 
-        Set<OccurrenceValidationRule> issues = Sets.newHashSet();
+        Set<OccurrenceIssue> issues = Sets.newHashSet();
 
         ParseStringToDouble source = new ParseStringToDouble(precisionAsString);
         getDepthMeasurement(source);
@@ -203,12 +203,12 @@ public class GeospatialParseUtils {
 
         // record the number of record with depth 0
         if (min > max) {
-          issues.add(OccurrenceValidationRule.DEPTH_MIN_MAX_SWAPPED);
+          issues.add(OccurrenceIssue.DEPTH_MIN_MAX_SWAPPED);
         }
 
         // record the number of record with depth 0
         if (depth > OUT_OF_RANGE_DEPTH) {
-          issues.add(OccurrenceValidationRule.DEPTH_OUT_OF_RANGE);
+          issues.add(OccurrenceIssue.DEPTH_OUT_OF_RANGE);
         }
 
         long depthInMetres = Math.round(depth);
@@ -255,7 +255,7 @@ public class GeospatialParseUtils {
       @Override
       public ParseResult<IntPrecisionIssue> parse(Void v) {
 
-        Set<OccurrenceValidationRule> issues = Sets.newHashSet();
+        Set<OccurrenceIssue> issues = Sets.newHashSet();
 
         ParseStringToDouble source = new ParseStringToDouble(minimum);
         getAltitudeMeasurement(source);
@@ -319,17 +319,17 @@ public class GeospatialParseUtils {
 
         // record the number of records with altitude out of range
         if (altitude != null && (altitude > OUT_OF_RANGE_MAX_ALTITUDE || altitude < OUT_OF_RANGE_MIN_ALTITUDE)) {
-          issues.add(OccurrenceValidationRule.ALTITUDE_OUT_OF_RANGE);
+          issues.add(OccurrenceIssue.ALTITUDE_OUT_OF_RANGE);
         }
 
         // record the number of records with erroneous altitudes
         if (altitude != null && (altitude == -9999 || altitude == 9999)) {
-          issues.add(OccurrenceValidationRule.ALTITUDE_UNLIKELY);
+          issues.add(OccurrenceIssue.ALTITUDE_UNLIKELY);
         }
 
         // record the number of records with min/max altitude transposed
         if (min != null && max != null && min > max && max != 0) {
-          issues.add(OccurrenceValidationRule.ALTITUDE_MIN_MAX_SWAPPED);
+          issues.add(OccurrenceIssue.ALTITUDE_MIN_MAX_SWAPPED);
         }
 
         Integer precisionAsInt = null;
@@ -366,7 +366,7 @@ public class GeospatialParseUtils {
 
       // if contains non numeric chars, check for range, remove chars and try to parse number
       if (containsNonnumeric) {
-        source.addIssue(OccurrenceValidationRule.ALTITUDE_NON_NUMERIC);
+        source.addIssue(OccurrenceIssue.ALTITUDE_NON_NUMERIC);
         boolean isInFeet = FEET_MARKER_PATTERN.matcher(source.verbatim).matches();
         boolean isInInches = INCHES_MARKER_PATTERN.matcher(source.verbatim).matches();
 
@@ -399,7 +399,7 @@ public class GeospatialParseUtils {
         if (altitudeAsDouble != null) {
           // convert to metric
           if (isInFeet || isInInches) {
-            source.addIssue(OccurrenceValidationRule.ALTITUDE_PRESUMED_IN_FEET);
+            source.addIssue(OccurrenceIssue.ALTITUDE_PRESUMED_IN_FEET);
           }
           if (isInFeet) {
             altitudeAsDouble = convertFeetToMetres(altitudeAsDouble);
@@ -434,7 +434,7 @@ public class GeospatialParseUtils {
       boolean containsNonnumeric = MEASURE_MARKER_PATTERN.matcher(source.verbatim).matches();
 
       if (containsNonnumeric) {
-        source.addIssue(OccurrenceValidationRule.DEPTH_NON_NUMERIC);
+        source.addIssue(OccurrenceIssue.DEPTH_NON_NUMERIC);
         boolean isInFeet = FEET_MARKER_PATTERN.matcher(source.verbatim).matches();
         boolean isInInches = INCHES_MARKER_PATTERN.matcher(source.verbatim).matches();
 
@@ -467,7 +467,7 @@ public class GeospatialParseUtils {
         if (depthAsDouble != null) {
           // convert to metric
           if (isInFeet || isInInches) {
-            source.addIssue(OccurrenceValidationRule.DEPTH_PRESUMED_IN_FEET);
+            source.addIssue(OccurrenceIssue.DEPTH_PRESUMED_IN_FEET);
           }
           if (isInFeet) {
             depthAsDouble = convertFeetToMetres(depthAsDouble);
@@ -511,15 +511,14 @@ public class GeospatialParseUtils {
 
     String verbatim;
     Double parsed;
-    Set<OccurrenceValidationRule> issues = Sets.newHashSet();
+    Set<OccurrenceIssue> issues = Sets.newHashSet();
 
     ParseStringToDouble(String verbatim) {
       this.verbatim = verbatim;
-      this.issues = issues;
     }
 
-    void addIssue(OccurrenceValidationRule rule) {
-      issues.add(rule);
+    void addIssue(OccurrenceIssue issue) {
+      issues.add(issue);
     }
   }
 }

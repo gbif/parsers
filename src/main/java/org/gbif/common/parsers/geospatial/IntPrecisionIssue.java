@@ -1,6 +1,6 @@
 package org.gbif.common.parsers.geospatial;
 
-import org.gbif.api.vocabulary.OccurrenceValidationRule;
+import org.gbif.api.vocabulary.OccurrenceIssue;
 
 import java.util.Set;
 
@@ -14,15 +14,15 @@ public class IntPrecisionIssue {
 
   private final Integer value;
   private final Integer precision;
-  private final Set<OccurrenceValidationRule> issues;
+  private final Set<OccurrenceIssue> issues;
 
-  public IntPrecisionIssue(Integer value, Integer precision, Set<OccurrenceValidationRule> issues) {
+  public IntPrecisionIssue(Integer value, Integer precision, Set<OccurrenceIssue> issues) {
     this.value = value;
     this.precision = precision;
     this.issues = issues;
   }
 
-  public IntPrecisionIssue(Integer value, Integer precision, OccurrenceValidationRule... issue) {
+  public IntPrecisionIssue(Integer value, Integer precision, OccurrenceIssue... issue) {
     this(value, precision, Sets.newHashSet(issue));
   }
 
@@ -34,7 +34,7 @@ public class IntPrecisionIssue {
     return precision;
   }
 
-  public Set<OccurrenceValidationRule> getIssues() {
+  public Set<OccurrenceIssue> getIssues() {
     return issues;
   }
 

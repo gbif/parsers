@@ -1,6 +1,6 @@
 package org.gbif.common.parsers.geospatial;
 
-import org.gbif.api.vocabulary.OccurrenceValidationRule;
+import org.gbif.api.vocabulary.OccurrenceIssue;
 
 import com.google.common.base.Objects;
 
@@ -12,15 +12,15 @@ public class LatLngIssue {
 
   private final Double lat;
   private final Double lng;
-  private final OccurrenceValidationRule issue;
+  private final OccurrenceIssue issue;
 
-  public LatLngIssue(double lat, double lng, OccurrenceValidationRule issue) {
+  public LatLngIssue(double lat, double lng, OccurrenceIssue issue) {
     this.lat = lat;
     this.lng = lng;
     this.issue = issue;
   }
 
-  public LatLngIssue(OccurrenceValidationRule issue) {
+  public LatLngIssue(OccurrenceIssue issue) {
     lat = null;
     lng = null;
     this.issue = issue;
@@ -40,7 +40,7 @@ public class LatLngIssue {
     return lng;
   }
 
-  public OccurrenceValidationRule getIssue() {
+  public OccurrenceIssue getIssue() {
     return issue;
   }
 
