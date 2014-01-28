@@ -10,7 +10,7 @@
 
 <a class="jxr_linenumber" name="1" href="#1">1</a>   <strong class="jxr_keyword">package</strong> org.gbif.common.parsers.geospatial;
 <a class="jxr_linenumber" name="2" href="#2">2</a>   
-<a class="jxr_linenumber" name="3" href="#3">3</a>   <strong class="jxr_keyword">import</strong> org.gbif.api.vocabulary.OccurrenceValidationRule;
+<a class="jxr_linenumber" name="3" href="#3">3</a>   <strong class="jxr_keyword">import</strong> org.gbif.api.vocabulary.OccurrenceIssue;
 <a class="jxr_linenumber" name="4" href="#4">4</a>   
 <a class="jxr_linenumber" name="5" href="#5">5</a>   <strong class="jxr_keyword">import</strong> java.util.Set;
 <a class="jxr_linenumber" name="6" href="#6">6</a>   
@@ -24,15 +24,15 @@
 <a class="jxr_linenumber" name="14" href="#14">14</a>  
 <a class="jxr_linenumber" name="15" href="#15">15</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Integer value;
 <a class="jxr_linenumber" name="16" href="#16">16</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Integer precision;
-<a class="jxr_linenumber" name="17" href="#17">17</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Set&lt;OccurrenceValidationRule&gt; issues;
+<a class="jxr_linenumber" name="17" href="#17">17</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Set&lt;OccurrenceIssue&gt; issues;
 <a class="jxr_linenumber" name="18" href="#18">18</a>  
-<a class="jxr_linenumber" name="19" href="#19">19</a>    <strong class="jxr_keyword">public</strong> <a href="../../../../../org/gbif/common/parsers/geospatial/IntPrecisionIssue.html">IntPrecisionIssue</a>(Integer value, Integer precision, Set&lt;OccurrenceValidationRule&gt; issues) {
+<a class="jxr_linenumber" name="19" href="#19">19</a>    <strong class="jxr_keyword">public</strong> <a href="../../../../../org/gbif/common/parsers/geospatial/IntPrecisionIssue.html">IntPrecisionIssue</a>(Integer value, Integer precision, Set&lt;OccurrenceIssue&gt; issues) {
 <a class="jxr_linenumber" name="20" href="#20">20</a>      <strong class="jxr_keyword">this</strong>.value = value;
 <a class="jxr_linenumber" name="21" href="#21">21</a>      <strong class="jxr_keyword">this</strong>.precision = precision;
 <a class="jxr_linenumber" name="22" href="#22">22</a>      <strong class="jxr_keyword">this</strong>.issues = issues;
 <a class="jxr_linenumber" name="23" href="#23">23</a>    }
 <a class="jxr_linenumber" name="24" href="#24">24</a>  
-<a class="jxr_linenumber" name="25" href="#25">25</a>    <strong class="jxr_keyword">public</strong> <a href="../../../../../org/gbif/common/parsers/geospatial/IntPrecisionIssue.html">IntPrecisionIssue</a>(Integer value, Integer precision, OccurrenceValidationRule... issue) {
+<a class="jxr_linenumber" name="25" href="#25">25</a>    <strong class="jxr_keyword">public</strong> <a href="../../../../../org/gbif/common/parsers/geospatial/IntPrecisionIssue.html">IntPrecisionIssue</a>(Integer value, Integer precision, OccurrenceIssue... issue) {
 <a class="jxr_linenumber" name="26" href="#26">26</a>      <strong class="jxr_keyword">this</strong>(value, precision, Sets.newHashSet(issue));
 <a class="jxr_linenumber" name="27" href="#27">27</a>    }
 <a class="jxr_linenumber" name="28" href="#28">28</a>  
@@ -44,7 +44,7 @@
 <a class="jxr_linenumber" name="34" href="#34">34</a>      <strong class="jxr_keyword">return</strong> precision;
 <a class="jxr_linenumber" name="35" href="#35">35</a>    }
 <a class="jxr_linenumber" name="36" href="#36">36</a>  
-<a class="jxr_linenumber" name="37" href="#37">37</a>    <strong class="jxr_keyword">public</strong> Set&lt;OccurrenceValidationRule&gt; getIssues() {
+<a class="jxr_linenumber" name="37" href="#37">37</a>    <strong class="jxr_keyword">public</strong> Set&lt;OccurrenceIssue&gt; getIssues() {
 <a class="jxr_linenumber" name="38" href="#38">38</a>      <strong class="jxr_keyword">return</strong> issues;
 <a class="jxr_linenumber" name="39" href="#39">39</a>    }
 <a class="jxr_linenumber" name="40" href="#40">40</a>  

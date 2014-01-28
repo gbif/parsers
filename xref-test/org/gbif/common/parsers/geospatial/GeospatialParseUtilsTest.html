@@ -11,7 +11,7 @@
 <a class="jxr_linenumber" name="1" href="#1">1</a>   <strong class="jxr_keyword">package</strong> org.gbif.common.parsers.geospatial;
 <a class="jxr_linenumber" name="2" href="#2">2</a>   
 <a class="jxr_linenumber" name="3" href="#3">3</a>   
-<a class="jxr_linenumber" name="4" href="#4">4</a>   <strong class="jxr_keyword">import</strong> org.gbif.api.vocabulary.OccurrenceValidationRule;
+<a class="jxr_linenumber" name="4" href="#4">4</a>   <strong class="jxr_keyword">import</strong> org.gbif.api.vocabulary.OccurrenceIssue;
 <a class="jxr_linenumber" name="5" href="#5">5</a>   <strong class="jxr_keyword">import</strong> org.gbif.common.parsers.ParseResult;
 <a class="jxr_linenumber" name="6" href="#6">6</a>   
 <a class="jxr_linenumber" name="7" href="#7">7</a>   <strong class="jxr_keyword">import</strong> org.junit.Test;
@@ -35,20 +35,20 @@
 <a class="jxr_linenumber" name="25" href="#25">25</a>        ParseResult.CONFIDENCE.DEFINITE);
 <a class="jxr_linenumber" name="26" href="#26">26</a>      assertExpected(GeospatialParseUtils.parseLatLng(<span class="jxr_string">"-90"</span>, <span class="jxr_string">"-180"</span>), <strong class="jxr_keyword">new</strong> LatLngIssue(-90, -180),
 <a class="jxr_linenumber" name="27" href="#27">27</a>        ParseResult.CONFIDENCE.DEFINITE);
-<a class="jxr_linenumber" name="28" href="#28">28</a>      assertExpected(GeospatialParseUtils.parseLatLng(<span class="jxr_string">"0"</span>, <span class="jxr_string">"0"</span>), <strong class="jxr_keyword">new</strong> LatLngIssue(0, 0, OccurrenceValidationRule.ZERO_COORDINATE),
+<a class="jxr_linenumber" name="28" href="#28">28</a>      assertExpected(GeospatialParseUtils.parseLatLng(<span class="jxr_string">"0"</span>, <span class="jxr_string">"0"</span>), <strong class="jxr_keyword">new</strong> LatLngIssue(0, 0, OccurrenceIssue.ZERO_COORDINATE),
 <a class="jxr_linenumber" name="29" href="#29">29</a>        ParseResult.CONFIDENCE.POSSIBLE);
 <a class="jxr_linenumber" name="30" href="#30">30</a>  
 <a class="jxr_linenumber" name="31" href="#31">31</a>      <em class="jxr_comment">// check swapped coords</em>
 <a class="jxr_linenumber" name="32" href="#32">32</a>      assertFailedWithIssues(GeospatialParseUtils.parseLatLng(<span class="jxr_string">"100"</span>, <span class="jxr_string">"40"</span>),
-<a class="jxr_linenumber" name="33" href="#33">33</a>                             OccurrenceValidationRule.PRESUMED_SWAPPED_COORDINATE);
+<a class="jxr_linenumber" name="33" href="#33">33</a>                             OccurrenceIssue.PRESUMED_SWAPPED_COORDINATE);
 <a class="jxr_linenumber" name="34" href="#34">34</a>      assertFailedWithIssues(GeospatialParseUtils.parseLatLng(<span class="jxr_string">"-100"</span>, <span class="jxr_string">"90"</span>),
-<a class="jxr_linenumber" name="35" href="#35">35</a>                             OccurrenceValidationRule.PRESUMED_SWAPPED_COORDINATE);
+<a class="jxr_linenumber" name="35" href="#35">35</a>                             OccurrenceIssue.PRESUMED_SWAPPED_COORDINATE);
 <a class="jxr_linenumber" name="36" href="#36">36</a>  
 <a class="jxr_linenumber" name="37" href="#37">37</a>      <em class="jxr_comment">// check errors</em>
 <a class="jxr_linenumber" name="38" href="#38">38</a>      assertErrored(GeospatialParseUtils.parseLatLng(<span class="jxr_string">"tim"</span>, <span class="jxr_string">"tom"</span>));
-<a class="jxr_linenumber" name="39" href="#39">39</a>      assertFailedWithIssues(GeospatialParseUtils.parseLatLng(<span class="jxr_string">"200"</span>, <span class="jxr_string">"200"</span>), OccurrenceValidationRule.COORDINATES_OUT_OF_RANGE);
-<a class="jxr_linenumber" name="40" href="#40">40</a>      assertFailedWithIssues(GeospatialParseUtils.parseLatLng(<span class="jxr_string">"-200"</span>, <span class="jxr_string">"30"</span>), OccurrenceValidationRule.COORDINATES_OUT_OF_RANGE);
-<a class="jxr_linenumber" name="41" href="#41">41</a>      assertFailedWithIssues(GeospatialParseUtils.parseLatLng(<span class="jxr_string">"200"</span>, <span class="jxr_string">"30"</span>), OccurrenceValidationRule.COORDINATES_OUT_OF_RANGE);
+<a class="jxr_linenumber" name="39" href="#39">39</a>      assertFailedWithIssues(GeospatialParseUtils.parseLatLng(<span class="jxr_string">"200"</span>, <span class="jxr_string">"200"</span>), OccurrenceIssue.COORDINATES_OUT_OF_RANGE);
+<a class="jxr_linenumber" name="40" href="#40">40</a>      assertFailedWithIssues(GeospatialParseUtils.parseLatLng(<span class="jxr_string">"-200"</span>, <span class="jxr_string">"30"</span>), OccurrenceIssue.COORDINATES_OUT_OF_RANGE);
+<a class="jxr_linenumber" name="41" href="#41">41</a>      assertFailedWithIssues(GeospatialParseUtils.parseLatLng(<span class="jxr_string">"200"</span>, <span class="jxr_string">"30"</span>), OccurrenceIssue.COORDINATES_OUT_OF_RANGE);
 <a class="jxr_linenumber" name="42" href="#42">42</a>    }
 <a class="jxr_linenumber" name="43" href="#43">43</a>  
 <a class="jxr_linenumber" name="44" href="#44">44</a>    @Test
@@ -64,15 +64,15 @@
 <a class="jxr_linenumber" name="54" href="#54">54</a>  
 <a class="jxr_linenumber" name="55" href="#55">55</a>      <em class="jxr_comment">// check units are removed</em>
 <a class="jxr_linenumber" name="56" href="#56">56</a>      assertExpected(GeospatialParseUtils.parseDepth(<span class="jxr_string">"10m"</span>, <strong class="jxr_keyword">null</strong>, <span class="jxr_string">"1"</span>),
-<a class="jxr_linenumber" name="57" href="#57">57</a>        <strong class="jxr_keyword">new</strong> IntPrecisionIssue(10, 1, OccurrenceValidationRule.DEPTH_NON_NUMERIC),
+<a class="jxr_linenumber" name="57" href="#57">57</a>        <strong class="jxr_keyword">new</strong> IntPrecisionIssue(10, 1, OccurrenceIssue.DEPTH_NON_NUMERIC),
 <a class="jxr_linenumber" name="58" href="#58">58</a>        ParseResult.CONFIDENCE.DEFINITE);
 <a class="jxr_linenumber" name="59" href="#59">59</a>      assertExpected(GeospatialParseUtils.parseDepth(<span class="jxr_string">"3.27ft"</span>, <strong class="jxr_keyword">null</strong>, <span class="jxr_string">"1"</span>),
-<a class="jxr_linenumber" name="60" href="#60">60</a>        <strong class="jxr_keyword">new</strong> IntPrecisionIssue(1, 1,OccurrenceValidationRule.DEPTH_PRESUMED_IN_FEET, OccurrenceValidationRule.DEPTH_NON_NUMERIC),
+<a class="jxr_linenumber" name="60" href="#60">60</a>        <strong class="jxr_keyword">new</strong> IntPrecisionIssue(1, 1,OccurrenceIssue.DEPTH_PRESUMED_IN_FEET, OccurrenceIssue.DEPTH_NON_NUMERIC),
 <a class="jxr_linenumber" name="61" href="#61">61</a>        ParseResult.CONFIDENCE.DEFINITE);
 <a class="jxr_linenumber" name="62" href="#62">62</a>  
 <a class="jxr_linenumber" name="63" href="#63">63</a>      <em class="jxr_comment">// check out of range</em>
 <a class="jxr_linenumber" name="64" href="#64">64</a>      assertExpected(GeospatialParseUtils.parseDepth(<span class="jxr_string">"100000000"</span>, <strong class="jxr_keyword">null</strong>, <span class="jxr_string">"1"</span>),
-<a class="jxr_linenumber" name="65" href="#65">65</a>        <strong class="jxr_keyword">new</strong> IntPrecisionIssue(<strong class="jxr_keyword">null</strong>, <strong class="jxr_keyword">null</strong>, OccurrenceValidationRule.DEPTH_OUT_OF_RANGE),
+<a class="jxr_linenumber" name="65" href="#65">65</a>        <strong class="jxr_keyword">new</strong> IntPrecisionIssue(<strong class="jxr_keyword">null</strong>, <strong class="jxr_keyword">null</strong>, OccurrenceIssue.DEPTH_OUT_OF_RANGE),
 <a class="jxr_linenumber" name="66" href="#66">66</a>        ParseResult.CONFIDENCE.DEFINITE);
 <a class="jxr_linenumber" name="67" href="#67">67</a>  
 <a class="jxr_linenumber" name="68" href="#68">68</a>      <em class="jxr_comment">// nonsense</em>
@@ -92,20 +92,20 @@
 <a class="jxr_linenumber" name="82" href="#82">82</a>      assertExpected(GeospatialParseUtils.parseAltitude(<strong class="jxr_keyword">null</strong>, <span class="jxr_string">"10000"</span>, <span class="jxr_string">"1"</span>), <strong class="jxr_keyword">new</strong> IntPrecisionIssue(10000, 1),
 <a class="jxr_linenumber" name="83" href="#83">83</a>        ParseResult.CONFIDENCE.DEFINITE);
 <a class="jxr_linenumber" name="84" href="#84">84</a>      assertExpected(GeospatialParseUtils.parseAltitude(<span class="jxr_string">"4061987"</span>, <span class="jxr_string">"4061987"</span>, <strong class="jxr_keyword">null</strong>),
-<a class="jxr_linenumber" name="85" href="#85">85</a>        <strong class="jxr_keyword">new</strong> IntPrecisionIssue(<strong class="jxr_keyword">null</strong>, <strong class="jxr_keyword">null</strong>, OccurrenceValidationRule.ALTITUDE_OUT_OF_RANGE),
+<a class="jxr_linenumber" name="85" href="#85">85</a>        <strong class="jxr_keyword">new</strong> IntPrecisionIssue(<strong class="jxr_keyword">null</strong>, <strong class="jxr_keyword">null</strong>, OccurrenceIssue.ALTITUDE_OUT_OF_RANGE),
 <a class="jxr_linenumber" name="86" href="#86">86</a>        ParseResult.CONFIDENCE.DEFINITE);
 <a class="jxr_linenumber" name="87" href="#87">87</a>  
 <a class="jxr_linenumber" name="88" href="#88">88</a>      <em class="jxr_comment">// check units are removed</em>
 <a class="jxr_linenumber" name="89" href="#89">89</a>      assertExpected(GeospatialParseUtils.parseAltitude(<span class="jxr_string">"1000m"</span>, <strong class="jxr_keyword">null</strong>, <span class="jxr_string">"1"</span>),
-<a class="jxr_linenumber" name="90" href="#90">90</a>        <strong class="jxr_keyword">new</strong> IntPrecisionIssue(1000, 1, OccurrenceValidationRule.ALTITUDE_NON_NUMERIC),
+<a class="jxr_linenumber" name="90" href="#90">90</a>        <strong class="jxr_keyword">new</strong> IntPrecisionIssue(1000, 1, OccurrenceIssue.ALTITUDE_NON_NUMERIC),
 <a class="jxr_linenumber" name="91" href="#91">91</a>        ParseResult.CONFIDENCE.DEFINITE);
 <a class="jxr_linenumber" name="92" href="#92">92</a>      assertExpected(GeospatialParseUtils.parseAltitude(<span class="jxr_string">"3280ft"</span>, <strong class="jxr_keyword">null</strong>, <span class="jxr_string">"1"</span>),
-<a class="jxr_linenumber" name="93" href="#93">93</a>        <strong class="jxr_keyword">new</strong> IntPrecisionIssue(1000, 1, OccurrenceValidationRule.ALTITUDE_PRESUMED_IN_FEET, OccurrenceValidationRule.ALTITUDE_NON_NUMERIC),
+<a class="jxr_linenumber" name="93" href="#93">93</a>        <strong class="jxr_keyword">new</strong> IntPrecisionIssue(1000, 1, OccurrenceIssue.ALTITUDE_PRESUMED_IN_FEET, OccurrenceIssue.ALTITUDE_NON_NUMERIC),
 <a class="jxr_linenumber" name="94" href="#94">94</a>        ParseResult.CONFIDENCE.DEFINITE);
 <a class="jxr_linenumber" name="95" href="#95">95</a>  
 <a class="jxr_linenumber" name="96" href="#96">96</a>      <em class="jxr_comment">// check out of range</em>
 <a class="jxr_linenumber" name="97" href="#97">97</a>      assertExpected(GeospatialParseUtils.parseAltitude(<span class="jxr_string">"100000000000"</span>, <strong class="jxr_keyword">null</strong>, <span class="jxr_string">"1"</span>),
-<a class="jxr_linenumber" name="98" href="#98">98</a>        <strong class="jxr_keyword">new</strong> IntPrecisionIssue(<strong class="jxr_keyword">null</strong>, 1, OccurrenceValidationRule.ALTITUDE_OUT_OF_RANGE),
+<a class="jxr_linenumber" name="98" href="#98">98</a>        <strong class="jxr_keyword">new</strong> IntPrecisionIssue(<strong class="jxr_keyword">null</strong>, 1, OccurrenceIssue.ALTITUDE_OUT_OF_RANGE),
 <a class="jxr_linenumber" name="99" href="#99">99</a>        ParseResult.CONFIDENCE.DEFINITE);
 <a class="jxr_linenumber" name="100" href="#100">100</a> 
 <a class="jxr_linenumber" name="101" href="#101">101</a>     <em class="jxr_comment">// nonsense</em>
@@ -130,7 +130,7 @@
 <a class="jxr_linenumber" name="120" href="#120">120</a>     assertEquals(ParseResult.STATUS.FAIL, pr.getStatus());
 <a class="jxr_linenumber" name="121" href="#121">121</a>   }
 <a class="jxr_linenumber" name="122" href="#122">122</a> 
-<a class="jxr_linenumber" name="123" href="#123">123</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> assertFailedWithIssues(ParseResult&lt;LatLngIssue&gt; pr, OccurrenceValidationRule issue) {
+<a class="jxr_linenumber" name="123" href="#123">123</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> assertFailedWithIssues(ParseResult&lt;LatLngIssue&gt; pr, OccurrenceIssue issue) {
 <a class="jxr_linenumber" name="124" href="#124">124</a>     assertFailed(pr);
 <a class="jxr_linenumber" name="125" href="#125">125</a>     assertNotNull(pr.getPayload().getIssue());
 <a class="jxr_linenumber" name="126" href="#126">126</a>     assertEquals(issue, pr.getPayload().getIssue());

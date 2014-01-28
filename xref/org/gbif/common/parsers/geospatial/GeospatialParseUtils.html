@@ -10,7 +10,7 @@
 
 <a class="jxr_linenumber" name="1" href="#1">1</a>   <strong class="jxr_keyword">package</strong> org.gbif.common.parsers.geospatial;
 <a class="jxr_linenumber" name="2" href="#2">2</a>   
-<a class="jxr_linenumber" name="3" href="#3">3</a>   <strong class="jxr_keyword">import</strong> org.gbif.api.vocabulary.OccurrenceValidationRule;
+<a class="jxr_linenumber" name="3" href="#3">3</a>   <strong class="jxr_keyword">import</strong> org.gbif.api.vocabulary.OccurrenceIssue;
 <a class="jxr_linenumber" name="4" href="#4">4</a>   <strong class="jxr_keyword">import</strong> org.gbif.common.parsers.Parsable;
 <a class="jxr_linenumber" name="5" href="#5">5</a>   <strong class="jxr_keyword">import</strong> org.gbif.common.parsers.ParseResult;
 <a class="jxr_linenumber" name="6" href="#6">6</a>   
@@ -105,7 +105,7 @@
 <a class="jxr_linenumber" name="95" href="#95">95</a>  
 <a class="jxr_linenumber" name="96" href="#96">96</a>    <em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="97" href="#97">97</a>  <em class="jxr_javadoccomment">   * This parses string representations of latitude and longitude values. It tries its best to interpret the values and</em>
-<a class="jxr_linenumber" name="98" href="#98">98</a>  <em class="jxr_javadoccomment">   * indicates any problems in its result as {@link org.gbif.api.vocabulary.OccurrenceValidationRule}.</em>
+<a class="jxr_linenumber" name="98" href="#98">98</a>  <em class="jxr_javadoccomment">   * indicates any problems in its result as {@link org.gbif.api.vocabulary.OccurrenceIssue}.</em>
 <a class="jxr_linenumber" name="99" href="#99">99</a>  <em class="jxr_javadoccomment">   * When the {@link ParseResult.STATUS} is either SUCCESS or FAIL the payload will always be non-null and the</em>
 <a class="jxr_linenumber" name="100" href="#100">100</a> <em class="jxr_javadoccomment">   * {@link LatLngIssue#getIssue()} method should return any issues there were. In case the issue is ERROR the payload</em>
 <a class="jxr_linenumber" name="101" href="#101">101</a> <em class="jxr_javadoccomment">   * will usually be {@code null}.</em>
@@ -131,7 +131,7 @@
 <a class="jxr_linenumber" name="121" href="#121">121</a>         <em class="jxr_comment">// 0,0 is too suspicious</em>
 <a class="jxr_linenumber" name="122" href="#122">122</a>         <strong class="jxr_keyword">if</strong> (Double.compare(lat, 0) == 0 &amp;&amp; Double.compare(lng, 0) == 0) {
 <a class="jxr_linenumber" name="123" href="#123">123</a>           <strong class="jxr_keyword">return</strong> <a href="../../../../../org/gbif/common/parsers/ParseResult.html">ParseResult</a>
-<a class="jxr_linenumber" name="124" href="#124">124</a>             .success(ParseResult.CONFIDENCE.POSSIBLE, <strong class="jxr_keyword">new</strong> <a href="../../../../../org/gbif/common/parsers/geospatial/LatLngIssue.html">LatLngIssue</a>(0, 0, OccurrenceValidationRule.ZERO_COORDINATE));
+<a class="jxr_linenumber" name="124" href="#124">124</a>             .success(ParseResult.CONFIDENCE.POSSIBLE, <strong class="jxr_keyword">new</strong> <a href="../../../../../org/gbif/common/parsers/geospatial/LatLngIssue.html">LatLngIssue</a>(0, 0, OccurrenceIssue.ZERO_COORDINATE));
 <a class="jxr_linenumber" name="125" href="#125">125</a>         }
 <a class="jxr_linenumber" name="126" href="#126">126</a> 
 <a class="jxr_linenumber" name="127" href="#127">127</a>         <em class="jxr_comment">// if everything falls in range</em>
@@ -150,12 +150,12 @@
 <a class="jxr_linenumber" name="140" href="#140">140</a>           <em class="jxr_comment">// try and swap</em>
 <a class="jxr_linenumber" name="141" href="#141">141</a>           <strong class="jxr_keyword">if</strong> (Double.compare(lng, 90) &lt;= 0 &amp;&amp; Double.compare(lng, -90) &gt;= 0 &amp;&amp; Double.compare(lat, 180) &lt;= 0
 <a class="jxr_linenumber" name="142" href="#142">142</a>               &amp;&amp; Double.compare(lat, -180) &gt;= 0) {
-<a class="jxr_linenumber" name="143" href="#143">143</a>             <strong class="jxr_keyword">return</strong> ParseResult.fail(<strong class="jxr_keyword">new</strong> <a href="../../../../../org/gbif/common/parsers/geospatial/LatLngIssue.html">LatLngIssue</a>(lat, lng, OccurrenceValidationRule.PRESUMED_SWAPPED_COORDINATE));
+<a class="jxr_linenumber" name="143" href="#143">143</a>             <strong class="jxr_keyword">return</strong> ParseResult.fail(<strong class="jxr_keyword">new</strong> <a href="../../../../../org/gbif/common/parsers/geospatial/LatLngIssue.html">LatLngIssue</a>(lat, lng, OccurrenceIssue.PRESUMED_SWAPPED_COORDINATE));
 <a class="jxr_linenumber" name="144" href="#144">144</a>           }
 <a class="jxr_linenumber" name="145" href="#145">145</a>         }
 <a class="jxr_linenumber" name="146" href="#146">146</a> 
 <a class="jxr_linenumber" name="147" href="#147">147</a>         <em class="jxr_comment">// then something is out of range</em>
-<a class="jxr_linenumber" name="148" href="#148">148</a>         <strong class="jxr_keyword">return</strong> ParseResult.fail(<strong class="jxr_keyword">new</strong> <a href="../../../../../org/gbif/common/parsers/geospatial/LatLngIssue.html">LatLngIssue</a>(OccurrenceValidationRule.COORDINATES_OUT_OF_RANGE));
+<a class="jxr_linenumber" name="148" href="#148">148</a>         <strong class="jxr_keyword">return</strong> ParseResult.fail(<strong class="jxr_keyword">new</strong> <a href="../../../../../org/gbif/common/parsers/geospatial/LatLngIssue.html">LatLngIssue</a>(OccurrenceIssue.COORDINATES_OUT_OF_RANGE));
 <a class="jxr_linenumber" name="149" href="#149">149</a>       }
 <a class="jxr_linenumber" name="150" href="#150">150</a>     }.parse(<strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="151" href="#151">151</a>   }
@@ -176,7 +176,7 @@
 <a class="jxr_linenumber" name="166" href="#166">166</a>       @Override
 <a class="jxr_linenumber" name="167" href="#167">167</a>       <strong class="jxr_keyword">public</strong> ParseResult&lt;IntPrecisionIssue&gt; parse(Void v) {
 <a class="jxr_linenumber" name="168" href="#168">168</a> 
-<a class="jxr_linenumber" name="169" href="#169">169</a>         Set&lt;OccurrenceValidationRule&gt; issues = Sets.newHashSet();
+<a class="jxr_linenumber" name="169" href="#169">169</a>         Set&lt;OccurrenceIssue&gt; issues = Sets.newHashSet();
 <a class="jxr_linenumber" name="170" href="#170">170</a> 
 <a class="jxr_linenumber" name="171" href="#171">171</a>         <a href="../../../../../org/gbif/common/parsers/geospatial/GeospatialParseUtils.html">ParseStringToDouble</a> source = <strong class="jxr_keyword">new</strong> <a href="../../../../../org/gbif/common/parsers/geospatial/GeospatialParseUtils.html">ParseStringToDouble</a>(precisionAsString);
 <a class="jxr_linenumber" name="172" href="#172">172</a>         getDepthMeasurement(source);
@@ -213,12 +213,12 @@
 <a class="jxr_linenumber" name="203" href="#203">203</a> 
 <a class="jxr_linenumber" name="204" href="#204">204</a>         <em class="jxr_comment">// record the number of record with depth 0</em>
 <a class="jxr_linenumber" name="205" href="#205">205</a>         <strong class="jxr_keyword">if</strong> (min &gt; max) {
-<a class="jxr_linenumber" name="206" href="#206">206</a>           issues.add(OccurrenceValidationRule.DEPTH_MIN_MAX_SWAPPED);
+<a class="jxr_linenumber" name="206" href="#206">206</a>           issues.add(OccurrenceIssue.DEPTH_MIN_MAX_SWAPPED);
 <a class="jxr_linenumber" name="207" href="#207">207</a>         }
 <a class="jxr_linenumber" name="208" href="#208">208</a> 
 <a class="jxr_linenumber" name="209" href="#209">209</a>         <em class="jxr_comment">// record the number of record with depth 0</em>
 <a class="jxr_linenumber" name="210" href="#210">210</a>         <strong class="jxr_keyword">if</strong> (depth &gt; OUT_OF_RANGE_DEPTH) {
-<a class="jxr_linenumber" name="211" href="#211">211</a>           issues.add(OccurrenceValidationRule.DEPTH_OUT_OF_RANGE);
+<a class="jxr_linenumber" name="211" href="#211">211</a>           issues.add(OccurrenceIssue.DEPTH_OUT_OF_RANGE);
 <a class="jxr_linenumber" name="212" href="#212">212</a>         }
 <a class="jxr_linenumber" name="213" href="#213">213</a> 
 <a class="jxr_linenumber" name="214" href="#214">214</a>         <strong class="jxr_keyword">long</strong> depthInMetres = Math.round(depth);
@@ -265,7 +265,7 @@
 <a class="jxr_linenumber" name="255" href="#255">255</a>       @Override
 <a class="jxr_linenumber" name="256" href="#256">256</a>       <strong class="jxr_keyword">public</strong> ParseResult&lt;IntPrecisionIssue&gt; parse(Void v) {
 <a class="jxr_linenumber" name="257" href="#257">257</a> 
-<a class="jxr_linenumber" name="258" href="#258">258</a>         Set&lt;OccurrenceValidationRule&gt; issues = Sets.newHashSet();
+<a class="jxr_linenumber" name="258" href="#258">258</a>         Set&lt;OccurrenceIssue&gt; issues = Sets.newHashSet();
 <a class="jxr_linenumber" name="259" href="#259">259</a> 
 <a class="jxr_linenumber" name="260" href="#260">260</a>         <a href="../../../../../org/gbif/common/parsers/geospatial/GeospatialParseUtils.html">ParseStringToDouble</a> source = <strong class="jxr_keyword">new</strong> <a href="../../../../../org/gbif/common/parsers/geospatial/GeospatialParseUtils.html">ParseStringToDouble</a>(minimum);
 <a class="jxr_linenumber" name="261" href="#261">261</a>         getAltitudeMeasurement(source);
@@ -329,17 +329,17 @@
 <a class="jxr_linenumber" name="319" href="#319">319</a> 
 <a class="jxr_linenumber" name="320" href="#320">320</a>         <em class="jxr_comment">// record the number of records with altitude out of range</em>
 <a class="jxr_linenumber" name="321" href="#321">321</a>         <strong class="jxr_keyword">if</strong> (altitude != <strong class="jxr_keyword">null</strong> &amp;&amp; (altitude &gt; OUT_OF_RANGE_MAX_ALTITUDE || altitude &lt; OUT_OF_RANGE_MIN_ALTITUDE)) {
-<a class="jxr_linenumber" name="322" href="#322">322</a>           issues.add(OccurrenceValidationRule.ALTITUDE_OUT_OF_RANGE);
+<a class="jxr_linenumber" name="322" href="#322">322</a>           issues.add(OccurrenceIssue.ALTITUDE_OUT_OF_RANGE);
 <a class="jxr_linenumber" name="323" href="#323">323</a>         }
 <a class="jxr_linenumber" name="324" href="#324">324</a> 
 <a class="jxr_linenumber" name="325" href="#325">325</a>         <em class="jxr_comment">// record the number of records with erroneous altitudes</em>
 <a class="jxr_linenumber" name="326" href="#326">326</a>         <strong class="jxr_keyword">if</strong> (altitude != <strong class="jxr_keyword">null</strong> &amp;&amp; (altitude == -9999 || altitude == 9999)) {
-<a class="jxr_linenumber" name="327" href="#327">327</a>           issues.add(OccurrenceValidationRule.ALTITUDE_UNLIKELY);
+<a class="jxr_linenumber" name="327" href="#327">327</a>           issues.add(OccurrenceIssue.ALTITUDE_UNLIKELY);
 <a class="jxr_linenumber" name="328" href="#328">328</a>         }
 <a class="jxr_linenumber" name="329" href="#329">329</a> 
 <a class="jxr_linenumber" name="330" href="#330">330</a>         <em class="jxr_comment">// record the number of records with min/max altitude transposed</em>
 <a class="jxr_linenumber" name="331" href="#331">331</a>         <strong class="jxr_keyword">if</strong> (min != <strong class="jxr_keyword">null</strong> &amp;&amp; max != <strong class="jxr_keyword">null</strong> &amp;&amp; min &gt; max &amp;&amp; max != 0) {
-<a class="jxr_linenumber" name="332" href="#332">332</a>           issues.add(OccurrenceValidationRule.ALTITUDE_MIN_MAX_SWAPPED);
+<a class="jxr_linenumber" name="332" href="#332">332</a>           issues.add(OccurrenceIssue.ALTITUDE_MIN_MAX_SWAPPED);
 <a class="jxr_linenumber" name="333" href="#333">333</a>         }
 <a class="jxr_linenumber" name="334" href="#334">334</a> 
 <a class="jxr_linenumber" name="335" href="#335">335</a>         Integer precisionAsInt = <strong class="jxr_keyword">null</strong>;
@@ -376,7 +376,7 @@
 <a class="jxr_linenumber" name="366" href="#366">366</a> 
 <a class="jxr_linenumber" name="367" href="#367">367</a>       <em class="jxr_comment">// if contains non numeric chars, check for range, remove chars and try to parse number</em>
 <a class="jxr_linenumber" name="368" href="#368">368</a>       <strong class="jxr_keyword">if</strong> (containsNonnumeric) {
-<a class="jxr_linenumber" name="369" href="#369">369</a>         source.addIssue(OccurrenceValidationRule.ALTITUDE_NON_NUMERIC);
+<a class="jxr_linenumber" name="369" href="#369">369</a>         source.addIssue(OccurrenceIssue.ALTITUDE_NON_NUMERIC);
 <a class="jxr_linenumber" name="370" href="#370">370</a>         <strong class="jxr_keyword">boolean</strong> isInFeet = FEET_MARKER_PATTERN.matcher(source.verbatim).matches();
 <a class="jxr_linenumber" name="371" href="#371">371</a>         <strong class="jxr_keyword">boolean</strong> isInInches = INCHES_MARKER_PATTERN.matcher(source.verbatim).matches();
 <a class="jxr_linenumber" name="372" href="#372">372</a> 
@@ -409,7 +409,7 @@
 <a class="jxr_linenumber" name="399" href="#399">399</a>         <strong class="jxr_keyword">if</strong> (altitudeAsDouble != <strong class="jxr_keyword">null</strong>) {
 <a class="jxr_linenumber" name="400" href="#400">400</a>           <em class="jxr_comment">// convert to metric</em>
 <a class="jxr_linenumber" name="401" href="#401">401</a>           <strong class="jxr_keyword">if</strong> (isInFeet || isInInches) {
-<a class="jxr_linenumber" name="402" href="#402">402</a>             source.addIssue(OccurrenceValidationRule.ALTITUDE_PRESUMED_IN_FEET);
+<a class="jxr_linenumber" name="402" href="#402">402</a>             source.addIssue(OccurrenceIssue.ALTITUDE_PRESUMED_IN_FEET);
 <a class="jxr_linenumber" name="403" href="#403">403</a>           }
 <a class="jxr_linenumber" name="404" href="#404">404</a>           <strong class="jxr_keyword">if</strong> (isInFeet) {
 <a class="jxr_linenumber" name="405" href="#405">405</a>             altitudeAsDouble = convertFeetToMetres(altitudeAsDouble);
@@ -444,7 +444,7 @@
 <a class="jxr_linenumber" name="434" href="#434">434</a>       <strong class="jxr_keyword">boolean</strong> containsNonnumeric = MEASURE_MARKER_PATTERN.matcher(source.verbatim).matches();
 <a class="jxr_linenumber" name="435" href="#435">435</a> 
 <a class="jxr_linenumber" name="436" href="#436">436</a>       <strong class="jxr_keyword">if</strong> (containsNonnumeric) {
-<a class="jxr_linenumber" name="437" href="#437">437</a>         source.addIssue(OccurrenceValidationRule.DEPTH_NON_NUMERIC);
+<a class="jxr_linenumber" name="437" href="#437">437</a>         source.addIssue(OccurrenceIssue.DEPTH_NON_NUMERIC);
 <a class="jxr_linenumber" name="438" href="#438">438</a>         <strong class="jxr_keyword">boolean</strong> isInFeet = FEET_MARKER_PATTERN.matcher(source.verbatim).matches();
 <a class="jxr_linenumber" name="439" href="#439">439</a>         <strong class="jxr_keyword">boolean</strong> isInInches = INCHES_MARKER_PATTERN.matcher(source.verbatim).matches();
 <a class="jxr_linenumber" name="440" href="#440">440</a> 
@@ -477,7 +477,7 @@
 <a class="jxr_linenumber" name="467" href="#467">467</a>         <strong class="jxr_keyword">if</strong> (depthAsDouble != <strong class="jxr_keyword">null</strong>) {
 <a class="jxr_linenumber" name="468" href="#468">468</a>           <em class="jxr_comment">// convert to metric</em>
 <a class="jxr_linenumber" name="469" href="#469">469</a>           <strong class="jxr_keyword">if</strong> (isInFeet || isInInches) {
-<a class="jxr_linenumber" name="470" href="#470">470</a>             source.addIssue(OccurrenceValidationRule.DEPTH_PRESUMED_IN_FEET);
+<a class="jxr_linenumber" name="470" href="#470">470</a>             source.addIssue(OccurrenceIssue.DEPTH_PRESUMED_IN_FEET);
 <a class="jxr_linenumber" name="471" href="#471">471</a>           }
 <a class="jxr_linenumber" name="472" href="#472">472</a>           <strong class="jxr_keyword">if</strong> (isInFeet) {
 <a class="jxr_linenumber" name="473" href="#473">473</a>             depthAsDouble = convertFeetToMetres(depthAsDouble);
@@ -521,18 +521,17 @@
 <a class="jxr_linenumber" name="511" href="#511">511</a> 
 <a class="jxr_linenumber" name="512" href="#512">512</a>     String verbatim;
 <a class="jxr_linenumber" name="513" href="#513">513</a>     Double parsed;
-<a class="jxr_linenumber" name="514" href="#514">514</a>     Set&lt;OccurrenceValidationRule&gt; issues = Sets.newHashSet();
+<a class="jxr_linenumber" name="514" href="#514">514</a>     Set&lt;OccurrenceIssue&gt; issues = Sets.newHashSet();
 <a class="jxr_linenumber" name="515" href="#515">515</a> 
 <a class="jxr_linenumber" name="516" href="#516">516</a>     <a href="../../../../../org/gbif/common/parsers/geospatial/GeospatialParseUtils.html">ParseStringToDouble</a>(String verbatim) {
 <a class="jxr_linenumber" name="517" href="#517">517</a>       <strong class="jxr_keyword">this</strong>.verbatim = verbatim;
-<a class="jxr_linenumber" name="518" href="#518">518</a>       <strong class="jxr_keyword">this</strong>.issues = issues;
-<a class="jxr_linenumber" name="519" href="#519">519</a>     }
-<a class="jxr_linenumber" name="520" href="#520">520</a> 
-<a class="jxr_linenumber" name="521" href="#521">521</a>     <strong class="jxr_keyword">void</strong> addIssue(OccurrenceValidationRule rule) {
-<a class="jxr_linenumber" name="522" href="#522">522</a>       issues.add(rule);
-<a class="jxr_linenumber" name="523" href="#523">523</a>     }
-<a class="jxr_linenumber" name="524" href="#524">524</a>   }
-<a class="jxr_linenumber" name="525" href="#525">525</a> }
+<a class="jxr_linenumber" name="518" href="#518">518</a>     }
+<a class="jxr_linenumber" name="519" href="#519">519</a> 
+<a class="jxr_linenumber" name="520" href="#520">520</a>     <strong class="jxr_keyword">void</strong> addIssue(OccurrenceIssue issue) {
+<a class="jxr_linenumber" name="521" href="#521">521</a>       issues.add(issue);
+<a class="jxr_linenumber" name="522" href="#522">522</a>     }
+<a class="jxr_linenumber" name="523" href="#523">523</a>   }
+<a class="jxr_linenumber" name="524" href="#524">524</a> }
 </pre>
 <hr/><div id="footer">This page was automatically generated by <a href="http://maven.apache.org/">Maven</a></div></body>
 </html>
