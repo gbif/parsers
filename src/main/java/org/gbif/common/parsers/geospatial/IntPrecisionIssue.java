@@ -15,12 +15,12 @@ public class IntPrecisionIssue {
 
   private final Integer value;
   private final Integer precision;
-  private final Set<OccurrenceIssue> issues;
+  private final Set<OccurrenceIssue> issues = EnumSet.noneOf(OccurrenceIssue.class);
 
   public IntPrecisionIssue(Integer value, Integer precision, Set<OccurrenceIssue> issues) {
     this.value = value;
     this.precision = precision;
-    this.issues = EnumSet.copyOf(issues);
+    this.issues.addAll(issues);
   }
 
   public IntPrecisionIssue(Integer value, Integer precision, OccurrenceIssue... issue) {
