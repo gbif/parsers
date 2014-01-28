@@ -18,11 +18,11 @@ public class BasisOfRecordParserTest extends FileBasedDictionaryParserTest {
   @Test
   public void testParse() {
     // run a few basic tests to check it bootstraps and appears to work
-    assertParseSuccess(borp, "Living", "living organism");
-    assertParseSuccess(borp, "Specimen", "SpeCImen");
-    assertParseSuccess(borp, "Observation", "sound recording");
-    assertParseSuccess(borp, "Observation", "Observation");
-    assertParseSuccess(borp, "Observation", "O");
+    assertParseSuccess(borp, "LIVING_SPECIMEN", "living organism");
+    assertParseSuccess(borp, "PRESERVED_SPECIMEN", "SpeCImen");
+    assertParseSuccess(borp, "OBSERVATION", "sound recording");
+    assertParseSuccess(borp, "OBSERVATION", "Observation");
+    assertParseSuccess(borp, "OBSERVATION", "O");
   }
 
   /**
@@ -30,15 +30,13 @@ public class BasisOfRecordParserTest extends FileBasedDictionaryParserTest {
    */
   @Test
   public void testDefaultNames() {
-    assertParseSuccess(borp, "Unknown", "unknown");
-    assertParseSuccess(borp, "Observation", "observation");
-    assertParseSuccess(borp, "Specimen", "specimen");
-    assertParseSuccess(borp, "Living", "living");
-    assertParseSuccess(borp, "Germplasm", "germplasm");
-    assertParseSuccess(borp, "Fossil", "fossil");
-    assertParseSuccess(borp, "Literature", "literature");
-    assertParseSuccess(borp, "Regional Checklist", "regional_checklist");
-    assertParseSuccess(borp, "Legislative List", "legislative_list");
+    assertParseSuccess(borp, "UNKNOWN", "unknown");
+    assertParseSuccess(borp, "OBSERVATION", "observation");
+    assertParseSuccess(borp, "PRESERVED_SPECIMEN", "specimen");
+    assertParseSuccess(borp, "LIVING_SPECIMEN", "living");
+    assertParseSuccess(borp, "LIVING_SPECIMEN", "germplasm");
+    assertParseSuccess(borp, "FOSSIL_SPECIMEN", "fossil");
+    assertParseSuccess(borp, "LITERATURE", "literature");
   }
 
   @Test
@@ -46,5 +44,7 @@ public class BasisOfRecordParserTest extends FileBasedDictionaryParserTest {
     assertParseFailure(borp, null);
     assertParseFailure(borp, "");
     assertParseFailure(borp, "Tim");
+    assertParseFailure(borp, "regional_checklist");
+    assertParseFailure(borp, "legislative_list");
   }
 }

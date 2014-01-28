@@ -1,228 +1,226 @@
-Adult, papered	Specimen
-Adult, mounted	Specimen
-Espèce	Specimen
-S	Specimen
-Specimen	Specimen
-Accession	Specimen
-PreservedSpecimen	Specimen
-voucher	Specimen
-Preserved Specimen	Specimen
-Voucher specimen	Specimen
-Voucher specimen(s)	Specimen
-Herbarium sheet	Specimen
-Museum specimen	Specimen
-Espèce	Specimen
-OtherSpecimen	Specimen
-dead seed sample	Specimen
-Collection	Specimen
-specimen(SP)	Specimen
-SP.	Specimen
-SP	Specimen
-herbarium specimen	Specimen
-Voucher reared	Specimen
-"Adult, mounted"	Specimen
-"Adult, papered"	Specimen
-papered specimen	Specimen
-mounted specimen	Specimen
-Preservado	Specimen
-Especimen	Specimen
-Label	Specimen
-Sheet	Specimen
-Prokarya specimen:Bacteria	Specimen
-Prokarya specimen:Archaea	Specimen
-"Electronic Media, Published Report, Specimen"	Specimen
-Emerged specimen	Specimen
-PreservedSp	Specimen
-preserved	Specimen
-Voucher spia	Specimen
-Voucher specim	Specimen
-19 specimens	Specimen
-12 specimens	Specimen
-1 specimen	Specimen
-7 specimens	Specimen
-5 specimens	Specimen
-2 specimens	Specimen
-3 specimens	Specimen
-6 specimens	Specimen
-4 specimens	Specimen
-14 specimens	Specimen
-24 specimens	Specimen
-9 specimens	Specimen
-30 specimens	Specimen
-25 specimens	Specimen
-8 specimens	Specimen
-15 specimens	Specimen
-10 specimens	Specimen
-22 specimens	Specimen
-21 specimens	Specimen
-40 specimens	Specimen
-13 specimens	Specimen
-46 specimens	Specimen
-18 specimens	Specimen
-11 specimens	Specimen
-54 specimens	Specimen
-59 specimens	Specimen
-27 specimens	Specimen
-50 specimens	Specimen
-72 specimens	Specimen
-48 specimens	Specimen
-23 specimens	Specimen
-26 specimens	Specimen
-16 specimens	Specimen
-69 specimens	Specimen
-52 specimens	Specimen
-35 specimens	Specimen
-36 specimens	Specimen
-17 specimens	Specimen
-31 specimens	Specimen
-33 specimens	Specimen
-88 specimens	Specimen
-51 specimens	Specimen
-64 specimens	Specimen
-117 specimens	Specimen
-87 specimens	Specimen
-45 specimens	Specimen
-53 specimens	Specimen
-32 specimens	Specimen
-70 specimens	Specimen
-102 specimens	Specimen
-28 specimens	Specimen
-96 specimens	Specimen
-34 specimens	Specimen
-29 specimens	Specimen
-20 specimens	Specimen
-66 specimens	Specimen
-55 specimens	Specimen
-180 specimens	Specimen
-90 specimens	Specimen
-166 specimens	Specimen
-42 specimens	Specimen
-61 specimens	Specimen
-43 specimens	Specimen
-67 specimens	Specimen
-65 specimens	Specimen
-57 specimens	Specimen
-89 specimens	Specimen
-44 specimens	Specimen
-37 specimens	Specimen
-39 specimens	Specimen
-111 specimens	Specimen
-80 specimens	Specimen
-38 specimens	Specimen
-60 specimens	Specimen
-141 specimens	Specimen
-56 specimens	Specimen
-83 specimens	Specimen
-81 specimens	Specimen
-74 specimens	Specimen
-197 specimens	Specimen
-107 specimens	Specimen
-41 specimens	Specimen
-82 specimens	Specimen
-68 specimens	Specimen
-49 specimens	Specimen
-73 specimens	Specimen
-85 specimens	Specimen
-58 specimens	Specimen
-77 specimens	Specimen
-"specimen, fossil"	Specimen
-121 specimens	Specimen
-76 specimens	Specimen
-95 specimens	Specimen
-62 specimens	Specimen
-75 specimens	Specimen
-47 specimens	Specimen
-148 specimens	Specimen
-79 specimens	Specimen
-118 specimens	Specimen
-100 specimens	Specimen
-63 specimens	Specimen
-collected specimen	Specimen
-ecimen	Specimen
-sp.	Specimen
-Voucher ves	Specimen
-PreservedSpecim6	Specimen
-PreservedS1645	Specimen
-PreservedSpeci	Specimen
-PreservedSpecimenAnseriformes	Specimen
-PreservedSpeczonarius semitorquatus	Specimen
-PreservedSpecieriformes	Specimen
-Preserve179600	Specimen
-PreservedSpver	Specimen
-PreservedSMts.	Specimen
-Preserveds	Specimen
-PreservedSpecucogaster	Specimen
-PreservedSpe5359	Specimen
-PreservedSpecimensseriformes	Specimen
-preserved in alcohol	Specimen
-dry sample	Specimen
-dried specimen	Specimen
-observation	Observation
-O	Observation
-Observación	Observation
-HumanObservation	Observation
-present only (seen or heard)	Observation
-StillImage	Observation
-Field survey	Observation
-Audio recording	Observation
-SoundRecording	Observation
-DrawingOrPhotograph	Observation
-Sighting	Observation
-Sight	Observation
-Photograph	Observation
-Photo	Observation
-OBS	Observation
-FOTO	Observation
-SO	Observation
-Sound	Observation
-Human Observation	Observation
-Observations	Observation
-sound recording	Observation
-drawing	Observation
-imagen	Observation
-imagen tipo	Observation
-Observado	Observation
-Live observation	Observation
-Observación	Observation
-Video recording	Observation
-Still image	Observation
-Obs. from car	Observation
-Obs. from boat	Observation
-alcohol/microscope	Observation
-LivingSpecimen	Living
-L	Living
-living but as yet not sown seeds	Living
-"living, growing plant"	Living
-sown but as yet not germinated seeds	Living
-Live plant collection	Living
-living organism	Living
-living, growing plant	Living
-Living	Living
-LivingSpeciman	Living
-literature	Literature
-Unpublished Report	Literature
-Published Report	Literature
-Publication	Literature
-LiteratureRecord	Literature
-Checklist	Literature
-Reportado	Literature
-Literatur	Literature
-Literaturangabe	Literature
-germplasm/seed	Germplasm
-Exsiccata; cultivated?Yes	Germplasm
-Exsiccata; cultivated? Yes	Germplasm
-FossilRecord	Fossil
-fossil	Fossil
-FossilSpecimen	Fossil
-FossileSpecimen	Fossil
-specimen, fossil	Fossil
-"1727 specimens, fossil"	Fossil
-fossii	Fossil
-unknown	Unknown
-germplasm	Germplasm
-regional_checklist	Regional Checklist
-legislative_list	Legislative List
-Observación humana  Observation
-Observacion humana  Observation
-observacion humana  Observation
-Fossil Specimen  Fossil
+Adult, papered	PRESERVED_SPECIMEN
+Adult, mounted	PRESERVED_SPECIMEN
+Espèce	PRESERVED_SPECIMEN
+S	PRESERVED_SPECIMEN
+Specimen	PRESERVED_SPECIMEN
+Accession	PRESERVED_SPECIMEN
+PreservedSpecimen	PRESERVED_SPECIMEN
+voucher	PRESERVED_SPECIMEN
+Preserved Specimen	PRESERVED_SPECIMEN
+Voucher specimen	PRESERVED_SPECIMEN
+Voucher specimen(s)	PRESERVED_SPECIMEN
+Herbarium sheet	PRESERVED_SPECIMEN
+Museum specimen	PRESERVED_SPECIMEN
+Espèce	PRESERVED_SPECIMEN
+OtherSpecimen	PRESERVED_SPECIMEN
+dead seed sample	PRESERVED_SPECIMEN
+Collection	PRESERVED_SPECIMEN
+specimen(SP)	PRESERVED_SPECIMEN
+SP.	PRESERVED_SPECIMEN
+SP	PRESERVED_SPECIMEN
+herbarium specimen	PRESERVED_SPECIMEN
+Voucher reared	PRESERVED_SPECIMEN
+"Adult, mounted"	PRESERVED_SPECIMEN
+"Adult, papered"	PRESERVED_SPECIMEN
+papered specimen	PRESERVED_SPECIMEN
+mounted specimen	PRESERVED_SPECIMEN
+Preservado	PRESERVED_SPECIMEN
+Especimen	PRESERVED_SPECIMEN
+Label	PRESERVED_SPECIMEN
+Sheet	PRESERVED_SPECIMEN
+Prokarya specimen:Bacteria	PRESERVED_SPECIMEN
+Prokarya specimen:Archaea	PRESERVED_SPECIMEN
+"Electronic Media, Published Report, Specimen"	PRESERVED_SPECIMEN
+Emerged specimen	PRESERVED_SPECIMEN
+PreservedSp	PRESERVED_SPECIMEN
+preserved	PRESERVED_SPECIMEN
+Voucher spia	PRESERVED_SPECIMEN
+Voucher specim	PRESERVED_SPECIMEN
+19 specimens	PRESERVED_SPECIMEN
+12 specimens	PRESERVED_SPECIMEN
+1 specimen	PRESERVED_SPECIMEN
+7 specimens	PRESERVED_SPECIMEN
+5 specimens	PRESERVED_SPECIMEN
+2 specimens	PRESERVED_SPECIMEN
+3 specimens	PRESERVED_SPECIMEN
+6 specimens	PRESERVED_SPECIMEN
+4 specimens	PRESERVED_SPECIMEN
+14 specimens	PRESERVED_SPECIMEN
+24 specimens	PRESERVED_SPECIMEN
+9 specimens	PRESERVED_SPECIMEN
+30 specimens	PRESERVED_SPECIMEN
+25 specimens	PRESERVED_SPECIMEN
+8 specimens	PRESERVED_SPECIMEN
+15 specimens	PRESERVED_SPECIMEN
+10 specimens	PRESERVED_SPECIMEN
+22 specimens	PRESERVED_SPECIMEN
+21 specimens	PRESERVED_SPECIMEN
+40 specimens	PRESERVED_SPECIMEN
+13 specimens	PRESERVED_SPECIMEN
+46 specimens	PRESERVED_SPECIMEN
+18 specimens	PRESERVED_SPECIMEN
+11 specimens	PRESERVED_SPECIMEN
+54 specimens	PRESERVED_SPECIMEN
+59 specimens	PRESERVED_SPECIMEN
+27 specimens	PRESERVED_SPECIMEN
+50 specimens	PRESERVED_SPECIMEN
+72 specimens	PRESERVED_SPECIMEN
+48 specimens	PRESERVED_SPECIMEN
+23 specimens	PRESERVED_SPECIMEN
+26 specimens	PRESERVED_SPECIMEN
+16 specimens	PRESERVED_SPECIMEN
+69 specimens	PRESERVED_SPECIMEN
+52 specimens	PRESERVED_SPECIMEN
+35 specimens	PRESERVED_SPECIMEN
+36 specimens	PRESERVED_SPECIMEN
+17 specimens	PRESERVED_SPECIMEN
+31 specimens	PRESERVED_SPECIMEN
+33 specimens	PRESERVED_SPECIMEN
+88 specimens	PRESERVED_SPECIMEN
+51 specimens	PRESERVED_SPECIMEN
+64 specimens	PRESERVED_SPECIMEN
+117 specimens	PRESERVED_SPECIMEN
+87 specimens	PRESERVED_SPECIMEN
+45 specimens	PRESERVED_SPECIMEN
+53 specimens	PRESERVED_SPECIMEN
+32 specimens	PRESERVED_SPECIMEN
+70 specimens	PRESERVED_SPECIMEN
+102 specimens	PRESERVED_SPECIMEN
+28 specimens	PRESERVED_SPECIMEN
+96 specimens	PRESERVED_SPECIMEN
+34 specimens	PRESERVED_SPECIMEN
+29 specimens	PRESERVED_SPECIMEN
+20 specimens	PRESERVED_SPECIMEN
+66 specimens	PRESERVED_SPECIMEN
+55 specimens	PRESERVED_SPECIMEN
+180 specimens	PRESERVED_SPECIMEN
+90 specimens	PRESERVED_SPECIMEN
+166 specimens	PRESERVED_SPECIMEN
+42 specimens	PRESERVED_SPECIMEN
+61 specimens	PRESERVED_SPECIMEN
+43 specimens	PRESERVED_SPECIMEN
+67 specimens	PRESERVED_SPECIMEN
+65 specimens	PRESERVED_SPECIMEN
+57 specimens	PRESERVED_SPECIMEN
+89 specimens	PRESERVED_SPECIMEN
+44 specimens	PRESERVED_SPECIMEN
+37 specimens	PRESERVED_SPECIMEN
+39 specimens	PRESERVED_SPECIMEN
+111 specimens	PRESERVED_SPECIMEN
+80 specimens	PRESERVED_SPECIMEN
+38 specimens	PRESERVED_SPECIMEN
+60 specimens	PRESERVED_SPECIMEN
+141 specimens	PRESERVED_SPECIMEN
+56 specimens	PRESERVED_SPECIMEN
+83 specimens	PRESERVED_SPECIMEN
+81 specimens	PRESERVED_SPECIMEN
+74 specimens	PRESERVED_SPECIMEN
+197 specimens	PRESERVED_SPECIMEN
+107 specimens	PRESERVED_SPECIMEN
+41 specimens	PRESERVED_SPECIMEN
+82 specimens	PRESERVED_SPECIMEN
+68 specimens	PRESERVED_SPECIMEN
+49 specimens	PRESERVED_SPECIMEN
+73 specimens	PRESERVED_SPECIMEN
+85 specimens	PRESERVED_SPECIMEN
+58 specimens	PRESERVED_SPECIMEN
+77 specimens	PRESERVED_SPECIMEN
+"specimen, fossil"	PRESERVED_SPECIMEN
+121 specimens	PRESERVED_SPECIMEN
+76 specimens	PRESERVED_SPECIMEN
+95 specimens	PRESERVED_SPECIMEN
+62 specimens	PRESERVED_SPECIMEN
+75 specimens	PRESERVED_SPECIMEN
+47 specimens	PRESERVED_SPECIMEN
+148 specimens	PRESERVED_SPECIMEN
+79 specimens	PRESERVED_SPECIMEN
+118 specimens	PRESERVED_SPECIMEN
+100 specimens	PRESERVED_SPECIMEN
+63 specimens	PRESERVED_SPECIMEN
+collected specimen	PRESERVED_SPECIMEN
+ecimen	PRESERVED_SPECIMEN
+sp.	PRESERVED_SPECIMEN
+Voucher ves	PRESERVED_SPECIMEN
+PreservedSpecim6	PRESERVED_SPECIMEN
+PreservedS1645	PRESERVED_SPECIMEN
+PreservedSpeci	PRESERVED_SPECIMEN
+PreservedSpecimenAnseriformes	PRESERVED_SPECIMEN
+PreservedSpeczonarius semitorquatus	PRESERVED_SPECIMEN
+PreservedSpecieriformes	PRESERVED_SPECIMEN
+Preserve179600	PRESERVED_SPECIMEN
+PreservedSpver	PRESERVED_SPECIMEN
+PreservedSMts.	PRESERVED_SPECIMEN
+Preserveds	PRESERVED_SPECIMEN
+PreservedSpecucogaster	PRESERVED_SPECIMEN
+PreservedSpe5359	PRESERVED_SPECIMEN
+PreservedSpecimensseriformes	PRESERVED_SPECIMEN
+preserved in alcohol	PRESERVED_SPECIMEN
+dry sample	PRESERVED_SPECIMEN
+dried specimen	PRESERVED_SPECIMEN
+observation	OBSERVATION
+O	OBSERVATION
+Observación	OBSERVATION
+HumanObservation	HUMAN_OBSERVATION
+present only (seen or heard)	OBSERVATION
+StillImage	OBSERVATION
+Field survey	OBSERVATION
+Audio recording	OBSERVATION
+SoundRecording	OBSERVATION
+DrawingOrPhotograph	OBSERVATION
+Sighting	OBSERVATION
+Sight	OBSERVATION
+Photograph	OBSERVATION
+Photo	OBSERVATION
+OBS	OBSERVATION
+FOTO	OBSERVATION
+SO	OBSERVATION
+Sound	OBSERVATION
+Human Observation	HUMAN_OBSERVATION
+Observations	OBSERVATION
+sound recording	OBSERVATION
+drawing	OBSERVATION
+imagen	OBSERVATION
+imagen tipo	OBSERVATION
+Observado	OBSERVATION
+Live observation	OBSERVATION
+Observación	OBSERVATION
+Video recording	OBSERVATION
+Still image	OBSERVATION
+Obs. from car	OBSERVATION
+Obs. from boat	OBSERVATION
+alcohol/microscope	OBSERVATION
+LivingSpecimen	LIVING_SPECIMEN
+L	LIVING_SPECIMEN
+living but as yet not sown seeds	LIVING_SPECIMEN
+"living, growing plant"	LIVING_SPECIMEN
+sown but as yet not germinated seeds	LIVING_SPECIMEN
+Live plant collection	LIVING_SPECIMEN
+living organism	LIVING_SPECIMEN
+living, growing plant	LIVING_SPECIMEN
+Living	LIVING_SPECIMEN
+LivingSpeciman	LIVING_SPECIMEN
+literature	LITERATURE
+Unpublished Report	LITERATURE
+Published Report	LITERATURE
+Publication	LITERATURE
+LiteratureRecord	LITERATURE
+Checklist	LITERATURE
+Reportado	LITERATURE
+Literatur	LITERATURE
+Literaturangabe	LITERATURE
+germplasm/seed	LIVING_SPECIMEN
+Exsiccata; cultivated?Yes	LIVING_SPECIMEN
+Exsiccata; cultivated? Yes	LIVING_SPECIMEN
+FossilRecord	FOSSIL_SPECIMEN
+fossil	FOSSIL_SPECIMEN
+FossilSpecimen	FOSSIL_SPECIMEN
+FossileSpecimen	FOSSIL_SPECIMEN
+specimen, fossil	FOSSIL_SPECIMEN
+"1727 specimens, fossil"	FOSSIL_SPECIMEN
+fossii	FOSSIL_SPECIMEN
+unknown	UNKNOWN
+germplasm	LIVING_SPECIMEN
+Observación humana  HUMAN_OBSERVATION
+Observacion humana  HUMAN_OBSERVATION
+observacion humana  HUMAN_OBSERVATION
+Fossil Specimen  FOSSIL_SPECIMEN

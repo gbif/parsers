@@ -139,6 +139,10 @@ public class MappingUtils {
     return PHYLA.get(p.toUpperCase());
   }
 
+  /**
+  * @deprecated use InterpretedBasisOfRecordParser and the API enum instead
+  */
+  @Deprecated
   public static Integer mapBasisOfRecord(String bor) {
     if (bor == null) {
       return null;

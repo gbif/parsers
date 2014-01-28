@@ -1,5 +1,6 @@
 package org.gbif.common.parsers.basisofrecord;
 
+import org.gbif.api.vocabulary.BasisOfRecord;
 import org.gbif.common.parsers.FileBasedDictionaryParser;
 
 import java.io.InputStream;
@@ -13,6 +14,7 @@ public class BasisOfRecordParser extends FileBasedDictionaryParser {
 
   private BasisOfRecordParser(boolean caseSensitive, InputStream... file) {
     super(caseSensitive, file);
+    addEnumValues();
   }
 
   public static BasisOfRecordParser getInstance()
@@ -24,5 +26,11 @@ public class BasisOfRecordParser extends FileBasedDictionaryParser {
       }
     }
     return singletonObject;
+  }
+
+  private void addEnumValues() {
+    for (BasisOfRecord bor : BasisOfRecord.values()) {
+      add(bor.name(), bor.name());
+    }
   }
 }
