@@ -4,6 +4,7 @@ import org.gbif.api.vocabulary.OccurrenceIssue;
 import org.gbif.common.parsers.Parsable;
 import org.gbif.common.parsers.ParseResult;
 
+import java.util.EnumSet;
 import java.util.Set;
 import java.util.regex.Pattern;
 
@@ -255,7 +256,7 @@ public class GeospatialParseUtils {
       @Override
       public ParseResult<IntPrecisionIssue> parse(Void v) {
 
-        Set<OccurrenceIssue> issues = Sets.newHashSet();
+        Set<OccurrenceIssue> issues = EnumSet.noneOf(OccurrenceIssue.class);
 
         ParseStringToDouble source = new ParseStringToDouble(minimum);
         getAltitudeMeasurement(source);

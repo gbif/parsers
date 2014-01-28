@@ -2,6 +2,7 @@ package org.gbif.common.parsers.geospatial;
 
 import org.gbif.api.vocabulary.OccurrenceIssue;
 
+import java.util.EnumSet;
 import java.util.Set;
 
 import com.google.common.base.Objects;
@@ -19,7 +20,7 @@ public class IntPrecisionIssue {
   public IntPrecisionIssue(Integer value, Integer precision, Set<OccurrenceIssue> issues) {
     this.value = value;
     this.precision = precision;
-    this.issues = issues;
+    this.issues = EnumSet.copyOf(issues);
   }
 
   public IntPrecisionIssue(Integer value, Integer precision, OccurrenceIssue... issue) {
