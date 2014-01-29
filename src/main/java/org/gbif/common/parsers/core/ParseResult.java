@@ -6,6 +6,7 @@ import java.util.Collection;
 import java.util.EnumSet;
 import java.util.Set;
 
+import com.google.common.base.Preconditions;
 import com.google.common.base.Predicates;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
@@ -134,6 +135,11 @@ public class ParseResult<T> {
 
   public Set<OccurrenceIssue> getIssues() {
     return issues;
+  }
+
+  public void addIssue(OccurrenceIssue issue) {
+    Preconditions.checkNotNull(issue);
+    issues.add(issue);
   }
 
   /**

@@ -8,6 +8,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.regex.Pattern;
 
+import com.google.common.base.Strings;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateUtils;
 import org.slf4j.Logger;
@@ -76,6 +77,10 @@ class StringToDateParser implements Parsable<Date> {
    */
   @Override
   public ParseResult<Date> parse(String input) {
+
+    if (Strings.isNullOrEmpty(input)) {
+      return ParseResult.fail();
+    }
 
     final int len = input.length();
     Date d = null;
