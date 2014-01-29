@@ -1,7 +1,7 @@
 package org.gbif.common.parsers.date;
 
 
-import org.gbif.common.parsers.ParseResult;
+import org.gbif.common.parsers.core.ParseResult;
 
 import java.text.ParseException;
 import java.text.ParsePosition;
@@ -296,7 +296,7 @@ public class DateParseUtils {
       // atomize
       YearMonthDay atomized = atomize(parsed.getPayload());
       // construct a combined result of the 2 stages
-      return new ParseResult<YearMonthDay>(ParseResult.STATUS.SUCCESS, parsed.getConfidence(), atomized, null);
+      return ParseResult.success(parsed.getConfidence(), atomized);
 
     } else if (ParseResult.STATUS.ERROR == parsed.getStatus()) {
       return ParseResult.error(parsed.getError());

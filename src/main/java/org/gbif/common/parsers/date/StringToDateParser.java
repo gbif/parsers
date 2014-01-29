@@ -1,7 +1,7 @@
 package org.gbif.common.parsers.date;
 
-import org.gbif.common.parsers.Parsable;
-import org.gbif.common.parsers.ParseResult;
+import org.gbif.common.parsers.core.Parsable;
+import org.gbif.common.parsers.core.ParseResult;
 
 import java.text.ParseException;
 import java.util.Calendar;
@@ -16,7 +16,7 @@ import org.slf4j.LoggerFactory;
 /**
  * Implementation to take String and algorithmically convert to Date objects.
  */
-class StringToDateParser implements Parsable<String, Date> {
+class StringToDateParser implements Parsable<Date> {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(StringToDateParser.class);
 

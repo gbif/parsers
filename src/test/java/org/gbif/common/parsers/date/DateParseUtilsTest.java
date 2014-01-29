@@ -1,6 +1,6 @@
 package org.gbif.common.parsers.date;
 
-import org.gbif.common.parsers.ParseResult;
+import org.gbif.common.parsers.core.ParseResult;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;

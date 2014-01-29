@@ -19,7 +19,7 @@ public final class BlacklistedNames {
 
   private static final Set<String> NAMES = new HashSet<String>();
 
-  private static final String BLACKLIST_FILE = "blacklistedNames.txt";
+  private static final String BLACKLIST_FILE = "utils/blacklistedNames.txt";
 
   static {
     init(BLACKLIST_FILE);

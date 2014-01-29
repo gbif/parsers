@@ -1,8 +1,8 @@
 package org.gbif.common.parsers.geospatial;
 
 import org.gbif.api.vocabulary.OccurrenceIssue;
-import org.gbif.common.parsers.Parsable;
-import org.gbif.common.parsers.ParseResult;
+import org.gbif.common.parsers.core.Parsable;
+import org.gbif.common.parsers.core.ParseResult;
 
 import java.util.EnumSet;
 import java.util.Set;
@@ -97,8 +97,8 @@ public class GeospatialParseUtils {
   /**
    * This parses string representations of latitude and longitude values. It tries its best to interpret the values and
    * indicates any problems in its result as {@link org.gbif.api.vocabulary.OccurrenceIssue}.
-   * When the {@link ParseResult.STATUS} is either SUCCESS or FAIL the payload will always be non-null and the
-   * {@link LatLngIssue#getIssue()} method should return any issues there were. In case the issue is ERROR the payload
+   * When the {@link ParseResult.STATUS} is FAIL the payload will be null and one or more issues should be set
+   * in {@link ParseResult#getIssues()}. In case the issue is ERROR the payload
    * will usually be {@code null}.
    *
    * @param latitude  The verbatim latitude
@@ -106,10 +106,10 @@ public class GeospatialParseUtils {
    *
    * @return The parse result
    */
-  public static ParseResult<LatLngIssue> parseLatLng(final String latitude, final String longitude) {
-    return new Parsable<Void, LatLngIssue>() {
+  public static ParseResult<LatLng> parseLatLng(final String latitude, final String longitude) {
+    return new Parsable<LatLng>() {
       @Override
-      public ParseResult<LatLngIssue> parse(Void v) {
+      public ParseResult<LatLng> parse(String v) {
         Double lat;
         Double lng;
         try {
@@ -122,13 +122,13 @@ public class GeospatialParseUtils {
         // 0,0 is too suspicious
         if (Double.compare(lat, 0) == 0 && Double.compare(lng, 0) == 0) {
           return ParseResult
-            .success(ParseResult.CONFIDENCE.POSSIBLE, new LatLngIssue(0, 0, OccurrenceIssue.ZERO_COORDINATE));
+            .success(ParseResult.CONFIDENCE.POSSIBLE, new LatLng(0, 0), OccurrenceIssue.ZERO_COORDINATE);
         }
 
         // if everything falls in range
         if (Double.compare(lat, 90) <= 0 && Double.compare(lat, -90) >= 0 && Double.compare(lng, 180) <= 0
             && Double.compare(lng, -180) >= 0) {
-          return ParseResult.success(ParseResult.CONFIDENCE.DEFINITE, new LatLngIssue(lat, lng));
+          return ParseResult.success(ParseResult.CONFIDENCE.DEFINITE, new LatLng(lat, lng));
         }
 
         // if lat is out of range, but in range of the lng,
@@ -141,12 +141,12 @@ public class GeospatialParseUtils {
           // try and swap
           if (Double.compare(lng, 90) <= 0 && Double.compare(lng, -90) >= 0 && Double.compare(lat, 180) <= 0
               && Double.compare(lat, -180) >= 0) {
-            return ParseResult.fail(new LatLngIssue(lat, lng, OccurrenceIssue.PRESUMED_SWAPPED_COORDINATE));
+            return ParseResult.fail(new LatLng(lat, lng), OccurrenceIssue.PRESUMED_SWAPPED_COORDINATE);
           }
         }
 
         // then something is out of range
-        return ParseResult.fail(new LatLngIssue(OccurrenceIssue.COORDINATES_OUT_OF_RANGE));
+        return ParseResult.fail(OccurrenceIssue.COORDINATES_OUT_OF_RANGE);
       }
     }.parse(null);
   }
@@ -161,11 +161,11 @@ public class GeospatialParseUtils {
    *
    * @return The parse result
    */
-  public static ParseResult<IntPrecisionIssue> parseDepth(final String minimum, final String maximum,
+  public static ParseResult<IntPrecision> parseDepth(final String minimum, final String maximum,
     final String precisionAsString) {
-    return new Parsable<Void, IntPrecisionIssue>() {
+    return new Parsable<IntPrecision>() {
       @Override
-      public ParseResult<IntPrecisionIssue> parse(Void v) {
+      public ParseResult<IntPrecision> parse(String v) {
 
         Set<OccurrenceIssue> issues = Sets.newHashSet();
 
@@ -189,7 +189,7 @@ public class GeospatialParseUtils {
 
         if (min == null && max == null) {
           // both are null
-          return ParseResult.fail();
+          return ParseResult.fail(issues);
         }
 
         min = min == null ? max : min;
@@ -216,18 +216,14 @@ public class GeospatialParseUtils {
         if (depthInMetres <= MAX_RECORD_DEPTH_IN_METRES
             && depthInMetres >= MIN_RECORD_DEPTH_IN_METERS) {
           if (precision != null) {
-            return ParseResult
-              .success(ParseResult.CONFIDENCE.DEFINITE,
-                       new IntPrecisionIssue(roundedInt(depth), roundedInt(precision), issues));
+            return ParseResult.success(ParseResult.CONFIDENCE.DEFINITE, new IntPrecision(roundedInt(depth), roundedInt(precision)), issues);
           } else {
-            return ParseResult
-              .success(ParseResult.CONFIDENCE.DEFINITE,
-              new IntPrecisionIssue(roundedInt(depth), null, issues));
+            return ParseResult.success(ParseResult.CONFIDENCE.DEFINITE, new IntPrecision(roundedInt(depth), null), issues);
           }
         }
 
         // we get no value during parsing
-        return ParseResult.success(ParseResult.CONFIDENCE.DEFINITE, new IntPrecisionIssue(null, null, issues));
+        return ParseResult.success(ParseResult.CONFIDENCE.DEFINITE, new IntPrecision(null, null), issues);
       }
 
     }.parse(null);
@@ -250,11 +246,11 @@ public class GeospatialParseUtils {
    *
    * @return The parse result
    */
-  public static ParseResult<IntPrecisionIssue> parseAltitude(final String minimum, final String maximum,
+  public static ParseResult<IntPrecision> parseAltitude(final String minimum, final String maximum,
     final String precisionAsString) {
-    return new Parsable<Void, IntPrecisionIssue>() {
+    return new Parsable<IntPrecision>() {
       @Override
-      public ParseResult<IntPrecisionIssue> parse(Void v) {
+      public ParseResult<IntPrecision> parse(String v) {
 
         Set<OccurrenceIssue> issues = EnumSet.noneOf(OccurrenceIssue.class);
 
@@ -339,10 +335,10 @@ public class GeospatialParseUtils {
         }
         if (altitude != null && altitude <= MAX_TO_RECORD_ALTITUDE_IN_METRES && altitude >= MIN_TO_RECORD_ALTITUDE_IN_METRES) {
           return ParseResult
-            .success(ParseResult.CONFIDENCE.DEFINITE, new IntPrecisionIssue(altitude, precisionAsInt, issues));
+            .success(ParseResult.CONFIDENCE.DEFINITE, new IntPrecision(altitude, precisionAsInt), issues);
         } else if (altitude != null) {
           return ParseResult
-            .success(ParseResult.CONFIDENCE.DEFINITE, new IntPrecisionIssue(null, precisionAsInt, issues));
+            .success(ParseResult.CONFIDENCE.DEFINITE, new IntPrecision(null, precisionAsInt), issues);
         } else {
           return ParseResult.fail();
         }
