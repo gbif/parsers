@@ -11,7 +11,7 @@
 <a class="jxr_linenumber" name="1" href="#1">1</a>   <strong class="jxr_keyword">package</strong> org.gbif.common.parsers.date;
 <a class="jxr_linenumber" name="2" href="#2">2</a>   
 <a class="jxr_linenumber" name="3" href="#3">3</a>   
-<a class="jxr_linenumber" name="4" href="#4">4</a>   <strong class="jxr_keyword">import</strong> org.gbif.common.parsers.ParseResult;
+<a class="jxr_linenumber" name="4" href="#4">4</a>   <strong class="jxr_keyword">import</strong> org.gbif.common.parsers.core.ParseResult;
 <a class="jxr_linenumber" name="5" href="#5">5</a>   
 <a class="jxr_linenumber" name="6" href="#6">6</a>   <strong class="jxr_keyword">import</strong> java.text.ParseException;
 <a class="jxr_linenumber" name="7" href="#7">7</a>   <strong class="jxr_keyword">import</strong> java.text.ParsePosition;
@@ -306,7 +306,7 @@
 <a class="jxr_linenumber" name="296" href="#296">296</a>       <em class="jxr_comment">// atomize</em>
 <a class="jxr_linenumber" name="297" href="#297">297</a>       <a href="../../../../../org/gbif/common/parsers/date/YearMonthDay.html">YearMonthDay</a> atomized = atomize(parsed.getPayload());
 <a class="jxr_linenumber" name="298" href="#298">298</a>       <em class="jxr_comment">// construct a combined result of the 2 stages</em>
-<a class="jxr_linenumber" name="299" href="#299">299</a>       <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> ParseResult&lt;YearMonthDay&gt;(ParseResult.STATUS.SUCCESS, parsed.getConfidence(), atomized, <strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="299" href="#299">299</a>       <strong class="jxr_keyword">return</strong> ParseResult.success(parsed.getConfidence(), atomized);
 <a class="jxr_linenumber" name="300" href="#300">300</a> 
 <a class="jxr_linenumber" name="301" href="#301">301</a>     } <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (ParseResult.STATUS.ERROR == parsed.getStatus()) {
 <a class="jxr_linenumber" name="302" href="#302">302</a>       <strong class="jxr_keyword">return</strong> ParseResult.error(parsed.getError());

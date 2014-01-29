@@ -10,8 +10,8 @@
 
 <a class="jxr_linenumber" name="1" href="#1">1</a>   <strong class="jxr_keyword">package</strong> org.gbif.common.parsers.date;
 <a class="jxr_linenumber" name="2" href="#2">2</a>   
-<a class="jxr_linenumber" name="3" href="#3">3</a>   <strong class="jxr_keyword">import</strong> org.gbif.common.parsers.Parsable;
-<a class="jxr_linenumber" name="4" href="#4">4</a>   <strong class="jxr_keyword">import</strong> org.gbif.common.parsers.ParseResult;
+<a class="jxr_linenumber" name="3" href="#3">3</a>   <strong class="jxr_keyword">import</strong> org.gbif.common.parsers.core.Parsable;
+<a class="jxr_linenumber" name="4" href="#4">4</a>   <strong class="jxr_keyword">import</strong> org.gbif.common.parsers.core.ParseResult;
 <a class="jxr_linenumber" name="5" href="#5">5</a>   
 <a class="jxr_linenumber" name="6" href="#6">6</a>   <strong class="jxr_keyword">import</strong> java.text.ParseException;
 <a class="jxr_linenumber" name="7" href="#7">7</a>   <strong class="jxr_keyword">import</strong> java.util.Calendar;
@@ -26,7 +26,7 @@
 <a class="jxr_linenumber" name="16" href="#16">16</a>  <em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="17" href="#17">17</a>  <em class="jxr_javadoccomment"> * Implementation to take String and algorithmically convert to Date objects.</em>
 <a class="jxr_linenumber" name="18" href="#18">18</a>  <em class="jxr_javadoccomment"> */</em>
-<a class="jxr_linenumber" name="19" href="#19">19</a>  <strong class="jxr_keyword">class</strong> <a href="../../../../../org/gbif/common/parsers/date/StringToDateParser.html">StringToDateParser</a> <strong class="jxr_keyword">implements</strong> Parsable&lt;String, Date&gt; {
+<a class="jxr_linenumber" name="19" href="#19">19</a>  <strong class="jxr_keyword">class</strong> <a href="../../../../../org/gbif/common/parsers/date/StringToDateParser.html">StringToDateParser</a> <strong class="jxr_keyword">implements</strong> Parsable&lt;Date&gt; {
 <a class="jxr_linenumber" name="20" href="#20">20</a>  
 <a class="jxr_linenumber" name="21" href="#21">21</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Logger LOGGER = LoggerFactory.getLogger(StringToDateParser.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="22" href="#22">22</a>  
