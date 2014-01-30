@@ -25,7 +25,7 @@
 <a class="jxr_linenumber" name="15" href="#15">15</a>  
 <a class="jxr_linenumber" name="16" href="#16">16</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.junit.Assert.assertTrue;
 <a class="jxr_linenumber" name="17" href="#17">17</a>  
-<a class="jxr_linenumber" name="18" href="#18">18</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../org/gbif/common/parsers/CountryParserTest.html">CountryParserTest</a> <strong class="jxr_keyword">extends</strong> EnumParserTest&lt;Country&gt; {
+<a class="jxr_linenumber" name="18" href="#18">18</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../org/gbif/common/parsers/CountryParserTest.html">CountryParserTest</a> <strong class="jxr_keyword">extends</strong> ParserTestBase&lt;Country&gt; {
 <a class="jxr_linenumber" name="19" href="#19">19</a>  
 <a class="jxr_linenumber" name="20" href="#20">20</a>    <strong class="jxr_keyword">public</strong> <a href="../../../../org/gbif/common/parsers/CountryParserTest.html">CountryParserTest</a>() {
 <a class="jxr_linenumber" name="21" href="#21">21</a>      <strong class="jxr_keyword">super</strong>(CountryParser.getInstance());
@@ -49,8 +49,8 @@
 <a class="jxr_linenumber" name="39" href="#39">39</a>  <em class="jxr_javadoccomment">   */</em>
 <a class="jxr_linenumber" name="40" href="#40">40</a>    @Test
 <a class="jxr_linenumber" name="41" href="#41">41</a>    <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testOccurrenceValues() <strong class="jxr_keyword">throws</strong> IOException {
-<a class="jxr_linenumber" name="42" href="#42">42</a>      <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> CURRENT_COUNTRIES_PARSED = 246;
-<a class="jxr_linenumber" name="43" href="#43">43</a>      <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> CURRENT_TESTS_SUCCESSFUL = 2976;
+<a class="jxr_linenumber" name="42" href="#42">42</a>      <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> CURRENT_COUNTRIES_PARSED = 251; <em class="jxr_comment">//246;</em>
+<a class="jxr_linenumber" name="43" href="#43">43</a>      <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> CURRENT_TESTS_SUCCESSFUL = 3311;<em class="jxr_comment">// 2976;</em>
 <a class="jxr_linenumber" name="44" href="#44">44</a>  
 <a class="jxr_linenumber" name="45" href="#45">45</a>  
 <a class="jxr_linenumber" name="46" href="#46">46</a>      <em class="jxr_comment">// remember number of successful parsed countries:</em>
