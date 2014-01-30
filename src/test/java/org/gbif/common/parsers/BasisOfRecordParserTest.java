@@ -7,7 +7,7 @@ import org.junit.Test;
 /**
  *
  */
-public class BasisOfRecordParserTest extends EnumParserTest<BasisOfRecord> {
+public class BasisOfRecordParserTest extends ParserTestBase<BasisOfRecord> {
 
   public BasisOfRecordParserTest() {
     super(BasisOfRecordParser.getInstance());

@@ -15,7 +15,7 @@ import org.junit.Test;
 
 import static org.junit.Assert.assertTrue;
 
-public class CountryParserTest extends EnumParserTest<Country> {
+public class CountryParserTest extends ParserTestBase<Country> {
 
   public CountryParserTest() {
     super(CountryParser.getInstance());
@@ -39,8 +39,8 @@ public class CountryParserTest extends EnumParserTest<Country> {
    */
   @Test
   public void testOccurrenceValues() throws IOException {
-    final int CURRENT_COUNTRIES_PARSED = 246;
-    final int CURRENT_TESTS_SUCCESSFUL = 2976;
+    final int CURRENT_COUNTRIES_PARSED = 251; //246;
+    final int CURRENT_TESTS_SUCCESSFUL = 3311;// 2976;
 
 
     // remember number of successful parsed countries:

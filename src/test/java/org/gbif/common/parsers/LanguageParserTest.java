@@ -5,7 +5,7 @@ import org.gbif.api.vocabulary.Language;
 
 import org.junit.Test;
 
-public class LanguageParserTest extends EnumParserTest<Language> {
+public class LanguageParserTest extends ParserTestBase<Language> {
 
   public LanguageParserTest() {
     super(LanguageParser.getInstance());

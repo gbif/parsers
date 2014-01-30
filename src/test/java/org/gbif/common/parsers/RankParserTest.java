@@ -4,7 +4,7 @@ import org.gbif.api.vocabulary.Rank;
 
 import org.junit.Test;
 
-public class RankParserTest extends EnumParserTest<Rank> {
+public class RankParserTest extends ParserTestBase<Rank> {
 
   public RankParserTest() {
     super(RankParser.getInstance());

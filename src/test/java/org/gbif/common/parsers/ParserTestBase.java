@@ -1,6 +1,6 @@
 package org.gbif.common.parsers;
 
-import org.gbif.common.parsers.core.EnumParser;
+import org.gbif.common.parsers.core.Parsable;
 import org.gbif.common.parsers.core.ParseResult;
 
 import java.io.IOException;
@@ -12,8 +12,8 @@ import org.junit.Before;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
-public class EnumParserTest<T extends Enum<T>> implements LineProcessor<EnumParserTest.BatchParseResult>  {
-  protected final EnumParser<T> parser;
+public abstract class ParserTestBase<T> implements LineProcessor<ParserTestBase.BatchParseResult>  {
+  protected final Parsable<T> parser;
   private BatchParseResult batchResult;
 
   public static class BatchParseResult {
@@ -26,7 +26,7 @@ public class EnumParserTest<T extends Enum<T>> implements LineProcessor<EnumPars
     batchResult = new BatchParseResult();
   }
 
-  public EnumParserTest(EnumParser<T> parser) {
+  public ParserTestBase(Parsable<T> parser) {
     this.parser = parser;
   }
 
@@ -36,12 +36,18 @@ public class EnumParserTest<T extends Enum<T>> implements LineProcessor<EnumPars
   }
 
   protected void assertParseSuccess(T expected, String input) {
+    assertParseSuccess(expected, ParseResult.CONFIDENCE.DEFINITE, input);
+  }
+
+  protected void assertParseSuccess(T expected, ParseResult.CONFIDENCE confidence, String input) {
     ParseResult<T> parsed = parser.parse(input);
     assertNotNull(parsed);
     assertEquals(ParseResult.STATUS.SUCCESS, parsed.getStatus());
     assertNotNull(parsed.getPayload());
     assertEquals(expected, parsed.getPayload());
-    assertEquals(ParseResult.CONFIDENCE.DEFINITE, parsed.getConfidence());
+    if (confidence != null) {
+      assertEquals(confidence, parsed.getConfidence());
+    }
   }
 
   @Override
@@ -58,7 +64,7 @@ public class EnumParserTest<T extends Enum<T>> implements LineProcessor<EnumPars
   }
 
   @Override
-  public EnumParserTest.BatchParseResult getResult() {
+  public ParserTestBase.BatchParseResult getResult() {
     return batchResult;
   }
 }
