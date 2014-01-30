@@ -32,7 +32,7 @@ public abstract class ParserTestBase<T> implements LineProcessor<ParserTestBase.
 
   protected void assertParseFailure(String input) {
     ParseResult<T> parsed = parser.parse(input);
-    assertEquals(ParseResult.STATUS.FAIL, parsed.getStatus());
+    assertEquals("Expected "+input+" to fail but got "+parsed.getPayload()+" instead", ParseResult.STATUS.FAIL, parsed.getStatus());
   }
 
   protected void assertParseSuccess(T expected, String input) {

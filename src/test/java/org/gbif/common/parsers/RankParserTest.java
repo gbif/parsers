@@ -34,5 +34,7 @@ public class RankParserTest extends ParserTestBase<Rank> {
     // run a few basic tests to check it bootstraps and appears to work
     assertParseSuccess(Rank.SPECIES, "species");
     assertParseSuccess(Rank.SPECIES, "SPECIES");
+    assertParseSuccess(Rank.SPECIES, "spécies");
+    assertParseSuccess(Rank.SPECIES, "speçies");
   }
 }

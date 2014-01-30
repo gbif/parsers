@@ -40,7 +40,7 @@ public class CountryParserTest extends ParserTestBase<Country> {
   @Test
   public void testOccurrenceValues() throws IOException {
     final int CURRENT_COUNTRIES_PARSED = 251; //246;
-    final int CURRENT_TESTS_SUCCESSFUL = 3311;// 2976;
+    final int CURRENT_TESTS_SUCCESSFUL = 5067;// 2976;
 
 
     // remember number of successful parsed countries:
@@ -79,9 +79,9 @@ public class CountryParserTest extends ParserTestBase<Country> {
 
   @Test
   public void testParseFail() {
-    assertParseFailure("[West Indian Ocean]");
     assertParseFailure("Really great britain");
     assertParseFailure("Borneo");
+    assertParseFailure("Padua");
   }
 
   @Test
@@ -105,5 +105,10 @@ public class CountryParserTest extends ParserTestBase<Country> {
     assertParseSuccess(Country.GERMANY, "Germany");
     assertParseSuccess(Country.GERMANY, "deutschland");
     assertParseSuccess(Country.GERMANY, "De");
+    assertParseSuccess(Country.NORTHERN_MARIANA_ISLANDS, "[West Indian Ocean]");
+
+    assertParseSuccess(Country.FAROE_ISLANDS, "Faroe");
+    assertParseSuccess(Country.FAROE_ISLANDS, "Farœ");
+    assertParseSuccess(Country.FAROE_ISLANDS, "Faröe");
   }
 }

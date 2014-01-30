@@ -16,6 +16,7 @@ public class EnumParser<T extends Enum<T>> extends FileBasedDictionaryParser<T> 
 
   private final Class<T> clazz;
   private final Pattern NORMALIZER;
+  private final ASCIIParser ascii = ASCIIParser.getInstance();
 
   protected EnumParser(Class<T> clazz, boolean allowDigits, final InputStream... inputs) {
     super(false);
@@ -48,7 +49,9 @@ public class EnumParser<T extends Enum<T>> extends FileBasedDictionaryParser<T> 
   @Override
   protected String normalize(String value) {
     if (Strings.isNullOrEmpty(value)) return null;
-    return NORMALIZER.matcher(value).replaceAll("").toUpperCase();
+    // convert to ascii
+    ParseResult<String> asci = ascii.parse(value);
+    return NORMALIZER.matcher(asci.getPayload()).replaceAll("").toUpperCase();
   }
 
   @Override
