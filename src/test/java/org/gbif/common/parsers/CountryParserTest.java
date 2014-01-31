@@ -80,8 +80,17 @@ public class CountryParserTest extends ParserTestBase<Country> {
   @Test
   public void testParseFail() {
     assertParseFailure("Really great britain");
-    assertParseFailure("Borneo");
     assertParseFailure("Padua");
+  }
+
+  @Test
+  public void testParseUnknown() {
+    assertParseSuccess(Country.UNKNOWN, "U S S R");
+    assertParseSuccess(Country.UNKNOWN, "USSR");
+    assertParseSuccess(Country.UNKNOWN, "U S S R");
+    assertParseSuccess(Country.UNKNOWN, "U S S R");
+    assertParseSuccess(Country.UNKNOWN, "NETHERLANDS ANTILLES");
+    assertParseSuccess(Country.UNKNOWN, "Borneo");
   }
 
   @Test
@@ -110,5 +119,34 @@ public class CountryParserTest extends ParserTestBase<Country> {
     assertParseSuccess(Country.FAROE_ISLANDS, "Faroe");
     assertParseSuccess(Country.FAROE_ISLANDS, "Farœ");
     assertParseSuccess(Country.FAROE_ISLANDS, "Faröe");
+
+    assertParseSuccess(Country.BELIZE, "BRITISH HONDURAS");
+    assertParseSuccess(Country.FRANCE, "CLIPPERTON ISLAND");
+    assertParseSuccess(Country.FRANCE, "CLIPPERTON IS");
+    assertParseSuccess(Country.FRANCE, "CLIPPERTON ID");
+    assertParseSuccess(Country.FRANCE, "CLIPPERTON I");
+    assertParseSuccess(Country.CONGO, "french congo");
+    assertParseSuccess(Country.CONGO, "Republic of the Congo");
+    assertParseSuccess(Country.CONGO, "République du Congo");
+    assertParseSuccess(Country.CONGO, "People's Republic of the Congo");
+    assertParseSuccess(Country.CONGO, "congo republic");
+    assertParseSuccess(Country.CONGO, "Congo-Brazzaville");
+    assertParseSuccess(Country.CONGO, "CONGO");
+    assertParseSuccess(Country.CONGO_DEMOCRATIC_REPUBLIC, "CONGO AFRICA");
+    assertParseSuccess(Country.CONGO_DEMOCRATIC_REPUBLIC, "Léopoldville");
+    assertParseSuccess(Country.CONGO_DEMOCRATIC_REPUBLIC, "Zaïre");
+    assertParseSuccess(Country.CONGO_DEMOCRATIC_REPUBLIC, "belgium congo");
+    assertParseSuccess(Country.CONGO_DEMOCRATIC_REPUBLIC, "congo free state");
+    assertParseSuccess(Country.CONGO_DEMOCRATIC_REPUBLIC, "République démocratique du Congo");
+    assertParseSuccess(Country.CONGO_DEMOCRATIC_REPUBLIC, "DR Congo");
+    assertParseSuccess(Country.CONGO_DEMOCRATIC_REPUBLIC, "DROC");
+    assertParseSuccess(Country.CONGO_DEMOCRATIC_REPUBLIC, "Congo-Kinshasa");
+    assertParseSuccess(Country.ANGOLA, "Portuguese Congo");
+    assertParseSuccess(Country.CURAÇAO, "CURACAO");
+    assertParseSuccess(Country.CURAÇAO, "CURACOS");
+    assertParseSuccess(Country.ISLE_OF_MAN, "ISLE OF MAN");
+    assertParseSuccess(Country.BONAIRE_SINT_EUSTATIUS_SABA, "ST EUSTATIUS ISLAND");
+    assertParseSuccess(Country.BONAIRE_SINT_EUSTATIUS_SABA, "ST EUSTATIUS");
+    assertParseSuccess(Country.BONAIRE_SINT_EUSTATIUS_SABA, "BONAIRE THE NETHERLANDS ANTILLES");
   }
 }
