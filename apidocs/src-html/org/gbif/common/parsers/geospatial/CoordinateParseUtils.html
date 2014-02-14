@@ -1,0 +1,155 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en">
+<head>
+<title>Source code</title>
+<link rel="stylesheet" type="text/css" href="../../../../../../stylesheet.css" title="Style">
+</head>
+<body>
+<div class="sourceContainer">
+<pre><span class="sourceLineNo">001</span>package org.gbif.common.parsers.geospatial;<a name="line.1"></a>
+<span class="sourceLineNo">002</span><a name="line.2"></a>
+<span class="sourceLineNo">003</span>import org.gbif.api.vocabulary.OccurrenceIssue;<a name="line.3"></a>
+<span class="sourceLineNo">004</span>import org.gbif.common.parsers.core.Parsable;<a name="line.4"></a>
+<span class="sourceLineNo">005</span>import org.gbif.common.parsers.core.ParseResult;<a name="line.5"></a>
+<span class="sourceLineNo">006</span><a name="line.6"></a>
+<span class="sourceLineNo">007</span>import org.slf4j.Logger;<a name="line.7"></a>
+<span class="sourceLineNo">008</span>import org.slf4j.LoggerFactory;<a name="line.8"></a>
+<span class="sourceLineNo">009</span><a name="line.9"></a>
+<span class="sourceLineNo">010</span>/**<a name="line.10"></a>
+<span class="sourceLineNo">011</span> * Utilities for assisting in the parsing of latitude and longitude strings into Decimals.<a name="line.11"></a>
+<span class="sourceLineNo">012</span> */<a name="line.12"></a>
+<span class="sourceLineNo">013</span>public class CoordinateParseUtils {<a name="line.13"></a>
+<span class="sourceLineNo">014</span><a name="line.14"></a>
+<span class="sourceLineNo">015</span>  private CoordinateParseUtils() {<a name="line.15"></a>
+<span class="sourceLineNo">016</span>    throw new UnsupportedOperationException("Can't initialize class");<a name="line.16"></a>
+<span class="sourceLineNo">017</span>  }<a name="line.17"></a>
+<span class="sourceLineNo">018</span><a name="line.18"></a>
+<span class="sourceLineNo">019</span>  private static final Logger LOG = LoggerFactory.getLogger(CoordinateParseUtils.class);<a name="line.19"></a>
+<span class="sourceLineNo">020</span><a name="line.20"></a>
+<span class="sourceLineNo">021</span>  /**<a name="line.21"></a>
+<span class="sourceLineNo">022</span>   * This parses string representations of latitude and longitude values. It tries its best to interpret the values and<a name="line.22"></a>
+<span class="sourceLineNo">023</span>   * indicates any problems in its result as {@link org.gbif.api.vocabulary.OccurrenceIssue}.<a name="line.23"></a>
+<span class="sourceLineNo">024</span>   * When the {@link ParseResult.STATUS} is FAIL the payload will be null and one or more issues should be set<a name="line.24"></a>
+<span class="sourceLineNo">025</span>   * in {@link ParseResult#getIssues()}.<a name="line.25"></a>
+<span class="sourceLineNo">026</span>   *<a name="line.26"></a>
+<span class="sourceLineNo">027</span>   * Coordinate precision will be 5 decimals at most, any more precise values will be rounded.<a name="line.27"></a>
+<span class="sourceLineNo">028</span>   *<a name="line.28"></a>
+<span class="sourceLineNo">029</span>   * @param latitude  The decimal latitude<a name="line.29"></a>
+<span class="sourceLineNo">030</span>   * @param longitude The decimal longitude<a name="line.30"></a>
+<span class="sourceLineNo">031</span>   *<a name="line.31"></a>
+<span class="sourceLineNo">032</span>   * @return The parse result<a name="line.32"></a>
+<span class="sourceLineNo">033</span>   */<a name="line.33"></a>
+<span class="sourceLineNo">034</span>  public static ParseResult&lt;LatLng&gt; parseLatLng(final String latitude, final String longitude) {<a name="line.34"></a>
+<span class="sourceLineNo">035</span>    return new Parsable&lt;LatLng&gt;() {<a name="line.35"></a>
+<span class="sourceLineNo">036</span>      @Override<a name="line.36"></a>
+<span class="sourceLineNo">037</span>      public ParseResult&lt;LatLng&gt; parse(String v) {<a name="line.37"></a>
+<span class="sourceLineNo">038</span>        Double lat;<a name="line.38"></a>
+<span class="sourceLineNo">039</span>        Double lng;<a name="line.39"></a>
+<span class="sourceLineNo">040</span>        try {<a name="line.40"></a>
+<span class="sourceLineNo">041</span>          lat = roundTo5decimals(Double.parseDouble(latitude));<a name="line.41"></a>
+<span class="sourceLineNo">042</span>          lng = roundTo5decimals(Double.parseDouble(longitude));<a name="line.42"></a>
+<span class="sourceLineNo">043</span>        } catch (NumberFormatException e) {<a name="line.43"></a>
+<span class="sourceLineNo">044</span>          return ParseResult.error(e);<a name="line.44"></a>
+<span class="sourceLineNo">045</span>        }<a name="line.45"></a>
+<span class="sourceLineNo">046</span><a name="line.46"></a>
+<span class="sourceLineNo">047</span>        // 0,0 is too suspicious<a name="line.47"></a>
+<span class="sourceLineNo">048</span>        if (Double.compare(lat, 0) == 0 &amp;&amp; Double.compare(lng, 0) == 0) {<a name="line.48"></a>
+<span class="sourceLineNo">049</span>          return ParseResult<a name="line.49"></a>
+<span class="sourceLineNo">050</span>            .success(ParseResult.CONFIDENCE.POSSIBLE, new LatLng(0, 0), OccurrenceIssue.ZERO_COORDINATE);<a name="line.50"></a>
+<span class="sourceLineNo">051</span>        }<a name="line.51"></a>
+<span class="sourceLineNo">052</span><a name="line.52"></a>
+<span class="sourceLineNo">053</span>        // if everything falls in range<a name="line.53"></a>
+<span class="sourceLineNo">054</span>        if (Double.compare(lat, 90) &lt;= 0 &amp;&amp; Double.compare(lat, -90) &gt;= 0 &amp;&amp; Double.compare(lng, 180) &lt;= 0<a name="line.54"></a>
+<span class="sourceLineNo">055</span>            &amp;&amp; Double.compare(lng, -180) &gt;= 0) {<a name="line.55"></a>
+<span class="sourceLineNo">056</span>          return ParseResult.success(ParseResult.CONFIDENCE.DEFINITE, new LatLng(lat, lng));<a name="line.56"></a>
+<span class="sourceLineNo">057</span>        }<a name="line.57"></a>
+<span class="sourceLineNo">058</span><a name="line.58"></a>
+<span class="sourceLineNo">059</span>        // if lat is out of range, but in range of the lng,<a name="line.59"></a>
+<span class="sourceLineNo">060</span>        // assume swapped coordinates.<a name="line.60"></a>
+<span class="sourceLineNo">061</span>        // note that should we desire to trust the following records, we would need to clear the flag for the records to<a name="line.61"></a>
+<span class="sourceLineNo">062</span>        // appear in<a name="line.62"></a>
+<span class="sourceLineNo">063</span>        // search results and maps etc. however, this is logic decision, that goes above the capabilities of this method<a name="line.63"></a>
+<span class="sourceLineNo">064</span>        if (Double.compare(lat, 90) &gt; 0 || Double.compare(lat, -90) &lt; 0) {<a name="line.64"></a>
+<span class="sourceLineNo">065</span><a name="line.65"></a>
+<span class="sourceLineNo">066</span>          // try and swap<a name="line.66"></a>
+<span class="sourceLineNo">067</span>          if (Double.compare(lng, 90) &lt;= 0 &amp;&amp; Double.compare(lng, -90) &gt;= 0 &amp;&amp; Double.compare(lat, 180) &lt;= 0<a name="line.67"></a>
+<span class="sourceLineNo">068</span>              &amp;&amp; Double.compare(lat, -180) &gt;= 0) {<a name="line.68"></a>
+<span class="sourceLineNo">069</span>            return ParseResult.fail(new LatLng(lat, lng), OccurrenceIssue.PRESUMED_SWAPPED_COORDINATE);<a name="line.69"></a>
+<span class="sourceLineNo">070</span>          }<a name="line.70"></a>
+<span class="sourceLineNo">071</span>        }<a name="line.71"></a>
+<span class="sourceLineNo">072</span><a name="line.72"></a>
+<span class="sourceLineNo">073</span>        // then something is out of range<a name="line.73"></a>
+<span class="sourceLineNo">074</span>        return ParseResult.fail(OccurrenceIssue.COORDINATES_OUT_OF_RANGE);<a name="line.74"></a>
+<span class="sourceLineNo">075</span>      }<a name="line.75"></a>
+<span class="sourceLineNo">076</span>    }.parse(null);<a name="line.76"></a>
+<span class="sourceLineNo">077</span>  }<a name="line.77"></a>
+<span class="sourceLineNo">078</span><a name="line.78"></a>
+<span class="sourceLineNo">079</span>  // round to 5 decimals (~1m precision) since no way we're getting anything legitimately more precise<a name="line.79"></a>
+<span class="sourceLineNo">080</span>  private static Double roundTo5decimals(Double x) {<a name="line.80"></a>
+<span class="sourceLineNo">081</span>    return x == null ? null : Math.round(x * Math.pow(10, 5)) / Math.pow(10, 5);<a name="line.81"></a>
+<span class="sourceLineNo">082</span>  }<a name="line.82"></a>
+<span class="sourceLineNo">083</span>}<a name="line.83"></a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</pre>
+</div>
+</body>
+</html>
