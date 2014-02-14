@@ -3,37 +3,37 @@ package org.gbif.common.parsers.geospatial;
 import com.google.common.base.Objects;
 
 /**
- * Simple container class for integer based values with an accurracy (e.g. depth in meters).
+ * Simple container class for integer based values with an accuracy (e.g. depth in meters).
  */
-public class IntPrecision {
+public class IntAccuracy {
 
   private final Integer value;
-  private final Integer precision;
+  private final Integer accuracy;
 
-  public IntPrecision(Integer value, Integer precision) {
+  public IntAccuracy(Integer value, Integer accuracy) {
     this.value = value;
-    this.precision = precision;
+    this.accuracy = accuracy;
   }
 
   public Integer getValue() {
     return value;
   }
 
-  public Integer getPrecision() {
-    return precision;
+  public Integer getAccuracy() {
+    return accuracy;
   }
 
   @Override
   public String toString() {
     return Objects.toStringHelper(this)
       .add("value", value)
-      .add("precision", precision)
+      .add("accuracy", accuracy)
       .toString();
   }
 
   @Override
   public int hashCode() {
-    return Objects.hashCode(value, precision);
+    return Objects.hashCode(value, accuracy);
   }
 
   @Override
@@ -41,13 +41,13 @@ public class IntPrecision {
     if (this == object) {
       return true;
     }
-    if (!(object instanceof IntPrecision)) {
+    if (!(object instanceof IntAccuracy)) {
       return false;
     }
 
-    IntPrecision that = (IntPrecision) object;
+    IntAccuracy that = (IntAccuracy) object;
     return Objects.equal(this.value, that.value)
-           && Objects.equal(this.precision, that.precision);
+           && Objects.equal(this.accuracy, that.accuracy);
   }
 
 }

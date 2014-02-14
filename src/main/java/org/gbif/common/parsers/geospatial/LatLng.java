@@ -28,7 +28,6 @@ public class LatLng {
     return lng;
   }
 
-
   @Override
   public String toString() {
     return Objects.toStringHelper(this)
