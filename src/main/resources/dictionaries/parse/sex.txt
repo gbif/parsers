@@ -1,0 +1,7 @@
+man	MALE
+woman	FEMALE
+women	FEMALE
+männlich	MALE
+weiblich	FEMALE
+Mann	MALE
+Frau	FEMALE
