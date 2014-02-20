@@ -138,8 +138,8 @@ public class MeterRangeParser {
    * Takes min and max values in meters and a known precision and comes up woth a single mean value and its accuracy.
    * This method tries also to parse common measurements given in feet or inch and converts them to meters.
    */
-  public static MeasurementWrapper<IntAccuracy> parseMeterRange(String minRaw, @Nullable String maxRaw, @Nullable String precisionRaw) {
-    MeasurementWrapper<IntAccuracy> result = new MeasurementWrapper<IntAccuracy>();
+  public static MeasurementWrapper<DoubleAccuracy> parseMeterRange(String minRaw, @Nullable String maxRaw, @Nullable String precisionRaw) {
+    MeasurementWrapper<DoubleAccuracy> result = new MeasurementWrapper<DoubleAccuracy>();
 
     MeasurementWrapper<Double> min = parseInMeter(minRaw);
     MeasurementWrapper<Double> max = parseInMeter(maxRaw);
@@ -182,32 +182,17 @@ public class MeterRangeParser {
       accuracy = prec.measurement;
     }
 
-
-    Integer intValue = null;
-    try {
-      intValue = roundedInt(value);
-    } catch (IllegalArgumentException e) {
-      result.tooLarge = true;
-    }
-
-    Integer intAccuracy = null;
-    try {
-      intAccuracy = roundedInt(abs(accuracy));
-    } catch (IllegalArgumentException e) {
-      // ignore bad accuracy, likely the same error as the value
-    }
-
-    if (intValue != null) {
-      result.measurement = new IntAccuracy(intValue, intAccuracy);
+    if (value != null) {
+      result.measurement = new DoubleAccuracy(value, accuracy);
     }
 
     // finally a result, bye bye!
     return result;
   }
 
-  public static ParseResult<IntAccuracy> parseElevation(@Nullable String min, @Nullable String max, @Nullable String precision) {
+  public static ParseResult<DoubleAccuracy> parseElevation(@Nullable String min, @Nullable String max, @Nullable String precision) {
 
-    MeasurementWrapper<IntAccuracy> elevation = parseMeterRange(min, max, precision);
+    MeasurementWrapper<DoubleAccuracy> elevation = parseMeterRange(min, max, precision);
 
     Set<OccurrenceIssue> issues = Sets.newHashSet();
     if(elevation.containsNonNumeric) {
@@ -227,7 +212,7 @@ public class MeterRangeParser {
       return ParseResult.fail(issues);
     }
 
-    IntAccuracy result = elevation.measurement;
+    DoubleAccuracy result = elevation.measurement;
     // record the number of records with altitude out of range
     if (result.getValue() > MAX_ELEVATION || result.getValue() < MIN_ELEVATION) {
       issues.add(OccurrenceIssue.ELEVATION_UNLIKELY);
@@ -237,8 +222,8 @@ public class MeterRangeParser {
     return ParseResult.success(ParseResult.CONFIDENCE.DEFINITE, result, issues);
   }
 
-  public static ParseResult<IntAccuracy> parseDepth(@Nullable String min, @Nullable String max, @Nullable String precision) {
-    MeasurementWrapper<IntAccuracy> depth = parseMeterRange(min, max, precision);
+  public static ParseResult<DoubleAccuracy> parseDepth(@Nullable String min, @Nullable String max, @Nullable String precision) {
+    MeasurementWrapper<DoubleAccuracy> depth = parseMeterRange(min, max, precision);
 
     Set<OccurrenceIssue> issues = Sets.newHashSet();
     if(depth.containsNonNumeric) {
@@ -258,48 +243,17 @@ public class MeterRangeParser {
       return ParseResult.fail(issues);
     }
 
-    IntAccuracy result = depth.measurement;
+    DoubleAccuracy result = depth.measurement;
 
     // negate depth if its negative
     if (result.getValue() < 0) {
-      result = new IntAccuracy(-1 * result.getValue(), result.getAccuracy());
+      result = new DoubleAccuracy(-1 * result.getValue(), result.getAccuracy());
       issues.add(OccurrenceIssue.DEPTH_UNLIKELY);
     }
 
     // record the number of records with depth out of range
     if (result.getValue() > MAX_DEPTH) {
       issues.add(OccurrenceIssue.DEPTH_UNLIKELY);
-      return ParseResult.fail(issues);
-    }
-
-    return ParseResult.success(ParseResult.CONFIDENCE.DEFINITE, result, issues);
-  }
-
-  public static ParseResult<IntAccuracy> parseSurfaceDistance(@Nullable String min, @Nullable String max, @Nullable String precision) {
-    MeasurementWrapper<IntAccuracy> distance = parseMeterRange(min, max, precision);
-
-    Set<OccurrenceIssue> issues = Sets.newHashSet();
-    if(distance.containsNonNumeric) {
-      issues.add(OccurrenceIssue.SURFACE_DISTANCE_NON_NUMERIC);
-    }
-    if(distance.isInFeet || distance.isInInches) {
-      issues.add(OccurrenceIssue.SURFACE_DISTANCE_NOT_METRIC);
-    }
-    if(distance.minMaxSwapped) {
-      issues.add(OccurrenceIssue.SURFACE_DISTANCE_MIN_MAX_SWAPPED);
-    }
-    if(distance.tooLarge) {
-      issues.add(OccurrenceIssue.SURFACE_DISTANCE_UNLIKELY);
-    }
-
-    if (distance.measurement == null || distance.measurement.getValue() == null) {
-      return ParseResult.fail(issues);
-    }
-
-    IntAccuracy result = distance.measurement;
-    // record the number of records with altitude out of range
-    if (result.getValue() > MAX_DISTANCE || result.getValue() < MIN_DISTANCE) {
-      issues.add(OccurrenceIssue.SURFACE_DISTANCE_UNLIKELY);
       return ParseResult.fail(issues);
     }
 
@@ -357,6 +311,11 @@ public class MeterRangeParser {
     } catch (NumberFormatException e) {
       LOG.debug("Unparsable meter measurement: {}", meter, e.getMessage());
     }
+
+    // round to centimeters
+    if (iMeter.measurement != null) {
+      iMeter.measurement = Math.round(iMeter.measurement * 100.0) / 100.0;
+    }
     return iMeter;
   }
 
@@ -391,13 +350,6 @@ public class MeterRangeParser {
       throw new IllegalArgumentException("Long too big for an integer");
     }
     return xl.intValue();
-  }
-
-  /**
-   * @return the absolute value nullsafe
-   */
-  private static Double abs(Double x) {
-    return x == null ? null : Math.abs(x);
   }
 
 }

@@ -3,23 +3,24 @@ package org.gbif.common.parsers.geospatial;
 import com.google.common.base.Objects;
 
 /**
- * Simple container class for integer based values with an accuracy (e.g. depth in meters).
+ * Simple container class for double based values with an accuracy (e.g. depth in meters).
  */
-public class IntAccuracy {
+public class DoubleAccuracy {
 
-  private final Integer value;
-  private final Integer accuracy;
+  private final Double value;
+  private final Double accuracy;
 
-  public IntAccuracy(Integer value, Integer accuracy) {
+  public DoubleAccuracy(Double value, Double accuracy) {
     this.value = value;
-    this.accuracy = accuracy;
+    // never negative
+    this.accuracy = accuracy == null ? null : Math.abs(accuracy);
   }
 
-  public Integer getValue() {
+  public Double getValue() {
     return value;
   }
 
-  public Integer getAccuracy() {
+  public Double getAccuracy() {
     return accuracy;
   }
 
@@ -41,11 +42,11 @@ public class IntAccuracy {
     if (this == object) {
       return true;
     }
-    if (!(object instanceof IntAccuracy)) {
+    if (!(object instanceof DoubleAccuracy)) {
       return false;
     }
 
-    IntAccuracy that = (IntAccuracy) object;
+    DoubleAccuracy that = (DoubleAccuracy) object;
     return Objects.equal(this.value, that.value)
            && Objects.equal(this.accuracy, that.accuracy);
   }
