@@ -26,15 +26,16 @@ class StringToDateParser implements Parsable<Date> {
     {"dd/MM/yy", "ddMMyy", "dd\\MM\\yy", "dd.MM.yy", "dd-MM-yy", "dd_MM_yy", "MM/dd/yy", "MMddyy", "MM\\dd\\yy",
       "MM.dd.yy", "MM-dd-yy", "MM_dd_yy", "dd/MM/yyyy", "ddMMyyyy", "dd\\MM\\yyyy", "dd.MM.yyyy", "dd-MM-yyyy",
       "dd_MM_yyyy", "MM/dd/yyyy", "MMddyyyy", "MM\\dd\\yyyy", "MM.dd.yyyy", "MM-dd-yyyy", "MM_dd_yyyy", "yyyy-MM-dd",
-      "yyyy-MM-dd HH:mm:ss", "yyyy-MM-dd'T'HH:mm:ssZZ", "yyyy-MM-dd'T'HH:mm:ss'Z'", "yyyy-MM"};
+      "yyyy-MM-dd HH:mm:ss", "yyyy-MM-dd'T'HH:mm:ss", "yyyy-MM-dd'T'HH:mm:ssZZ", "yyyy-MM-dd'T'HH:mm:ss'Z'", "yyyy-MM"};
 
   private static Pattern FULL_YEAR = Pattern.compile("\\d\\d\\d\\d");
   private static String[] ASIAN = {"yyyy年mm月dd日", "yyyy年m月d日", "yy年m月d日"};
-  private  static String[] TIME_FORMATS = {"yyyy-MM-dd HH:mm:ss", "yyyy-MM-dd'T'HH:mm:ssZZ", "yyyy-MM-dd'T'HH:mm:ss'Z'"};
-  private  static String[] FREQUENT_FULL = {"yyyy-MM-dd", "dd.MM.yyyy", "dd-MM-yyyy"};
+  private static String[] TIME_FORMATS =
+    {"yyyy-MM-dd HH:mm:ss", "yyyy-MM-dd'T'HH:mm:ss", "yyyy-MM-dd'T'HH:mm:ssZZ", "yyyy-MM-dd'T'HH:mm:ss'Z'"};
+  private static String[] FREQUENT_FULL = {"yyyy-MM-dd", "dd.MM.yyyy", "dd-MM-yyyy"};
 
-  private  static String[] CHAR6_ONLY_DIGITS = {"ddMMyy", "MMddyy", "yyMMdd"};
-  private  static String[] CHAR8_ONLY_DIGITS = {"yyyyMMdd", "ddMMyyyy"};
+  private static String[] CHAR6_ONLY_DIGITS = {"ddMMyy", "MMddyy", "yyMMdd"};
+  private static String[] CHAR8_ONLY_DIGITS = {"yyyyMMdd", "ddMMyyyy"};
 
   private static final Pattern DOUBLE_ZERO_PATTERN = Pattern.compile("00");
   private static final Pattern DOUBLE_ZERO_ONE_PATTERN = Pattern.compile("0101");
@@ -89,17 +90,18 @@ class StringToDateParser implements Parsable<Date> {
     if (input.contains("年")) {
       d = strictParse(input, ASIAN);
 
-    } if (StringUtils.isNumeric(input)) {
-      if (len<=4) {
+    }
+    if (StringUtils.isNumeric(input)) {
+      if (len <= 4) {
         // year only
         d = strictParse(input, "yy", "yyyy");
 
-      } else if (len==6) {
+      } else if (len == 6) {
         // no delimiter, year as 2 digits
         d = strictParse(input, CHAR6_ONLY_DIGITS);
         confidence = checkMonthDay(d, true);
         confidence = confidence == ParseResult.CONFIDENCE.DEFINITE ? ParseResult.CONFIDENCE.PROBABLE : confidence;
-      } else if (len==8) {
+      } else if (len == 8) {
         // no delimiter, year as 2 digits
         d = strictParse(input, CHAR8_ONLY_DIGITS);
         confidence = checkMonthDay(d, true);
@@ -115,8 +117,10 @@ class StringToDateParser implements Parsable<Date> {
           if (del == null) {
             del = c;
           } else if (!del.equals(c)) {
-            // different delimiters in use - we dont understand this at all
-            return ParseResult.fail();
+            // different delimiters in use - could be datetime
+            d = strictParse(input, TIME_FORMATS);
+            confidence = checkMonthDay(d, true);
+            break;
           }
         }
       }
@@ -131,11 +135,11 @@ class StringToDateParser implements Parsable<Date> {
       if (delimCount == 1) {
         // year & month only
         if (fullYear) {
-          String[] formats = new String[]{"yyyy" + del + "MM", "MM" + del + "yyyy"};
+          String[] formats = new String[] {"yyyy" + del + "MM", "MM" + del + "yyyy"};
           d = strictParse(input, formats);
 
         } else {
-          String[] formats = new String[]{"yy" + del + "MM", "MM" + del + "yy"};
+          String[] formats = new String[] {"yy" + del + "MM", "MM" + del + "yy"};
           d = strictParse(input, formats);
           confidence = ParseResult.CONFIDENCE.POSSIBLE;
         }
@@ -144,18 +148,21 @@ class StringToDateParser implements Parsable<Date> {
           // first try very common formats (main US, European, Chinese, etc)
           d = strictParse(input, FREQUENT_FULL);
           if (d == null) {
-            String[] formats = new String[]{"yyyy" + del + "MM"+ del + "dd", "dd" + del + "MM" + del + "yyyy", "MM" + del + "dd" + del + "yyyy"};
+            String[] formats = new String[] {"yyyy" + del + "MM" + del + "dd", "dd" + del + "MM" + del + "yyyy",
+              "MM" + del + "dd" + del + "yyyy"};
             d = strictParse(input, formats);
             confidence = checkMonthDay(d, false);
           }
 
         } else {
           String[] formats;
-          if (del=='-') {
+          if (del == '-') {
             // iso formats use dash and start with years
-            formats = new String[]{"yy" + del + "MM" + del + "dd", "dd" + del + "MM" + del + "yy", "MM" + del + "dd" + del + "yy"};
+            formats = new String[] {"yy" + del + "MM" + del + "dd", "dd" + del + "MM" + del + "yy",
+              "MM" + del + "dd" + del + "yy"};
           } else {
-            formats = new String[]{"dd" + del + "MM" + del + "yy", "MM" + del + "dd" + del + "yy", "yy" + del + "MM" + del + "dd"};
+            formats = new String[] {"dd" + del + "MM" + del + "yy", "MM" + del + "dd" + del + "yy",
+              "yy" + del + "MM" + del + "dd"};
           }
           d = strictParse(input, formats);
           confidence = checkMonthDay(d, true);
@@ -216,7 +223,7 @@ class StringToDateParser implements Parsable<Date> {
    *
    * @return null on error or the date
    */
-  Date strictParse(String input, String ... patterns) {
+  Date strictParse(String input, String... patterns) {
     try {
       return DateUtils.parseDateStrictly(input, patterns);
     } catch (ParseException e) {

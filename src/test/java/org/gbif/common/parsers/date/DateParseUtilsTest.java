@@ -61,6 +61,9 @@ public class DateParseUtilsTest {
     assertEquivalent("01/05/1973", DateParseUtils.parse("1973-05"), ParseResult.CONFIDENCE.DEFINITE);
     assertEquivalent("01/05/1973", DateParseUtils.parse("1973-5"), ParseResult.CONFIDENCE.DEFINITE);
 
+    assertEquivalent("21/12/1978", DateParseUtils.parse("1978-12-21T00:00:00"), ParseResult.CONFIDENCE.DEFINITE);
+    assertEquals(ParseResult.STATUS.FAIL, DateParseUtils.parse("1978-13-32T00:00:00").getStatus());
+
     assertNotNull(DateParseUtils.parse("0000-00-00 00:00:00"));
     assertEquals(ParseResult.STATUS.FAIL, DateParseUtils.parse("0000-00-00 00:00:00").getStatus());
 
