@@ -26,12 +26,14 @@ class StringToDateParser implements Parsable<Date> {
     {"dd/MM/yy", "ddMMyy", "dd\\MM\\yy", "dd.MM.yy", "dd-MM-yy", "dd_MM_yy", "MM/dd/yy", "MMddyy", "MM\\dd\\yy",
       "MM.dd.yy", "MM-dd-yy", "MM_dd_yy", "dd/MM/yyyy", "ddMMyyyy", "dd\\MM\\yyyy", "dd.MM.yyyy", "dd-MM-yyyy",
       "dd_MM_yyyy", "MM/dd/yyyy", "MMddyyyy", "MM\\dd\\yyyy", "MM.dd.yyyy", "MM-dd-yyyy", "MM_dd_yyyy", "yyyy-MM-dd",
-      "yyyy-MM-dd HH:mm:ss", "yyyy-MM-dd'T'HH:mm:ss", "yyyy-MM-dd'T'HH:mm:ssZZ", "yyyy-MM-dd'T'HH:mm:ss'Z'", "yyyy-MM"};
+      "yyyy-MM-dd HH:mm:ss", "yyyy-MM-dd'T'HH", "yyyy-MM-dd'T'HH:mm", "yyyy-MM-dd'T'HH:mm:ss", "yyyy-MM-dd'T'HHmm",
+      "yyyy-MM-dd'T'HHmmss", "yyyy-MM-dd'T'HH:mm:ssZZ", "yyyy-MM-dd'T'HH:mm:ss'Z'", "yyyy-MM"};
 
   private static Pattern FULL_YEAR = Pattern.compile("\\d\\d\\d\\d");
   private static String[] ASIAN = {"yyyy年mm月dd日", "yyyy年m月d日", "yy年m月d日"};
   private static String[] TIME_FORMATS =
-    {"yyyy-MM-dd HH:mm:ss", "yyyy-MM-dd'T'HH:mm:ss", "yyyy-MM-dd'T'HH:mm:ssZZ", "yyyy-MM-dd'T'HH:mm:ss'Z'"};
+    {"yyyy-MM-dd HH:mm:ss", "yyyy-MM-dd'T'HH", "yyyy-MM-dd'T'HH:mm", "yyyy-MM-dd'T'HH:mm:ss", "yyyy-MM-dd'T'HHmm",
+      "yyyy-MM-dd'T'HHmmss", "yyyy-MM-dd'T'HH:mm:ssZZ", "yyyy-MM-dd'T'HH:mm:ss'Z'"};
   private static String[] FREQUENT_FULL = {"yyyy-MM-dd", "dd.MM.yyyy", "dd-MM-yyyy"};
 
   private static String[] CHAR6_ONLY_DIGITS = {"ddMMyy", "MMddyy", "yyMMdd"};
