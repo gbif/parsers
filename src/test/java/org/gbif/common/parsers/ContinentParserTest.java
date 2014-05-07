@@ -29,6 +29,7 @@ public class ContinentParserTest extends ParserTestBase<Continent> {
   public void testParseFail() {
     assertParseFailure("Really great britain");
     assertParseFailure("Padua");
+    assertParseFailure("Southern Ocean");
   }
 
   @Test

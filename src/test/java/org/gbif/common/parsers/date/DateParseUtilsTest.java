@@ -131,6 +131,10 @@ public class DateParseUtilsTest {
 
   @Test
   public void testAtomUse() {
+    assertFalse(DateParseUtils.isValidUse(null, DateParseUtils.DATE_FIELD.DAY));
+    assertFalse(DateParseUtils.isValidUse(" ", DateParseUtils.DATE_FIELD.DAY));
+    assertFalse(DateParseUtils.isValidUse("-", DateParseUtils.DATE_FIELD.DAY));
+
     assertTrue(DateParseUtils.isValidUse("1", DateParseUtils.DATE_FIELD.DAY));
     assertTrue(DateParseUtils.isValidUse("31", DateParseUtils.DATE_FIELD.DAY));
     assertFalse(DateParseUtils.isValidUse("0", DateParseUtils.DATE_FIELD.DAY));

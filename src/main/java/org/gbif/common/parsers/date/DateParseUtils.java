@@ -83,7 +83,7 @@ public class DateParseUtils {
 
   /**
    * Utility to check that the field appears valid in it's status use. Day must fall within 1-31, month within 1-12 and
-   * year within 1-<currentyear>
+   * year within 1-<currentyear>, null will always be invalid.
    *
    * @param value To test
    * @param field The context that the value is being used
@@ -91,6 +91,8 @@ public class DateParseUtils {
    * @return true or false depending on the validity of the value in it's context
    */
   public static boolean isValidUse(String value, DATE_FIELD field) {
+    if (value == null) return false;
+
     try {
       int valueAsInt = Integer.parseInt(value);
       switch (field) {
