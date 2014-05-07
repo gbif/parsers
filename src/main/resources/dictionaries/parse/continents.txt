@@ -10,7 +10,6 @@ West Indies	NORTH_AMERICA
 SA	SOUTH_AMERICA
 América del Sur	SOUTH_AMERICA
 Hawaiian Islands	OCEANIA
-Southern Ocean	ANTARCTICA
 North and Central America	NORTH_AMERICA
 Australasia	OCEANIA
 Southern America	SOUTH_AMERICA

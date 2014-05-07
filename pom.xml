@@ -25,14 +25,14 @@
   </scm>
 
   <properties>
-    <commons-lang.version>3.2.1</commons-lang.version>
+    <commons-lang.version>3.3.1</commons-lang.version>
     <commons-math.version>3.2</commons-math.version>
     <guava.version>14.0.1</guava.version>
     <jsr305.version>2.0.2</jsr305.version>
     <junit.version>4.11</junit.version>
     <logback.version>1.0.13</logback.version>
     <slf4j.version>1.7.5</slf4j.version>
-    <gbif-api.version>0.12-SNAPSHOT</gbif-api.version>
+    <gbif-api.version>0.14-SNAPSHOT</gbif-api.version>
     <name-parser.version>2.4-SNAPSHOT</name-parser.version>
   </properties>
 
