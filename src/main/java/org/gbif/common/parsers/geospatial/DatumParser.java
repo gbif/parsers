@@ -24,7 +24,7 @@ import com.google.common.base.Strings;
 public class DatumParser extends FileBasedDictionaryParser<Integer> {
   private static DatumParser singletonObject;
   private final Pattern EPSG = Pattern.compile("\\s*(EPSG|ESPG)\\s*:+\\s*(\\d+)\\s*$", Pattern.CASE_INSENSITIVE);
-  private final Pattern NORMALIZER = Pattern.compile("[^\\w:]+");
+  private final Pattern NORMALIZER = Pattern.compile("[^a-zA-Z0-9]+");
   private final ASCIIParser ascii = ASCIIParser.getInstance();
 
   private DatumParser() {
