@@ -27,6 +27,7 @@ public class DatumParserTest extends ParserTestBase<Integer> {
     assertParseSuccess(6269, "nad83");
     assertParseSuccess(6301, "tokYo!");
     assertParseSuccess(4326, "WGS_1984");
+    assertParseSuccess(6202, "AGD66");
 
   }
 

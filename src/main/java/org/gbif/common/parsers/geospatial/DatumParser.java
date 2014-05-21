@@ -18,6 +18,7 @@ import com.google.common.base.Strings;
  * <ul>
  *   <li>http://georepository.com/search/by-name/?query=samoa</li>
  *   <li>http://www.epsg-registry.org/</li>
+ *   <li>http://prj2epsg.org/apidocs.html</li>
  * </ul>
  *
  */

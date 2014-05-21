@@ -82,6 +82,19 @@ public class ParseResult<T> {
   }
 
   /**
+   * This creates a ParseResult indicating a parse failure but it also has a payload. Depending on the context this
+   * may provide additional information about the failure.
+   *
+   * @param payload the payload of the parse result
+   * @param <T1>    the generic type of the payload
+   *
+   * @return the new parse response which has a status of FAIL and an additional payload.
+   */
+  public static <T1> ParseResult<T1> fail(T1 payload, Collection<OccurrenceIssue> issues) {
+    return new ParseResult<T1>(STATUS.SUCCESS, null, payload, null, issues);
+  }
+
+  /**
    * @return A new parse response configured to indicate an error
    */
   public static <T1> ParseResult<T1> error() {
