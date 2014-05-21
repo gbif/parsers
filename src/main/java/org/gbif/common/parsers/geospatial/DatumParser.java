@@ -17,6 +17,7 @@ import com.google.common.base.Strings;
  * For mapping common names to EPSG codes use the code registry search here:
  * <ul>
  *   <li>http://georepository.com/search/by-name/?query=samoa</li>
+ *   <li>http://epsg.io/</li>
  *   <li>http://www.epsg-registry.org/</li>
  *   <li>http://prj2epsg.org/apidocs.html</li>
  * </ul>
