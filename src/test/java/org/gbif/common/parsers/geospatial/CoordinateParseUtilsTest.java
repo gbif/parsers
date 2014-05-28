@@ -1,6 +1,5 @@
 package org.gbif.common.parsers.geospatial;
 
-
 import org.gbif.api.vocabulary.OccurrenceIssue;
 import org.gbif.common.parsers.core.ParseResult;
 
@@ -14,6 +13,7 @@ public class CoordinateParseUtilsTest {
 
   @Test
   public void testParseLatLng() {
+    assertExpected(CoordinateParseUtils.parseLatLng("-46,33", "51,8717"), new LatLng(-46.33, 51.8717), ParseResult.CONFIDENCE.DEFINITE);
     assertExpected(CoordinateParseUtils.parseLatLng("10.3", "99.99"), new LatLng(10.3, 99.99), ParseResult.CONFIDENCE.DEFINITE);
     assertExpected(CoordinateParseUtils.parseLatLng("10", "10"), new LatLng(10, 10), ParseResult.CONFIDENCE.DEFINITE);
     assertExpected(CoordinateParseUtils.parseLatLng("90", "180"), new LatLng(90, 180), ParseResult.CONFIDENCE.DEFINITE);
@@ -22,15 +22,23 @@ public class CoordinateParseUtilsTest {
     assertExpected(CoordinateParseUtils.parseLatLng("-90", "-180"), new LatLng(-90, -180), ParseResult.CONFIDENCE.DEFINITE);
     assertExpected(CoordinateParseUtils.parseLatLng("0", "0"), new LatLng(0, 0), ParseResult.CONFIDENCE.POSSIBLE, OccurrenceIssue.ZERO_COORDINATE);
 
+    // rounding
+    assertExpected(CoordinateParseUtils.parseLatLng("2.123450678", "-8.123450678"), new LatLng(2.12345, -8.12345), ParseResult.CONFIDENCE.DEFINITE, OccurrenceIssue.COORDINATE_ROUNDED);
+    assertExpected(CoordinateParseUtils.parseLatLng("2.12345", "-8.123450678"), new LatLng(2.12345, -8.12345), ParseResult.CONFIDENCE.DEFINITE, OccurrenceIssue.COORDINATE_ROUNDED);
+    assertExpected(CoordinateParseUtils.parseLatLng("2.12345", "-8.12345"), new LatLng(2.12345, -8.12345), ParseResult.CONFIDENCE.DEFINITE);
+    assertExpected(CoordinateParseUtils.parseLatLng("2.12345000", "-8.123450"), new LatLng(2.12345, -8.12345), ParseResult.CONFIDENCE.DEFINITE);
+    assertExpected(CoordinateParseUtils.parseLatLng("2.123", "-8.1234506"), new LatLng(2.123, -8.12345), ParseResult.CONFIDENCE.DEFINITE, OccurrenceIssue.COORDINATE_ROUNDED);
+
     // check swapped coords
     assertFailedWithIssues(CoordinateParseUtils.parseLatLng("100", "40"), OccurrenceIssue.PRESUMED_SWAPPED_COORDINATE);
     assertFailedWithIssues(CoordinateParseUtils.parseLatLng("-100", "90"), OccurrenceIssue.PRESUMED_SWAPPED_COORDINATE);
 
     // check errors
-    assertErrored(CoordinateParseUtils.parseLatLng("tim", "tom"));
-    assertFailedWithIssues(CoordinateParseUtils.parseLatLng("200", "200"), OccurrenceIssue.COORDINATES_OUT_OF_RANGE);
-    assertFailedWithIssues(CoordinateParseUtils.parseLatLng("-200", "30"), OccurrenceIssue.COORDINATES_OUT_OF_RANGE);
-    assertFailedWithIssues(CoordinateParseUtils.parseLatLng("200", "30"), OccurrenceIssue.COORDINATES_OUT_OF_RANGE);
+    assertFailedWithIssues(CoordinateParseUtils.parseLatLng("tim", "tom"), OccurrenceIssue.COORDINATE_INVALID);
+    assertFailedWithIssues(CoordinateParseUtils.parseLatLng("20,432,12", "13,4"), OccurrenceIssue.COORDINATE_INVALID);
+    assertFailedWithIssues(CoordinateParseUtils.parseLatLng("200", "200"), OccurrenceIssue.COORDINATE_OUT_OF_RANGE);
+    assertFailedWithIssues(CoordinateParseUtils.parseLatLng("-200", "30"), OccurrenceIssue.COORDINATE_OUT_OF_RANGE);
+    assertFailedWithIssues(CoordinateParseUtils.parseLatLng("200", "30"), OccurrenceIssue.COORDINATE_OUT_OF_RANGE);
   }
 
   private void assertExpected(ParseResult<?> pr, Object expected, ParseResult.CONFIDENCE c, OccurrenceIssue ... issue) {
@@ -39,6 +47,7 @@ public class CoordinateParseUtilsTest {
     assertEquals(c, pr.getConfidence());
     assertNotNull(pr.getPayload());
     assertEquals(expected, pr.getPayload());
+    //System.out.println(Lists.newArrayList(issue));
     if (issue == null) {
       assertTrue(pr.getIssues().isEmpty());
     } else {
@@ -47,11 +56,6 @@ public class CoordinateParseUtilsTest {
         assertTrue(pr.getIssues().contains(iss));
       }
     }
-  }
-
-  private void assertErrored(ParseResult<?> pr) {
-    assertNotNull(pr);
-    assertEquals(ParseResult.STATUS.ERROR, pr.getStatus());
   }
 
   private void assertFailed(ParseResult<?> pr) {

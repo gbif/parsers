@@ -3,7 +3,12 @@ package org.gbif.common.parsers.geospatial;
 import org.gbif.api.vocabulary.OccurrenceIssue;
 import org.gbif.common.parsers.core.Parsable;
 import org.gbif.common.parsers.core.ParseResult;
+import org.gbif.common.parsers.utils.NumberParser;
 
+import java.util.EnumSet;
+import java.util.Set;
+
+import com.google.common.base.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -35,25 +40,39 @@ public class CoordinateParseUtils {
     return new Parsable<LatLng>() {
       @Override
       public ParseResult<LatLng> parse(String v) {
-        Double lat;
-        Double lng;
-        try {
-          lat = roundTo5decimals(Double.parseDouble(latitude));
-          lng = roundTo5decimals(Double.parseDouble(longitude));
-        } catch (NumberFormatException e) {
-          return ParseResult.error(e);
+        if (Strings.isNullOrEmpty(latitude) && Strings.isNullOrEmpty(longitude)) {
+          return ParseResult.fail();
+        }
+        Double lat = NumberParser.parseDouble(latitude);
+        Double lng = NumberParser.parseDouble(longitude);
+
+        if (lat == null || lng == null) {
+          return ParseResult.fail(OccurrenceIssue.COORDINATE_INVALID);
+        }
+
+        // collecting issues for result
+        Set<OccurrenceIssue> issues = EnumSet.noneOf(OccurrenceIssue.class);
+
+        // round to 5 decimals
+        final double latOrig = lat;
+        final double lngOrig = lng;
+        lat = roundTo5decimals(lat);
+        lng = roundTo5decimals(lng);
+        if (Double.compare(lat, latOrig) != 0 || Double.compare(lng, lngOrig) != 0) {
+          issues.add(OccurrenceIssue.COORDINATE_ROUNDED);
         }
 
         // 0,0 is too suspicious
         if (Double.compare(lat, 0) == 0 && Double.compare(lng, 0) == 0) {
+          issues.add(OccurrenceIssue.ZERO_COORDINATE);
           return ParseResult
-            .success(ParseResult.CONFIDENCE.POSSIBLE, new LatLng(0, 0), OccurrenceIssue.ZERO_COORDINATE);
+            .success(ParseResult.CONFIDENCE.POSSIBLE, new LatLng(0, 0), issues);
         }
 
         // if everything falls in range
         if (Double.compare(lat, 90) <= 0 && Double.compare(lat, -90) >= 0 && Double.compare(lng, 180) <= 0
             && Double.compare(lng, -180) >= 0) {
-          return ParseResult.success(ParseResult.CONFIDENCE.DEFINITE, new LatLng(lat, lng));
+          return ParseResult.success(ParseResult.CONFIDENCE.DEFINITE, new LatLng(lat, lng), issues);
         }
 
         // if lat is out of range, but in range of the lng,
@@ -66,12 +85,14 @@ public class CoordinateParseUtils {
           // try and swap
           if (Double.compare(lng, 90) <= 0 && Double.compare(lng, -90) >= 0 && Double.compare(lat, 180) <= 0
               && Double.compare(lat, -180) >= 0) {
-            return ParseResult.fail(new LatLng(lat, lng), OccurrenceIssue.PRESUMED_SWAPPED_COORDINATE);
+            issues.add(OccurrenceIssue.PRESUMED_SWAPPED_COORDINATE);
+            return ParseResult.fail(new LatLng(lat, lng), issues);
           }
         }
 
         // then something is out of range
-        return ParseResult.fail(OccurrenceIssue.COORDINATES_OUT_OF_RANGE);
+        issues.add(OccurrenceIssue.COORDINATE_OUT_OF_RANGE);
+        return ParseResult.fail(issues);
       }
     }.parse(null);
   }

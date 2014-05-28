@@ -2,6 +2,7 @@ package org.gbif.common.parsers.geospatial;
 
 import org.gbif.api.vocabulary.OccurrenceIssue;
 import org.gbif.common.parsers.core.ParseResult;
+import org.gbif.common.parsers.utils.NumberParser;
 
 import java.util.Set;
 import java.util.regex.Pattern;
@@ -271,7 +272,7 @@ public class MeterRangeParser {
       iMeter.containsNonNumeric = MEASURE_MARKER_PATTERN.matcher(meter).matches();
 
       if (!iMeter.containsNonNumeric()) {
-        iMeter.measurement = Double.parseDouble(meter);
+        iMeter.measurement = NumberParser.parseDouble(meter);
 
       } else {
         iMeter.isInFeet = FEET_MARKER_PATTERN.matcher(meter).matches();
@@ -286,8 +287,8 @@ public class MeterRangeParser {
             String max = meter.substring(meter.indexOf('-') + 1).trim();
             max = removeMeasurementMarkers(max);
 
-            Double minDouble = Double.parseDouble(min);
-            Double maxDouble = Double.parseDouble(max);
+            Double minDouble = NumberParser.parseDouble(min);
+            Double maxDouble = NumberParser.parseDouble(max);
 
             if (minDouble != 0 && maxDouble != 0 && maxDouble - minDouble != 0) {
               iMeter.measurement = (maxDouble + minDouble) / 2;
@@ -296,7 +297,7 @@ public class MeterRangeParser {
           }
 
         } else {
-          iMeter.measurement = Double.parseDouble(removeMeasurementMarkers(meter));
+          iMeter.measurement = NumberParser.parseDouble(removeMeasurementMarkers(meter));
         }
 
         if (iMeter.measurement != null) {
