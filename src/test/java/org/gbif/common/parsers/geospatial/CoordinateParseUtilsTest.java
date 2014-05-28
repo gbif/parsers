@@ -31,7 +31,7 @@ public class CoordinateParseUtilsTest {
     assertExpected(CoordinateParseUtils.parseLatLng("2.123", "-8.1234506"), new LatLng(2.123, -8.12345), ParseResult.CONFIDENCE.DEFINITE, OccurrenceIssue.COORDINATE_ROUNDED);
 
     // degree minutes seconds
-    assertExpected(CoordinateParseUtils.parseLatLng("02° 49' 52\" N", "131° 47' 03\" E"), new LatLng(2.123, -8.12345), ParseResult.CONFIDENCE.DEFINITE);
+    assertExpected(CoordinateParseUtils.parseLatLng("02° 49' 52\" N", "131° 47' 03\" E"), new LatLng(2.83111d, 131.78417d), ParseResult.CONFIDENCE.DEFINITE, OccurrenceIssue.COORDINATE_ROUNDED);
 
     // check swapped coords
     assertFailedWithIssues(CoordinateParseUtils.parseLatLng("100", "40"), OccurrenceIssue.PRESUMED_SWAPPED_COORDINATE);
@@ -60,7 +60,6 @@ public class CoordinateParseUtilsTest {
 
   private void assertExpected(LatLng result, double lat, double lon) {
     assertNotNull(result);
-    System.out.println(result);
     assertEquals(0, result.getLat().compareTo(lat));
     assertEquals(0, result.getLng().compareTo(lon));
   }
