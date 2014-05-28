@@ -7,7 +7,10 @@ import org.gbif.common.parsers.utils.NumberParser;
 
 import java.util.EnumSet;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
+import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,6 +19,8 @@ import org.slf4j.LoggerFactory;
  * Utilities for assisting in the parsing of latitude and longitude strings into Decimals.
  */
 public class CoordinateParseUtils {
+  private final static Pattern DMS_LAT = Pattern.compile("^(\\d\\d?)° *([0-6]?\\d)' *([0-6]?\\d)\" *([NS])$", Pattern.CASE_INSENSITIVE);
+  private final static Pattern DMS_LON = Pattern.compile("^(\\d\\d?\\d?)° *([0-6]?\\d)' *([0-6]?\\d)\" *([EOW])$", Pattern.CASE_INSENSITIVE);
 
   private CoordinateParseUtils() {
     throw new UnsupportedOperationException("Can't initialize class");
@@ -40,14 +45,20 @@ public class CoordinateParseUtils {
     return new Parsable<LatLng>() {
       @Override
       public ParseResult<LatLng> parse(String v) {
-        if (Strings.isNullOrEmpty(latitude) && Strings.isNullOrEmpty(longitude)) {
+        if (Strings.isNullOrEmpty(latitude) || Strings.isNullOrEmpty(longitude)) {
           return ParseResult.fail();
         }
         Double lat = NumberParser.parseDouble(latitude);
         Double lng = NumberParser.parseDouble(longitude);
 
         if (lat == null || lng == null) {
-          return ParseResult.fail(OccurrenceIssue.COORDINATE_INVALID);
+          // try degree minute seconds
+          LatLng latLng = parseDMS(latitude, longitude);
+          if (latLng == null) {
+            return ParseResult.fail(OccurrenceIssue.COORDINATE_INVALID);
+          }
+          lat = latLng.getLat();
+          lng = latLng.getLng();
         }
 
         // collecting issues for result
@@ -95,6 +106,28 @@ public class CoordinateParseUtils {
         return ParseResult.fail(issues);
       }
     }.parse(null);
+  }
+
+  // 02° 49' 52" N	131° 47' 03" E
+  @VisibleForTesting
+  protected static LatLng parseDMS(String lat, String lon) {
+    Matcher mLat = DMS_LAT.matcher(lat);
+    Matcher mLon = DMS_LON.matcher(lon);
+
+    if (mLat.find() && mLon.find()) {
+      double dLat = dmsToDecimal( Double.valueOf(mLat.group(1)), Double.valueOf(mLat.group(2)), Double.valueOf(mLat.group(3)) );
+      int sLat = mLat.group(4).equalsIgnoreCase("N") ? 1 : -1;
+
+      double dLon = dmsToDecimal( Double.valueOf(mLon.group(1)), Double.valueOf(mLon.group(2)), Double.valueOf(mLon.group(3)) );
+      int sLon = mLon.group(4).equalsIgnoreCase("W") ? -1 : 1;
+
+      return new LatLng(dLat * sLat, dLon * sLon);
+    }
+    return null;
+  }
+
+  private static double dmsToDecimal(double degree, double minutes, double seconds) {
+    return degree + (minutes / 60) + (seconds / 3600);
   }
 
   // round to 5 decimals (~1m precision) since no way we're getting anything legitimately more precise

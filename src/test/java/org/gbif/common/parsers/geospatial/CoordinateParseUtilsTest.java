@@ -7,6 +7,7 @@ import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 public class CoordinateParseUtilsTest {
@@ -29,16 +30,39 @@ public class CoordinateParseUtilsTest {
     assertExpected(CoordinateParseUtils.parseLatLng("2.12345000", "-8.123450"), new LatLng(2.12345, -8.12345), ParseResult.CONFIDENCE.DEFINITE);
     assertExpected(CoordinateParseUtils.parseLatLng("2.123", "-8.1234506"), new LatLng(2.123, -8.12345), ParseResult.CONFIDENCE.DEFINITE, OccurrenceIssue.COORDINATE_ROUNDED);
 
+    // degree minutes seconds
+    assertExpected(CoordinateParseUtils.parseLatLng("02° 49' 52\" N", "131° 47' 03\" E"), new LatLng(2.123, -8.12345), ParseResult.CONFIDENCE.DEFINITE);
+
     // check swapped coords
     assertFailedWithIssues(CoordinateParseUtils.parseLatLng("100", "40"), OccurrenceIssue.PRESUMED_SWAPPED_COORDINATE);
     assertFailedWithIssues(CoordinateParseUtils.parseLatLng("-100", "90"), OccurrenceIssue.PRESUMED_SWAPPED_COORDINATE);
 
     // check errors
+    assertFailed(CoordinateParseUtils.parseLatLng("", "30"));
     assertFailedWithIssues(CoordinateParseUtils.parseLatLng("tim", "tom"), OccurrenceIssue.COORDINATE_INVALID);
     assertFailedWithIssues(CoordinateParseUtils.parseLatLng("20,432,12", "13,4"), OccurrenceIssue.COORDINATE_INVALID);
     assertFailedWithIssues(CoordinateParseUtils.parseLatLng("200", "200"), OccurrenceIssue.COORDINATE_OUT_OF_RANGE);
     assertFailedWithIssues(CoordinateParseUtils.parseLatLng("-200", "30"), OccurrenceIssue.COORDINATE_OUT_OF_RANGE);
     assertFailedWithIssues(CoordinateParseUtils.parseLatLng("200", "30"), OccurrenceIssue.COORDINATE_OUT_OF_RANGE);
+  }
+
+  @Test
+  public void testParseDMS() {
+    assertExpected( CoordinateParseUtils.parseDMS("02° 49' 52\" N", "131° 47' 03\" E"), 2.831111111111111d, 131.78416666666666d);
+    assertExpected( CoordinateParseUtils.parseDMS("2°49'52\"S", "131°47'03\" W"), -2.831111111111111d, -131.78416666666666d);
+    assertExpected( CoordinateParseUtils.parseDMS("2°49'52\"  n", "131°47'03\"  O"), 2.831111111111111d, 131.78416666666666d);
+    // failed
+    assertNull(CoordinateParseUtils.parseDMS("12344", "432"));
+    assertNull(CoordinateParseUtils.parseDMS(" ", " "));
+    assertNull(CoordinateParseUtils.parseDMS("2°49'52\"N", "131°47'03\""));
+    assertNull(CoordinateParseUtils.parseDMS("122°49'52\"N", "131°47'03\"E"));
+  }
+
+  private void assertExpected(LatLng result, double lat, double lon) {
+    assertNotNull(result);
+    System.out.println(result);
+    assertEquals(0, result.getLat().compareTo(lat));
+    assertEquals(0, result.getLng().compareTo(lon));
   }
 
   private void assertExpected(ParseResult<?> pr, Object expected, ParseResult.CONFIDENCE c, OccurrenceIssue ... issue) {
