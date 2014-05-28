@@ -1,8 +1,18 @@
 package org.gbif.common.parsers.geospatial;
 
 import org.gbif.common.parsers.ParserTestBase;
+import org.gbif.common.parsers.core.ParseResult;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.Set;
+
+import com.google.common.base.Charsets;
+import com.google.common.collect.Sets;
 import org.junit.Test;
+
+import static org.junit.Assert.assertTrue;
 
 /**
  *
@@ -37,7 +47,37 @@ public class DatumParserTest extends ParserTestBase<Integer> {
     assertParseSuccess(4222, "CAPE");
     assertParseSuccess(6131, "indian");
 
-
   }
 
+  /**
+   * Parse all unique datum values found and make sure parsing doesn't get worse.
+   * If the test file is updated, values here need to be adjusted!
+   */
+  @Test
+  public void testOccurrenceValues() throws IOException {
+    final int CURRENT_TESTS_SUCCESSFUL = 14;
+
+    int failed = 0;
+    int success = 0;
+    Set<Integer> codes = Sets.newHashSet();
+
+    BufferedReader r = new BufferedReader(new InputStreamReader(
+          getClass().getResourceAsStream("/parse/test_datum.txt"), Charsets.UTF_8));
+    String line;
+    while ((line=r.readLine()) != null) {
+      ParseResult<Integer> parsed = parser.parse(line);
+      if (parsed.isSuccessful()) {
+        success++;
+        codes.add(parsed.getPayload());
+      } else {
+        System.out.println("Failed: " + line);
+        failed++;
+      }
+    }
+
+    System.out.println(failed + " failed parse results");
+    System.out.println(success + " successful parse results");
+    System.out.println(codes.size() + " distinct datums parsed");
+    assertTrue(CURRENT_TESTS_SUCCESSFUL <= success);
+  }
 }
