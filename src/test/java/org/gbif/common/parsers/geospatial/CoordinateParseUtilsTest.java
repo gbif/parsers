@@ -69,6 +69,10 @@ public class CoordinateParseUtilsTest {
     assertExpected( CoordinateParseUtils.parseVerbatimCoordinates("02° 49' 52\" N 131° 47' 03\" E"), new LatLng(2.831111111111111d, 131.78416666666666d), ParseResult.CONFIDENCE.DEFINITE);
     assertExpected( CoordinateParseUtils.parseVerbatimCoordinates("02° 49' 52\" N, 131° 47' 03\" E"), new LatLng(2.831111111111111d, 131.78416666666666d), ParseResult.CONFIDENCE.DEFINITE);
     assertExpected( CoordinateParseUtils.parseVerbatimCoordinates("02°49'52\"N; 131°47'03\"O"), new LatLng(2.831111111111111d, 131.78416666666666d), ParseResult.CONFIDENCE.DEFINITE);
+    assertExpected( CoordinateParseUtils.parseVerbatimCoordinates("17d 33m 5s N/99d 30m 3s W"), new LatLng(17.55138888888889d, -99.50083333333333d), ParseResult.CONFIDENCE.DEFINITE);
+    assertExpected( CoordinateParseUtils.parseVerbatimCoordinates("14.93333/-91.9"), new LatLng(14.93333d, -91.9d), ParseResult.CONFIDENCE.DEFINITE);
+    assertExpected( CoordinateParseUtils.parseVerbatimCoordinates("63d 41m 39s N 170d 28m 44s W"), new LatLng(63.69416666666666d, -170.4788888888889d), ParseResult.CONFIDENCE.DEFINITE);
+    assertExpected( CoordinateParseUtils.parseVerbatimCoordinates("37° 28' N, 122° 6' W"), new LatLng(37.46666666666667d, -122.1d), ParseResult.CONFIDENCE.DEFINITE);
     // failed
     assertFailedWithIssues(CoordinateParseUtils.parseVerbatimCoordinates("12344"), OccurrenceIssue.COORDINATE_INVALID);
     assertFailedWithIssues(CoordinateParseUtils.parseVerbatimCoordinates(" "), OccurrenceIssue.COORDINATE_INVALID);

@@ -12,6 +12,7 @@ import java.util.regex.Pattern;
 
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Strings;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -19,10 +20,10 @@ import org.slf4j.LoggerFactory;
  * Utilities for assisting in the parsing of latitude and longitude strings into Decimals.
  */
 public class CoordinateParseUtils {
-  private final static String DMS = "\\s*(\\d{1,3})°\\s*([0-6]?\\d)'\\s*(?:([0-6]?\\d)(?:\"|''))?\\s*";
+  private final static String DMS = "\\s*(\\d{1,3})\\s*[°d]\\s*([0-6]?\\d)\\s*['m]\\s*(?:([0-6]?\\d)\\s*(?:\"|''|s))?\\s*";
   private final static Pattern DMS_LAT = Pattern.compile("^" + DMS + "([NS])$", Pattern.CASE_INSENSITIVE);
   private final static Pattern DMS_LON = Pattern.compile("^" + DMS + "([EOW])$", Pattern.CASE_INSENSITIVE);
-  private final static Pattern DMS_COORD = Pattern.compile("^" + DMS + "([NSEOW])" + "[,;]?" + DMS + "([NSEOW])$", Pattern.CASE_INSENSITIVE);
+  private final static Pattern DMS_COORD = Pattern.compile("^" + DMS + "([NSEOW])" + "[ ,;/]?" + DMS + "([NSEOW])$", Pattern.CASE_INSENSITIVE);
   private final static String POSITIVE = "NEO";
   private CoordinateParseUtils() {
     throw new UnsupportedOperationException("Can't initialize class");
@@ -153,6 +154,15 @@ public class CoordinateParseUtils {
         return ParseResult.success(ParseResult.CONFIDENCE.DEFINITE, result);
       } else {
         return ParseResult.fail(OccurrenceIssue.COORDINATE_OUT_OF_RANGE);
+      }
+    } else if(coordinates.length() > 4) {
+      // try to split and then use lat/lon parsing
+      for (final char delim : ",;/ ".toCharArray()) {
+        int cnt = StringUtils.countMatches(coordinates, String.valueOf(delim));
+        if (cnt == 1) {
+          String[] latlon = StringUtils.split(coordinates, delim);
+          return parseLatLng(latlon[0], latlon[1]);
+        }
       }
     }
     return ParseResult.fail(OccurrenceIssue.COORDINATE_INVALID);
