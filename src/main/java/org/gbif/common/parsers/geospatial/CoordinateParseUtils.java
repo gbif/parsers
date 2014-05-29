@@ -19,9 +19,11 @@ import org.slf4j.LoggerFactory;
  * Utilities for assisting in the parsing of latitude and longitude strings into Decimals.
  */
 public class CoordinateParseUtils {
-  private final static Pattern DMS_LAT = Pattern.compile("^(\\d\\d?)° *([0-6]?\\d)' *([0-6]?\\d)\" *([NS])$", Pattern.CASE_INSENSITIVE);
-  private final static Pattern DMS_LON = Pattern.compile("^(\\d\\d?\\d?)° *([0-6]?\\d)' *([0-6]?\\d)\" *([EOW])$", Pattern.CASE_INSENSITIVE);
-
+  private final static String DMS = "\\s*(\\d{1,3})°\\s*([0-6]?\\d)'\\s*(?:([0-6]?\\d)(?:\"|''))?\\s*";
+  private final static Pattern DMS_LAT = Pattern.compile("^" + DMS + "([NS])$", Pattern.CASE_INSENSITIVE);
+  private final static Pattern DMS_LON = Pattern.compile("^" + DMS + "([EOW])$", Pattern.CASE_INSENSITIVE);
+  private final static Pattern DMS_COORD = Pattern.compile("^" + DMS + "([NSEOW])" + "[,;]?" + DMS + "([NSEOW])$", Pattern.CASE_INSENSITIVE);
+  private final static String POSITIVE = "NEO";
   private CoordinateParseUtils() {
     throw new UnsupportedOperationException("Can't initialize class");
   }
@@ -81,8 +83,7 @@ public class CoordinateParseUtils {
         }
 
         // if everything falls in range
-        if (Double.compare(lat, 90) <= 0 && Double.compare(lat, -90) >= 0 && Double.compare(lng, 180) <= 0
-            && Double.compare(lng, -180) >= 0) {
+        if (inRange(lat, lng)) {
           return ParseResult.success(ParseResult.CONFIDENCE.DEFINITE, new LatLng(lat, lng), issues);
         }
 
@@ -94,8 +95,7 @@ public class CoordinateParseUtils {
         if (Double.compare(lat, 90) > 0 || Double.compare(lat, -90) < 0) {
 
           // try and swap
-          if (Double.compare(lng, 90) <= 0 && Double.compare(lng, -90) >= 0 && Double.compare(lat, 180) <= 0
-              && Double.compare(lat, -180) >= 0) {
+          if (inRange(lng, lat)) {
             issues.add(OccurrenceIssue.PRESUMED_SWAPPED_COORDINATE);
             return ParseResult.fail(new LatLng(lat, lng), issues);
           }
@@ -108,25 +108,77 @@ public class CoordinateParseUtils {
     }.parse(null);
   }
 
+  private static boolean inRange(double lat, double lon) {
+    if (Double.compare(lat, 90) <= 0 && Double.compare(lat, -90) >= 0 && Double.compare(lon, 180) <= 0 && Double.compare(lon, -180) >= 0) {
+      return true;
+    }
+    return false;
+  }
+
+  private static boolean isLat(String direction) {
+    if ("NS".contains(direction.toUpperCase())) {
+      return true;
+    }
+    return false;
+  }
+
+  private static int coordSign(String direction) {
+    return POSITIVE.contains(direction.toUpperCase()) ? 1 : -1;
+  }
+
   // 02° 49' 52" N	131° 47' 03" E
+  public static ParseResult<LatLng> parseVerbatimCoordinates(final String coordinates) {
+    if (Strings.isNullOrEmpty(coordinates)) {
+      return ParseResult.fail();
+    }
+    Matcher m = DMS_COORD.matcher(coordinates);
+    if (m.find()) {
+      // first parse coords regardless whether they are lat or lon
+      double c1 = coordFromMatcher(m, 1,2,3, 4);
+      double c2 = coordFromMatcher(m, 5,6,7, 8);
+      // now see what order the coords are in:
+      final String dir1 = m.group(4);
+      final String dir2 = m.group(8);
+      LatLng result;
+      if (isLat(dir1) && !isLat(dir2)) {
+        result = new LatLng(c1, c2);
+
+      } else if (!isLat(dir1) && isLat(dir2)) {
+        result = new LatLng(c2, c1);
+
+      } else {
+        return ParseResult.fail(OccurrenceIssue.COORDINATE_INVALID);
+      }
+      if (inRange(result.getLat(), result.getLng())) {
+        return ParseResult.success(ParseResult.CONFIDENCE.DEFINITE, result);
+      } else {
+        return ParseResult.fail(OccurrenceIssue.COORDINATE_OUT_OF_RANGE);
+      }
+    }
+    return ParseResult.fail(OccurrenceIssue.COORDINATE_INVALID);
+  }
+
   @VisibleForTesting
   protected static LatLng parseDMS(String lat, String lon) {
     Matcher mLat = DMS_LAT.matcher(lat);
     Matcher mLon = DMS_LON.matcher(lon);
 
     if (mLat.find() && mLon.find()) {
-      double dLat = dmsToDecimal( Double.valueOf(mLat.group(1)), Double.valueOf(mLat.group(2)), Double.valueOf(mLat.group(3)) );
-      int sLat = mLat.group(4).equalsIgnoreCase("N") ? 1 : -1;
+      double dLat = coordFromMatcher(mLat, 1,2,3,4);
+      double dLon = coordFromMatcher(mLon, 1,2,3,4);
 
-      double dLon = dmsToDecimal( Double.valueOf(mLon.group(1)), Double.valueOf(mLon.group(2)), Double.valueOf(mLon.group(3)) );
-      int sLon = mLon.group(4).equalsIgnoreCase("W") ? -1 : 1;
-
-      return new LatLng(dLat * sLat, dLon * sLon);
+      return new LatLng(dLat, dLon);
     }
     return null;
   }
 
-  private static double dmsToDecimal(double degree, double minutes, double seconds) {
+  private static double coordFromMatcher(Matcher m, int idx1, int idx2, int idx3, int idxSign) {
+    return coordSign(m.group(idxSign))
+         * dmsToDecimal( NumberParser.parseDouble(m.group(idx1)), NumberParser.parseDouble(m.group(idx2)), NumberParser.parseDouble(m.group(idx3)) );
+  }
+  private static double dmsToDecimal(double degree, Double minutes, Double seconds) {
+    minutes = minutes == null ? 0 : minutes;
+    seconds = seconds == null ? 0 : seconds;
     return degree + (minutes / 60) + (seconds / 3600);
   }
 
