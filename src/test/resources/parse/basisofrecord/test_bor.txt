@@ -1,0 +1,822 @@
+HumanObservation
+PreservedSpecimen
+observation
+Observation
+O
+NULL
+S
+humanObservation
+Human Observation
+specimen
+Preserved Specimen
+Specimen
+preserved specimen
+voucher
+Colectado
+OtherSpecimen
+specimen(SP)
+HO
+Accession
+FossilSpecimen
+humanobservation
+fossil
+o
+FossileSpecimen
+LivingSpecimen
+Observación humana
+FossilRecord
+Observasjon
+Objekt
+Occurrence
+Voucher
+D
+MachineObservation
+Museum specimen
+preservedspecimen
+Reportado
+F
+herbarium specimen
+(Atkinson, Siegel, Pakhomov and Rothery 2004)
+L
+genomic DNA
+6
+Observado
+Unpublished Report
+Plant
+preserved
+Especimen preservado
+HumanObservation 
+still image
+FishPreparation
+Fossil Specimen
+collected specimen
+preservedSpecimen
+Compound observation
+1
+fossilspecimen
+SP
+Published Report
+Unknown
+livingspecimen
+Personal Communication
+Especimen Preservado
+Especimen
+GLOBEC
+Literature
+s
+SoundRecording
+A
+Personal Communication, Unpublished Report
+StillImage
+PreservedSp
+Ukjent
+VirtualSpecimen
+Sound Recording
+Registro Biológico
+Preservedspecimen
+PS
+Other Organization
+Preserved specimen
+2
+DrawingOrPhotograph
+Observation, Unpublished Report
+Published Report, Unpublished Report
+Espèce
+L S
+literature
+Observación con máquina
+http://globec.whoi.edu/jg/dir/globec/soglobec/
+Specimen, Unpublished Report
+living organism
+PreservedTissue
+Observación Humana
+LiteratureRecord
+colectado
+L S Fungi
+G
+dried specimen
+Observation, Personal Communication
+Ejemplar
+Herbarium sheet
+fluid specimen
+Especimen vivo
+Living Organism
+Espécimen Preservado
+Other Organization, Unpublished Report
+Observation, Specimen
+Checklist of Antarctic Amphipod Crustaceans
+Personal Communication, Specimen
+living, growing plant
+Espécimen preservado
+Preservado
+1 specimen
+germplasm/seed
+Adult
+Personal Communication, Published Report, Unpublished Report
+W
+Living
+Published Report, Specimen
+Observation, Personal Communication, Unpublished Report
+PreservedRecord
+Personal Communication, Published Report
+Observation, Specimen, Unpublished Report
+specimen, fossil
+preservedsample
+preserved in alcohol
+Other Organization, Published Report
+P
+Germplasm
+Checklist
+Personal Communication, Specimen, Unpublished Report
+micr. slide
+ZIN
+Map or Photograph, Unpublished Report
+Map or Photograph
+occurrence
+Observation, Published Report, Unpublished Report
+Other Organization, Personal Communication
+Culture
+Field survey
+Germoplasm/seed
+Fossil
+skin
+Published Report, Specimen, Unpublished Report
+L S Yeast
+slide
+Observation, Published Report
+collection unit
+Other Organization, Published Report, Unpublished Report
+Other Organization, Personal Communication, Unpublished Report
+Map or Photograph, Observation, Unpublished Report
+Observation, Personal Communication, Specimen
+Skin; Tissue
+2 specimens
+Map or Photograph, Personal Communication, Unpublished Report
+Literaturangabe
+Observation, Personal Communication, Specimen, Unpublished Report
+Electronic Media
+Specimen, dead
+living but as yet not sown seeds
+Henri Robert - henri.robert@naturalsciences.be
+Virtual Museum
+Espécimen vivo
+spe
+Electronic Media, Published Report
+C
+Y
+Observation, Other Organization
+Observation, Published Report, Specimen, Unpublished Report
+United States
+Map or Photograph, Observation
+3 specimens
+Track
+l
+Observation, Personal Communication, Published Report, Unpublished Report
+Still image
+Map or Photograph, Published Report, Unpublished Report
+Observation, Published Report, Specimen
+Personal Communication, Published Report, Specimen, Unpublished Report
+Nemertina World Checklist
+F, D
+Personal Communication, Published Report, Specimen
+Juvenile
+Espécimen Vivo
+Observation, Personal Communication, Published Report
+Map or Photograph, Personal Communication, Published Report, Unpublished Report
+Other Organization, Personal Communication, Published Report, Unpublished Report
+Collection
+Saw 1
+Map or Photograph, Observation, Specimen, Unpublished Report
+Map or Photograph, Specimen
+Sample
+mounted skin
+Observation, Other Organization, Unpublished Report
+Genital preparation
+Especímen preservado
+Sheet
+4 specimens
+Map or Photograph, Specimen, Unpublished Report
+Young
+5 specimens
+Canada
+Electronic Media, Unpublished Report
+Detail 1
+Detail 2
+papered specimen
+DNASpecimen
+Other Organization, Personal Communication, Published Report
+Publication
+Label 2
+Label 1
+Denmark
+Photograph
+Adult, papered
+Leaves
+Other Organization, Personal Communication, Specimen
+Observación con Máquina
+Voucher reared
+J
+Saw few
+Observation, Personal Communication, Published Report, Specimen, Unpublished Report
+6 specimens
+Map or Photograph, Observation, Specimen
+Observacion
+Larva
+Observation, Other Organization, Published Report, Unpublished Report
+dead seed sample
+Specimen/still image
+Saw 2
+Photo
+Detail 3
+Spécimen
+sown but as yet not germinated seeds
+thin section, fossil
+Adult, mounted
+Spain
+Map or Photograph, Observation, Personal Communication, Unpublished Report
+Label 3
+Portugal
+Habit
+7 specimens
+Indonesia
+unknown
+Map or Photograph, Personal Communication
+8 specimens
+Other Organization, Specimen
+UTU
+10 specimens
+Type specimen
+Map or Photograph, Observation, Published Report, Specimen, Unpublished Report
+Observation, Personal Communication, Published Report, Specimen
+Literatur
+Observation, Other Organization, Personal Communication
+9 specimens
+Observation, Other Organization, Personal Communication, Unpublished Report
+Map or Photograph, Published Report
+Label
+Electronic Media, Observation
+Observation, dead
+Saw 3
+NomenclaturalChecklist
+Other Organization, Specimen, Unpublished Report
+Palmaria decipiens
+Observation, Other Organization, Personal Communication, Published Report, Unpublished Report
+Map or Photograph, Published Report, Specimen, Unpublished Report
+Detail 4
+Map or Photograph, Observation, Published Report, Unpublished Report
+Map or Photograph, Observation, Personal Communication
+Electronic Media, Published Report, Unpublished Report
+Observation, Other Organization, Published Report
+Caught 1
+Blood
+11 specimens
+Map or Photograph, Other Organization, Personal Communication, Unpublished Report
+Map or Photograph, Observation, Personal Communication, Published Report, Unpublished Report
+Ulva fasciata
+12 specimens
+Electronic Media, Personal Communication
+United Kingdom
+Label 4
+Detail
+14 specimens
+Map or Photograph, Published Report, Specimen
+15 specimens
+13 specimens
+Sargassum
+juvenile
+Electronic Media, Observation, Unpublished Report
+Electronic Media, Personal Communication, Unpublished Report
+Dried
+mounted specimen
+Russian Federation
+Map or Photograph, Other Organization, Unpublished Report
+Papered specimen
+Other Organization, Personal Communication, Specimen, Unpublished Report
+Observacion humana
+Saw 4
+Australia
+17 specimens
+18 specimens
+16 specimens
+skeleton
+Map or Photograph, Observation, Other Organization, Personal Communication, Unpublished Report
+LF
+UNKNOWN
+Listing on website http://www.thalabeach.com.au/birdlife/
+mRNA
+Detail 5
+Hypnea valentiae
+Map or Photograph, Observation, Published Report
+19 specimens
+20 specimens
+Other Organization, Published Report, Specimen, Unpublished Report
+Observation, Other Organization, Personal Communication, Published Report
+Datenbank
+Leaves 1
+Leaves 2
+Stoechospermum marginatum
+Sighting
+Saw many
+Electronic Media, Personal Communication, Published Report, Unpublished Report
+Saw 5
+viral cRNA
+sample, fossil
+Electronic Media, Other Organization, Published Report, Unpublished Report
+Still Image
+22 specimens
+Ulva lactuca
+Other Organization, Published Report, Specimen
+Habit 2
+drawing
+Habit 1
+France
+21 specimens
+25 specimens
+Map or Photograph, Other Organization
+Map or Photograph, Observation, Published Report, Specimen
+Electronic Media, Personal Communication, Published Report
+Caught 2
+Padina tetrasomatica
+DigitisedTrack
+Hypnea cervicornis
+30 specimens
+Labelscan
+LITERATURE
+Beleg und Protokoll
+Bosnia and Herzegovina
+Plant Virus
+Malaysia
+Italy
+Mounted specimen
+23 specimens
+Ulva reticulata
+Caulerpa scalpelliformis
+Literaturauswertung
+Labels
+26 specimens
+Electronic Media, Observation, Personal Communication, Unpublished Report
+Physical Object
+Felddaten
+fragment, fossil
+Moving Image
+Type
+Map or Photograph, Personal Communication, Specimen
+Found 1 larva
+Map or Photograph, Personal Communication, Specimen, Unpublished Report
+Label 5
+Electronic Media, Observation, Published Report
+Observation, Other Organization, Specimen, Unpublished Report
+Map or Photograph, Other Organization, Personal Communication
+Map or Photograph, Observation, Personal Communication, Specimen, Unpublished Report
+dry sample
+Padina
+Freeze-dried pupa
+Map or Photograph, Personal Communication, Published Report, Specimen, Unpublished Report
+24 specimens
+27 specimens
+Spatoglossum asperum
+40 specimens
+Bryopsis plumosa
+Helimeda opuntia
+Greece
+Cladophora fascicularis
+29 specimens
+Map or Photograph, Observation, Other Organization, Unpublished Report
+India
+Map or Photograph, Personal Communication, Published Report
+36 specimens
+Enteromorpha tubulosa
+Electronic Media, Other Organization, Personal Communication, Published Report, Unpublished Report
+Caulerpa taxifolia
+Exsiccata; cultivated?Yes
+Ulva rigida
+Observation, Other Organization, Published Report, Specimen, Unpublished Report
+Electronic Media, Observation, Published Report, Unpublished Report
+Electronic Media, Other Organization, Personal Communication, Unpublished Report
+larvae
+Leaves 3
+Electronic Media, Other Organization, Published Report
+Halymenia porphyroides
+Other Organization, Personal Communication, Published Report, Specimen, Unpublished Report
+Nest
+Freeze-dried larva
+Found 2 larvae
+true
+Electronic Media, Observation, Personal Communication
+Sargassum filipendula
+35 specimens
+Saint Helena, Ascension and Tristan da Cunha
+China
+Caulerpa peltata
+microscope slide
+28 specimens
+Map or Photograph, Observation, Personal Communication, Specimen
+Other museum
+34 specimens
+Electronic Media, Other Organization, Unpublished Report
+32 specimens
+Adult, ex larva on Urtica dioica
+50 specimens
+Monostroma hariotii
+Sargassum tenerrimum
+Halymenia venusta
+Codium dwarkense
+Adult, ex larva on Salix
+45 specimens
+Chaetomorpha media
+31 specimens
+Adult, ex larva on Rudbeckia hirta
+Electronic Media, Specimen
+Dictyota
+Electronic Media, Other Organization, Personal Communication, Published Report
+Living Specimen
+Hypnea musciformis
+59 specimens
+Electronic Media, Observation, Specimen
+Spatoglossum
+Notebook entry
+Trinidad and Tobago
+33 specimens
+Electronic Media, Other Organization
+Caught 3
+basisOfRecord
+Chaetomorpha linum
+larva
+43 specimens
+Found 3 larvae
+Electronic Media, Observation, Personal Communication, Published Report, Unpublished Report
+42 specimens
+54 specimens
+44 specimens
+Electronic Media, Observation, Personal Communication, Published Report
+ZOBODAT
+Rosenvingea
+67 specimens
+Observation, Other Organization, Personal Communication, Specimen, Unpublished Report
+37 specimens
+Udotea indica
+Electronic Media, Personal Communication, Specimen, Unpublished Report
+Enteromorpha linza
+Saw 6
+Hydrocalathus clathratus
+Hydrocalathrus clathratus
+Found 4 larvae
+Valoniopsis pachynema
+SF
+Sargassum hystrix var. spinulosum
+Caulerpa serrulata
+52 specimens
+Observation, Other Organization, Specimen
+46 specimens
+specimen collected
+Halymenia
+Map or Photograph, Observation, Personal Communication, Published Report, Specimen, Unpublished Report
+Hypnea
+Sargassum granuliferum
+Observation, Other Organization, Personal Communication, Published Report, Specimen, Unpublished Report
+Stoechospermum
+Sargassum ilicifolium
+61 specimens
+Phyllophora antarctica
+Samoa
+Adult, ex larva on Juglans cinerea
+Codium arabicum
+Sargassum vulgare
+100 specimens
+OCF
+Saint Vincent and The Grenadines
+48 specimens
+Amphiroa
+Other Organization, Personal Communication, Published Report, Specimen
+Rosenvingea orientalis
+SC
+Sargassum wrightii
+Electronic Media, Observation, Other Organization, Published Report, Unpublished Report
+Enteromorpha clathrata
+Leaves 4
+PRESERVEDSPECIMEN
+Dictyopteris australis
+Caulerpa sertularioides
+38 specimens
+Tanzania
+labels
+Colpomenia sinuosa
+Emerged specimen
+Sargassum wightii
+39 specimens
+Enteromorpha bulbosa
+Chamaedoris auriculata
+Halymenia yenusta
+41 specimens
+Enteromorpha intestinalis
+Sargassum swartzii
+Adult, ex larva on cabbage
+Iridaea cordata
+69 specimens
+genomic RNA
+Sportegn
+Cladophora subsimplex
+81 specimens
+Electronic Media, Other Organization, Personal Communication
+Observation, Other Organization, Published Report, Specimen
+$, skin
+Caulerpa racemosa
+Freeze-dried ova, on Butternut
+Map or Photograph, Other Organization, Published Report
+Map or Photograph, Other Organization, Personal Communication, Published Report
+imagen
+Cladophora howei
+74 specimens
+dry
+Found 6 larvae
+Ulva beytensis
+Sight
+Pocockiella variegata
+Video
+Chnoospora implex
+Adult, ex pupa on Rumex verticillatus
+Boergesenia forbesii
+OF
+56 specimens
+Ecuador
+Syntype
+Papua New Guinea
+Ox
+enteromorpha intestinalis
+Caulerpa crassifolia
+Helimeda incrassata
+Helimeda gracilis
+Cystoseira indica
+65 specimens
+57 specimens
+Desmarestia menziesii
+72 specimens
+85 specimens
+Sargassum densifolium
+Caught 4
+Lobophora variegata
+Microscope slide
+Map or Photograph, Other Organization, Published Report, Unpublished Report
+Caught 6
+Dictyurus purpurascens
+Dictyota bartayresiana
+88 specimens
+87 specimens
+Map or Photograph, Other Organization, Personal Communication, Published Report, Unpublished Report
+LOS ANGELES CO.
+68 specimens
+Map or Photograph, Observation, Other Organization, Personal Communication, Published Report, Unpublished Report
+South Africa
+70 specimens
+Uzbekistan
+73 specimens
+Caulerpa cupressoides
+Dictyota atomaria
+Ruth ct. 1
+label
+Tissue
+66 specimens
+Electronic Media, Personal Communication, Specimen
+Codium coronatum
+Imagen
+Padina gymnospora
+Found many ova, 8 larvae
+Electronic Media, Personal Communication, Published Report, Specimen, Unpublished Report
+Jamaica
+Cystoseira trinodis
+1994/11/23
+Ghana
+Observation, Other Organization, Personal Communication, Specimen
+Sargassum hystrix var. buxifolium
+Cladophora prolifera
+Enteromorpha compressa
+51 specimens
+Found 5 larvae
+Dictyota dumosa
+PreservedSpecimenn
+83 specimens
+82 specimens
+UCLA
+Adult, ex larva on Woolly Aphids on Alder
+Paratype
+Adult, ex larva on Asclepias syriaca
+Codium elongatum
+49 specimens
+Adult, ex larva on galls on Choke Cherry
+55 specimens
+Freeze-dried ova, on Pin Cherry
+Adult, ex larva on Pastinaca sativa
+Adult, ex larva on Spiraea alba
+Electronic Media, Map or Photograph, Observation, Unpublished Report
+Svalbard and Jan Mayen
+literature record
+Found 15 ova, 3 larvae
+Levringea borgesenii
+Padina pavonica
+Sargassum verruculosum
+Slovakia
+Found 7 ova, 4 larvae
+Found 3 larvae on A. incarnata
+Found 4 ova, 1 larva
+Map or Photograph, Observation, Other Organization, Personal Communication, Published Report, Specimen, Unpublished Report
+Found 5 ova, 2 larvae
+Caulerpa serrularioides
+Cystophora
+Dasya
+HOWELL, A. B. (#1053)
+Endodesmis verticillata
+fluid preparationskeleton
+Electronic Media, Map or Photograph, Observation
+Caught 8
+Gymnogongrus antarcticus
+Map or Photograph, Observation, Personal Communication, Published Report, Specimen
+OC
+Map or Photograph, Observation, Other Organization, Personal Communication, Specimen, Unpublished Report
+Electronic Media, Observation, Personal Communication, Published Report, Specimen, Unpublished Report
+79 specimens
+Dictyopteris dichotoma
+HumanObservation, PreservedSpecimen
+23532
+LivingSpeciman
+Dictyopteris muelleri
+Found 1 larva, about to pupate
+Found 4 ova
+Dictyota automaria
+Sargassum plagiophyllum
+Halymenia amoena
+Dichyota dumosa
+89 specimens
+Found 13 larvae
+Found 1 larva on Queen Anne's Lace
+Found many pupal shells on or near A. incarnata
+38
+Pocockiella
+Found many ova, 9 larvae
+PreservedSpecim6
+95 specimens
+Found 1 larva on Urtica
+Dictyota dichotona
+Equatorial Guinea
+Chnoospora
+Colpomenia sinusa
+Jania adhaerens
+Dictyopteris woodwardii
+Netherlands Antilles
+Bryopsis pennata
+Philippines
+Map or Photograph, Observation, Other Organization, Specimen, Unpublished Report
+Halimeda macroloba
+Saw 3, inc. 1 pocahontas form female
+feathers
+76 specimens
+Ukraine
+117 specimens
+Electronic Media, Observation, Personal Communication, Specimen, Unpublished Report
+head
+LivingSpecimen, PreservedSpecimen
+Ernodesmis
+Found 7 ova
+HUMBOLDT CO.
+x
+64 specimens
+118 specimens
+Antarctosaccion applanatum
+Adult, ex larva on Fraxinus americana
+Found 3 pupae, 8 pupal shells, 4 emerged ova
+Saw 7
+Laminaria
+Chaeromorpha indica
+Found few ova on Arabis divaricarpa
+Found 9 larvae
+Costa Rica
+Saw 1 female
+Poland
+SCF
+Halimeda incrassata
+Caulerpa varavalensis
+Finland
+Sonido grabado
+Electronic Media, Published Report, Specimen
+French Polynesia
+90 specimens
+Found 6 ova
+Caught 1 pocahontas female
+Caulerpa verticillata
+Cladophora saracenica
+Electronic Media, Published Report, Specimen, Unpublished Report
+Found 1 ovum, 3 larvae
+Kazakhstan
+Dictyota bartaysiana
+Loose wing on ground
+Found many ova, 3 larvae
+Found 8 old ova
+29 05N, 110 58W
+96 specimens
+Enteromorpha
+141 specimens
+Laurencia padicularioiodes
+Nigeria
+alcohol/microscope
+Caulerpa fergussoni
+Found 2 ova
+62 specimens
+Adult, ex larva on Arabis glabra
+Cybachrome
+63 specimens
+Morocco
+Sargassum hystrize var spinulosum
+sound recording
+Found 5 ova
+Found 8 ova, 1 larva
+Rhizoclonium tortusum
+Sargassum cinereum
+107 specimens
+80 specimens
+Champia compressa var scindica
+Exsiccata; cultivated? Yes
+Found 2 pupae
+Hypnea spicifera
+Sargassum portierianum
+USA
+Dictyota dichotoma
+Estonia
+http://biocol.org/urn:lsid:biocol.org:col:15670
+Found 1 larva on willow
+Leptosarca simplex
+Preseeserticola
+Sa w 1
+1929
+Mauritius
+121 specimens
+77 specimens
+Chnoospora minima
+Found 5 larvae on Sium suave
+Hypnea valletie
+Sargassum merrifieldii
+Solomon Islands
+Padina tenuis
+Found 1 larva, 2 pupae on A.incarnata
+Found 5 pupae,11 pupal shells
+Human Observat
+LC
+Found 1 ovum
+Found 1 larva, on hops
+Halimeda tuna
+Sound
+Animalia
+166 specimens
+Gambia
+111 specimens
+12
+Found few ova, 1 larva
+imagen tipo
+Specimenisopropyl
+102 specimens
+58 specimens
+Porphyra endiviifolium
+Northern Mariana Islands
+Fosliella farinosa
+Found 8 larvae
+75 specimens
+Chile
+Acetabularia calyculus
+El Salvador
+Electronic Media, Observation, Specimen, Unpublished Report
+Caught 10
+Found 3 larvae on Hops
+Dilophus coniegata
+Valoniopsis forbesii
+Dictyopteris plagiogramma
+Rosenvingeia intricata
+180 specimens
+53 specimens
+Adult, ex larva on Aquilegia canadensis
+Map or Photograph, Personal Communication, Published Report, Specimen
+Found 20 larvae
+Cladophora luteola
+Electronic Media, Map or Photograph, Personal Communication, Published Report, Unpublished Report
+148 specimens
+Passeriformes
+60 specimens
+Saw 2, in copula
+Kyrgyzstan
+Found few ova, 3 larvae
+q
+14
+Acetabularia
+197 specimens
+PresNOHOMISH CO.
+PreservedSpecimen, HumanObservation
+SANTA CRUZ CO
+Prese
+Gracilaria verrucosa
+47 specimens
+Sargassum myriocystum
+Guinea-Bissau
+Live observation
+Micronesia
+Electronic Media, Observation, Other Organization, Personal Communication, Published Report, Unpublished Report
+Pres
+Boodlea composita
+Saw  1
+Found 50 ova on Rumex crispus
