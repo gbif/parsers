@@ -10,7 +10,7 @@
 
   <groupId>org.gbif</groupId>
   <artifactId>gbif-parsers</artifactId>
-  <version>0.9-SNAPSHOT</version>
+  <version>0.9</version>
   <packaging>jar</packaging>
 
   <name>GBIF Parsers</name>
@@ -21,7 +21,7 @@
     <connection>scm:git:git@github.com:gbif/parsers.git</connection>
     <url>https://github.com/gbif/parsers</url>
     <developerConnection>scm:git:git@github.com:gbif/parsers.git</developerConnection>
-    <tag>HEAD</tag>
+    <tag>gbif-parsers-0.9</tag>
   </scm>
 
   <properties>
