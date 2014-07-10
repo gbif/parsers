@@ -20,9 +20,13 @@ import org.slf4j.LoggerFactory;
  * Utilities for assisting in the parsing of latitude and longitude strings into Decimals.
  */
 public class CoordinateParseUtils {
-  private final static String DMS = "\\s*(\\d{1,3})\\s*[°d]\\s*([0-6]?\\d)\\s*['m]\\s*(?:([0-6]?\\d)\\s*(?:\"|''|s))?\\s*";
-  private final static Pattern DMS_LAT = Pattern.compile("^" + DMS + "([NS])$", Pattern.CASE_INSENSITIVE);
-  private final static Pattern DMS_LON = Pattern.compile("^" + DMS + "([EOW])$", Pattern.CASE_INSENSITIVE);
+  private final static String DMS = "\\s*(\\d{1,3})\\s*[°d ]"
+                                  + "\\s*([0-6]?\\d)\\s*['m ]"
+                                  + "\\s*(?:"
+                                    + "([0-6]?\\d(?:[,.]\\d+)?)"
+                                    + "\\s*(?:\"|''|s)?"
+                                  + ")?\\s*";
+  private final static Pattern DMS_SINGLE = Pattern.compile("^" + DMS + "$", Pattern.CASE_INSENSITIVE);
   private final static Pattern DMS_COORD = Pattern.compile("^" + DMS + "([NSEOW])" + "[ ,;/]?" + DMS + "([NSEOW])$", Pattern.CASE_INSENSITIVE);
   private final static String POSITIVE = "NEO";
   private CoordinateParseUtils() {
@@ -38,6 +42,15 @@ public class CoordinateParseUtils {
    * in {@link ParseResult#getIssues()}.
    *
    * Coordinate precision will be 5 decimals at most, any more precise values will be rounded.
+   *
+   * Supported standard formats are the following, with dots or optionally a comma as the decimal marker:
+   * <ul>
+   *   <li>43.63871944444445</li>
+   *   <li>N43°38'19.39"</li>
+   *   <li>43°38'19.39"N</li>
+   *   <li>43d 38m 19.39s N</li>
+   *   <li>43 38 19.39</li>
+   * </ul>
    *
    * @param latitude  The decimal latitude
    * @param longitude The decimal longitude
@@ -56,55 +69,15 @@ public class CoordinateParseUtils {
 
         if (lat == null || lng == null) {
           // try degree minute seconds
-          LatLng latLng = parseDMS(latitude, longitude);
-          if (latLng == null) {
+          try {
+            lat = parseDMS(latitude, true);
+            lng = parseDMS(longitude, false);
+          } catch (IllegalArgumentException e) {
             return ParseResult.fail(OccurrenceIssue.COORDINATE_INVALID);
           }
-          lat = latLng.getLat();
-          lng = latLng.getLng();
         }
 
-        // collecting issues for result
-        Set<OccurrenceIssue> issues = EnumSet.noneOf(OccurrenceIssue.class);
-
-        // round to 5 decimals
-        final double latOrig = lat;
-        final double lngOrig = lng;
-        lat = roundTo5decimals(lat);
-        lng = roundTo5decimals(lng);
-        if (Double.compare(lat, latOrig) != 0 || Double.compare(lng, lngOrig) != 0) {
-          issues.add(OccurrenceIssue.COORDINATE_ROUNDED);
-        }
-
-        // 0,0 is too suspicious
-        if (Double.compare(lat, 0) == 0 && Double.compare(lng, 0) == 0) {
-          issues.add(OccurrenceIssue.ZERO_COORDINATE);
-          return ParseResult
-            .success(ParseResult.CONFIDENCE.POSSIBLE, new LatLng(0, 0), issues);
-        }
-
-        // if everything falls in range
-        if (inRange(lat, lng)) {
-          return ParseResult.success(ParseResult.CONFIDENCE.DEFINITE, new LatLng(lat, lng), issues);
-        }
-
-        // if lat is out of range, but in range of the lng,
-        // assume swapped coordinates.
-        // note that should we desire to trust the following records, we would need to clear the flag for the records to
-        // appear in
-        // search results and maps etc. however, this is logic decision, that goes above the capabilities of this method
-        if (Double.compare(lat, 90) > 0 || Double.compare(lat, -90) < 0) {
-
-          // try and swap
-          if (inRange(lng, lat)) {
-            issues.add(OccurrenceIssue.PRESUMED_SWAPPED_COORDINATE);
-            return ParseResult.fail(new LatLng(lat, lng), issues);
-          }
-        }
-
-        // then something is out of range
-        issues.add(OccurrenceIssue.COORDINATE_OUT_OF_RANGE);
-        return ParseResult.fail(issues);
+        return validateAndRound(lat, lng);
       }
     }.parse(null);
   }
@@ -134,27 +107,22 @@ public class CoordinateParseUtils {
     }
     Matcher m = DMS_COORD.matcher(coordinates);
     if (m.find()) {
-      // first parse coords regardless whether they are lat or lon
-      double c1 = coordFromMatcher(m, 1,2,3, 4);
-      double c2 = coordFromMatcher(m, 5,6,7, 8);
-      // now see what order the coords are in:
       final String dir1 = m.group(4);
       final String dir2 = m.group(8);
-      LatLng result;
+      // first parse coords regardless whether they are lat or lon
+      double c1 = coordFromMatcher(m, 1,2,3, dir1);
+      double c2 = coordFromMatcher(m, 5,6,7, dir2);
+      // now see what order the coords are in:
       if (isLat(dir1) && !isLat(dir2)) {
-        result = new LatLng(c1, c2);
+        return validateAndRound(c1, c2);
 
       } else if (!isLat(dir1) && isLat(dir2)) {
-        result = new LatLng(c2, c1);
+        return validateAndRound(c2, c1);
 
       } else {
         return ParseResult.fail(OccurrenceIssue.COORDINATE_INVALID);
       }
-      if (inRange(result.getLat(), result.getLng())) {
-        return ParseResult.success(ParseResult.CONFIDENCE.DEFINITE, result);
-      } else {
-        return ParseResult.fail(OccurrenceIssue.COORDINATE_OUT_OF_RANGE);
-      }
+
     } else if(coordinates.length() > 4) {
       // try to split and then use lat/lon parsing
       for (final char delim : ",;/ ".toCharArray()) {
@@ -168,22 +136,81 @@ public class CoordinateParseUtils {
     return ParseResult.fail(OccurrenceIssue.COORDINATE_INVALID);
   }
 
-  @VisibleForTesting
-  protected static LatLng parseDMS(String lat, String lon) {
-    Matcher mLat = DMS_LAT.matcher(lat);
-    Matcher mLon = DMS_LON.matcher(lon);
+  private static ParseResult<LatLng> validateAndRound(double lat, double lon) {
+    // collecting issues for result
+    Set<OccurrenceIssue> issues = EnumSet.noneOf(OccurrenceIssue.class);
 
-    if (mLat.find() && mLon.find()) {
-      double dLat = coordFromMatcher(mLat, 1,2,3,4);
-      double dLon = coordFromMatcher(mLon, 1,2,3,4);
-
-      return new LatLng(dLat, dLon);
+    // round to 5 decimals
+    final double latOrig = lat;
+    final double lngOrig = lon;
+    lat = roundTo5decimals(lat);
+    lon = roundTo5decimals(lon);
+    if (Double.compare(lat, latOrig) != 0 || Double.compare(lon, lngOrig) != 0) {
+      issues.add(OccurrenceIssue.COORDINATE_ROUNDED);
     }
-    return null;
+
+    // 0,0 is too suspicious
+    if (Double.compare(lat, 0) == 0 && Double.compare(lon, 0) == 0) {
+      issues.add(OccurrenceIssue.ZERO_COORDINATE);
+      return ParseResult.success(ParseResult.CONFIDENCE.POSSIBLE, new LatLng(0, 0), issues);
+    }
+
+    // if everything falls in range
+    if (inRange(lat, lon)) {
+      return ParseResult.success(ParseResult.CONFIDENCE.DEFINITE, new LatLng(lat, lon), issues);
+    }
+
+    // if lat is out of range, but in range of the lng,
+    // assume swapped coordinates.
+    // note that should we desire to trust the following records, we would need to clear the flag for the records to
+    // appear in
+    // search results and maps etc. however, this is logic decision, that goes above the capabilities of this method
+    if (Double.compare(lat, 90) > 0 || Double.compare(lat, -90) < 0) {
+      // try and swap
+      if (inRange(lon, lat)) {
+        issues.add(OccurrenceIssue.PRESUMED_SWAPPED_COORDINATE);
+        return ParseResult.fail(new LatLng(lat, lon), issues);
+      }
+    }
+
+    // then something is out of range
+    issues.add(OccurrenceIssue.COORDINATE_OUT_OF_RANGE);
+    return ParseResult.fail(issues);
+
   }
 
-  private static double coordFromMatcher(Matcher m, int idx1, int idx2, int idx3, int idxSign) {
-    return coordSign(m.group(idxSign))
+  /**
+   * Parses a single DMS coordinate
+   * @param coord
+   * @param lat
+   * @return the converted decimal
+   */
+  @VisibleForTesting
+  protected static double parseDMS(String coord, boolean lat) {
+    final String DIRS = lat ? "NS" : "EOW";
+    coord = coord.trim().toUpperCase();
+
+    if (coord.length() > 3) {
+      // preparse the direction and remove it from the string to avoid a very complex regex
+      char dir = 'n';
+      if (DIRS.contains(String.valueOf(coord.charAt(0)))) {
+        dir = coord.charAt(0);
+        coord = coord.substring(1);
+      } else if (DIRS.contains(String.valueOf(coord.charAt(coord.length()-1)))) {
+        dir = coord.charAt(coord.length()-1);
+        coord = coord.substring(0, coord.length()-1);
+      }
+      // without the direction chuck it at the regex
+      Matcher m = DMS_SINGLE.matcher(coord);
+      if (m.find()) {
+        return coordFromMatcher(m, 1,2,3, String.valueOf(dir));
+      }
+    }
+    throw new IllegalArgumentException();
+  }
+
+  private static double coordFromMatcher(Matcher m, int idx1, int idx2, int idx3, String sign) {
+    return coordSign(sign)
          * dmsToDecimal( NumberParser.parseDouble(m.group(idx1)), NumberParser.parseDouble(m.group(idx2)), NumberParser.parseDouble(m.group(idx3)) );
   }
   private static double dmsToDecimal(double degree, Double minutes, Double seconds) {
