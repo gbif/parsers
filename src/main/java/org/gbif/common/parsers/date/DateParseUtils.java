@@ -1,21 +1,20 @@
 package org.gbif.common.parsers.date;
 
 
+import com.google.common.base.Joiner;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.time.DateUtils;
 import org.gbif.common.parsers.core.ParseResult;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import javax.annotation.Nullable;
 import java.text.ParseException;
 import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
-import javax.annotation.Nullable;
-
-import com.google.common.base.Joiner;
-import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.time.DateUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * Utilities for parsing dates. Methods are implemented in static to reduce object creation and shorten coding for
@@ -104,7 +103,7 @@ public class DateParseUtils {
           return valueAsInt >= 1 && valueAsInt <= new GregorianCalendar().get(Calendar.YEAR);
       }
     } catch (NumberFormatException e) {
-      LOGGER.debug("{} does not appear valid as a {}", new Object[] {value, field, e});
+      LOGGER.debug("{} does not appear valid as a {}", value, field);
     }
     return false;
   }
@@ -206,13 +205,13 @@ public class DateParseUtils {
       } else {
         try {
           // last ditch attempt to get a date
+          // bad days are converted by the gregorian calendar (31/06/2000 for example becomes 01/07/2000)
           Date p = DateUtils.parseDate(year, new String[] {"yyyy-MM-dd", "yyyy/MM/dd"});
           GregorianCalendar gc = new GregorianCalendar();
           gc.setTime(p);
           ymd.setYear(String.valueOf(gc.get(Calendar.YEAR)));
-          ymd.setMonth(String.valueOf(gc.get(Calendar.MONTH)));
-          // we deliberately do not set the day since this is a last ditch to catch bad
-          // dates, and a common reason is the bad day (31/06/2000 for example)
+          ymd.setMonth(String.valueOf(1+gc.get(Calendar.MONTH)));
+          ymd.setDay(String.valueOf(gc.get(Calendar.DAY_OF_MONTH)));
 
         } catch (ParseException e) {
         }
