@@ -1,0 +1,5 @@
+botany	BOTANICAL
+zoo	ZOOLOGICAL
+vir	VIRUS
+bc	BIOCODE
+bact	BACTERIAL

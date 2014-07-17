@@ -1,13 +1,12 @@
 package org.gbif.common.parsers;
 
-import org.gbif.common.parsers.core.Parsable;
-import org.gbif.common.parsers.core.ParseResult;
-
-import java.io.IOException;
-
 import com.google.common.base.Strings;
 import com.google.common.io.LineProcessor;
+import org.gbif.common.parsers.core.Parsable;
+import org.gbif.common.parsers.core.ParseResult;
 import org.junit.Before;
+
+import java.io.IOException;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -42,9 +41,9 @@ public abstract class ParserTestBase<T> implements LineProcessor<ParserTestBase.
   protected void assertParseSuccess(T expected, ParseResult.CONFIDENCE confidence, String input) {
     ParseResult<T> parsed = parser.parse(input);
     assertNotNull(parsed);
-    assertEquals(ParseResult.STATUS.SUCCESS, parsed.getStatus());
+    assertEquals("BAD PARSING OF: "+input, ParseResult.STATUS.SUCCESS, parsed.getStatus());
     assertNotNull(parsed.getPayload());
-    assertEquals(expected, parsed.getPayload());
+    assertEquals("BAD PARSING OF: "+input, expected, parsed.getPayload());
     if (confidence != null) {
       assertEquals(confidence, parsed.getConfidence());
     }
