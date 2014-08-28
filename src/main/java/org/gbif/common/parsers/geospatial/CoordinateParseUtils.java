@@ -1,7 +1,6 @@
 package org.gbif.common.parsers.geospatial;
 
 import org.gbif.api.vocabulary.OccurrenceIssue;
-import org.gbif.common.parsers.core.Parsable;
 import org.gbif.common.parsers.core.ParseResult;
 import org.gbif.common.parsers.utils.NumberParser;
 
@@ -39,7 +38,7 @@ public class CoordinateParseUtils {
    * This parses string representations of latitude and longitude values. It tries its best to interpret the values and
    * indicates any problems in its result as {@link org.gbif.api.vocabulary.OccurrenceIssue}.
    * When the {@link ParseResult.STATUS} is FAIL the payload will be null and one or more issues should be set
-   * in {@link ParseResult#getIssues()}.
+   * in {@link OccurrenceParseResult#getIssues()}.
    *
    * Coordinate precision will be 5 decimals at most, any more precise values will be rounded.
    *
@@ -57,29 +56,23 @@ public class CoordinateParseUtils {
    *
    * @return The parse result
    */
-  public static ParseResult<LatLng> parseLatLng(final String latitude, final String longitude) {
-    return new Parsable<LatLng>() {
-      @Override
-      public ParseResult<LatLng> parse(String v) {
-        if (Strings.isNullOrEmpty(latitude) || Strings.isNullOrEmpty(longitude)) {
-          return ParseResult.fail();
-        }
-        Double lat = NumberParser.parseDouble(latitude);
-        Double lng = NumberParser.parseDouble(longitude);
-
-        if (lat == null || lng == null) {
-          // try degree minute seconds
-          try {
-            lat = parseDMS(latitude, true);
-            lng = parseDMS(longitude, false);
-          } catch (IllegalArgumentException e) {
-            return ParseResult.fail(OccurrenceIssue.COORDINATE_INVALID);
-          }
-        }
-
-        return validateAndRound(lat, lng);
+  public static OccurrenceParseResult<LatLng> parseLatLng(final String latitude, final String longitude) {
+    if (Strings.isNullOrEmpty(latitude) || Strings.isNullOrEmpty(longitude)) {
+      return OccurrenceParseResult.fail();
+    }
+    Double lat = NumberParser.parseDouble(latitude);
+    Double lng = NumberParser.parseDouble(longitude);
+    if (lat == null || lng == null) {
+      // try degree minute seconds
+      try {
+        lat = parseDMS(latitude, true);
+        lng = parseDMS(longitude, false);
+      } catch (IllegalArgumentException e) {
+        return OccurrenceParseResult.fail(OccurrenceIssue.COORDINATE_INVALID);
       }
-    }.parse(null);
+    }
+
+    return validateAndRound(lat, lng);
   }
 
   private static boolean inRange(double lat, double lon) {
@@ -101,9 +94,9 @@ public class CoordinateParseUtils {
   }
 
   // 02° 49' 52" N	131° 47' 03" E
-  public static ParseResult<LatLng> parseVerbatimCoordinates(final String coordinates) {
+  public static OccurrenceParseResult<LatLng> parseVerbatimCoordinates(final String coordinates) {
     if (Strings.isNullOrEmpty(coordinates)) {
-      return ParseResult.fail();
+      return OccurrenceParseResult.fail();
     }
     Matcher m = DMS_COORD.matcher(coordinates);
     if (m.find()) {
@@ -120,7 +113,7 @@ public class CoordinateParseUtils {
         return validateAndRound(c2, c1);
 
       } else {
-        return ParseResult.fail(OccurrenceIssue.COORDINATE_INVALID);
+        return OccurrenceParseResult.fail(OccurrenceIssue.COORDINATE_INVALID);
       }
 
     } else if(coordinates.length() > 4) {
@@ -133,10 +126,10 @@ public class CoordinateParseUtils {
         }
       }
     }
-    return ParseResult.fail(OccurrenceIssue.COORDINATE_INVALID);
+    return OccurrenceParseResult.fail(OccurrenceIssue.COORDINATE_INVALID);
   }
 
-  private static ParseResult<LatLng> validateAndRound(double lat, double lon) {
+  private static OccurrenceParseResult<LatLng> validateAndRound(double lat, double lon) {
     // collecting issues for result
     Set<OccurrenceIssue> issues = EnumSet.noneOf(OccurrenceIssue.class);
 
@@ -152,12 +145,12 @@ public class CoordinateParseUtils {
     // 0,0 is too suspicious
     if (Double.compare(lat, 0) == 0 && Double.compare(lon, 0) == 0) {
       issues.add(OccurrenceIssue.ZERO_COORDINATE);
-      return ParseResult.success(ParseResult.CONFIDENCE.POSSIBLE, new LatLng(0, 0), issues);
+      return OccurrenceParseResult.success(ParseResult.CONFIDENCE.POSSIBLE, new LatLng(0, 0), issues);
     }
 
     // if everything falls in range
     if (inRange(lat, lon)) {
-      return ParseResult.success(ParseResult.CONFIDENCE.DEFINITE, new LatLng(lat, lon), issues);
+      return OccurrenceParseResult.success(ParseResult.CONFIDENCE.DEFINITE, new LatLng(lat, lon), issues);
     }
 
     // if lat is out of range, but in range of the lng,
@@ -169,13 +162,13 @@ public class CoordinateParseUtils {
       // try and swap
       if (inRange(lon, lat)) {
         issues.add(OccurrenceIssue.PRESUMED_SWAPPED_COORDINATE);
-        return ParseResult.fail(new LatLng(lat, lon), issues);
+        return OccurrenceParseResult.fail(new LatLng(lat, lon), issues);
       }
     }
 
     // then something is out of range
     issues.add(OccurrenceIssue.COORDINATE_OUT_OF_RANGE);
-    return ParseResult.fail(issues);
+    return OccurrenceParseResult.fail(issues);
 
   }
 
@@ -183,7 +176,7 @@ public class CoordinateParseUtils {
    * Parses a single DMS coordinate
    * @param coord
    * @param lat
-   * @return the converted decimal
+   * @return the converted decimal up to 5 decimals accurracy
    */
   @VisibleForTesting
   protected static double parseDMS(String coord, boolean lat) {
@@ -210,8 +203,8 @@ public class CoordinateParseUtils {
   }
 
   private static double coordFromMatcher(Matcher m, int idx1, int idx2, int idx3, String sign) {
-    return coordSign(sign)
-         * dmsToDecimal( NumberParser.parseDouble(m.group(idx1)), NumberParser.parseDouble(m.group(idx2)), NumberParser.parseDouble(m.group(idx3)) );
+    return roundTo5decimals(coordSign(sign) *
+        dmsToDecimal( NumberParser.parseDouble(m.group(idx1)), NumberParser.parseDouble(m.group(idx2)), NumberParser.parseDouble(m.group(idx3)) ));
   }
   private static double dmsToDecimal(double degree, Double minutes, Double seconds) {
     minutes = minutes == null ? 0 : minutes;

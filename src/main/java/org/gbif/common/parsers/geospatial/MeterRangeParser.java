@@ -191,7 +191,7 @@ public class MeterRangeParser {
     return result;
   }
 
-  public static ParseResult<DoubleAccuracy> parseElevation(@Nullable String min, @Nullable String max, @Nullable String precision) {
+  public static OccurrenceParseResult<DoubleAccuracy> parseElevation(@Nullable String min, @Nullable String max, @Nullable String precision) {
 
     MeasurementWrapper<DoubleAccuracy> elevation = parseMeterRange(min, max, precision);
 
@@ -210,20 +210,20 @@ public class MeterRangeParser {
     }
 
     if (elevation.measurement == null || elevation.measurement.getValue() == null) {
-      return ParseResult.fail(issues);
+      return OccurrenceParseResult.fail(issues);
     }
 
     DoubleAccuracy result = elevation.measurement;
     // record the number of records with altitude out of range
     if (result.getValue() > MAX_ELEVATION || result.getValue() < MIN_ELEVATION) {
       issues.add(OccurrenceIssue.ELEVATION_UNLIKELY);
-      return ParseResult.fail(issues);
+      return OccurrenceParseResult.fail(issues);
     }
 
-    return ParseResult.success(ParseResult.CONFIDENCE.DEFINITE, result, issues);
+    return OccurrenceParseResult.success(ParseResult.CONFIDENCE.DEFINITE, result, issues);
   }
 
-  public static ParseResult<DoubleAccuracy> parseDepth(@Nullable String min, @Nullable String max, @Nullable String precision) {
+  public static OccurrenceParseResult<DoubleAccuracy> parseDepth(@Nullable String min, @Nullable String max, @Nullable String precision) {
     MeasurementWrapper<DoubleAccuracy> depth = parseMeterRange(min, max, precision);
 
     Set<OccurrenceIssue> issues = Sets.newHashSet();
@@ -241,7 +241,7 @@ public class MeterRangeParser {
     }
 
     if (depth.measurement == null || depth.measurement.getValue() == null) {
-      return ParseResult.fail(issues);
+      return OccurrenceParseResult.fail(issues);
     }
 
     DoubleAccuracy result = depth.measurement;
@@ -255,10 +255,10 @@ public class MeterRangeParser {
     // record the number of records with depth out of range
     if (result.getValue() > MAX_DEPTH) {
       issues.add(OccurrenceIssue.DEPTH_UNLIKELY);
-      return ParseResult.fail(issues);
+      return OccurrenceParseResult.fail(issues);
     }
 
-    return ParseResult.success(ParseResult.CONFIDENCE.DEFINITE, result, issues);
+    return OccurrenceParseResult.success(ParseResult.CONFIDENCE.DEFINITE, result, issues);
   }
 
   private static MeasurementWrapper<Double> parseInMeter(String meter) {

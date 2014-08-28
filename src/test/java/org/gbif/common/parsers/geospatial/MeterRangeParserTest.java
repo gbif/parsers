@@ -78,7 +78,7 @@ public class MeterRangeParserTest {
                  OccurrenceIssue.DEPTH_NON_NUMERIC);
   }
 
-  private void assertResult(ParseResult<?> pr, boolean success, Double elevation, Double precision, OccurrenceIssue ... issue) {
+  private void assertResult(OccurrenceParseResult<?> pr, boolean success, Double elevation, Double precision, OccurrenceIssue ... issue) {
     if (success) {
       assertExpected(pr, new DoubleAccuracy(elevation, precision), ParseResult.CONFIDENCE.DEFINITE, issue);
     } else {
@@ -86,7 +86,7 @@ public class MeterRangeParserTest {
     }
   }
 
-  private void assertExpected(ParseResult<?> pr, Object expected, ParseResult.CONFIDENCE c, OccurrenceIssue ... issue) {
+  private void assertExpected(OccurrenceParseResult<?> pr, Object expected, ParseResult.CONFIDENCE c, OccurrenceIssue ... issue) {
     assertNotNull(pr);
     assertEquals(ParseResult.STATUS.SUCCESS, pr.getStatus());
     assertEquals(c, pr.getConfidence());

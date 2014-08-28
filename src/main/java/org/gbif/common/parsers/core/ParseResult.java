@@ -1,15 +1,5 @@
 package org.gbif.common.parsers.core;
 
-import org.gbif.api.vocabulary.OccurrenceIssue;
-
-import java.util.Collection;
-import java.util.EnumSet;
-import java.util.Set;
-
-import com.google.common.base.Preconditions;
-import com.google.common.base.Predicates;
-import com.google.common.collect.Iterables;
-import com.google.common.collect.Lists;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -33,7 +23,6 @@ public class ParseResult<T> {
   protected CONFIDENCE confidence;
   protected T payload;
   protected Throwable error;
-  private final Set<OccurrenceIssue> issues = EnumSet.noneOf(OccurrenceIssue.class);
 
   /**
    * @param <T1>       The generic type of the payload
@@ -43,62 +32,21 @@ public class ParseResult<T> {
    * @return The new ParseResult which has no error and status of SUCCESS
    */
   public static <T1> ParseResult<T1> success(CONFIDENCE confidence, T1 payload) {
-    return new ParseResult<T1>(STATUS.SUCCESS, confidence, payload, null, null);
+    return new ParseResult<T1>(STATUS.SUCCESS, confidence, payload, null);
   }
 
-  public static <T1> ParseResult<T1> success(CONFIDENCE confidence, T1 payload, OccurrenceIssue issue) {
-    return new ParseResult<T1>(STATUS.SUCCESS, confidence, payload, null, Lists.newArrayList(issue));
-  }
-
-  public static <T1> ParseResult<T1> success(CONFIDENCE confidence, T1 payload, Collection<OccurrenceIssue> issues) {
-    return new ParseResult<T1>(STATUS.SUCCESS, confidence, payload, null, issues);
-  }
   /**
    * @return A new parse response with only the status set to FAIL
    */
   public static <T1> ParseResult<T1> fail() {
-    return new ParseResult<T1>(STATUS.FAIL, null, null, null, null);
-  }
-
-  public static <T1> ParseResult<T1> fail(OccurrenceIssue issue) {
-    return new ParseResult<T1>(STATUS.FAIL, null, null, null, Lists.newArrayList(issue));
-  }
-
-  public static <T1> ParseResult<T1> fail(Collection<OccurrenceIssue> issues) {
-    return new ParseResult<T1>(STATUS.FAIL, null, null, null, issues);
-  }
-
-  /**
-   * This creates a ParseResult indicating a parse failure but it also has a payload. Depending on the context this
-   * may provide additional information about the failure.
-   *
-   * @param payload the payload of the parse result
-   * @param <T1>    the generic type of the payload
-   *
-   * @return the new parse response which has a status of FAIL and an additional payload.
-   */
-  public static <T1> ParseResult<T1> fail(T1 payload, OccurrenceIssue issue) {
-    return new ParseResult<T1>(STATUS.FAIL, null, payload, null, Lists.newArrayList(issue));
-  }
-
-  /**
-   * This creates a ParseResult indicating a parse failure but it also has a payload. Depending on the context this
-   * may provide additional information about the failure.
-   *
-   * @param payload the payload of the parse result
-   * @param <T1>    the generic type of the payload
-   *
-   * @return the new parse response which has a status of FAIL and an additional payload.
-   */
-  public static <T1> ParseResult<T1> fail(T1 payload, Collection<OccurrenceIssue> issues) {
-    return new ParseResult<T1>(STATUS.FAIL, null, payload, null, issues);
+    return new ParseResult<T1>(STATUS.FAIL, null, null, null);
   }
 
   /**
    * @return A new parse response configured to indicate an error
    */
   public static <T1> ParseResult<T1> error() {
-    return new ParseResult<T1>(STATUS.ERROR, null, null, null, null);
+    return new ParseResult<T1>(STATUS.ERROR, null, null, null);
   }
 
   /**
@@ -107,7 +55,7 @@ public class ParseResult<T> {
    * @return A new parse response configured with error and the cause
    */
   public static <T1> ParseResult<T1> error(Throwable cause) {
-    return new ParseResult<T1>(STATUS.ERROR, null, null, cause, null);
+    return new ParseResult<T1>(STATUS.ERROR, null, null, cause);
   }
 
   /**
@@ -117,17 +65,12 @@ public class ParseResult<T> {
    * @param confidence The confidence in the result
    * @param payload    The payload of the response
    * @param error      The error in the response
-   * @param issues     Optional issues to report
    */
-  public ParseResult(STATUS status, CONFIDENCE confidence, T payload, Throwable error, Collection<OccurrenceIssue> issues) {
+  public ParseResult(STATUS status, CONFIDENCE confidence, T payload, Throwable error) {
     this.status = status;
     this.confidence = confidence;
     this.payload = payload;
     this.error = error;
-    if (issues != null) {
-      // add non nulls only
-      Iterables.addAll(this.issues, Iterables.filter(issues, Predicates.notNull()));
-    }
   }
 
   public STATUS getStatus() {
@@ -146,14 +89,6 @@ public class ParseResult<T> {
     return error;
   }
 
-  public Set<OccurrenceIssue> getIssues() {
-    return issues;
-  }
-
-  public void addIssue(OccurrenceIssue issue) {
-    Preconditions.checkNotNull(issue);
-    issues.add(issue);
-  }
 
   /**
    * Returns true if {@link #getStatus()} returns SUCCESS.
@@ -170,7 +105,6 @@ public class ParseResult<T> {
       .append("status", getStatus())
       .append("confidence", getConfidence())
       .append("payload", getPayload())
-      .append("issues", getIssues())
       .append("error", getError()).toString();
   }
 }
