@@ -1,7 +1,6 @@
-package org.gbif.common.parsers.geospatial;
+package org.gbif.common.parsers.core;
 
 import org.gbif.api.vocabulary.OccurrenceIssue;
-import org.gbif.common.parsers.core.ParseResult;
 
 import java.util.Collection;
 import java.util.EnumSet;
@@ -28,6 +27,10 @@ public class OccurrenceParseResult<T> extends ParseResult<T> {
 
   public OccurrenceParseResult(STATUS status, CONFIDENCE confidence, T payload, Throwable error) {
     super(status, confidence, payload, error);
+  }
+
+  public OccurrenceParseResult(ParseResult<T> result) {
+    super(result.getStatus(), result.getConfidence(), result.getPayload(), result.getError());
   }
 
   /**

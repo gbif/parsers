@@ -1,8 +1,9 @@
 package org.gbif.common.parsers.geospatial;
 
 import org.gbif.api.vocabulary.OccurrenceIssue;
+import org.gbif.common.parsers.core.OccurrenceParseResult;
 import org.gbif.common.parsers.core.ParseResult;
-import org.gbif.common.parsers.utils.NumberParser;
+import org.gbif.common.parsers.NumberParser;
 
 import java.util.EnumSet;
 import java.util.Set;
@@ -38,7 +39,7 @@ public class CoordinateParseUtils {
    * This parses string representations of latitude and longitude values. It tries its best to interpret the values and
    * indicates any problems in its result as {@link org.gbif.api.vocabulary.OccurrenceIssue}.
    * When the {@link ParseResult.STATUS} is FAIL the payload will be null and one or more issues should be set
-   * in {@link OccurrenceParseResult#getIssues()}.
+   * in {@link org.gbif.common.parsers.core.OccurrenceParseResult#getIssues()}.
    *
    * Coordinate precision will be 5 decimals at most, any more precise values will be rounded.
    *

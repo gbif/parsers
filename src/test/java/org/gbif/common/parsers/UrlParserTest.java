@@ -1,4 +1,6 @@
-package org.gbif.common.parsers.core;
+package org.gbif.common.parsers;
+
+import org.gbif.common.parsers.UrlParser;
 
 import org.junit.Test;
 

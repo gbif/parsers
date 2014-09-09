@@ -1,4 +1,6 @@
-package org.gbif.common.parsers.utils;
+package org.gbif.common.parsers;
+
+import org.gbif.common.parsers.NumberParser;
 
 import org.junit.Test;
 

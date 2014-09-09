@@ -1,6 +1,7 @@
 package org.gbif.common.parsers.geospatial;
 
 import org.gbif.api.vocabulary.OccurrenceIssue;
+import org.gbif.common.parsers.core.OccurrenceParseResult;
 import org.gbif.common.parsers.core.ParseResult;
 
 import org.junit.Test;
