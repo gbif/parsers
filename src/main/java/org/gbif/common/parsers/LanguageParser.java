@@ -8,10 +8,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Iterator;
 
-import com.google.common.base.CharMatcher;
 import com.google.common.base.Charsets;
 import com.google.common.base.Splitter;
-import com.google.common.base.Strings;
 
 /**
  * Singleton implementation of the case insensitive iso 639-1 language dictionary
@@ -23,14 +21,12 @@ import com.google.common.base.Strings;
 public class LanguageParser extends EnumParser<Language> {
 
   private static LanguageParser singletonObject = null;
-  private static final CharMatcher LETTER_MATCHER = CharMatcher.JAVA_LETTER.or(CharMatcher.WHITESPACE).precomputed();
-  private static final CharMatcher WHITESPACE_MATCHER = CharMatcher.WHITESPACE.precomputed();
   private static final Splitter TAB_SPLITTER = Splitter.on('\t').trimResults();
   private static final Splitter SEMICOLON_SPLITTER = Splitter.on(';').trimResults();
 
 
   private LanguageParser() {
-    super(Language.class, true);
+    super(Language.class, false);
     try {
       BufferedReader r = new BufferedReader(
         new InputStreamReader(LanguageParser.class.getResourceAsStream("/dictionaries/parse/iso-639-1.txt"),
@@ -74,33 +70,19 @@ public class LanguageParser extends EnumParser<Language> {
     }
   }
 
-  /**
-   * A language string could come in as a locale like "en_US" or if it was constructed improperly "eng_US", so
-   * extract only the part before the underscore". Only if it contains an "_" is parsing attempted.
-   * Whether it actually represents an iso 369 language code is left for the language parser to determine.
-   *
-   * @param input language string (possibly representing a Locale)
-   *
-   * @return parsed string if it contained an underscore, unchanged string if it didn't, or null if it was empty or
-   *         null
-   *         to begin with
-   */
-  private String extractLanguageFromLocale(String input) {
-    if (!Strings.isNullOrEmpty(input) && input.contains("_")) {
-      int index = input.indexOf("_");
-      return input.substring(0, index);
-    }
-    return input;
-  }
-
   @Override
   protected String normalize(String value) {
     if (value != null) {
-      String cleaned = extractLanguageFromLocale(value);
-      cleaned = LETTER_MATCHER.retainFrom(cleaned);
-      cleaned = WHITESPACE_MATCHER.trimAndCollapseFrom(cleaned, ' ');
-      cleaned = Strings.emptyToNull(cleaned);
-      return super.normalize(cleaned);
+      /**
+       * A language string could come in as a locale like "en_US" or if it was constructed improperly "eng_US", so
+       * extract only the part before the underscore". Only if it contains an "_" is parsing attempted.
+       * Whether it actually represents an iso 369 language code is left for the language parser to determine.
+       */
+      if (value.contains("_")) {
+        int index = value.indexOf("_");
+        return super.normalize(value.substring(0, index));
+      }
+      return super.normalize(value);
     }
     return null;
   }

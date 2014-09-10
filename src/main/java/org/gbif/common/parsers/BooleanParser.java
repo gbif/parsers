@@ -1,13 +1,6 @@
 package org.gbif.common.parsers;
 
-import org.gbif.api.util.VocabularyUtils;
-import org.gbif.api.vocabulary.Sex;
-import org.gbif.common.parsers.core.EnumParser;
 import org.gbif.common.parsers.core.FileBasedDictionaryParser;
-
-import com.google.common.base.CharMatcher;
-import com.google.common.base.Strings;
-import com.sun.org.apache.xpath.internal.operations.Bool;
 
 /**
  * Singleton implementation of the dictionary that uses the file /dictionaries/parse/continents.txt.
@@ -15,8 +8,6 @@ import com.sun.org.apache.xpath.internal.operations.Bool;
 public class BooleanParser extends FileBasedDictionaryParser<Boolean> {
 
   private static BooleanParser singletonObject = null;
-
-
 
   private BooleanParser() {
     super(false);

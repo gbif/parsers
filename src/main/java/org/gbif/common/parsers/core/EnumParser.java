@@ -5,6 +5,7 @@ import org.gbif.api.util.VocabularyUtils;
 import java.io.InputStream;
 import java.util.regex.Pattern;
 
+import com.google.common.base.CharMatcher;
 import com.google.common.base.Strings;
 
 /**
@@ -17,6 +18,8 @@ public class EnumParser<T extends Enum<T>> extends FileBasedDictionaryParser<T> 
   private final Class<T> clazz;
   private final Pattern NORMALIZER;
   private final ASCIIParser ascii = ASCIIParser.getInstance();
+  private static final CharMatcher LETTER_MATCHER = CharMatcher.JAVA_LETTER.or(CharMatcher.WHITESPACE).precomputed();
+  private static final CharMatcher WHITESPACE_MATCHER = CharMatcher.WHITESPACE.precomputed();
 
   protected EnumParser(Class<T> clazz, boolean allowDigits, final InputStream... inputs) {
     super(false);
@@ -46,6 +49,19 @@ public class EnumParser<T extends Enum<T>> extends FileBasedDictionaryParser<T> 
     }
   }
 
+  protected String normalizeALT(String value) {
+    if (value != null) {
+      String cleaned = LETTER_MATCHER.retainFrom(value);
+      cleaned = WHITESPACE_MATCHER.trimAndCollapseFrom(cleaned, ' ');
+      cleaned = Strings.emptyToNull(cleaned);
+      if (Strings.isNullOrEmpty(cleaned)) return null;
+      // convert to ascii
+      ParseResult<String> asci = ascii.parse(cleaned);
+      return NORMALIZER.matcher(asci.getPayload()).replaceAll("").toUpperCase();
+    }
+    return null;
+  }
+
   @Override
   protected String normalize(String value) {
     if (Strings.isNullOrEmpty(value)) return null;
@@ -58,10 +74,9 @@ public class EnumParser<T extends Enum<T>> extends FileBasedDictionaryParser<T> 
   protected T fromDictFile(String value) {
     try {
       return (T) VocabularyUtils.lookupEnum(value, clazz);
-
     } catch (RuntimeException e) {
-
+      return null;
     }
-    return null;
   }
+
 }
