@@ -74,28 +74,6 @@ public class MediaParserTest {
     assertNull(mo.getType());
   }
 
-  @Test
-  public void testParseAssociatedMedia() throws Exception {
-    assertEquals(0, parser.parseAssociatedMedia(null).size());
-    assertEquals(0, parser.parseAssociatedMedia("").size());
-    assertEquals(0, parser.parseAssociatedMedia(" ").size());
-    assertEquals(0, parser.parseAssociatedMedia("-").size());
-
-    assertEquals(1, parser.parseAssociatedMedia("http://gbif.org/logo.png").size());
-    assertEquals(1, parser.parseAssociatedMedia(" http://gbif.org/logo.png").size());
-    assertEquals(1, parser.parseAssociatedMedia("www.gbif.org/logo.png").size());
-    assertEquals(1, parser.parseAssociatedMedia("www.gbif.org/image?id=12").size());
-    assertEquals(1, parser.parseAssociatedMedia("http://www.gbif.org/image?id=12").size());
-    assertEquals(1, parser.parseAssociatedMedia("http://www.gbif.org/image?id=12&format=gif,jpg").size());
-
-    assertEquals(2, parser.parseAssociatedMedia("http://gbif.org/logo.png, http://gbif.org/logo2.png").size());
-    assertEquals(2, parser.parseAssociatedMedia("http://gbif.org/logo.png; http://gbif.org/logo2.png").size());
-    assertEquals(2, parser.parseAssociatedMedia("http://gbif.org/logo.png | http://gbif.org/logo2.png").size());
-    assertEquals(2, parser.parseAssociatedMedia("http://gbif.org/logo.png |#DELIMITER#| http://gbif.org/logo2.png").size());
-
-    assertEquals(3, parser.parseAssociatedMedia("http://gbif.org/logo.png, http://gbif.org/logo2.png, http://gbif.org/logo3.png").size());
-  }
-
   private MediaObject buildMO(String format, String uri) {
     MediaObject mo = new MediaObject();
 
