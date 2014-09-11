@@ -4,12 +4,15 @@ import org.gbif.api.model.common.MediaObject;
 import org.gbif.api.vocabulary.MediaType;
 
 import java.net.URI;
+import java.util.List;
 import java.util.Set;
 import javax.annotation.Nullable;
 
-import com.google.common.annotations.VisibleForTesting;
+import com.google.common.base.Splitter;
 import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
 import org.apache.tika.Tika;
 import org.apache.tika.mime.MimeType;
 import org.apache.tika.mime.MimeTypeException;
@@ -19,6 +22,7 @@ import org.slf4j.LoggerFactory;
 
 public class MediaParser {
   private static final Logger LOG = LoggerFactory.getLogger(MediaParser.class);
+  private static final String[] MULTI_VALUE_DELIMITERS = {"|#DELIMITER#|", "|", ",", ";"};
   private static final Tika TIKA = new Tika();
   private static final MimeTypes MIME_TYPES = MimeTypes.getDefaultMimeTypes();
   private static final String HTML_TYPE = "text/html";
@@ -35,6 +39,46 @@ public class MediaParser {
       }
     }
     return instance;
+  }
+
+  /**
+   * Parses a single string with null, one or many URLs concatenated together as found in dwc:associatedMedia.
+   */
+  public static List<URI> parseAssociatedMedia(String associatedMedia) {
+    List<URI> result = Lists.newArrayList();
+
+    if (!Strings.isNullOrEmpty(associatedMedia)) {
+      // first try to use the entire string
+      URI uri = UrlParser.parse(associatedMedia);
+      if (uri != null) {
+        result.add(uri);
+
+      } else {
+        // try common delimiters
+        int maxValidUrls = 0;
+        for (String delimiter : MULTI_VALUE_DELIMITERS) {
+          Splitter splitter = Splitter.on(delimiter).omitEmptyStrings().trimResults();
+          String[] urls = Iterables.toArray(splitter.split(associatedMedia), String.class);
+          // avoid parsing if we haven' actually split anything
+          if (urls.length > 1) {
+            List<URI> tmp = Lists.newArrayList();
+            for (String url : urls) {
+              uri = UrlParser.parse(url);
+              if (uri != null) {
+                tmp.add(uri);
+              }
+            }
+            if (tmp.size() > maxValidUrls) {
+              result = tmp;
+              maxValidUrls = tmp.size();
+            } else if (maxValidUrls > 0 && tmp.size() == maxValidUrls) {
+              LOG.info("Unclear what delimiter is being used for associatedMedia = {}", associatedMedia);
+            }
+          }
+        }
+      }
+    }
+    return result;
   }
 
   public MediaObject detectType(MediaObject mo) {
@@ -91,7 +135,6 @@ public class MediaParser {
    * Parses a mime type using apache tika which can handle the following:
    * http://svn.apache.org/repos/asf/tika/trunk/tika-core/src/main/resources/org/apache/tika/mime/tika-mimetypes.xml
    */
-  @VisibleForTesting
   public String parseMimeType(@Nullable URI uri) {
     if (uri != null) {
       String mime = TIKA.detect(uri.toString());
