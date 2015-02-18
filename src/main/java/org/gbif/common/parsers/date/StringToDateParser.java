@@ -1,17 +1,18 @@
 package org.gbif.common.parsers.date;
 
-import com.google.common.base.Strings;
-import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.time.DateUtils;
 import org.gbif.common.parsers.core.Parsable;
 import org.gbif.common.parsers.core.ParseResult;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.text.ParseException;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.regex.Pattern;
+
+import com.google.common.base.Strings;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.time.DateUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Implementation to take String and algorithmically convert to Date objects.
@@ -134,13 +135,16 @@ class StringToDateParser implements Parsable<Date> {
                 }
             }
 
+            if (del == null) {
+              return ParseResult.fail();
+            }
+
             if (Character.isLetter(del)) {
                 confidence = ParseResult.CONFIDENCE.POSSIBLE;
             }
 
-            // check if full year is given
-            boolean fullYear = FULL_YEAR.matcher(input).find();
-
+            // check if full year is given within the string
+            final boolean fullYear = FULL_YEAR.matcher(input).find();
             try {
                 if (delimCount == 1) {
                     // year & month only
@@ -199,40 +203,6 @@ class StringToDateParser implements Parsable<Date> {
             }
         }
         return ParseResult.fail();
-
-
-        // old code tried to parse strings with 00, see commented out code below.
-        //TODO: verify we dont need this anymore or enable it again
-/*
-    if (d == null) {
-      try {
-        try {
-          d = DateUtils.parseDate(input, ALL);
-        } catch (ParseException e) {
-          // sometime we see 00 instead of 01 for days and months
-          // but if it has not separators, we might have just made
-          // 00000000 become 01010101
-          // 00/00/0000 should become 01/01/0000 though - see below
-          input = DOUBLE_ZERO_PATTERN.matcher(input).replaceAll("01");
-          input = DOUBLE_ZERO_ONE_PATTERN.matcher(input).replaceAll("00"); // so catch stupidity
-          d = DateUtils.parseDate(input, ALL);
-        }
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(d);
-        LOGGER.debug("Day[{}] Month[{}] Year[{}]",
-                     new Object[] {cal.get(Calendar.DAY_OF_MONTH), cal.get(Calendar.DAY_OF_MONTH),
-                       cal.get(Calendar.YEAR)});
-        if (d != null && !(cal.get(Calendar.DAY_OF_MONTH) == 1 // remember above 0 becomes 1
-                           && cal.get(Calendar.MONTH) == 1 && cal.get(Calendar.YEAR) == 0)) {
-          // possible as this is not an exact sciensce by any means
-          return ParseResult.success(ParseResult.CONFIDENCE.POSSIBLE, d);
-        } else {
-          return ParseResult.fail();
-        }
-      } catch (ParseException e) {
-      }
-    }
-*/
     }
 
 
