@@ -30,8 +30,11 @@ agg﻿	INFRAGENERICNAME
 agregate﻿	INFRAGENERICNAME
 ap﻿	INFRASUBSPECIFICNAME
 a﻿	UNRANKED
+biotype BIOVAR
 branch﻿	UNRANKED
+bv  BIOVAR
 b﻿	UNRANKED
+chemotype CHEMOFORM
 clade﻿	UNRANKED
 clase﻿	CLASE
 class	CLASS
@@ -44,6 +47,7 @@ coll species﻿	INFRASPECIFICNAME
 coll sp﻿	INFRASPECIFICNAME
 complex﻿	INFRASPECIFICNAME
 convar﻿	INFRASPECIFICNAME
+ct  CHEMOFORM
 cultivar	CULTIVAR
 cultivar_group	CULTIVAR_GROUP
 cultivargroup﻿	CULTIVARGROUP
@@ -115,9 +119,11 @@ kla﻿	CLASS
 kl﻿	CLASS
 k﻿	KINGDOM
 legio﻿	SUPRAGENERICNAME
+lysotype  PHAGOVAR
 microgen﻿	INFRAGENERICNAME
 modif﻿	MODIF
 monstr﻿	MONSTR
+morphotype  MORPHOVAR
 natio﻿	INFORMAL
 nat﻿	INFORMAL
 nm﻿	NM
@@ -145,9 +151,12 @@ ord﻿	ORDER
 o﻿	ORDER
 pars﻿	PARS
 parvorder﻿	SUPRAGENERICNAME
+pathotype PATHOVAR
+phagotype PHAGOVAR
 phylum	PHYLUM
 phylum﻿	PHYLUM
 phyl﻿	PHYLUM
+physiological type  BIOVAR
 prolata﻿	INFRASPECIFICNAME
 proles﻿	INFRASPECIFICNAME
 prol﻿	INFRASPECIFICNAME
@@ -169,8 +178,10 @@ sec﻿	SECTION
 series	SERIES
 series﻿	SERIES
 serie﻿	SERIES
+serotype  SEROVAR
 ser﻿	SERIES
 sge﻿	SUBGENUS
+special form  FORMA_SPECIALIS
 special form﻿	FORM
 species	SPECIES
 species group﻿	INFRAGENERICNAME
@@ -290,9 +301,9 @@ varietas﻿	VARIETY
 variety	VARIETY
 var﻿	VARIETY
 v﻿	VARIETY
-µ﻿	UNRANKED
 ßß﻿	UNRANKED
 ß﻿	UNRANKED
 α﻿	UNRANKED
 γ﻿	UNRANKED
 δ﻿	UNRANKED
+µ﻿	UNRANKED
