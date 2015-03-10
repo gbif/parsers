@@ -1,0 +1,32 @@
+brackish	FRESHWATER
+rivers	FRESHWATER
+lakes	FRESHWATER
+swamp	FRESHWATER
+bog	FRESHWATER
+moor	FRESHWATER
+wetlands	FRESHWATER
+marsh	FRESHWATER
+streams	FRESHWATER
+ponds	FRESHWATER
+
+ocean	MARINE
+sea	MARINE
+seawater	MARINE
+meer	MARINE
+salzwasser	MARINE
+estuary	MARINE
+estuaries	MARINE
+reef	MARINE
+sea bed	MARINE
+rockpools	MARINE
+
+forest	TERRESTRIAL
+desert	TERRESTRIAL
+grassland	TERRESTRIAL
+wood	TERRESTRIAL
+hedgerows	TERRESTRIAL
+mountains	TERRESTRIAL
+rainforest	TERRESTRIAL
+tundra	TERRESTRIAL
+parkland	TERRESTRIAL
+farmland	TERRESTRIAL
