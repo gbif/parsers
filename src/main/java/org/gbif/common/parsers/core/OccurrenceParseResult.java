@@ -71,12 +71,20 @@ public class OccurrenceParseResult<T> extends ParseResult<T> {
     return new OccurrenceParseResult<T>(STATUS.SUCCESS, confidence, payload, null, Lists.newArrayList(issue));
   }
 
+  public static <T> OccurrenceParseResult<T> success(CONFIDENCE confidence, T payload, OccurrenceIssue ... issues) {
+    return new OccurrenceParseResult<T>(STATUS.SUCCESS, confidence, payload, null, Lists.newArrayList(issues));
+  }
+
   public static <T> OccurrenceParseResult<T> success(CONFIDENCE confidence, T payload, Collection<OccurrenceIssue> issues) {
     return new OccurrenceParseResult<T>(STATUS.SUCCESS, confidence, payload, null, issues);
   }
 
   public static <T> OccurrenceParseResult<T> fail(OccurrenceIssue issue) {
     return new OccurrenceParseResult<T>(STATUS.FAIL, null, null, null, Lists.newArrayList(issue));
+  }
+
+  public static <T> OccurrenceParseResult<T> fail(OccurrenceIssue ... issues) {
+    return new OccurrenceParseResult<T>(STATUS.FAIL, null, null, null, Lists.newArrayList(issues));
   }
 
   public static <T> OccurrenceParseResult<T> fail(Collection<OccurrenceIssue> issues) {
@@ -96,6 +104,9 @@ public class OccurrenceParseResult<T> extends ParseResult<T> {
     return new OccurrenceParseResult<T>(STATUS.FAIL, null, payload, null, issues);
   }
 
+  public static <T> OccurrenceParseResult<T> fail(T payload, OccurrenceIssue ... issues) {
+    return new OccurrenceParseResult<T>(STATUS.FAIL, null, payload, null, Lists.newArrayList(issues));
+  }
 
   /**
    * This creates a ParseResult indicating a parse failure but it also has a payload. Depending on the context this
