@@ -24,6 +24,12 @@ public abstract class FileBasedDictionaryParser<T> extends DictionaryBackedParse
     init(new Source(input));
   }
 
+  /**
+   * Returns the value read from the dictionary as an instance of <T>
+   * 
+   * @param value
+   * @return
+   */
   protected abstract T fromDictFile(String value);
 
   /**

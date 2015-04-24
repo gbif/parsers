@@ -4,7 +4,7 @@ import org.gbif.api.vocabulary.LifeStage;
 import org.gbif.common.parsers.core.EnumParser;
 
 /**
- * Singleton implementation of the dictionary that uses the file /dictionaries/parse/continents.txt.
+ * Singleton implementation of the dictionary that uses the file /dictionaries/parse/life_stage.txt.
  */
 public class LifeStageParser extends EnumParser<LifeStage> {
 
@@ -12,7 +12,7 @@ public class LifeStageParser extends EnumParser<LifeStage> {
 
   private LifeStageParser() {
     super(LifeStage.class, false);
-    // also make sure we have all official iso countries mapped
+    // make sure we have all life_stage from the enum
     for (LifeStage c : LifeStage.values()) {
       add(c.name(), c);
     }

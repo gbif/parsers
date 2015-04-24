@@ -10,7 +10,7 @@ import com.google.common.base.CharMatcher;
 import com.google.common.base.Strings;
 
 /**
- * Singleton implementation of the dictionary that uses the file /dictionaries/parse/rank.txt.
+ * Singleton implementation of the dictionary that uses the file /dictionaries/parse/typeStatus.txt.
  */
 public class TypeStatusParser extends EnumParser<TypeStatus> {
 

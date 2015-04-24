@@ -9,7 +9,7 @@ public class ThreatStatusParser extends EnumParser<ThreatStatus> {
 
   private ThreatStatusParser() {
     super(ThreatStatus.class, false);
-    // also make sure we have all official iso countries mapped
+    // also make sure we have all enum values mapped
     for (ThreatStatus c : ThreatStatus.values()) {
       add(c.name(), c);
       add(c.getCode(), c);

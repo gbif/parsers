@@ -4,7 +4,7 @@ import org.gbif.api.vocabulary.MediaType;
 import org.gbif.common.parsers.core.EnumParser;
 
 /**
- * Singleton implementation of the dictionary that uses the file /dictionaries/parse/continents.txt.
+ * Singleton implementation of the dictionary that uses the file /dictionaries/parse/media_type.txt.
  */
 public class MediaTypeParser extends EnumParser<MediaType> {
 
@@ -12,7 +12,7 @@ public class MediaTypeParser extends EnumParser<MediaType> {
 
   private MediaTypeParser() {
     super(MediaType.class, false);
-    // also make sure we have all official iso countries mapped
+    // make sure we have media_type from the enum
     for (MediaType c : MediaType.values()) {
       add(c.name(), c);
     }
