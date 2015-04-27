@@ -6,7 +6,7 @@ import org.gbif.common.parsers.core.EnumParser;
 import java.io.InputStream;
 
 /**
- * Singleton implementation of the dictionary that uses the file /dictionaries/parse/rank.txt.
+ * Singleton implementation of the dictionary that uses the file /dictionaries/parse/taxStatus.txt.
  */
 public class TaxStatusParser extends EnumParser<TaxonomicStatus> {
 

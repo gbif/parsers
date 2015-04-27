@@ -4,7 +4,7 @@ import org.gbif.api.vocabulary.Sex;
 import org.gbif.common.parsers.core.EnumParser;
 
 /**
- * Singleton implementation of the dictionary that uses the file /dictionaries/parse/continents.txt.
+ * Singleton implementation of the dictionary that uses the file /dictionaries/parse/sex.txt.
  */
 public class SexParser extends EnumParser<Sex> {
 
@@ -12,7 +12,7 @@ public class SexParser extends EnumParser<Sex> {
 
   private SexParser() {
     super(Sex.class, false);
-    // also make sure we have all official iso countries mapped
+    // also make sure we have all enum values mapped
     for (Sex c : Sex.values()) {
       add(c.name(), c);
     }

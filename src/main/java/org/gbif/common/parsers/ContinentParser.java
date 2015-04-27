@@ -12,7 +12,7 @@ public class ContinentParser extends EnumParser<Continent> {
 
   private ContinentParser() {
     super(Continent.class, false);
-    // also make sure we have all official iso countries mapped
+    // make sure we have all continents from the enum
     for (Continent c : Continent.values()) {
       add(c.name(), c);
       add(c.getTitle(), c);

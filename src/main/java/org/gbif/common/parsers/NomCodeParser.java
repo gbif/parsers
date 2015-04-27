@@ -6,7 +6,7 @@ import org.gbif.common.parsers.core.EnumParser;
 import java.io.InputStream;
 
 /**
- * Singleton implementation of the dictionary that uses the file /dictionaries/parse/rank.txt.
+ * Singleton implementation of the dictionary that uses the file /dictionaries/parse/nomCode.txt.
  */
 public class NomCodeParser extends EnumParser<NomenclaturalCode> {
 

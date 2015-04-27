@@ -3,7 +3,7 @@ package org.gbif.common.parsers;
 import org.gbif.common.parsers.core.FileBasedDictionaryParser;
 
 /**
- * Singleton implementation of the dictionary that uses the file /dictionaries/parse/continents.txt.
+ * Singleton implementation of the dictionary that uses the file /dictionaries/parse/boolean.txt.
  */
 public class BooleanParser extends FileBasedDictionaryParser<Boolean> {
 

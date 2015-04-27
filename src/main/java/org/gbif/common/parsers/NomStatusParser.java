@@ -11,7 +11,7 @@ import java.util.Map;
 import java.util.regex.Pattern;
 
 /**
- * Singleton implementation of the dictionary that uses the file /dictionaries/parse/rank.txt.
+ * Singleton implementation of the dictionary that uses the file /dictionaries/parse/nomStatus.txt.
  */
 public class NomStatusParser extends EnumParser<NomenclaturalStatus> {
     private Pattern CLEAN_PREFIX = Pattern.compile("\\s*\\.?\\s*");

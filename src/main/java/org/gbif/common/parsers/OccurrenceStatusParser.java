@@ -9,7 +9,7 @@ public class OccurrenceStatusParser extends EnumParser<OccurrenceStatus> {
 
   private OccurrenceStatusParser() {
     super(OccurrenceStatus.class, false);
-    // also make sure we have all official iso countries mapped
+    // make sure we have all occurrence_status enum mapped
     for (OccurrenceStatus c : OccurrenceStatus.values()) {
       add(c.name(), c);
     }
