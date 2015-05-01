@@ -8,8 +8,9 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.regex.Pattern;
 
-import com.google.common.base.Charsets;
 import org.apache.commons.lang3.StringUtils;
+
+import com.google.common.base.Charsets;
 
 /**
  * A very simple Dictionary backed by a tab delimited file.
@@ -21,12 +22,22 @@ public abstract class FileBasedDictionaryParser<T> extends DictionaryBackedParse
   }
 
   protected void init(InputStream input) {
-    init(new Source(input));
+    init(input, null);
+  }
+
+  /**
+   * Init the parser to read the InputStream and ignore lines starting with the commentMarker.
+   *
+   * @param input
+   * @param commentMarker marker identifying a commented line (e.g. #) or null to read all lines
+   */
+  protected void init(InputStream input, String commentMarker) {
+    init(new Source(input, commentMarker));
   }
 
   /**
    * Returns the value read from the dictionary as an instance of <T>
-   * 
+   *
    * @param value
    * @return
    */
@@ -40,10 +51,16 @@ public abstract class FileBasedDictionaryParser<T> extends DictionaryBackedParse
 
     private final BufferedReader r;
     private final Pattern tab = Pattern.compile("\t");
+    private final String commentMarker;
     private String line = null;
 
     Source(InputStream file) {
+      this(file, null);
+    }
+
+    Source(InputStream file, String commentMarker) {
       r = new BufferedReader(new InputStreamReader(file, Charsets.UTF_8));
+      this.commentMarker = commentMarker;
     }
 
     @Override
@@ -53,14 +70,10 @@ public abstract class FileBasedDictionaryParser<T> extends DictionaryBackedParse
       }
 
       try {
-        // we discard bad lines
-        boolean valid = false;
+        // we discard empty or commented lines
         do {
           line = r.readLine();
-          if (line != null) {
-            valid = tab.split(line).length == 2;
-          }
-        } while (!valid && line != null);
+        } while (line != null && !isValidLine(line));
       } catch (IOException ignored) {
         close();
         return false;
@@ -72,6 +85,26 @@ public abstract class FileBasedDictionaryParser<T> extends DictionaryBackedParse
       } else {
         return true;
       }
+    }
+
+    /**
+     * Check if a line is valid or not.
+     * A valid line is not a comment (if configured) and should be in the form "key<tab>value".
+     *
+     * @param line
+     * @return
+     */
+    private boolean isValidLine(String line) {
+      if (line == null) {
+        return false;
+      }
+
+      if (commentMarker != null) {
+        if (line.startsWith(commentMarker)) {
+          return false;
+        }
+      }
+      return (tab.split(line).length == 2);
     }
 
     @Override
