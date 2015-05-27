@@ -37,6 +37,7 @@ notdescribed	SYNONYM
 othercombination	SYNONYM
 replacedname	SYNONYM
 spellingalternative	SYNONYM
+sinonimo	SYNONYM
 synonym	SYNONYM
 synonymsl	SYNONYM
 unaccepted	SYNONYM
