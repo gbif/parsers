@@ -146,6 +146,7 @@ nothosubtrib	SUBTRIBE
 nothotaxon	UNRANKED
 nothovariety	VARIETY
 nothovar	VARIETY
+ordem	ORDER
 order	ORDER
 order	ORDER
 ordo	ORDER
