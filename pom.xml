@@ -5,7 +5,7 @@
   <parent>
     <groupId>org.gbif</groupId>
     <artifactId>motherpom</artifactId>
-    <version>20</version>
+    <version>23-SNAPSHOT</version>
   </parent>
 
   <groupId>org.gbif</groupId>
@@ -25,6 +25,8 @@
   </scm>
 
   <properties>
+    <jdkLevel>1.7</jdkLevel>
+
     <commons-lang.version>3.3.2</commons-lang.version>
     <commons-math.version>3.2</commons-math.version>
     <guava.version>17.0</guava.version>
@@ -32,7 +34,7 @@
     <junit.version>4.11</junit.version>
     <logback.version>1.0.13</logback.version>
     <slf4j.version>1.7.7</slf4j.version>
-    <gbif-api.version>0.18</gbif-api.version>
+    <gbif-api.version>0.23-SNAPSHOT</gbif-api.version>
     <name-parser.version>2.6</name-parser.version>
     <tika.version>1.5</tika.version>
   </properties>
