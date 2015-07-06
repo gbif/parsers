@@ -10,3 +10,7 @@ movie	MOVINGIMAGE
 audio	SOUND
 ton	SOUND
 sounds	SOUND
+http://purl.org/dc/dcmitype/Image	STILLIMAGE
+http://purl.org/dc/dcmitype/StillImage	STILLIMAGE
+http://purl.org/dc/dcmitype/MovingImage	MOVINGIMAGE
+http://purl.org/dc/dcmitype/Sound	SOUND

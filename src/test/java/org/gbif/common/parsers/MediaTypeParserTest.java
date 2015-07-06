@@ -33,5 +33,6 @@ public class MediaTypeParserTest extends ParserTestBase<MediaType> {
     assertParseSuccess(MediaType.Sound, "audio");
     assertParseSuccess(MediaType.MovingImage, "movie");
     assertParseSuccess(MediaType.StillImage, "image");
+    assertParseSuccess(MediaType.StillImage, "http://purl.org/dc/dcmitype/StillImage");
   }
 }
