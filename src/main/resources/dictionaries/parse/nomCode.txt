@@ -1,5 +1,14 @@
 botany	BOTANICAL
+icbn	BOTANICAL
+ICNafp	BOTANICAL
+bot	BOTANICAL
+botanical code	BOTANICAL
 zoo	ZOOLOGICAL
+iczn	ZOOLOGICAL
+zoology	ZOOLOGICAL
+zoological code	ZOOLOGICAL
 vir	VIRUS
+ictv	VIRUS
 bc	BIOCODE
 bact	BACTERIAL
+bacteria	BACTERIAL
