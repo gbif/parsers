@@ -28,4 +28,4 @@ if (parsed.getConfidence() == ParseResult.CONFIDENCE.DEFINITE){
  * Built as Java 6 artifact until the [IPT](https://github.com/gbif/ipt) upgrades its minimal Java version (see https://github.com/gbif/ipt/issues/1222).
 
 ## Documentations
- * [JavaDoc](shttp://gbif.github.io/parsers/apidocs/)
+ * [JavaDoc](http://gbif.github.io/parsers/apidocs/)
