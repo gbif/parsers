@@ -40,7 +40,7 @@ public class TypifiedNameParser implements Parsable<String> {
         // make sure the name does not end with "type", see http://dev.gbif.org/issues/browse/POR-2703
         if (!name.endsWith("type")) {
           try {
-            ParsedName pn = NAME_PARSER.parse(name);
+            ParsedName pn = NAME_PARSER.parse(name,null);
             return ParseResult.success(ParseResult.CONFIDENCE.PROBABLE, pn.canonicalNameComplete());
 
           } catch (UnparsableException e) {
