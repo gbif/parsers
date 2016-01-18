@@ -6,6 +6,8 @@ import org.junit.Test;
 import org.threeten.bp.LocalDate;
 import org.threeten.bp.LocalDateTime;
 import org.threeten.bp.Month;
+import org.threeten.bp.Year;
+import org.threeten.bp.YearMonth;
 
 import static org.junit.Assert.assertEquals;
 
@@ -65,6 +67,13 @@ public class ThreeTenNumericalDateParserTest {
     assertEquals(LocalDate.of(1978, Month.DECEMBER, 21), LocalDate.from(parser.parse("12.21.78").getPayload()));
     assertEquals(LocalDate.of(1978, Month.DECEMBER, 21), LocalDate.from(parser.parse("12-21-78").getPayload()));
     assertEquals(LocalDate.of(1978, Month.DECEMBER, 21), LocalDate.from(parser.parse("12_21_78").getPayload()));
+
+    //month/year alone
+    assertEquals(YearMonth.of(1978,12), YearMonth.from(parser.parse("1978-12").getPayload()));
+
+    //year alone
+    assertEquals(Year.of(1978), Year.from(parser.parse("1978").getPayload()));
+    assertEquals(Year.of(1978), Year.from(parser.parse("78").getPayload()));
   }
 
 

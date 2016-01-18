@@ -15,6 +15,7 @@ import org.slf4j.LoggerFactory;
 import org.threeten.bp.LocalDate;
 import org.threeten.bp.LocalDateTime;
 import org.threeten.bp.Year;
+import org.threeten.bp.YearMonth;
 import org.threeten.bp.format.DateTimeFormatter;
 import org.threeten.bp.format.DateTimeFormatterBuilder;
 import org.threeten.bp.format.DateTimeParseException;
@@ -56,9 +57,8 @@ public class ThreeTenNumericalDateParser implements Parsable<TemporalAccessor> {
           buildDateTimeParser("uuuu-MM-dd'T'HH:mm:ssZ", DateParsingHint.YMDT),
           buildDateTimeParser("uuuu-MM-dd'T'HH:mm:ssxxx", DateParsingHint.YMDT), //covers 1978-12-21T02:12:43+01:00
           buildDateTimeParser("uuuu-MM-dd'T'HH:mm:ss'Z'", DateParsingHint.YMDT),
-          buildDateTimeParser("yyyy-MM", DateParsingHint.YM),
-          buildDateTimeParser("yyyy", DateParsingHint.Y),
-          buildDateTimeParser("yy", DateParsingHint.Y),
+          buildDateTimeParser("uuuu-MM", DateParsingHint.YM),
+          buildDateTimeParser("uuuu", DateParsingHint.Y),
 
           //possibly ambiguous patterns
           buildPossiblyAmbiguousDateTimeParser("dd/MM/uu", DateParsingHint.DMY),
@@ -90,6 +90,7 @@ public class ThreeTenNumericalDateParser implements Parsable<TemporalAccessor> {
           buildPossiblyAmbiguousDateTimeParser("MM.dd.uu", DateParsingHint.MDY),
           buildPossiblyAmbiguousDateTimeParser("MM-dd-uu", DateParsingHint.MDY),
           buildPossiblyAmbiguousDateTimeParser("MM_dd_uu", DateParsingHint.MDY),
+          buildPossiblyAmbiguousDateTimeParser("uu", DateParsingHint.Y),
 
           buildDateTimeParser("yyyy年mm月dd日", DateParsingHint.ASIAN),
           buildDateTimeParser("yyyy年m月d日", DateParsingHint.ASIAN),
@@ -112,7 +113,6 @@ public class ThreeTenNumericalDateParser implements Parsable<TemporalAccessor> {
   }
 
   private static InternalDateTimeParser buildDateTimeParser(String pattern, DateParsingHint hint){
-
     return InternalDateTimeParser.of(DateTimeFormatter.ofPattern(pattern).withResolverStyle(ResolverStyle.STRICT),
             pattern, hint);
   }
@@ -120,7 +120,7 @@ public class ThreeTenNumericalDateParser implements Parsable<TemporalAccessor> {
   private static InternalDateTimeParser buildPossiblyAmbiguousDateTimeParser(String pattern, DateParsingHint hint){
     DateTimeFormatter dateTimeFormatter = null;
 
-    if(pattern.matches(IS_YEAR_2_DIGITS_PATTERN)){
+    if(pattern.matches(IS_YEAR_2_DIGITS_PATTERN) || pattern.equals(YEAR_2_DIGITS_PATTERN_SUFFIX)){
       dateTimeFormatter = buildWith2DigitYear(StringUtils.removeEnd(pattern, YEAR_2_DIGITS_PATTERN_SUFFIX));
     }
     else{
@@ -201,7 +201,7 @@ public class ThreeTenNumericalDateParser implements Parsable<TemporalAccessor> {
    */
   private static TemporalAccessor tryParse(String input, DateTimeFormatter formatter){
     try {
-      return formatter.parseBest(input, LocalDateTime.FROM, LocalDate.FROM);
+      return formatter.parseBest(input, LocalDateTime.FROM, LocalDate.FROM, YearMonth.FROM, Year.FROM);
     }
     catch (DateTimeParseException dpe){}
     return null;
