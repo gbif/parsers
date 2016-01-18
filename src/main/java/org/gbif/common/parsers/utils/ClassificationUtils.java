@@ -1,6 +1,7 @@
 package org.gbif.common.parsers.utils;
 
 import org.gbif.api.model.checklistbank.ParsedName;
+import org.gbif.api.vocabulary.Rank;
 import org.gbif.nameparser.NameParser;
 import org.gbif.nameparser.UnparsableException;
 
@@ -31,18 +32,25 @@ public final class ClassificationUtils {
   }
 
   /**
-   * parses a scientific name and creates the canonical name including a potential hybrid and rank marker
+   * Parses a canonical name at a specific Rank.
+   */
+  public static String canonicalName(String scientificName, Rank rank) {
+    ParsedName pn = null;
+    try {
+      pn = PARSER.parse(scientificName, rank);
+    } catch (UnparsableException e) {
+    }
+    return pn.canonicalNameWithMarker();
+  }
+
+  /**
+   * Parses a scientific name and creates the canonical name including a potential hybrid and rank marker
    * plus the cultivar and strain names if existing.
    * Note: This method once used to only include the hybrid marker - if that is still needed revert to buildName
    * method.
    */
   public static String canonicalName(String scientificName) {
-    ParsedName pn = null;
-    try {
-      pn = PARSER.parse(scientificName);
-    } catch (UnparsableException e) {
-    }
-    return pn.canonicalNameWithMarker();
+    return canonicalName(scientificName,null);
   }
 
   /**
@@ -135,10 +143,20 @@ public final class ClassificationUtils {
     return Strings.emptyToNull(cleanedAuthor);
   }
 
+  /**
+   * Parses a scientific name without knowing its Rank.
+   */
   public static String parseName(String scientificName) {
+    return parseName(scientificName, null);
+  }
+
+  /**
+   * Parses a scientific name of a specific rank.
+   */
+  public static String parseName(String scientificName, Rank rank) {
 
     try {
-      ParsedName pn = PARSER.parse(scientificName);
+      ParsedName pn = PARSER.parse(scientificName, rank);
       // Handle Aus sp. and Aus bus spp.
       if (pn.getRankMarker() != null && pn.getSpecificEpithet() == null && pn.getInfraSpecificEpithet() == null) {
         pn.setRankMarker(null);
@@ -152,7 +170,7 @@ public final class ClassificationUtils {
     }
 
     // looks dirty, so try and normalize it as best we can and get a canonical at least
-    String canon = PARSER.parseToCanonical(scientificName);
+    String canon = PARSER.parseToCanonical(scientificName, rank);
     if (canon != null) {
       return canon;
     }

@@ -12,7 +12,7 @@ mvn clean install
 ## Usage
 Country parsing example:
 ```java
-//get a Country by the defined enumaration
+//get a Country by the defined enumeration
 Country mexicoFromEnum = Country.MEXICO;
 
 //get a Country from a String
@@ -27,5 +27,5 @@ if (parsed.getConfidence() == ParseResult.CONFIDENCE.DEFINITE){
 ## Policies
  * Built as Java 6 artifact until the [IPT](https://github.com/gbif/ipt) upgrades its minimal Java version (see https://github.com/gbif/ipt/issues/1222).
 
-## Documentations
- * [JavaDoc](shttp://gbif.github.io/parsers/apidocs/)
+## Documentation
+ * [JavaDoc](http://gbif.github.io/parsers/apidocs/)
