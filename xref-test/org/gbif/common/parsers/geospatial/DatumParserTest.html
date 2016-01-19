@@ -1,0 +1,97 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head><meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+<title>DatumParserTest xref</title>
+<link type="text/css" rel="stylesheet" href="../../../../../stylesheet.css" />
+</head>
+<body>
+<div id="overview"><a href="../../../../../../testapidocs/org/gbif/common/parsers/geospatial/DatumParserTest.html">View Javadoc</a></div><pre>
+<a class="jxr_linenumber" name="L1" href="#L1">1</a>   <strong class="jxr_keyword">package</strong> org.gbif.common.parsers.geospatial;
+<a class="jxr_linenumber" name="L2" href="#L2">2</a>   
+<a class="jxr_linenumber" name="L3" href="#L3">3</a>   <strong class="jxr_keyword">import</strong> org.gbif.common.parsers.ParserTestBase;
+<a class="jxr_linenumber" name="L4" href="#L4">4</a>   <strong class="jxr_keyword">import</strong> org.gbif.common.parsers.core.ParseResult;
+<a class="jxr_linenumber" name="L5" href="#L5">5</a>   
+<a class="jxr_linenumber" name="L6" href="#L6">6</a>   <strong class="jxr_keyword">import</strong> java.io.BufferedReader;
+<a class="jxr_linenumber" name="L7" href="#L7">7</a>   <strong class="jxr_keyword">import</strong> java.io.IOException;
+<a class="jxr_linenumber" name="L8" href="#L8">8</a>   <strong class="jxr_keyword">import</strong> java.io.InputStreamReader;
+<a class="jxr_linenumber" name="L9" href="#L9">9</a>   <strong class="jxr_keyword">import</strong> java.util.Set;
+<a class="jxr_linenumber" name="L10" href="#L10">10</a>  
+<a class="jxr_linenumber" name="L11" href="#L11">11</a>  <strong class="jxr_keyword">import</strong> com.google.common.base.Charsets;
+<a class="jxr_linenumber" name="L12" href="#L12">12</a>  <strong class="jxr_keyword">import</strong> com.google.common.collect.Sets;
+<a class="jxr_linenumber" name="L13" href="#L13">13</a>  <strong class="jxr_keyword">import</strong> org.junit.Test;
+<a class="jxr_linenumber" name="L14" href="#L14">14</a>  
+<a class="jxr_linenumber" name="L15" href="#L15">15</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.junit.Assert.assertTrue;
+<a class="jxr_linenumber" name="L16" href="#L16">16</a>  
+<a class="jxr_linenumber" name="L17" href="#L17">17</a>  <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L18" href="#L18">18</a>  <em class="jxr_javadoccomment"> *</em>
+<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <em class="jxr_javadoccomment"> */</em>
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../../org/gbif/common/parsers/geospatial/DatumParserTest.html">DatumParserTest</a> <strong class="jxr_keyword">extends</strong> ParserTestBase&lt;Integer&gt; {
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>    <strong class="jxr_keyword">public</strong> <a href="../../../../../org/gbif/common/parsers/geospatial/DatumParserTest.html">DatumParserTest</a>() {
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>      <strong class="jxr_keyword">super</strong>(DatumParser.getInstance());
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>    }
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>  
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>    @Test
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>    <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testParse() {
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>      <em class="jxr_comment">// run a few basic tests to check it bootstraps and appears to work</em>
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>      assertParseSuccess(4269, <span class="jxr_string">"EPSG::4269"</span>);
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>      assertParseSuccess(6317, <span class="jxr_string">" EPSG::6317"</span>);
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>      assertParseSuccess(4269, <span class="jxr_string">"EPSG:4269"</span>);
+<a class="jxr_linenumber" name="L32" href="#L32">32</a>      assertParseSuccess(4269, <span class="jxr_string">" EPSG :: 4269 "</span>);
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>      assertParseSuccess(4269, <span class="jxr_string">"ESPG:4269"</span>);
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>      <em class="jxr_comment">// known srs names</em>
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>      assertParseSuccess(6269, <span class="jxr_string">"NAD83"</span>);
+<a class="jxr_linenumber" name="L36" href="#L36">36</a>      assertParseSuccess(4326, <span class="jxr_string">"WGS84"</span>);
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>      assertParseSuccess(6269, <span class="jxr_string">"nad83"</span>);
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>      assertParseSuccess(6301, <span class="jxr_string">"tokYo!"</span>);
+<a class="jxr_linenumber" name="L39" href="#L39">39</a>      assertParseSuccess(4326, <span class="jxr_string">"WGS_1984"</span>);
+<a class="jxr_linenumber" name="L40" href="#L40">40</a>      assertParseSuccess(6202, <span class="jxr_string">"AGD66"</span>);
+<a class="jxr_linenumber" name="L41" href="#L41">41</a>  
+<a class="jxr_linenumber" name="L42" href="#L42">42</a>      assertParseSuccess(7405, <span class="jxr_string">"OSGB36"</span>);
+<a class="jxr_linenumber" name="L43" href="#L43">43</a>      assertParseSuccess(7405, <span class="jxr_string">"Ordnance_Survey"</span>);
+<a class="jxr_linenumber" name="L44" href="#L44">44</a>      assertParseSuccess(7405, <span class="jxr_string">"Ordnance_Survey_36"</span>);
+<a class="jxr_linenumber" name="L45" href="#L45">45</a>      assertParseSuccess(7405, <span class="jxr_string">"OSGB36"</span>);
+<a class="jxr_linenumber" name="L46" href="#L46">46</a>      assertParseSuccess(6209, <span class="jxr_string">"ARC 1950"</span>);
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>      assertParseSuccess(4222, <span class="jxr_string">"CAPE"</span>);
+<a class="jxr_linenumber" name="L48" href="#L48">48</a>      assertParseSuccess(6131, <span class="jxr_string">"indian"</span>);
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>      assertParseSuccess(6760, <span class="jxr_string">"WGS66"</span>);
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>      assertParseSuccess(6760, <span class="jxr_string">"World Geodetic System 1966"</span>);
+<a class="jxr_linenumber" name="L51" href="#L51">51</a>    }
+<a class="jxr_linenumber" name="L52" href="#L52">52</a>  
+<a class="jxr_linenumber" name="L53" href="#L53">53</a>    <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L54" href="#L54">54</a>  <em class="jxr_javadoccomment">   * Parse all unique datum values found and make sure parsing doesn't get worse.</em>
+<a class="jxr_linenumber" name="L55" href="#L55">55</a>  <em class="jxr_javadoccomment">   * If the test file is updated, values here need to be adjusted!</em>
+<a class="jxr_linenumber" name="L56" href="#L56">56</a>  <em class="jxr_javadoccomment">   */</em>
+<a class="jxr_linenumber" name="L57" href="#L57">57</a>    @Test
+<a class="jxr_linenumber" name="L58" href="#L58">58</a>    <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testOccurrenceValues() <strong class="jxr_keyword">throws</strong> IOException {
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>      <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> CURRENT_TESTS_SUCCESSFUL = 14;
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>  
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>      <strong class="jxr_keyword">int</strong> failed = 0;
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>      <strong class="jxr_keyword">int</strong> success = 0;
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>      Set&lt;Integer&gt; codes = Sets.newHashSet();
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>  
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>      BufferedReader r = <strong class="jxr_keyword">new</strong> BufferedReader(<strong class="jxr_keyword">new</strong> InputStreamReader(
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>            getClass().getResourceAsStream(<span class="jxr_string">"/parse/test_datum.txt"</span>), Charsets.UTF_8));
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>      String line;
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>      <strong class="jxr_keyword">while</strong> ((line=r.readLine()) != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>        ParseResult&lt;Integer&gt; parsed = parser.parse(line);
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>        <strong class="jxr_keyword">if</strong> (parsed.isSuccessful()) {
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>          success++;
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>          codes.add(parsed.getPayload());
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>        } <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>          System.out.println(<span class="jxr_string">"Failed: "</span> + line);
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>          failed++;
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>        }
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>      }
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>  
+<a class="jxr_linenumber" name="L79" href="#L79">79</a>      System.out.println(failed + <span class="jxr_string">" failed parse results"</span>);
+<a class="jxr_linenumber" name="L80" href="#L80">80</a>      System.out.println(success + <span class="jxr_string">" successful parse results"</span>);
+<a class="jxr_linenumber" name="L81" href="#L81">81</a>      System.out.println(codes.size() + <span class="jxr_string">" distinct datums parsed"</span>);
+<a class="jxr_linenumber" name="L82" href="#L82">82</a>      assertTrue(CURRENT_TESTS_SUCCESSFUL &lt;= success);
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>    }
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>  }
+</pre>
+<hr/>
+<div id="footer">Copyright &#169; 2016 <a href="http://www.gbif.org">Global Biodiversity Information Facility</a>. All rights reserved.</div>
+</body>
+</html>
