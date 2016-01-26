@@ -7,7 +7,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import javax.annotation.Nullable;
 
+import com.google.common.base.Joiner;
+import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -22,6 +25,7 @@ import org.threeten.bp.format.DateTimeFormatter;
 import org.threeten.bp.format.DateTimeFormatterBuilder;
 import org.threeten.bp.format.DateTimeParseException;
 import org.threeten.bp.format.ResolverStyle;
+import org.threeten.bp.format.SignStyle;
 import org.threeten.bp.temporal.ChronoField;
 import org.threeten.bp.temporal.TemporalAccessor;
 
@@ -33,6 +37,9 @@ import org.threeten.bp.temporal.TemporalAccessor;
  * a part of the dates (e.g. January 1 1980)
  *
  * Months are in numerical value starting at 1 for January.
+ *
+ * This parser uses LocalDateTime and LocalDate which means it is TimeZone agnostic.
+ *
  */
 public class ThreeTenNumericalDateParser implements Parsable<TemporalAccessor> {
 
@@ -49,8 +56,19 @@ public class ThreeTenNumericalDateParser implements Parsable<TemporalAccessor> {
   private final static String YEAR_2_DIGITS_PATTERN_SUFFIX = "uu";
   private final static String IS_YEAR_2_DIGITS_PATTERN = "^.+[^u]"+YEAR_2_DIGITS_PATTERN_SUFFIX+"$";
 
+  // DateTimeFormatter includes some ISO parsers but just to make it explicit we define our own
+  private final static DateTimeFormatter ISO_PARSER = (new DateTimeFormatterBuilder()
+          .appendValue(ChronoField.YEAR, 2, 4, SignStyle.NEVER)
+          .optionalStart().appendLiteral('-')
+          .appendValue(ChronoField.MONTH_OF_YEAR, 1, 2, SignStyle.NEVER)
+          .optionalStart().appendLiteral('-')
+          .appendValue(ChronoField.DAY_OF_MONTH, 1, 2, SignStyle.NEVER))
+          .optionalEnd()
+          .optionalEnd()
+          .toFormatter().withResolverStyle(ResolverStyle.STRICT);
+
   //brackets [] represent optional section of the pattern
-  protected static InternalDateTimeParser[] DEFINITE_PATTERNS = {
+  private static InternalDateTimeParser[] DEFINITE_PATTERNS = {
           buildDateTimeParser("uuuuMMdd", DateFormatHint.YMD),
           buildDateTimeParser("uuuu-MM-dd[ HH:mm:ss]", DateFormatHint.YMDT),
           buildDateTimeParser("uuuu-MM-dd'T'HH[:mm[:ss]]", DateFormatHint.YMDT),
@@ -66,7 +84,7 @@ public class ThreeTenNumericalDateParser implements Parsable<TemporalAccessor> {
   };
 
   //Possibly ambiguous dates will record an error in case more than one pattern can be applied
-  protected static InternalDateTimeParserAmbiguity[] POSSIBLY_AMBIGUOUS_PATTERNS = {
+  private static InternalDateTimeParserAmbiguity[] POSSIBLY_AMBIGUOUS_PATTERNS = {
 
           buildPossibleAmbiguousDateTimeParserWithPreferred(
                   buildDateTimeParser("dd.MM.uuuu", DateFormatHint.DMY), //DE, DK, NO
@@ -181,8 +199,27 @@ public class ThreeTenNumericalDateParser implements Parsable<TemporalAccessor> {
 
   @Override
   public ParseResult<TemporalAccessor> parse(String input) {
-    // for the moment we do not support FormatHint
     return parse(input, DateFormatHint.NONE);
+  }
+
+  /**
+   * Parse year, month, day strings as a TemporalAccessor.
+   *
+   * @param year
+   * @param month
+   * @param day
+   * @return
+   */
+  public static ParseResult<TemporalAccessor> parse(@Nullable String year, @Nullable String month, @Nullable String day) {
+
+    String date = Joiner.on("-").skipNulls().join(Strings.emptyToNull(year), Strings.emptyToNull(month),
+            Strings.emptyToNull(day));
+    TemporalAccessor tp = tryParse(date, ISO_PARSER);
+
+    if(tp != null){
+      return ParseResult.success(ParseResult.CONFIDENCE.DEFINITE, tp);
+    }
+    return ParseResult.fail();
   }
 
   /**
@@ -194,7 +231,7 @@ public class ThreeTenNumericalDateParser implements Parsable<TemporalAccessor> {
   public static ParseResult<TemporalAccessor> parse(String input, DateFormatHint hint) {
 
     if(StringUtils.isBlank(input)){
-      return ParseResult.error();
+      return ParseResult.fail();
     }
     // make sure hint is never null
     if(hint == null){
@@ -217,7 +254,7 @@ public class ThreeTenNumericalDateParser implements Parsable<TemporalAccessor> {
     }
     // if a format hint was provided we already tried all possible format
     if( hint != DateFormatHint.NONE){
-      return ParseResult.error();
+      return ParseResult.fail();
     }
 
     // could be rewritten in a more DRY way
@@ -251,7 +288,7 @@ public class ThreeTenNumericalDateParser implements Parsable<TemporalAccessor> {
 
     LOGGER.debug("Number of matches for {} : {}", input, numberOfPossiblyAmbiguousMatch);
 
-    return ParseResult.error();
+    return ParseResult.fail();
   }
 
   /**
