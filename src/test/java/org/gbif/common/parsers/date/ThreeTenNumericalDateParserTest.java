@@ -38,8 +38,12 @@ public class ThreeTenNumericalDateParserTest {
 
     //y-m-d
     assertEquals(LocalDate.of(1978, Month.DECEMBER, 21), LocalDate.from(parser.parse("1978-12-21").getPayload()));
+    //test with/without 0 padding
     assertEquals(LocalDate.of(1978, Month.DECEMBER, 1), LocalDate.from(parser.parse("1978-12-01").getPayload()));
-    //assertEquals(LocalDate.of(1978, Month.DECEMBER, 1), LocalDate.from(parser.parse("1978-12-1").getPayload()));
+    assertEquals(LocalDate.of(1978, Month.DECEMBER, 1), LocalDate.from(parser.parse("1978-12-1").getPayload()));
+    assertEquals(LocalDate.of(1978, Month.JANUARY, 1), LocalDate.from(parser.parse("1978-01-1").getPayload()));
+    assertEquals(LocalDate.of(1978, Month.JANUARY, 1), LocalDate.from(parser.parse("1978-1-01").getPayload()));
+    assertEquals(LocalDate.of(1978, Month.JANUARY, 1), LocalDate.from(parser.parse("1978-1-1").getPayload()));
 
     assertEquals(LocalDateTime.of(1978, Month.DECEMBER, 21, 2, 12, 43), LocalDateTime.from(parser.parse("1978-12-21 02:12:43").getPayload()));
     assertEquals(LocalDateTime.of(1978, Month.DECEMBER, 21, 2, 0, 0), LocalDateTime.from(parser.parse("1978-12-21T02").getPayload()));

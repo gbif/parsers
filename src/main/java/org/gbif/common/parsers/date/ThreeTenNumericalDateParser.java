@@ -40,6 +40,10 @@ import org.threeten.bp.temporal.TemporalAccessor;
  *
  * This parser uses LocalDateTime and LocalDate which means it is TimeZone agnostic.
  *
+ * Be aware that LocalDate and LocalDateTime doesn't map correctly to Date object for all dates before the
+ * Gregorian cut-off date (1582-10-15). To transform a such date use GregorianCalendar by setting the date according
+ * to the TemporalAccessor you got back from that class.
+ *
  */
 public class ThreeTenNumericalDateParser implements Parsable<TemporalAccessor> {
 
@@ -70,13 +74,13 @@ public class ThreeTenNumericalDateParser implements Parsable<TemporalAccessor> {
   //brackets [] represent optional section of the pattern
   private static InternalDateTimeParser[] DEFINITE_PATTERNS = {
           buildDateTimeParser("uuuuMMdd", DateFormatHint.YMD),
-          buildDateTimeParser("uuuu-MM-dd[ HH:mm:ss]", DateFormatHint.YMDT),
-          buildDateTimeParser("uuuu-MM-dd'T'HH[:mm[:ss]]", DateFormatHint.YMDT),
-          buildDateTimeParser("uuuu-MM-dd'T'HHmm[ss]", DateFormatHint.YMDT),
-          buildDateTimeParser("uuuu-MM-dd'T'HH:mm:ssZ", DateFormatHint.YMDT),
-          buildDateTimeParser("uuuu-MM-dd'T'HH:mm:ssxxx", DateFormatHint.YMDT), //covers 1978-12-21T02:12:43+01:00
-          buildDateTimeParser("uuuu-MM-dd'T'HH:mm:ss'Z'", DateFormatHint.YMDT),
-          buildDateTimeParser("uuuu-MM", DateFormatHint.YM),
+          buildDateTimeParser("uuuu-M-d[ HH:mm:ss]", DateFormatHint.YMDT),
+          buildDateTimeParser("uuuu-M-d'T'HH[:mm[:ss]]", DateFormatHint.YMDT),
+          buildDateTimeParser("uuuu-M-d'T'HHmm[ss]", DateFormatHint.YMDT),
+          buildDateTimeParser("uuuu-M-d'T'HH:mm:ssZ", DateFormatHint.YMDT),
+          buildDateTimeParser("uuuu-M-d'T'HH:mm:ssxxx", DateFormatHint.YMDT), //covers 1978-12-21T02:12:43+01:00
+          buildDateTimeParser("uuuu-M-d'T'HH:mm:ss'Z'", DateFormatHint.YMDT),
+          buildDateTimeParser("uuuu-M", DateFormatHint.YM),
           buildDateTimeParser("uuuu", DateFormatHint.Y),
           buildDateTimeParser("yyyy年mm月dd日", DateFormatHint.ASIAN),
           buildDateTimeParser("yyyy年m月d日", DateFormatHint.ASIAN),
@@ -87,31 +91,31 @@ public class ThreeTenNumericalDateParser implements Parsable<TemporalAccessor> {
   private static InternalDateTimeParserAmbiguity[] POSSIBLY_AMBIGUOUS_PATTERNS = {
 
           buildPossibleAmbiguousDateTimeParserWithPreferred(
-                  buildDateTimeParser("dd.MM.uuuu", DateFormatHint.DMY), //DE, DK, NO
-                  buildDateTimeParser("MM.dd.uuuu", DateFormatHint.MDY)
+                  buildDateTimeParser("d.M.uuuu", DateFormatHint.DMY), //DE, DK, NO
+                  buildDateTimeParser("M.d.uuuu", DateFormatHint.MDY)
           ),
           buildPossibleAmbiguousDateTimeParserWithPreferred(
-                  buildDateTimeParser("dd.MM.uu", DateFormatHint.DMY), //DE, DK, NO
-                  buildDateTimeParser("MM.dd.uu", DateFormatHint.MDY)
+                  buildDateTimeParser("d.M.uu", DateFormatHint.DMY), //DE, DK, NO
+                  buildDateTimeParser("M.d.uu", DateFormatHint.MDY)
           ),
 
           // the followings are mostly derived of the difference between FR,GB,ES (DMY) format and US format (MDY)
           buildPossibleAmbiguousDateTimeParser(
-                  buildDateTimeParser("dd/MM/uuuu", DateFormatHint.DMY),
-                  buildDateTimeParser("MM/dd/uuuu", DateFormatHint.MDY)
+                  buildDateTimeParser("d/M/uuuu", DateFormatHint.DMY),
+                  buildDateTimeParser("M/d/uuuu", DateFormatHint.MDY)
           ),
           buildPossibleAmbiguousDateTimeParser(
-                  buildDateTimeParser("dd/MM/uu", DateFormatHint.DMY),
-                  buildDateTimeParser("MM/dd/uu", DateFormatHint.MDY)
+                  buildDateTimeParser("d/M/uu", DateFormatHint.DMY),
+                  buildDateTimeParser("M/d/uu", DateFormatHint.MDY)
           ),
 
           buildPossibleAmbiguousDateTimeParser(
-                  buildDateTimeParser("dd-MM-uuuu", DateFormatHint.DMY),
-                  buildDateTimeParser("MM-dd-uuuu", DateFormatHint.MDY)
+                  buildDateTimeParser("d-M-uuuu", DateFormatHint.DMY),
+                  buildDateTimeParser("M-d-uuuu", DateFormatHint.MDY)
           ),
           buildPossibleAmbiguousDateTimeParser(
-                  buildDateTimeParser("dd-MM-uu", DateFormatHint.DMY),
-                  buildDateTimeParser("MM-dd-uu", DateFormatHint.MDY)
+                  buildDateTimeParser("d-M-uu", DateFormatHint.DMY),
+                  buildDateTimeParser("M-d-uu", DateFormatHint.MDY)
           ),
 
           buildPossibleAmbiguousDateTimeParser(
@@ -125,21 +129,21 @@ public class ThreeTenNumericalDateParser implements Parsable<TemporalAccessor> {
 
           // the followings are not officially supported by any countries but are sometimes used
           buildPossibleAmbiguousDateTimeParser(
-                  buildDateTimeParser("dd\\MM\\uuuu", DateFormatHint.DMY),
-                  buildDateTimeParser("MM\\dd\\uuuu", DateFormatHint.MDY)
+                  buildDateTimeParser("d\\M\\uuuu", DateFormatHint.DMY),
+                  buildDateTimeParser("M\\d\\uuuu", DateFormatHint.MDY)
           ),
           buildPossibleAmbiguousDateTimeParser(
-                  buildDateTimeParser("dd\\MM\\uu", DateFormatHint.DMY),
-                  buildDateTimeParser("MM\\dd\\uu", DateFormatHint.MDY)
+                  buildDateTimeParser("d\\M\\uu", DateFormatHint.DMY),
+                  buildDateTimeParser("M\\d\\uu", DateFormatHint.MDY)
           ),
 
           buildPossibleAmbiguousDateTimeParser(
-                  buildDateTimeParser("dd_MM_uuuu", DateFormatHint.DMY),
-                  buildDateTimeParser("MM_dd_uuuu", DateFormatHint.MDY)
+                  buildDateTimeParser("d_M_uuuu", DateFormatHint.DMY),
+                  buildDateTimeParser("M_d_uuuu", DateFormatHint.MDY)
           ),
           buildPossibleAmbiguousDateTimeParser(
-                  buildDateTimeParser("dd_MM_uu", DateFormatHint.DMY),
-                  buildDateTimeParser("MM_dd_uu", DateFormatHint.MDY)
+                  buildDateTimeParser("d_M_uu", DateFormatHint.DMY),
+                  buildDateTimeParser("M_d_uu", DateFormatHint.MDY)
           ),
 
           //2 digits year pattern is ambiguous
