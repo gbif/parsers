@@ -48,7 +48,7 @@ public class DictionaryBackedParser<V> implements Parsable<V> {
     if (!Strings.isNullOrEmpty(normedKey)) {
       V existingValue = dictionary.get(normedKey);
       if (existingValue != null && !existingValue.equals(value)) {
-        log.warn("Ignore value {} mapped to more than one result", key);
+        log.warn("Ignoring mapping {}→{} as {} is already mapped to {}", key, value, key, existingValue);
       } else {
         dictionary.put(normedKey, value);
       }

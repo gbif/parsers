@@ -9,7 +9,7 @@ import com.google.common.base.Strings;
 
 /**
  * Generic parser for enumerations making use of our vocabulary util to lookup an enum value from a string.
- * Also adds stronger normalization removing any non alphanumeric characters. It is still ok to use hyphens or
+ * Also adds stronger normalization removing any non-ASCII-alphanumeric characters. It is still ok to use hyphens or
  * underscores in the enumeration values.
  */
 public class EnumParser<T extends Enum<T>> extends FileBasedDictionaryParser<T> {

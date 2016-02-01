@@ -39,9 +39,8 @@ public class CountryParserTest extends ParserTestBase<Country> {
    */
   @Test
   public void testOccurrenceValues() throws IOException {
-    final int CURRENT_COUNTRIES_PARSED = 251; //246;
-    final int CURRENT_TESTS_SUCCESSFUL = 5067;// 2976;
-
+    final int CURRENT_COUNTRIES_PARSED = 251;
+    final int CURRENT_TESTS_SUCCESSFUL = 5171;
 
     // remember number of successful parsed countries:
     Map<Country, AtomicInteger> stats = Maps.newHashMap();
@@ -125,13 +124,13 @@ public class CountryParserTest extends ParserTestBase<Country> {
     assertParseSuccess(Country.FRANCE, "CLIPPERTON IS");
     assertParseSuccess(Country.FRANCE, "CLIPPERTON ID");
     assertParseSuccess(Country.FRANCE, "CLIPPERTON I");
-    assertParseSuccess(Country.CONGO, "french congo");
-    assertParseSuccess(Country.CONGO, "Republic of the Congo");
-    assertParseSuccess(Country.CONGO, "République du Congo");
-    assertParseSuccess(Country.CONGO, "People's Republic of the Congo");
-    assertParseSuccess(Country.CONGO, "congo republic");
-    assertParseSuccess(Country.CONGO, "Congo-Brazzaville");
-    assertParseSuccess(Country.CONGO, "CONGO");
+    assertParseSuccess(Country.CONGO_REPUBLIC, "french congo");
+    assertParseSuccess(Country.CONGO_REPUBLIC, "Republic of the Congo");
+    assertParseSuccess(Country.CONGO_REPUBLIC, "République du Congo");
+    assertParseSuccess(Country.CONGO_REPUBLIC, "People's Republic of the Congo");
+    assertParseSuccess(Country.CONGO_REPUBLIC, "congo republic");
+    assertParseSuccess(Country.CONGO_REPUBLIC, "Congo-Brazzaville");
+    assertParseSuccess(Country.CONGO_REPUBLIC, "CONGO");
     assertParseSuccess(Country.CONGO_DEMOCRATIC_REPUBLIC, "CONGO AFRICA");
     assertParseSuccess(Country.CONGO_DEMOCRATIC_REPUBLIC, "Léopoldville");
     assertParseSuccess(Country.CONGO_DEMOCRATIC_REPUBLIC, "Zaïre");
