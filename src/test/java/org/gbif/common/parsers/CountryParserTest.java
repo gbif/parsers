@@ -40,7 +40,7 @@ public class CountryParserTest extends ParserTestBase<Country> {
   @Test
   public void testOccurrenceValues() throws IOException {
     final int CURRENT_COUNTRIES_PARSED = 251;
-    final int CURRENT_TESTS_SUCCESSFUL = 5171;
+    final int CURRENT_TESTS_SUCCESSFUL = 5274;
 
     // remember number of successful parsed countries:
     Map<Country, AtomicInteger> stats = Maps.newHashMap();
