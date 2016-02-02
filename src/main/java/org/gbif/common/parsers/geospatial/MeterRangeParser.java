@@ -262,7 +262,19 @@ public class MeterRangeParser {
     return OccurrenceParseResult.success(ParseResult.CONFIDENCE.DEFINITE, result, issues);
   }
 
-  public static MeasurementWrapper<Double> parseInMeter(String meter) {
+  /**
+   * Parses a string supposed to be a value in meters.
+   * Accepts also feets if marked with a unit and converts them
+   */
+  public static ParseResult<Double> parseMeters(String meter) {
+    MeasurementWrapper<Double> result = parseInMeter(meter);
+    if (result.getMeasurement() == null) {
+      return ParseResult.fail();
+    }
+    return ParseResult.success(ParseResult.CONFIDENCE.DEFINITE, result.getMeasurement());
+  }
+
+  private static MeasurementWrapper<Double> parseInMeter(String meter) {
     MeasurementWrapper<Double> iMeter = new MeasurementWrapper<Double>();
 
     if (Strings.isNullOrEmpty(meter)) {
