@@ -262,7 +262,7 @@ public class MeterRangeParser {
     return OccurrenceParseResult.success(ParseResult.CONFIDENCE.DEFINITE, result, issues);
   }
 
-  private static MeasurementWrapper<Double> parseInMeter(String meter) {
+  public static MeasurementWrapper<Double> parseInMeter(String meter) {
     MeasurementWrapper<Double> iMeter = new MeasurementWrapper<Double>();
 
     if (Strings.isNullOrEmpty(meter)) {
