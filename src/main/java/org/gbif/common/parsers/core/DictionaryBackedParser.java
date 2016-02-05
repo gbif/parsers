@@ -68,6 +68,8 @@ public class DictionaryBackedParser<V> implements Parsable<V> {
     if (value != null) {
       if (!caseSensitive) {
         return StringUtils.trimToNull(value.toUpperCase());
+      } else {
+        return StringUtils.trimToNull(value);
       }
     }
     return value;
