@@ -37,6 +37,7 @@ public class CountryParser extends EnumParser<Country> {
 
   @Override
   protected String normalize(String value) {
+    value = handleNotAvailable(value);
     if (value != null) {
       String cleanedCountry = LETTER_MATCHER.retainFrom(value);
       cleanedCountry = REMOVE_OFF_PATTERN.matcher(cleanedCountry).replaceFirst("");

@@ -1,8 +1,10 @@
 package org.gbif.common.parsers.core;
 
+import com.google.common.collect.Sets;
 import org.gbif.api.util.VocabularyUtils;
 
 import java.io.InputStream;
+import java.util.HashSet;
 import java.util.regex.Pattern;
 
 import com.google.common.base.Strings;
@@ -17,6 +19,13 @@ public class EnumParser<T extends Enum<T>> extends FileBasedDictionaryParser<T> 
   private final Class<T> clazz;
   private final Pattern NORMALIZER;
   private final ASCIIParser ascii = ASCIIParser.getInstance();
+
+  // These become null, as after removing non-letters "N/A" might mean something like "Namibia".
+  private final HashSet<String> notAvailable = Sets.newHashSet(
+          "N/A", "N/a", "n/a", "n/A", "n.a.", // Not available
+          "N/K", "N/k", "n/k", "n/K", "n.k.", // Not known
+          "UNK.", "Unk.", "unk.", "UNK", "Unk", "unk" // Unknown
+  );
 
   protected EnumParser(Class<T> clazz, boolean allowDigits, final InputStream... inputs) {
     super(false);
@@ -48,10 +57,19 @@ public class EnumParser<T extends Enum<T>> extends FileBasedDictionaryParser<T> 
 
   @Override
   protected String normalize(String value) {
-    if (Strings.isNullOrEmpty(value)) return null;
+    if (Strings.isNullOrEmpty(handleNotAvailable(value))) return null;
+
     // convert to ascii
     ParseResult<String> asci = ascii.parse(value);
     return NORMALIZER.matcher(asci.getPayload()).replaceAll("").toUpperCase();
+  }
+
+  /**
+   * Treat "n/a" etc as null.
+   * A separate method so it can be called before stripping slash characters etc.
+   */
+  protected String handleNotAvailable(String value) {
+    return notAvailable.contains(value) ? null : value;
   }
 
   @Override

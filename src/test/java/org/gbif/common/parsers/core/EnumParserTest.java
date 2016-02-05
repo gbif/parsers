@@ -5,6 +5,7 @@ import org.gbif.api.vocabulary.Rank;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 /**
  *
@@ -45,4 +46,17 @@ public class EnumParserTest {
     assertEquals("HELLOBERTOCKO", parser.normalize("Hello Bértöçkø"));
   }
 
+  @Test
+  public void testNormalizeNotAvailableEtc() throws Exception {
+    EnumParser parser = new EnumParser(Rank.class, true);
+
+    assertEquals("NA", parser.normalize("NA"));
+    assertEquals("NA", parser.normalize("/NA/"));
+    assertNull(parser.normalize("N/A"));
+    assertNull(parser.normalize("N/a"));
+    assertNull(parser.normalize("n/a"));
+    assertNull(parser.normalize("n/A"));
+    assertNull(parser.normalize("n.a."));
+    assertNull(parser.normalize("n.k."));
+  }
 }

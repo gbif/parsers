@@ -40,7 +40,7 @@ public class CountryParserTest extends ParserTestBase<Country> {
   @Test
   public void testOccurrenceValues() throws IOException {
     final int CURRENT_COUNTRIES_PARSED = 251;
-    final int CURRENT_TESTS_SUCCESSFUL = 5274;
+    final int CURRENT_TESTS_SUCCESSFUL = 5273;
 
     // remember number of successful parsed countries:
     Map<Country, AtomicInteger> stats = Maps.newHashMap();
@@ -147,5 +147,10 @@ public class CountryParserTest extends ParserTestBase<Country> {
     assertParseSuccess(Country.BONAIRE_SINT_EUSTATIUS_SABA, "ST EUSTATIUS ISLAND");
     assertParseSuccess(Country.BONAIRE_SINT_EUSTATIUS_SABA, "ST EUSTATIUS");
     assertParseSuccess(Country.BONAIRE_SINT_EUSTATIUS_SABA, "BONAIRE THE NETHERLANDS ANTILLES");
+
+    assertParseSuccess(Country.NAMIBIA, "NA");
+    assertParseFailure("N/A");
+    assertParseFailure("n/a");
+    assertParseFailure("n/k");
   }
 }
