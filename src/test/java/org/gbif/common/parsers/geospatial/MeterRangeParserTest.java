@@ -69,6 +69,8 @@ public class MeterRangeParserTest {
                  OccurrenceIssue.DEPTH_NON_NUMERIC);
     assertResult(MeterRangeParser.parseDepth("3280ft", null, "1"), true, 999.74, 1d,
                  OccurrenceIssue.DEPTH_NOT_METRIC, OccurrenceIssue.DEPTH_NON_NUMERIC);
+    assertResult(MeterRangeParser.parseDepth("30 In", null, "1"), true, 0.76, 1d,
+                 OccurrenceIssue.DEPTH_NOT_METRIC, OccurrenceIssue.DEPTH_NON_NUMERIC);
 
     // check out of range
     assertResult(MeterRangeParser.parseDepth("100000000000", null, "1"), false, null, 1d,

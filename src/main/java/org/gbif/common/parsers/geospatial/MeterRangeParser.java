@@ -38,12 +38,12 @@ public class MeterRangeParser {
   /**
    * Pattern for recognising measurements in feet
    */
-  private static final Pattern FEET_MARKER_PATTERN = Pattern.compile(".*ft.*|.*FT.*|.*'.*");
+  private static final Pattern FEET_MARKER_PATTERN = Pattern.compile(".*ft.*|.*'.*", Pattern.CASE_INSENSITIVE);
 
   /**
    * Pattern for recognising measurements in inches
    */
-  private static final Pattern INCHES_MARKER_PATTERN = Pattern.compile(".*in.*|.*\".*");
+  private static final Pattern INCHES_MARKER_PATTERN = Pattern.compile(".*in.*|.*\".*", Pattern.CASE_INSENSITIVE);
 
   /**
    * Pattern for recognising a range value
@@ -138,7 +138,7 @@ public class MeterRangeParser {
 
   /**
    * Takes min and max values in meters and a known precision and comes up woth a single mean value and its accuracy.
-   * This method tries also to parse common measurements given in feet or inch and converts them to meters.
+   * This method tries also to parse common measurements given in feet or inches and converts them to meters.
    */
   public static MeasurementWrapper<DoubleAccuracy> parseMeterRange(String minRaw, @Nullable String maxRaw, @Nullable String precisionRaw) {
     MeasurementWrapper<DoubleAccuracy> result = new MeasurementWrapper<DoubleAccuracy>();
@@ -264,7 +264,7 @@ public class MeterRangeParser {
 
   /**
    * Parses a string supposed to be a value in meters.
-   * Accepts also feets if marked with a unit and converts them
+   * Accepts also feet if marked with a unit and converts them
    */
   public static ParseResult<Double> parseMeters(String meter) {
     MeasurementWrapper<Double> result = parseInMeter(meter);
