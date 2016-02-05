@@ -70,35 +70,35 @@ nom cons	CONSERVED
 nom cons des	CONSERVED
 nom cons nom illeg	CONSERVED
 nom cons nom nov	CONSERVED
-nom cons nom rej see art 	CONSERVED
+nom cons nom rej see art	CONSERVED
 nom cons orth cons	CONSERVED
 nom cons prop	CONSERVED
-nom cons typ cons see art 	CONSERVED
-nom cons, see art 	CONSERVED
+nom cons typ cons see art	CONSERVED
+nom cons, see art	CONSERVED
 nom et orth c	CONSERVED
 nom illeg	ILLEGITIMATE
-nom illeg 	ILLEGITIMATE
+nom illeg	ILLEGITIMATE
 nom illeg later homonym	ILLEGITIMATE
 nom illeg nom inv	
 nom illeg nom nud	ILLEGITIMATE,NUDUM
 nom illeg nom superfl	ILLEGITIMATE,SUPERFLUOUS
 nom illegit	
-nom illegit art 	ILLEGITIMATE
+nom illegit art	ILLEGITIMATE
 nom illegit art art does not apply	ILLEGITIMATE
-nom illegit art nom rejic see art 	ILLEGITIMATE
-nom illegit arts 	ILLEGITIMATE
+nom illegit art nom rejic see art	ILLEGITIMATE
+nom illegit arts	ILLEGITIMATE
 nom illegit nom inval	INVALID
 nom illegit nom nov	REPLACEMENT
 nom illegit nom nov nom superfl	SUPERFLUOUS
-nom ilval art 	
+nom ilval art	
 nom ined	
 nom ined nom inv	
 nom inv	INVALID
 nom inval	INVALID
-nom inval art 	INVALID
-nom inval art nom illegit art 	INVALID
-nom inval art nom rejic art 	INVALID
-nom inval arts 	INVALID
+nom inval art	INVALID
+nom inval art nom illegit art	INVALID
+nom inval art nom rejic art	INVALID
+nom inval arts	INVALID
 nom inval later homonym	
 nom inval nom rej	REJECTED
 nom inval nom subnud	SUBNUDUM
@@ -117,7 +117,7 @@ nom nud unavailable invalid	NUDUM
 nom rej	REJECTED
 nom rej prop	REJECTED_PROPOSED
 nom rejic	REJECTED
-nom rejic art 	REJECTED
+nom rejic art	REJECTED
 nom rejic prop	REJECTED_PROPOSED
 nom rev	
 nom rev comb nov	
@@ -165,7 +165,7 @@ rejiciendumprop
 rejiciendumutique	
 rejiciendumutiqueprop	
 replacement name	
-ruhberg et al 	
+ruhberg et al	
 secondary homonym	
 sp nov	NEW_SPECIES
 sp nov heterotypic syn	NEW_SPECIES
