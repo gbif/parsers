@@ -177,7 +177,7 @@ public class CoordinateParseUtils {
    * Parses a single DMS coordinate
    * @param coord
    * @param lat
-   * @return the converted decimal up to 5 decimals accurracy
+   * @return the converted decimal up to 5 decimals accuracy
    */
   @VisibleForTesting
   protected static double parseDMS(String coord, boolean lat) {
