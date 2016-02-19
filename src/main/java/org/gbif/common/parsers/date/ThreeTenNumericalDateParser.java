@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 import javax.annotation.Nullable;
 
+import com.google.common.base.CharMatcher;
 import com.google.common.base.Joiner;
 import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableList;
@@ -49,9 +50,15 @@ public class ThreeTenNumericalDateParser implements Parsable<TemporalAccessor> {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(ThreeTenNumericalDateParser.class);
 
+  // ISO 8601 specifies a Unicode minus (CHAR_MINUS), with a hyphen (CHAR_HYPHEN) as an alternative.
+  public static final char CHAR_HYPHEN = '\u002d'; // Unicode hyphen, U+002d, char '-'
+  public static final char CHAR_MINUS = '\u2212'; // Unicode minus, U+2212, char '−'
+
   //Should be mutually exclusive
   //Hints are given to the parser to help to select the right sets of DateTimeFormatter
-  public enum DateFormatHint {YMDT, YMD, DMY, MDY, YM, Y, ASIAN, NONE};
+  //HAN = date format used in Chinese
+  public enum DateFormatHint {YMDT, YMD, DMY, MDY, YM, Y, HAN, NONE}
+  public enum DateParsingHint {MIN, MAX}
 
   private static final List<InternalDateTimeParser> DEFINITE_FORMATTERS;
   private static final Map<DateFormatHint, List<InternalDateTimeParser>> FORMATTERS_BY_HINT = Maps.newHashMap();
@@ -72,6 +79,7 @@ public class ThreeTenNumericalDateParser implements Parsable<TemporalAccessor> {
           .toFormatter().withResolverStyle(ResolverStyle.STRICT);
 
   //brackets [] represent optional section of the pattern
+  //separator is a CHAR_HYPHEN
   private static InternalDateTimeParser[] DEFINITE_PATTERNS = {
           buildDateTimeParser("uuuuMMdd", DateFormatHint.YMD),
           buildDateTimeParser("uuuu-M-d[ HH:mm:ss]", DateFormatHint.YMDT),
@@ -82,9 +90,9 @@ public class ThreeTenNumericalDateParser implements Parsable<TemporalAccessor> {
           buildDateTimeParser("uuuu-M-d'T'HH:mm:ss'Z'", DateFormatHint.YMDT),
           buildDateTimeParser("uuuu-M", DateFormatHint.YM),
           buildDateTimeParser("uuuu", DateFormatHint.Y),
-          buildDateTimeParser("yyyy年mm月dd日", DateFormatHint.ASIAN),
-          buildDateTimeParser("yyyy年m月d日", DateFormatHint.ASIAN),
-          buildDateTimeParser("yy年m月d日", DateFormatHint.ASIAN)
+          buildDateTimeParser("yyyy年mm月dd日", DateFormatHint.HAN),
+          buildDateTimeParser("yyyy年m月d日", DateFormatHint.HAN),
+          buildDateTimeParser("yy年m月d日", DateFormatHint.HAN)
   };
 
   //Possibly ambiguous dates will record an error in case more than one pattern can be applied
@@ -101,21 +109,12 @@ public class ThreeTenNumericalDateParser implements Parsable<TemporalAccessor> {
 
           // the followings are mostly derived of the difference between FR,GB,ES (DMY) format and US format (MDY)
           buildPossibleAmbiguousDateTimeParser(
-                  buildDateTimeParser("d/M/uuuu", DateFormatHint.DMY),
-                  buildDateTimeParser("M/d/uuuu", DateFormatHint.MDY)
+                  buildDateTimeParser("d/M/uuuu", DateFormatHint.DMY, "/", String.valueOf(CHAR_HYPHEN) + String.valueOf(CHAR_MINUS)),
+                  buildDateTimeParser("M/d/uuuu", DateFormatHint.MDY, "/", String.valueOf(CHAR_HYPHEN) + String.valueOf(CHAR_MINUS))
           ),
           buildPossibleAmbiguousDateTimeParser(
-                  buildDateTimeParser("d/M/uu", DateFormatHint.DMY),
-                  buildDateTimeParser("M/d/uu", DateFormatHint.MDY)
-          ),
-
-          buildPossibleAmbiguousDateTimeParser(
-                  buildDateTimeParser("d-M-uuuu", DateFormatHint.DMY),
-                  buildDateTimeParser("M-d-uuuu", DateFormatHint.MDY)
-          ),
-          buildPossibleAmbiguousDateTimeParser(
-                  buildDateTimeParser("d-M-uu", DateFormatHint.DMY),
-                  buildDateTimeParser("M-d-uu", DateFormatHint.MDY)
+                  buildDateTimeParser("d/M/uu", DateFormatHint.DMY, "/", String.valueOf(CHAR_HYPHEN) + String.valueOf(CHAR_MINUS)),
+                  buildDateTimeParser("M/d/uu", DateFormatHint.MDY, "/", String.valueOf(CHAR_HYPHEN) + String.valueOf(CHAR_MINUS))
           ),
 
           buildPossibleAmbiguousDateTimeParser(
@@ -129,21 +128,12 @@ public class ThreeTenNumericalDateParser implements Parsable<TemporalAccessor> {
 
           // the followings are not officially supported by any countries but are sometimes used
           buildPossibleAmbiguousDateTimeParser(
-                  buildDateTimeParser("d\\M\\uuuu", DateFormatHint.DMY),
-                  buildDateTimeParser("M\\d\\uuuu", DateFormatHint.MDY)
+                  buildDateTimeParser("d\\M\\uuuu", DateFormatHint.DMY, "\\", "_"),
+                  buildDateTimeParser("M\\d\\uuuu", DateFormatHint.MDY, "\\", "_")
           ),
           buildPossibleAmbiguousDateTimeParser(
-                  buildDateTimeParser("d\\M\\uu", DateFormatHint.DMY),
-                  buildDateTimeParser("M\\d\\uu", DateFormatHint.MDY)
-          ),
-
-          buildPossibleAmbiguousDateTimeParser(
-                  buildDateTimeParser("d_M_uuuu", DateFormatHint.DMY),
-                  buildDateTimeParser("M_d_uuuu", DateFormatHint.MDY)
-          ),
-          buildPossibleAmbiguousDateTimeParser(
-                  buildDateTimeParser("d_M_uu", DateFormatHint.DMY),
-                  buildDateTimeParser("M_d_uu", DateFormatHint.MDY)
+                  buildDateTimeParser("d\\M\\uu", DateFormatHint.DMY, "\\", "_"),
+                  buildDateTimeParser("M\\d\\uu", DateFormatHint.MDY, "\\", "_")
           ),
 
           //2 digits year pattern is ambiguous
@@ -181,6 +171,30 @@ public class ThreeTenNumericalDateParser implements Parsable<TemporalAccessor> {
     return InternalDateTimeParser.of(dateTimeFormatter, pattern, hint);
   }
 
+  /**
+   *
+   * @param pattern
+   * @param hint
+   * @param separator separator used in the pattern that should be used as replacement for alternativeSeparators
+   * @param alternativeSeparators
+   * @return
+   */
+  private static InternalDateTimeParser buildDateTimeParser(String pattern, DateFormatHint hint,
+                                                            String separator, String alternativeSeparators){
+    DateTimeFormatter dateTimeFormatter;
+
+    InternalDateTimeNormalizer dateTimeNormalizer = new InternalDateTimeNormalizer(CharMatcher.anyOf(alternativeSeparators), separator);
+
+    if(pattern.matches(IS_YEAR_2_DIGITS_PATTERN) || pattern.equals(YEAR_2_DIGITS_PATTERN_SUFFIX)){
+      dateTimeFormatter = buildWith2DigitYear(StringUtils.removeEnd(pattern, YEAR_2_DIGITS_PATTERN_SUFFIX));
+    }
+    else{
+      dateTimeFormatter = DateTimeFormatter.ofPattern(pattern).withResolverStyle(ResolverStyle.STRICT);
+    }
+
+    return InternalDateTimeParser.of(dateTimeFormatter, pattern, dateTimeNormalizer, hint);
+  }
+
   private static InternalDateTimeParserAmbiguity buildPossibleAmbiguousDateTimeParserWithPreferred(InternalDateTimeParser preferred, InternalDateTimeParser ... possibleAmbiguity){
     return InternalDateTimeParserAmbiguity.of(preferred, Arrays.asList(possibleAmbiguity));
   }
@@ -216,9 +230,9 @@ public class ThreeTenNumericalDateParser implements Parsable<TemporalAccessor> {
    */
   public static ParseResult<TemporalAccessor> parse(@Nullable String year, @Nullable String month, @Nullable String day) {
 
-    String date = Joiner.on("-").skipNulls().join(Strings.emptyToNull(year), Strings.emptyToNull(month),
+    String date = Joiner.on(CHAR_HYPHEN).skipNulls().join(Strings.emptyToNull(year), Strings.emptyToNull(month),
             Strings.emptyToNull(day));
-    TemporalAccessor tp = tryParse(date, ISO_PARSER);
+    TemporalAccessor tp = tryParse(date, ISO_PARSER, null);
 
     if(tp != null){
       return ParseResult.success(ParseResult.CONFIDENCE.DEFINITE, tp);
@@ -250,7 +264,7 @@ public class ThreeTenNumericalDateParser implements Parsable<TemporalAccessor> {
     TemporalAccessor parsedTemporalAccessor = null;
     for(InternalDateTimeParser parser : parserList){
       if(usesDelimiter || !usesDelimiter && !parser.isWithDelimiters()){
-        parsedTemporalAccessor = tryParse(input, parser.getFormatter());
+        parsedTemporalAccessor = tryParse(input, parser.getFormatter(), parser.getNormalizer());
         if(parsedTemporalAccessor != null){
           return ParseResult.success(ParseResult.CONFIDENCE.DEFINITE, parsedTemporalAccessor);
         }
@@ -268,7 +282,7 @@ public class ThreeTenNumericalDateParser implements Parsable<TemporalAccessor> {
     for(InternalDateTimeParserAmbiguity parserAmbiguity : POSSIBLY_AMBIGUOUS_PATTERNS){
       for(InternalDateTimeParser parser : parserAmbiguity.getAllParsers()){
         if(usesDelimiter || !usesDelimiter && !parser.isWithDelimiters()){
-          parsedTemporalAccessor = tryParse(input, parser.getFormatter());
+          parsedTemporalAccessor = tryParse(input, parser.getFormatter(),parser.getNormalizer());
           if(parsedTemporalAccessor != null){
             numberOfPossiblyAmbiguousMatch++;
             lastParsedTemporalAccessorSuccess = parsedTemporalAccessor;
@@ -297,12 +311,18 @@ public class ThreeTenNumericalDateParser implements Parsable<TemporalAccessor> {
 
   /**
    * Utility private method to avoid throwing a runtime exception when the formatter can not parse the String.
-   *
+   * TODO normalizer is call too often maybe this class should not take it and only try to parse
    * @param input
    * @param formatter
+   * @param normalizer
    * @return
    */
-  private static TemporalAccessor tryParse(String input, DateTimeFormatter formatter){
+  private static TemporalAccessor tryParse(String input, DateTimeFormatter formatter, InternalDateTimeNormalizer normalizer){
+
+    if(normalizer != null){
+      input = normalizer.normalize(input);
+    }
+
     try {
       return formatter.parseBest(input, LocalDateTime.FROM, LocalDate.FROM, YearMonth.FROM, Year.FROM);
     }
@@ -366,11 +386,29 @@ public class ThreeTenNumericalDateParser implements Parsable<TemporalAccessor> {
   }
 
   /**
+   * Internal normalizer used to support different separators
+   */
+  private static class InternalDateTimeNormalizer {
+    private CharMatcher charMatcher;
+    private String replacementChar;
+
+    public InternalDateTimeNormalizer(CharMatcher charMatcher, String replacementChar){
+      this.charMatcher = charMatcher;
+      this.replacementChar = replacementChar;
+    }
+
+    public String normalize(String input){
+      return charMatcher.replaceFrom(input, replacementChar);
+    }
+  }
+
+  /**
    * Internal representation of a DateTimeFormatter.
    */
   private static class InternalDateTimeParser {
 
     private DateTimeFormatter formatter;
+    private InternalDateTimeNormalizer normalizer;
     private String pattern;
     private DateFormatHint hint;
 
@@ -383,15 +421,25 @@ public class ThreeTenNumericalDateParser implements Parsable<TemporalAccessor> {
      * @param hint
      */
     private InternalDateTimeParser(DateTimeFormatter formatter, String pattern, DateFormatHint hint){
+      this(formatter, pattern, null, hint);
+    }
+
+    private InternalDateTimeParser(DateTimeFormatter formatter, String pattern, InternalDateTimeNormalizer normalizer, DateFormatHint hint){
       this.formatter = formatter;
       this.pattern = pattern;
       this.hint = hint;
+      this.normalizer = normalizer;
 
-      this.withDelimiters = !StringUtils.isAlpha(pattern) || hint == DateFormatHint.ASIAN;
+      this.withDelimiters = !StringUtils.isAlpha(pattern) || hint == DateFormatHint.HAN;
     }
+
 
     public static InternalDateTimeParser of(DateTimeFormatter formatter, String pattern, DateFormatHint hint){
       return new InternalDateTimeParser(formatter, pattern, hint);
+    }
+
+    public static InternalDateTimeParser of(DateTimeFormatter formatter, String pattern, InternalDateTimeNormalizer normalizer, DateFormatHint hint){
+      return new InternalDateTimeParser(formatter, pattern, normalizer, hint);
     }
 
     public DateTimeFormatter getFormatter(){
@@ -400,6 +448,10 @@ public class ThreeTenNumericalDateParser implements Parsable<TemporalAccessor> {
 
     public String getPattern() {
       return pattern;
+    }
+
+    public InternalDateTimeNormalizer getNormalizer(){
+      return normalizer;
     }
 
     public DateFormatHint getHint() {
