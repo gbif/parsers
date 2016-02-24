@@ -36,5 +36,6 @@ public class RankParserTest extends ParserTestBase<Rank> {
     assertParseSuccess(Rank.SPECIES, "SPECIES");
     assertParseSuccess(Rank.SPECIES, "spécies");
     assertParseSuccess(Rank.SPECIES, "speçies");
+    assertParseSuccess(Rank.TRIBE, "TRIBO");
   }
 }
