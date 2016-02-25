@@ -20,6 +20,7 @@
 \n	UNRANKED
 a	UNRANKED
 abberation	ABBERATION
+aberrancy	ABBERATION
 abt	PHYLUM
 abteilung	PHYLUM
 agamosp	SPECIES
@@ -29,18 +30,22 @@ agglom	INFRAGENERICNAME
 aggr	INFRAGENERICNAME
 aggregate	INFRAGENERICNAME
 agregate	INFRAGENERICNAME
+alliance	UNRANKED
+alpha	UNRANKED
 ap	INFRASUBSPECIFICNAME
 b	UNRANKED
-biotype BIOVAR
+beta	UNRANKED
+biotype	BIOVAR
 branch	UNRANKED
-bv  BIOVAR
+bv	BIOVAR
 c	CLASS
-chemotype CHEMOFORM
+chemotype	CHEMOFORM
 cl	CLASS
 clade	UNRANKED
 clase	CLASE
 class	CLASS
 class	CLASS
+classclade	CLASS
 classe	CLASS
 classis	CLASS
 cohors	SUPRAGENERICNAME
@@ -49,7 +54,7 @@ coll sp	INFRASPECIFICNAME
 coll species	INFRASPECIFICNAME
 complex	INFRASPECIFICNAME
 convar	INFRASPECIFICNAME
-ct  CHEMOFORM
+ct	CHEMOFORM
 cultivar	CULTIVAR
 cultivar	CULTIVAR
 cultivar_group	CULTIVAR_GROUP
@@ -66,13 +71,16 @@ domain	DOMAIN
 e	UNRANKED
 empire	DOMAIN
 es	SPECIES
+espece	SPECIES
 especie	SPECIES
+especies	SPECIES
 f	FORM
 f sp	FORM
 fam	FAMILY
 familia	FAMILY
 family	FAMILY
 family	FAMILY
+familyclade	FAMILY
 fm	FAMILY
 fma	FORM
 for	FORM
@@ -88,6 +96,12 @@ gennus	GENUS
 genus	GENUS
 genus	GENUS
 gn	GENUS
+genusclade	GENUS
+gnero	GENUS
+groupgenus	GENUS
+groupspecies	SPECIES
+imperium	KINGDOM
+kingdomclade	KINGDOM
 grex	INFRAGENERICNAME
 grex sect	SECTION
 group	INFRASPECIFICNAME
@@ -96,6 +110,7 @@ hybrid formula	HYBRID FORMULA
 informal	INFORMAL
 informal	INFORMAL
 infraclass	SUBCLASS
+infraclassis	SUBCLASS
 infragen	INFRAGENERICNAME
 infragen.unranked	INFRAGENERICNAME
 infrageneric	INFRAGENERICNAME
@@ -104,7 +119,9 @@ infragenericname	INFRAGENERICNAME
 infragenerictaxon	INFRAGENERICTAXON
 infragenus	INFRAGENERICNAME
 infrakingdom	SUBKINGDOM
+infraregnum	SUBKINGDOM
 infraorder	INFRAORDER
+infraordo	INFRAORDER
 infraorder	INFRAORDER
 infraphylum	SUBPHYLUM
 infrasp	INFRASPECIFICNAME
@@ -127,15 +144,16 @@ kl	CLASS
 kla	CLASS
 klasse	CLASS
 legio	SUPRAGENERICNAME
-lysotype  PHAGOVAR
+lysotype	PHAGOVAR
 microgen	INFRAGENERICNAME
 modif	MODIF
 monstr	MONSTR
-morphotype  MORPHOVAR
+morphotype	MORPHOVAR
 nat	INFORMAL
 natio	INFORMAL
 nm	NM
 no rank	UNRANKED
+norank	UNRANKED
 node	UNRANKED
 none	UNRANKED
 nothof	FORM
@@ -157,18 +175,20 @@ or	ORDER
 ord	ORDER
 ordem	ORDER
 order	ORDER
-order	ORDER
+orden	ORDER
 ordo	ORDER
+orderclade	ORDER
 p	PHYLUM
 pars	PARS
 parvorder	SUPRAGENERICNAME
-pathotype PATHOVAR
+pathotype	PATHOVAR
 ph	PHYLUM
-phagotype PHAGOVAR
+phagotype	PHAGOVAR
 phyl	PHYLUM
 phylum	PHYLUM
-phylum	PHYLUM
-physiological type  BIOVAR
+phylumclade	PHYLUM
+phylumdivision	PHYLUM
+physiological type	BIOVAR
 prol	INFRASPECIFICNAME
 prolata	INFRASPECIFICNAME
 proles	INFRASPECIFICNAME
@@ -191,16 +211,17 @@ ser	SERIES
 serie	SERIES
 series	SERIES
 series	SERIES
-serotype  SEROVAR
+serotype	SEROVAR
 sge	SUBGENUS
 sp	SPECIES
 spe	SPECIES
 spec	SPECIES
 special form	FORM
-special form  FORMA_SPECIALIS
+special form	FORMA_SPECIALIS
 species	SPECIES
 species	SPECIES
 species group	INFRAGENERICNAME
+speciesgroup	INFRAGENERICNAME
 species subgroup	INFRAGENERICNAME
 speciesaggregate	INFRAGENERICNAME
 ss	SUBSPECIES
@@ -212,11 +233,14 @@ strain	STRAIN
 sub ribe	SUBTRIBE
 sub variety	SUBVARIETY
 sub_especie	SUBSPECIES
+subespecie	SUBSPECIES
+subgenero	SUBGENUS
 subbranch	UNRANKED
 subcl	SUBCLASS
 subclass	SUBCLASS
 subclass	SUBCLASS
 subclassis	SUBCLASS
+subclase	SUBCLASS
 subdiv	SUBPHYLUM
 subdivisio	SUBPHYLUM
 subdivision	SUBPHYLUM
@@ -277,6 +301,7 @@ superfamily	SUPERFAMILY
 superkingdom	DOMAIN
 superorder	SUPERORDER
 superorder	SUPERORDER
+superordo	SUPERORDER
 superphyl	SUPRAGENERICNAME
 superphylum	SUPERPHYLUM
 superphylum	SUPERPHYLUM
@@ -316,6 +341,9 @@ variedad	VARIETY
 variedade	VARIETY
 varietas	VARIETY
 variety	VARIETY
+variete	VARIETY
+zoodivisio	SUBCLASS
+zoosectio	INFRAORDER
 µ	UNRANKED
 ß	UNRANKED
 ßß	UNRANKED

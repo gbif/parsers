@@ -1,19 +1,23 @@
-endemic	PRESENT
-native	PRESENT
-extant	PRESENT
-frequent	COMMON
-fairly common		COMMON
+adventive	PRESENT
+alien	PRESENT
 casual	RARE
-uncommon	RARE
+comun	COMMON
+endemic	PRESENT
 ephemeral	IRREGULAR
-vagrant	IRREGULAR
 episodic	IRREGULAR
-possibly extant	DOUBTFUL
-probably extant	DOUBTFUL
-possibly extinct DOUBTFUL
-presence uncertain	DOUBTFUL
+erroneous	EXCLUDED
+extant	PRESENT
 extinct	ABSENT
 extirpated	ABSENT
+fairly common	COMMON
+frequent	COMMON
 misidentification	EXCLUDED
+native	PRESENT
+possibly extant	DOUBTFUL
+possibly extinct DOUBTFUL
+presence uncertain	DOUBTFUL
+probably extant	DOUBTFUL
+rara	RARE
 reported	EXCLUDED
-erroneous	EXCLUDED
+uncommon	RARE
+vagrant	IRREGULAR

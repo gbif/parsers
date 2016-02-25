@@ -1,0 +1,29 @@
+alien	INTRODUCED
+captive	MANAGED
+cultivada	MANAGED
+cultivated	MANAGED
+cultivated	MANAGED
+domesticated	MANAGED
+doubtful	UNCERTAIN
+endemic	NATIVE
+endemismo	NATIVE
+endémica	NATIVE
+exotic	INTRODUCED
+indigenous	NATIVE
+introduced	INTRODUCED
+introducida	INTRODUCED
+invasiv	INVASIVE
+invasive	INVASIVE
+managed	MANAGED
+nativa	NATIVE
+native	NATIVE
+nativo	NATIVE
+naturalised	NATURALISED
+naturalizada	NATURALISED
+naturalized	NATURALISED
+origin uncertain	UNCERTAIN
+origin unknown	UNCERTAIN
+reintroduced	NATIVE
+transplantadas	INTRODUCED
+uncertain	UNCERTAIN
+unknown	UNCERTAIN
