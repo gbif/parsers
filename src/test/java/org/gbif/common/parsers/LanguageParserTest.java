@@ -33,6 +33,8 @@ public class LanguageParserTest extends ParserTestBase<Language> {
     assertParseSuccess(Language.ENGLISH, "en_US");
     assertParseSuccess(Language.ENGLISH, "eng_US");
     assertParseSuccess(Language.ENGLISH, "english");
+    assertParseSuccess(Language.PORTUGUESE, "PORTUGUES");
+
   }
 
 }

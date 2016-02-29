@@ -226,6 +226,7 @@ species subgroup	INFRAGENERICNAME
 speciesaggregate	INFRAGENERICNAME
 ss	SUBSPECIES
 ssp	SUBSPECIES
+sses	SUBSPECIES
 stamm	PHYLUM
 stirps	UNRANKED
 strain	STRAIN
