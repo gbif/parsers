@@ -17,6 +17,8 @@ nomendubium	DOUBTFUL
 provisionallyacceptedname	DOUBTFUL
 temporaryname	DOUBTFUL
 todetermine	DOUBTFUL
+unresolved	DOUBTFUL
+provisional	DOUBTFUL
 
 alternaterepresentation	SYNONYM
 equivalenname	SYNONYM
