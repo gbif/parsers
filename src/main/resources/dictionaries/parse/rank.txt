@@ -213,6 +213,7 @@ series	SERIES
 series	SERIES
 serotype	SEROVAR
 sge	SUBGENUS
+sous-classe	SUBCLASS
 sp	SPECIES
 spe	SPECIES
 spec	SPECIES
