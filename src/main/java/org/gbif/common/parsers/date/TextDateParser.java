@@ -5,6 +5,7 @@ import org.gbif.common.parsers.core.ParseResult;
 
 import java.util.regex.Pattern;
 
+import org.apache.commons.lang3.StringUtils;
 import org.threeten.bp.DateTimeException;
 import org.threeten.bp.LocalDate;
 import org.threeten.bp.temporal.TemporalAccessor;
@@ -21,6 +22,10 @@ public class TextDateParser implements Parsable<TemporalAccessor> {
 
   @Override
   public ParseResult<TemporalAccessor> parse(String input) {
+
+    if(StringUtils.isBlank(input)){
+      return ParseResult.fail();
+    }
 
     //check if the input text contains only punctuations and numbers
     if(!AT_LEAST_ONE_LETTER.matcher(input).find()) {
