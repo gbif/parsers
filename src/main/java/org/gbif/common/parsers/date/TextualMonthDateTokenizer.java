@@ -103,6 +103,15 @@ public class TextualMonthDateTokenizer {
       return discardedTokens != null;
     }
 
+    /**
+     * Size does NOT include discarded token(s).
+     *
+     * @return
+     */
+    public int size(){
+      return tokens.size();
+    }
+
     public DateToken getToken(TokenType tokenType){
       return tokens.get(tokenType);
     }
@@ -126,6 +135,10 @@ public class TextualMonthDateTokenizer {
     DateToken(String token, TokenType tokenType){
       this.token = token;
       this.type = tokenType;
+    }
+
+    public String getToken() {
+      return token;
     }
 
     @Override
