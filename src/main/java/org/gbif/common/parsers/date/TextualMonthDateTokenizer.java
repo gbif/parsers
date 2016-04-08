@@ -4,10 +4,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
 
+import com.google.common.base.Function;
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+import org.apache.commons.lang3.ArrayUtils;
 
 /**
  * The contract of the {@link TextualMonthDateTokenizer} is to break a string representing a date with a textual
@@ -37,6 +40,13 @@ public class TextualMonthDateTokenizer {
           TokenType.POSSIBLE_YEAR, Pattern.compile("[0-9]{4}"),
           TokenType.POSSIBLE_TEXT_MONTH, Pattern.compile("[A-Za-z.]{1,10}"));
 
+  private static Function<DateToken, TokenType> DATE_TOKEN_TO_MAP_FUNCTION = new Function<DateToken, TokenType>() {
+    @Override
+    public TokenType apply(DateToken token) {
+      return token.type;
+    }
+  };
+
   /**
    * Tokenize a string into a list of {@link DateToken}.
    *
@@ -56,6 +66,47 @@ public class TextualMonthDateTokenizer {
       }
     }
     return tokens;
+  }
+
+  /**
+   * Test if the list of DateToken contains at least one object for all TokenType.
+   *
+   * @param tokens
+   * @return
+   */
+  public static boolean allTokenTypesPresent(List<DateToken> tokens){
+    return allTokenTypesPresent(tokens, false);
+  }
+
+  /**
+   * Test if the list of DateToken contains one object for all TokenType.
+   *
+   * @param tokens
+   * @param onlyOnce each TokenType should only appear once in the list
+   * @return
+   */
+  public static boolean allTokenTypesPresent(List<DateToken> tokens, boolean onlyOnce){
+    if(tokens.size() < TokenType.values().length || (onlyOnce && tokens.size() > TokenType.values().length)){
+      return false;
+    }
+
+    boolean[] tokenTypesPresence = new boolean[TokenType.values().length];
+    for(DateToken dt : tokens){
+      tokenTypesPresence[dt.type.ordinal()] = true;
+    }
+    return !ArrayUtils.contains(tokenTypesPresence, false);
+  }
+
+  /**
+   * Transform the dateTokens List into a Map using TokenType as key.
+   * Make sure all TokenType are unique in the list see {@link #allTokenTypesPresent(List, boolean)} or token(s)
+   * will be lost in the transformation.
+   *
+   * @param dateTokens
+   * @return
+   */
+  public static Map<TokenType, DateToken> transformDateTokensToMap(List<DateToken> dateTokens){
+    return Maps.uniqueIndex(dateTokens, DATE_TOKEN_TO_MAP_FUNCTION);
   }
 
   /**
