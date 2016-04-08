@@ -33,21 +33,24 @@ public class TextDateParser implements Parsable<TemporalAccessor> {
     }
 
     TextualMonthDateTokenizer.DateTokens dt = TEXT_MONTH_TOKENIZER.tokenize(input);
+    // for now we only handle cases where we can find year, month, day with confidence.
     if(!dt.containsDiscardedTokens() && dt.size() == 3){
       DateNormalizer.NormalizedYearMonthDay normalizedYearMonthDay = DateNormalizer.normalize(
               dt.getToken(TextualMonthDateTokenizer.TokenType.INT_4).getToken(),
               dt.getToken(TextualMonthDateTokenizer.TokenType.TEXT).getToken(),
               dt.getToken(TextualMonthDateTokenizer.TokenType.INT_2).getToken());
 
+      //no handling for partial dates with textual month for now
       if(normalizedYearMonthDay.getYear() != null &&
               normalizedYearMonthDay.getMonth() != null &&
               normalizedYearMonthDay.getDay() != null){
         try {
           return ParseResult.success(ParseResult.CONFIDENCE.DEFINITE,
-                  (TemporalAccessor)LocalDate.of(normalizedYearMonthDay.getYear(), normalizedYearMonthDay.getMonth(),
-                  normalizedYearMonthDay.getDay()));
+                  (TemporalAccessor)LocalDate.of(normalizedYearMonthDay.getYear(),
+                          normalizedYearMonthDay.getMonth(), normalizedYearMonthDay.getDay()));
         }
         catch (DateTimeException ignore){
+          //simply ignore bad dates
         }
       }
     }

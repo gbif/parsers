@@ -27,6 +27,9 @@ public class TextDateParserTest {
 
     parseResult = TEXTDATE_PARSER.parse("2018-01-02");
     assertEquals(LocalDate.of(2018, Month.JANUARY, 2), LocalDate.from(parseResult.getPayload()));
+
+    parseResult = TEXTDATE_PARSER.parse("2018年1月2日");
+    assertEquals(LocalDate.of(2018, Month.JANUARY, 2), LocalDate.from(parseResult.getPayload()));
   }
 
   @Test
@@ -41,6 +44,12 @@ public class TextDateParserTest {
   @Test
   public void testTextDateParsingInvalidDate(){
     ParseResult<TemporalAccessor> parseResult = TEXTDATE_PARSER.parse("32nd jan. 2018");
+    assertFalse(parseResult.isSuccessful());
+
+    parseResult = TEXTDATE_PARSER.parse("2nd n/a 2018");
+    assertFalse(parseResult.isSuccessful());
+
+    parseResult = TEXTDATE_PARSER.parse("15 jan-fev 2018");
     assertFalse(parseResult.isSuccessful());
   }
 }

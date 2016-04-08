@@ -90,9 +90,9 @@ public class ThreeTenNumericalDateParser implements Parsable<TemporalAccessor> {
           buildDateTimeParser("uuuu-M-d'T'HH:mm:ss'Z'", DateFormatHint.YMDT),
           buildDateTimeParser("uuuu-M", DateFormatHint.YM),
           buildDateTimeParser("uuuu", DateFormatHint.Y),
-          buildDateTimeParser("yyyy年mm月dd日", DateFormatHint.HAN),
-          buildDateTimeParser("yyyy年m月d日", DateFormatHint.HAN),
-          buildDateTimeParser("yy年m月d日", DateFormatHint.HAN)
+          buildDateTimeParser("uuuu年MM月dd日", DateFormatHint.HAN),
+          buildDateTimeParser("uuuu年M月d日", DateFormatHint.HAN),
+          buildDateTimeParser("uu年M月d日", DateFormatHint.HAN)
   };
 
   //Possibly ambiguous dates will record an error in case more than one pattern can be applied
