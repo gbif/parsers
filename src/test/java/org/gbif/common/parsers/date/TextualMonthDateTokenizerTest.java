@@ -1,12 +1,9 @@
 package org.gbif.common.parsers.date;
 
-import java.util.List;
-import java.util.Map;
-
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 /**
@@ -19,37 +16,40 @@ public class TextualMonthDateTokenizerTest {
   @Test
   public void testDateTokenizer(){
 
-    List<TextualMonthDateTokenizer.DateToken> dateParts = DATE_TOKENIZER.tokenize("2nd jan. 2018");
-    assertEquals(3, dateParts.size());
-    assertTrue(TextualMonthDateTokenizer.allTokenTypesPresent(dateParts));
+    TextualMonthDateTokenizer.DateTokens dateTokens = DATE_TOKENIZER.tokenize("2nd jan. 2018");
 
-    Map<TextualMonthDateTokenizer.TokenType, TextualMonthDateTokenizer.DateToken> tokensMap =
-            TextualMonthDateTokenizer.transformDateTokensToMap(dateParts);
+    assertEquals(new TextualMonthDateTokenizer.DateToken("2", TextualMonthDateTokenizer.TokenType.INT_2),
+            dateTokens.getToken(TextualMonthDateTokenizer.TokenType.INT_2));
+    assertEquals(new TextualMonthDateTokenizer.DateToken("jan.", TextualMonthDateTokenizer.TokenType.TEXT),
+            dateTokens.getToken(TextualMonthDateTokenizer.TokenType.TEXT));
+    assertEquals(new TextualMonthDateTokenizer.DateToken("2018", TextualMonthDateTokenizer.TokenType.INT_4),
+            dateTokens.getToken(TextualMonthDateTokenizer.TokenType.INT_4));
 
-    assertEquals(new TextualMonthDateTokenizer.DateToken("2", TextualMonthDateTokenizer.TokenType.POSSIBLE_DAY),tokensMap.get(TextualMonthDateTokenizer.TokenType.POSSIBLE_DAY));
-    assertEquals(new TextualMonthDateTokenizer.DateToken("jan.", TextualMonthDateTokenizer.TokenType.POSSIBLE_TEXT_MONTH), dateParts.get(1));
-    assertEquals(new TextualMonthDateTokenizer.DateToken("2018", TextualMonthDateTokenizer.TokenType.POSSIBLE_YEAR), dateParts.get(2));
-
-    dateParts = DATE_TOKENIZER.tokenize("2018, March 1st");
-    assertEquals(3, dateParts.size());
-    assertTrue(TextualMonthDateTokenizer.allTokenTypesPresent(dateParts));
-    assertEquals(new TextualMonthDateTokenizer.DateToken("2018", TextualMonthDateTokenizer.TokenType.POSSIBLE_YEAR), dateParts.get(0));
-    assertEquals(new TextualMonthDateTokenizer.DateToken("March", TextualMonthDateTokenizer.TokenType.POSSIBLE_TEXT_MONTH), dateParts.get(1));
-    assertEquals(new TextualMonthDateTokenizer.DateToken("1", TextualMonthDateTokenizer.TokenType.POSSIBLE_DAY), dateParts.get(2));
+    dateTokens = DATE_TOKENIZER.tokenize("2018, March 1st");
+    assertEquals(new TextualMonthDateTokenizer.DateToken("2018", TextualMonthDateTokenizer.TokenType.INT_4),
+            dateTokens.getToken(TextualMonthDateTokenizer.TokenType.INT_4));
+    assertEquals(new TextualMonthDateTokenizer.DateToken("March", TextualMonthDateTokenizer.TokenType.TEXT),
+            dateTokens.getToken(TextualMonthDateTokenizer.TokenType.TEXT));
+    assertEquals(new TextualMonthDateTokenizer.DateToken("1", TextualMonthDateTokenizer.TokenType.INT_2),
+            dateTokens.getToken(TextualMonthDateTokenizer.TokenType.INT_2));
   }
 
+  @Test
+  public void testDateTokenizerWithNullAndEmpty(){
+    assertNull(DATE_TOKENIZER.tokenize(null));
+    assertNull(DATE_TOKENIZER.tokenize(""));
+  }
 
   /**
    * Test behavior when no textual month is provided.
-   * Month will be returned as TokenType.POSSIBLE_DAY, see {@link TextualMonthDateTokenizer } for more details.
+   * Month and Day will be returned as TokenType.INT_2, one of the 2 will fall under the discarded tokens.
+   * See {@link TextualMonthDateTokenizer } for more details.
    */
   @Test
   public void testDateTokenizerWithISODate(){
-    List<TextualMonthDateTokenizer.DateToken> dateParts = DATE_TOKENIZER.tokenize("2018-01-02");
-    assertEquals(3, dateParts.size());
-    assertFalse(TextualMonthDateTokenizer.allTokenTypesPresent(dateParts));
-    assertEquals(new TextualMonthDateTokenizer.DateToken("2018", TextualMonthDateTokenizer.TokenType.POSSIBLE_YEAR), dateParts.get(0));
-    assertEquals(new TextualMonthDateTokenizer.DateToken("01", TextualMonthDateTokenizer.TokenType.POSSIBLE_DAY), dateParts.get(1));
-    assertEquals(new TextualMonthDateTokenizer.DateToken("02", TextualMonthDateTokenizer.TokenType.POSSIBLE_DAY), dateParts.get(2));
+    TextualMonthDateTokenizer.DateTokens dateTokens = DATE_TOKENIZER.tokenize("2018-01-02");
+    assertEquals(new TextualMonthDateTokenizer.DateToken("2018", TextualMonthDateTokenizer.TokenType.INT_4),
+            dateTokens.getToken(TextualMonthDateTokenizer.TokenType.INT_4));
+    assertTrue(dateTokens.containsDiscardedTokens());
   }
 }

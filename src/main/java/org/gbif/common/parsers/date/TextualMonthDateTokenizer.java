@@ -4,64 +4,63 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
 
-import com.google.common.base.Function;
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * The contract of the {@link TextualMonthDateTokenizer} is to break a string representing a date with a textual
- * month representation into a list of {@link DateToken}. If no text can be found (e.g. ISO date) be aware that the
- * month will be returned as POSSIBLE_DAY token since no validation is performed on the value of the token.
+ * month representation into a list of {@link DateToken}.
  *
  * A {@link DateToken} should be interpreted as a possible/candidate for date part. No validation will be performed
  * by the {@link TextualMonthDateTokenizer}, simply patterns matching.
  *
- * This class is Thread-Safe
+ * The class it-self is Thread-Safe, see nested classes for specific details about them.
  */
 public class TextualMonthDateTokenizer {
 
   public enum TokenType {
-    /** Matches 4 integers */
-    POSSIBLE_YEAR,
+    /** Matches 1 or 2 integer(s) (possibly a day) */
+    INT_2,
+    /** Matches 4 integers (possibly a year) */
+    INT_4,
     /** Matches between 1 and 10 letters including the dot (.) */
-    POSSIBLE_TEXT_MONTH,
-    /** Matches 1 or 2 integer(s) */
-    POSSIBLE_DAY }
+    TEXT
+  }
 
-  private static final String SEPARATOR_REGEX =  "[^A-Za-z0-9.]+";
+  private static final Pattern SEPARATOR_PATTERN =  Pattern.compile("[^A-Za-z0-9.]+");
   private static final Pattern DAY_SUFFIXES_PATTERN =  Pattern.compile("(?<=[0-9])st|nd|rd|th");
 
   private static final Map<TokenType, Pattern> PATTERNS_BY_TYPE = ImmutableMap.of(
-          TokenType.POSSIBLE_DAY, Pattern.compile("[0-9]{1,2}"),
-          TokenType.POSSIBLE_YEAR, Pattern.compile("[0-9]{4}"),
-          TokenType.POSSIBLE_TEXT_MONTH, Pattern.compile("[A-Za-z.]{1,10}"));
-
-  private static Function<DateToken, TokenType> DATE_TOKEN_TO_MAP_FUNCTION = new Function<DateToken, TokenType>() {
-    @Override
-    public TokenType apply(DateToken token) {
-      return token.type;
-    }
-  };
+          TokenType.INT_2, Pattern.compile("[0-9]{1,2}"),
+          TokenType.INT_4, Pattern.compile("[0-9]{4}"),
+          TokenType.TEXT, Pattern.compile("[A-Za-z.]{1,10}"));
 
   /**
-   * Tokenize a string into a list of {@link DateToken}.
+   * Tokenize a string into a {@link DateTokens}.
    *
    * @param str
-   * @return list of {@link DateToken}, if none were found, an empty list, never null
+   * @return {@link DateTokens} instance, or null if str is null or empty
    */
-  public List<DateToken> tokenize(String str){
-    str = DAY_SUFFIXES_PATTERN.matcher(str).replaceAll("");
-    List<DateToken> tokens = Lists.newArrayList();
-    String[] parts = str.split(SEPARATOR_REGEX);
+  public DateTokens tokenize(String str) {
+    if (StringUtils.isBlank(str)) {
+      return null;
+    }
 
-    for(String part : parts){
-      for(TokenType tokenType : PATTERNS_BY_TYPE.keySet()){
-        if(PATTERNS_BY_TYPE.get(tokenType).matcher(part).matches()){
-          tokens.add(new DateToken(part, tokenType));
+    str = DAY_SUFFIXES_PATTERN.matcher(str).replaceAll("");
+    DateTokens tokens = new DateTokens();
+
+    String[] parts = SEPARATOR_PATTERN.split(str);
+    for (String part : parts) {
+      for (TokenType tokenType : PATTERNS_BY_TYPE.keySet()) {
+        if (PATTERNS_BY_TYPE.get(tokenType).matcher(part).matches()) {
+          tokens.addToken(new DateToken(part, tokenType));
+          //should always match only on pattern
+          break;
         }
       }
     }
@@ -69,49 +68,56 @@ public class TextualMonthDateTokenizer {
   }
 
   /**
-   * Test if the list of DateToken contains at least one object for all TokenType.
+   * Contains the result of the tokenization.
+   * DateToken are stored by TokenType on a 1 to 1 assumption.
+   * If a DateToken already exists for the same TokenType it will be replaced and the previous one will be moved to the
+   * discardedTokens list.
    *
-   * @param tokens
-   * @return
+   * This class is NOT Thread-Safe
+   *
    */
-  public static boolean allTokenTypesPresent(List<DateToken> tokens){
-    return allTokenTypesPresent(tokens, false);
-  }
+  public static class DateTokens {
+    private final Map<TokenType, DateToken> tokens = Maps.newHashMapWithExpectedSize(3);
+    private List<DateToken> discardedTokens = null;
 
-  /**
-   * Test if the list of DateToken contains one object for all TokenType.
-   *
-   * @param tokens
-   * @param onlyOnce each TokenType should only appear once in the list
-   * @return
-   */
-  public static boolean allTokenTypesPresent(List<DateToken> tokens, boolean onlyOnce){
-    if(tokens.size() < TokenType.values().length || (onlyOnce && tokens.size() > TokenType.values().length)){
-      return false;
+    private void addToken(DateToken dateToken){
+      DateToken prev = tokens.put(dateToken.type, dateToken);
+      if(prev != null){
+        addDiscardedToken(prev);
+      }
     }
 
-    boolean[] tokenTypesPresence = new boolean[TokenType.values().length];
-    for(DateToken dt : tokens){
-      tokenTypesPresence[dt.type.ordinal()] = true;
+    private void addDiscardedToken(DateToken dateToken){
+      if(discardedTokens == null){
+        discardedTokens = Lists.newArrayList();
+      }
+      discardedTokens.add(dateToken);
     }
-    return !ArrayUtils.contains(tokenTypesPresence, false);
-  }
 
-  /**
-   * Transform the dateTokens List into a Map using TokenType as key.
-   * Make sure all TokenType are unique in the list see {@link #allTokenTypesPresent(List, boolean)} or token(s)
-   * will be lost in the transformation.
-   *
-   * @param dateTokens
-   * @return
-   */
-  public static Map<TokenType, DateToken> transformDateTokensToMap(List<DateToken> dateTokens){
-    return Maps.uniqueIndex(dateTokens, DATE_TOKEN_TO_MAP_FUNCTION);
+    /**
+     * Checks if some DateToken were discarded during the tokenization.
+     *
+     * @return
+     */
+    public boolean containsDiscardedTokens(){
+      return discardedTokens != null;
+    }
+
+    public DateToken getToken(TokenType tokenType){
+      return tokens.get(tokenType);
+    }
+
+    public List<DateToken> getDiscardedTokens() {
+      return ImmutableList.copyOf(discardedTokens);
+    }
+
   }
 
   /**
    * Represents a possible candidate for date part. The value of the token represents what was provided and
    * may or may not be valid.
+   *
+   * This class is Thread-Safe.
    */
   public static class DateToken {
     private final String token;
