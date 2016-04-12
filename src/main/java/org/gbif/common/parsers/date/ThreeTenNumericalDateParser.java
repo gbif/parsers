@@ -12,6 +12,7 @@ import javax.annotation.Nullable;
 
 import com.google.common.base.CharMatcher;
 import com.google.common.base.Joiner;
+import com.google.common.base.Preconditions;
 import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
@@ -63,7 +64,7 @@ public class ThreeTenNumericalDateParser implements Parsable<TemporalAccessor> {
   public enum DateFormatHint {YMDT, YMD, DMY, MDY, YM, Y, HAN, NONE}
   public enum DateParsingHint {MIN, MAX}
 
-  private static final List<InternalDateTimeParser> DEFINITE_FORMATTERS;
+  private static List<InternalDateTimeParser> DEFINITE_FORMATTERS;
   private static final Map<DateFormatHint, List<InternalDateTimeParser>> FORMATTERS_BY_HINT = Maps.newHashMap();
 
   //the letter 'u' in all the patterns refers to YEAR as opposed to 'y' who refers to YEAR_OF_ERA
@@ -124,31 +125,17 @@ public class ThreeTenNumericalDateParser implements Parsable<TemporalAccessor> {
           )
   };
 
-  private static InternalDateTimeParserAmbiguity[] POSSIBLY_AMBIGUOUS_2DIGITS_YEAR_PATTERNS = {
-          buildPossibleAmbiguousDateTimeParserWithPreferred(
-                  buildDateTimeParser("d.M.uu", DateFormatHint.DMY), //DE, DK, NO
-                  buildDateTimeParser("M.d.uu", DateFormatHint.MDY)
-          ),
-          buildPossibleAmbiguousDateTimeParser(
-                  buildDateTimeParser("d/M/uu", DateFormatHint.DMY, "/", String.valueOf(CHAR_HYPHEN) + String.valueOf(CHAR_MINUS)),
-                  buildDateTimeParser("M/d/uu", DateFormatHint.MDY, "/", String.valueOf(CHAR_HYPHEN) + String.valueOf(CHAR_MINUS))
-          ),
-          buildPossibleAmbiguousDateTimeParser(
-                  buildDateTimeParser("ddMMuu", DateFormatHint.DMY),
-                  buildDateTimeParser("MMdduu", DateFormatHint.MDY)
-          ),
+  private List<InternalDateTimeParserAmbiguity> possiblyAmbiguousPatterns = Lists.newArrayList(POSSIBLY_AMBIGUOUS_PATTERNS);
 
-          buildPossibleAmbiguousDateTimeParser(
-                  buildDateTimeParser("d\\M\\uu", DateFormatHint.DMY, "\\", "_"),
-                  buildDateTimeParser("M\\d\\uu", DateFormatHint.MDY, "\\", "_")
-          ),
+  public static ThreeTenNumericalDateParser getParser(){
+    return new ThreeTenNumericalDateParser();
+  }
 
-          //2 digits year pattern is ambiguous
-          buildPossibleAmbiguousDateTimeParser(buildDateTimeParser("uu", DateFormatHint.Y))
-  };
+  public static ThreeTenNumericalDateParser getParser(Year baseYear){
+    return new ThreeTenNumericalDateParser(baseYear);
+  }
 
-  // initialize DEFINITE_FORMATTERS and FORMATTERS_BY_HINT
-  static{
+  private ThreeTenNumericalDateParser(){
     DEFINITE_FORMATTERS = ImmutableList.copyOf(DEFINITE_PATTERNS);
 
     for(InternalDateTimeParser parser : DEFINITE_PATTERNS){
@@ -164,16 +151,46 @@ public class ThreeTenNumericalDateParser implements Parsable<TemporalAccessor> {
     }
   }
 
-  public ThreeTenNumericalDateParser(){
-
+  private ThreeTenNumericalDateParser(Year baseYear) {
+    this();
+    Preconditions.checkState(baseYear.getValue() <= LocalDate.now().getYear(), "Base year is less or equals to" +
+            " the current year");
+    addPossiblyAmbiguous2DigitsYear(baseYear);
   }
 
-  public ThreeTenNumericalDateParser(Year minimumYear){
-    /**
-     *  if(pattern.matches(IS_YEAR_2_DIGITS_PATTERN) || pattern.equals(YEAR_2_DIGITS_PATTERN_SUFFIX)){
-     dateTimeFormatter = buildWith2DigitYear(StringUtils.removeEnd(pattern, YEAR_2_DIGITS_PATTERN_SUFFIX));
-     }
-     */
+  private void addPossiblyAmbiguous2DigitsYear(Year baseYear){
+    InternalDateTimeParserAmbiguity[] POSSIBLY_AMBIGUOUS_2DIGITS_YEAR_PATTERNS = {
+      buildPossibleAmbiguousDateTimeParserWithPreferred(
+              buildDateTimeParserFor2DigitYear("d.M.uu", DateFormatHint.DMY, baseYear), //DE, DK, NO
+              buildDateTimeParserFor2DigitYear("M.d.uu", DateFormatHint.MDY, baseYear)
+      ),
+      buildPossibleAmbiguousDateTimeParser(
+              buildDateTimeParserFor2DigitYear("d/M/uu", DateFormatHint.DMY, "/",
+                      String.valueOf(CHAR_HYPHEN) + String.valueOf(CHAR_MINUS), baseYear),
+              buildDateTimeParserFor2DigitYear("M/d/uu", DateFormatHint.MDY, "/",
+                      String.valueOf(CHAR_HYPHEN) + String.valueOf(CHAR_MINUS), baseYear)
+      ),
+      buildPossibleAmbiguousDateTimeParser(
+              buildDateTimeParserFor2DigitYear("ddMMuu", DateFormatHint.DMY, baseYear),
+              buildDateTimeParserFor2DigitYear("MMdduu", DateFormatHint.MDY, baseYear)
+      ),
+
+      buildPossibleAmbiguousDateTimeParser(
+              buildDateTimeParserFor2DigitYear("d\\M\\uu", DateFormatHint.DMY, "\\", "_", baseYear),
+              buildDateTimeParserFor2DigitYear("M\\d\\uu", DateFormatHint.MDY, "\\", "_", baseYear)
+      ),
+
+      //2 digits year pattern is ambiguous
+      buildPossibleAmbiguousDateTimeParser(buildDateTimeParserFor2DigitYear("uu", DateFormatHint.Y, baseYear))
+    };
+
+    for(InternalDateTimeParserAmbiguity parserAmbiguity : POSSIBLY_AMBIGUOUS_2DIGITS_YEAR_PATTERNS){
+      for(InternalDateTimeParser parser : parserAmbiguity.getAllParsers()) {
+        FORMATTERS_BY_HINT.putIfAbsent(parser.getHint(), new ArrayList<InternalDateTimeParser>());
+        FORMATTERS_BY_HINT.get(parser.getHint()).add(parser);
+      }
+    }
+    possiblyAmbiguousPatterns.addAll(Lists.newArrayList(POSSIBLY_AMBIGUOUS_2DIGITS_YEAR_PATTERNS));
   }
 
   /**
@@ -187,6 +204,26 @@ public class ThreeTenNumericalDateParser implements Parsable<TemporalAccessor> {
     int minLength = getMinimumStringLengthForPattern(pattern);
     DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(pattern).withResolverStyle(ResolverStyle.STRICT);
     return InternalDateTimeParser.of(dateTimeFormatter, hint, minLength);
+  }
+
+  private static InternalDateTimeParser buildDateTimeParserFor2DigitYear(String pattern, DateFormatHint hint,
+                                                                         Year baseYear){
+    //get length before removing year part
+    int minLength = getMinimumStringLengthForPattern(pattern);
+
+    DateTimeFormatter dateTimeFormatter = build2DigitsYearDateTimeFormatter(pattern, baseYear);
+    return InternalDateTimeParser.of(dateTimeFormatter, hint, minLength);
+  }
+
+  private static InternalDateTimeParser buildDateTimeParserFor2DigitYear(String pattern, DateFormatHint hint,
+                                                                         String separator, String alternativeSeparators,
+                                                                         Year baseYear){
+    //get length before removing year part
+    int minLength = getMinimumStringLengthForPattern(pattern);
+    InternalDateTimeNormalizer dateTimeNormalizer = new InternalDateTimeNormalizer(CharMatcher.anyOf(alternativeSeparators), separator);
+    DateTimeFormatter dateTimeFormatter = build2DigitsYearDateTimeFormatter(pattern, baseYear);
+
+    return InternalDateTimeParser.of(dateTimeFormatter, dateTimeNormalizer, hint, minLength);
   }
 
   /**
@@ -227,16 +264,12 @@ public class ThreeTenNumericalDateParser implements Parsable<TemporalAccessor> {
     return pattern.length();
   }
 
-  /**
-   * By default in JSR310 and Java 8, dates with 2 digits are 2000 based.
-   * This method will APPEND a 2 digit year in the pattern.
-   *
-   * @param pattern must NOT include the year in the pattern (e.g. MM-dd- will create a formatter for MM-dd-uu)
-   * @return
-   */
-  private static DateTimeFormatter buildWith2DigitYear(String pattern){
-    return new DateTimeFormatterBuilder().append(DateTimeFormatter.ofPattern(pattern)).appendValueReduced(
-                    ChronoField.YEAR, 2, 2, Year.now().getValue() - 80).parseStrict().toFormatter();
+  private static DateTimeFormatter build2DigitsYearDateTimeFormatter(String pattern, Year baseYear){
+    Preconditions.checkState(pattern.matches(IS_YEAR_2_DIGITS_PATTERN) || pattern.equals(YEAR_2_DIGITS_PATTERN_SUFFIX),
+            "build2DigitsYearDateTimeFormatter can only be used for patterns with 2 digit year");
+    pattern = StringUtils.removeEnd(pattern, YEAR_2_DIGITS_PATTERN_SUFFIX);
+    return new DateTimeFormatterBuilder().append(DateTimeFormatter.ofPattern(pattern))
+          .appendValueReduced(ChronoField.YEAR, 2, 2, baseYear.getValue()).parseStrict().toFormatter();
   }
 
   @Override
@@ -270,7 +303,7 @@ public class ThreeTenNumericalDateParser implements Parsable<TemporalAccessor> {
    * @param hint
    * @return
    */
-  public static ParseResult<TemporalAccessor> parse(String input, DateFormatHint hint) {
+  public ParseResult<TemporalAccessor> parse(String input, DateFormatHint hint) {
 
     if(StringUtils.isBlank(input)){
       return ParseResult.fail();
@@ -299,7 +332,7 @@ public class ThreeTenNumericalDateParser implements Parsable<TemporalAccessor> {
     int numberOfPossiblyAmbiguousMatch = 0;
     TemporalAccessor lastParsedTemporalAccessorSuccess = null;
     InternalDateTimeParserAmbiguity lastParserAmbiguitySuccess = null;
-    for(InternalDateTimeParserAmbiguity parserAmbiguity : POSSIBLY_AMBIGUOUS_PATTERNS){
+    for(InternalDateTimeParserAmbiguity parserAmbiguity : possiblyAmbiguousPatterns){
       for(InternalDateTimeParser parser : parserAmbiguity.getAllParsers()){
         parsedTemporalAccessor = parser.parse(input);
         if(parsedTemporalAccessor != null){

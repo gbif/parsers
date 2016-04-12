@@ -19,6 +19,7 @@ public class TextDateParser implements Parsable<TemporalAccessor> {
 
   private static final Pattern AT_LEAST_ONE_LETTER =  Pattern.compile("[a-zA-Z]+");
   private static final TextualMonthDateTokenizer TEXT_MONTH_TOKENIZER = new TextualMonthDateTokenizer();
+  private static final ThreeTenNumericalDateParser THREETEN_NUMERICAL_PARSER = ThreeTenNumericalDateParser.getParser();
 
   @Override
   public ParseResult<TemporalAccessor> parse(String input) {
@@ -29,7 +30,7 @@ public class TextDateParser implements Parsable<TemporalAccessor> {
 
     //check if the input text contains only punctuations and numbers
     if(!AT_LEAST_ONE_LETTER.matcher(input).find()) {
-      return ThreeTenNumericalDateParser.parse(input, ThreeTenNumericalDateParser.DateFormatHint.NONE);
+      return THREETEN_NUMERICAL_PARSER.parse(input, ThreeTenNumericalDateParser.DateFormatHint.NONE);
     }
 
     TextualMonthDateTokenizer.DateTokens dt = TEXT_MONTH_TOKENIZER.tokenize(input);
