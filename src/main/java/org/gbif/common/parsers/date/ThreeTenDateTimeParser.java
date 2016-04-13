@@ -15,26 +15,25 @@ import org.threeten.bp.temporal.TemporalQuery;
  * It adds some flexibility with the {@linkInternalDateTimeNormalizer} and
  * simple optimization the support of DateFormatHint.
  */
-class InternalDateTimeParser {
+class ThreeTenDateTimeParser {
 
   private DateTimeFormatter formatter;
-  private InternalDateTimeNormalizer normalizer;
-  private ThreeTenNumericalDateParser.DateFormatHint hint;
+  private DateTimeSeparatorNormalizer normalizer;
+  private DateFormatHint hint;
 
   private TemporalQuery<?>[] types;
   private int minLength;
 
   /**
-   * Private constructor.
-   * Use static InternalDateTimeParser.of(...) methods.
+   * protected constructor.
    *
    * @param formatter
    * @param normalizer
    * @param hint
    * @param minLength
    */
-  private InternalDateTimeParser(DateTimeFormatter formatter, InternalDateTimeNormalizer normalizer,
-                                 ThreeTenNumericalDateParser.DateFormatHint hint, int minLength){
+  ThreeTenDateTimeParser(DateTimeFormatter formatter, DateTimeSeparatorNormalizer normalizer,
+                         DateFormatHint hint, int minLength){
     this.formatter = formatter;
     this.hint = hint;
     this.normalizer = normalizer;
@@ -43,39 +42,12 @@ class InternalDateTimeParser {
   }
 
   /**
-   * Creates a {@link InternalDateTimeParser} without normalizer.
-   *
-   * @param formatter
-   * @param hint
-   * @param minLength
-   * @return
-   */
-  public static InternalDateTimeParser of(DateTimeFormatter formatter, ThreeTenNumericalDateParser.DateFormatHint hint,
-                                          int minLength){
-    return new InternalDateTimeParser(formatter, null,  hint, minLength);
-  }
-
-  /**
-   * Creates a {@link InternalDateTimeParser} that includes a {@link InternalDateTimeNormalizer}.
-   *
-   * @param formatter
-   * @param normalizer
-   * @param hint
-   * @param minLength
-   * @return
-   */
-  public static InternalDateTimeParser of(DateTimeFormatter formatter, InternalDateTimeNormalizer normalizer,
-                                          ThreeTenNumericalDateParser.DateFormatHint hint, int minLength){
-    return new InternalDateTimeParser(formatter, normalizer, hint, minLength);
-  }
-
-  /**
    * The idea is to only use the types that are possible with DateTimeFormatter.parseBest method.
    *
    * @param hint
    * @return
    */
-  private TemporalQuery<?>[] getTypesFromHint(ThreeTenNumericalDateParser.DateFormatHint hint){
+  private TemporalQuery<?>[] getTypesFromHint(DateFormatHint hint){
     switch(hint){
       case YMDT: return new TemporalQuery<?>[]{LocalDateTime.FROM, LocalDate.FROM, YearMonth.FROM, Year.FROM};
       case YMD: return new TemporalQuery<?>[]{LocalDate.FROM, YearMonth.FROM, Year.FROM};
@@ -89,7 +61,7 @@ class InternalDateTimeParser {
     }
   }
 
-  public ThreeTenNumericalDateParser.DateFormatHint getHint() {
+  public DateFormatHint getHint() {
     return hint;
   }
 

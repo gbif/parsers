@@ -30,7 +30,7 @@ public class TextDateParser implements Parsable<TemporalAccessor> {
 
     //check if the input text contains only punctuations and numbers
     if(!AT_LEAST_ONE_LETTER.matcher(input).find()) {
-      return THREETEN_NUMERICAL_PARSER.parse(input, ThreeTenNumericalDateParser.DateFormatHint.NONE);
+      return THREETEN_NUMERICAL_PARSER.parse(input, DateFormatHint.NONE);
     }
 
     TextualMonthDateTokenizer.DateTokens dt = TEXT_MONTH_TOKENIZER.tokenize(input);

@@ -5,11 +5,12 @@ import com.google.common.base.CharMatcher;
 /**
  * Internal (package protected) normalizer used to support different separators for the same pattern.
  */
-class InternalDateTimeNormalizer {
+class DateTimeSeparatorNormalizer {
+
   private CharMatcher charMatcher;
   private String replacementChar;
 
-  public InternalDateTimeNormalizer(CharMatcher charMatcher, String replacementChar){
+  public DateTimeSeparatorNormalizer(CharMatcher charMatcher, String replacementChar){
     this.charMatcher = charMatcher;
     this.replacementChar = replacementChar;
   }
