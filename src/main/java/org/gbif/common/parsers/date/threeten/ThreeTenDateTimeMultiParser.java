@@ -1,4 +1,6 @@
-package org.gbif.common.parsers.date;
+package org.gbif.common.parsers.date.threeten;
+
+import org.gbif.common.parsers.date.threeten.ThreeTenDateTimeParser;
 
 import java.util.List;
 
