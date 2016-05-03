@@ -1,7 +1,5 @@
 package org.gbif.common.parsers.date.threeten;
 
-import org.gbif.common.parsers.date.threeten.ThreeTenDateTimeParser;
-
 import java.util.List;
 
 import com.google.common.collect.Lists;
@@ -11,7 +9,7 @@ import org.threeten.bp.temporal.TemporalAccessor;
  * Allows to support more than one ThreeTenDateTimeParser that are considered "vague".
  * This class will try all the parsers and record all the results.
  */
-public class ThreeTenDateTimeMultiParser {
+class ThreeTenDateTimeMultiParser {
 
   private ThreeTenDateTimeParser preferred;
   private List<ThreeTenDateTimeParser> otherParsers;

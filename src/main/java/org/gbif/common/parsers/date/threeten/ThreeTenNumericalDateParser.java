@@ -3,7 +3,6 @@ package org.gbif.common.parsers.date.threeten;
 import org.gbif.common.parsers.core.Parsable;
 import org.gbif.common.parsers.core.ParseResult;
 import org.gbif.common.parsers.date.DateFormatHint;
-import org.gbif.common.parsers.date.ThreeTenNumericalDateParserBuilder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,8 +32,6 @@ import org.threeten.bp.temporal.ChronoField;
 import org.threeten.bp.temporal.TemporalAccessor;
 
 /**
- * WORK IN PROGRESS
- *
  * Numerical DateParser based on threetenbp (JSR310 backport) library which also means it is almost ready for Java 8.
  * This is a numerical Date Parser which means it is not responsible to parse dates that contains text for representing
  * a part of the dates (e.g. January 1 1980)
