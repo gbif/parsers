@@ -12,7 +12,7 @@ import org.threeten.bp.temporal.TemporalQuery;
 
 /**
  * Internal (package protected) wrapper of ThreeTen {@link DateTimeFormatter}.
- * It adds some flexibility with the {@linkInternalDateTimeNormalizer} and
+ * It adds some flexibility with the {@link DateTimeSeparatorNormalizer} and
  * simple optimization the support of DateFormatHint.
  */
 class ThreeTenDateTimeParser {
@@ -25,7 +25,8 @@ class ThreeTenDateTimeParser {
   private int minLength;
 
   /**
-   * protected constructor.
+   * Package protected constructor.
+   * Use {@link ThreeTenNumericalDateParserBuilder}
    *
    * @param formatter
    * @param normalizer

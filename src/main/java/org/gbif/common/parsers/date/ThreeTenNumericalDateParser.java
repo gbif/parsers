@@ -74,7 +74,8 @@ public class ThreeTenNumericalDateParser implements Parsable<TemporalAccessor> {
 
   //brackets [] represent optional section of the pattern
   //separator is a CHAR_HYPHEN
-  private static List<ThreeTenDateTimeParser> DEFINITE_PATTERNS_LIST = new ThreeTenNumericalDateParserBuilder()
+  private static List<ThreeTenDateTimeParser> DEFINITE_PATTERNS_LIST = ThreeTenNumericalDateParserBuilder
+          .newParserListBuilder()
           .appendDateTimeParser("uuuuMMdd", DateFormatHint.YMD)
           .appendDateTimeParser("uuuu-M-d[ HH:mm:ss]", DateFormatHint.YMDT)
           .appendDateTimeParser("uuuu-M-d'T'HH[:mm[:ss]]", DateFormatHint.YMDT)
@@ -87,26 +88,26 @@ public class ThreeTenNumericalDateParser implements Parsable<TemporalAccessor> {
           .appendDateTimeParser("uuuu年MM月dd日", DateFormatHint.HAN)
           .appendDateTimeParser("uuuu年M月d日", DateFormatHint.HAN)
           .appendDateTimeParser("uu年M月d日", DateFormatHint.HAN)
-          .buildList();
+          .build();
 
   //Possibly ambiguous dates will record an error in case more than one pattern can be applied
   private static List<ThreeTenDateTimeMultiParser> POSSIBLY_AMBIGUOUS_PATTERNS =
           Lists.newArrayList(
-                  ThreeTenNumericalDateParserBuilder.newMultiParserBuilder()
+                  ThreeTenNumericalDateParserBuilder.newMultiParserListBuilder()
                           .preferredDateTimeParser("d.M.uuuu", DateFormatHint.DMY) //DE, DK, NO
                           .appendDateTimeParser("M.d.uuuu", DateFormatHint.MDY)
                           .build(),
                   // the followings are mostly derived of the difference between FR,GB,ES (DMY) format and US format (MDY)
-                  ThreeTenNumericalDateParserBuilder.newMultiParserBuilder()
+                  ThreeTenNumericalDateParserBuilder.newMultiParserListBuilder()
                           .appendDateTimeParser("d/M/uuuu", DateFormatHint.DMY, "/", String.valueOf(CHAR_HYPHEN) + String.valueOf(CHAR_MINUS))
                           .appendDateTimeParser("M/d/uuuu", DateFormatHint.MDY, "/", String.valueOf(CHAR_HYPHEN) + String.valueOf(CHAR_MINUS))
                           .build(),
-                  ThreeTenNumericalDateParserBuilder.newMultiParserBuilder()
+                  ThreeTenNumericalDateParserBuilder.newMultiParserListBuilder()
                           .appendDateTimeParser("ddMMuuuu", DateFormatHint.DMY)
                           .appendDateTimeParser("MMdduuuu", DateFormatHint.MDY)
                           .build(),
                   // the followings are not officially supported by any countries but are sometimes used
-                  ThreeTenNumericalDateParserBuilder.newMultiParserBuilder()
+                  ThreeTenNumericalDateParserBuilder.newMultiParserListBuilder()
                           .appendDateTimeParser("d\\M\\uuuu", DateFormatHint.DMY, "\\", "_")
                           .appendDateTimeParser("M\\d\\uuuu", DateFormatHint.MDY, "\\", "_")
                           .build()
@@ -150,21 +151,21 @@ public class ThreeTenNumericalDateParser implements Parsable<TemporalAccessor> {
   private void addPossiblyAmbiguous2DigitsYear(Year baseYear){
 
     List<ThreeTenDateTimeMultiParser> POSSIBLY_AMBIGUOUS_2DIGITS_YEAR_PATTERNS = Lists.newArrayList(
-            ThreeTenNumericalDateParserBuilder.newMultiParserBuilder()
+            ThreeTenNumericalDateParserBuilder.newMultiParserListBuilder()
               .preferredDateTimeParser("d.M.uu", DateFormatHint.DMY, baseYear) //DE, DK, NO
             .appendDateTimeParser("M.d.uu", DateFormatHint.MDY, baseYear)
             .build(),
-            ThreeTenNumericalDateParserBuilder.newMultiParserBuilder()
+            ThreeTenNumericalDateParserBuilder.newMultiParserListBuilder()
                     .appendDateTimeParser("d/M/uu", DateFormatHint.DMY, "/",
                             String.valueOf(CHAR_HYPHEN) + String.valueOf(CHAR_MINUS), baseYear)
                     .appendDateTimeParser("M/d/uu", DateFormatHint.MDY, "/",
                             String.valueOf(CHAR_HYPHEN) + String.valueOf(CHAR_MINUS), baseYear)
                     .build(),
-            ThreeTenNumericalDateParserBuilder.newMultiParserBuilder()
+            ThreeTenNumericalDateParserBuilder.newMultiParserListBuilder()
                     .appendDateTimeParser("ddMMuu", DateFormatHint.DMY, baseYear)
                     .appendDateTimeParser("MMdduu", DateFormatHint.MDY, baseYear)
                     .build(),
-            ThreeTenNumericalDateParserBuilder.newMultiParserBuilder()
+            ThreeTenNumericalDateParserBuilder.newMultiParserListBuilder()
                     .appendDateTimeParser("d\\M\\uu", DateFormatHint.DMY, "\\", "_", baseYear)
                     .appendDateTimeParser("M\\d\\uu", DateFormatHint.MDY, "\\", "_", baseYear)
                     .build()
