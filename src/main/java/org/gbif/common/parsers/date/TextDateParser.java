@@ -12,7 +12,7 @@ import org.threeten.bp.LocalDate;
 import org.threeten.bp.temporal.TemporalAccessor;
 
 /**
- * Main class to parse date represented as a single String.
+ * Main class to parse a date represented as a single String or date parts as String.
  * If the String contains letters, the {@link TextualMonthDateTokenizer} and the {@link DateNormalizer} will be used.
  * Otherwise, {@link ThreeTenNumericalDateParser} will be used.
  */
@@ -58,11 +58,21 @@ public class TextDateParser implements Parsable<TemporalAccessor> {
     }
     return ParseResult.fail();
   }
-  
+
+  /**
+   * Parse date parts into a TemporalAccessor.
+   * The {@link DateNormalizer} will be applied on raw data.
+   *
+   * @param year
+   * @param month
+   * @param day
+   * @return
+   */
   public ParseResult<TemporalAccessor> parse(String year, String month, String day) {
     DateNormalizer.NormalizedYearMonthDay normalizedYearMonthDay = DateNormalizer.normalize(
             year, month ,day);
-    return ThreeTenNumericalDateParser.parse(normalizedYearMonthDay.getYear(), normalizedYearMonthDay.getMonth(), normalizedYearMonthDay.getDay());
+    return ThreeTenNumericalDateParser.parse(normalizedYearMonthDay.getYear(), normalizedYearMonthDay.getMonth(),
+            normalizedYearMonthDay.getDay());
   }
 
 }

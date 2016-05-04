@@ -5,6 +5,7 @@ import org.gbif.common.parsers.core.ParseResult;
 import org.junit.Test;
 import org.threeten.bp.LocalDate;
 import org.threeten.bp.Month;
+import org.threeten.bp.YearMonth;
 import org.threeten.bp.temporal.TemporalAccessor;
 
 import static org.junit.Assert.assertEquals;
@@ -30,6 +31,18 @@ public class TextDateParserTest {
 
     parseResult = TEXTDATE_PARSER.parse("2018年1月2日");
     assertEquals(LocalDate.of(2018, Month.JANUARY, 2), LocalDate.from(parseResult.getPayload()));
+  }
+
+  @Test
+  public void testDateParts(){
+    ParseResult<TemporalAccessor> parseResult = TEXTDATE_PARSER.parse("2018.0", "1.0", "02.0");
+    assertEquals(LocalDate.of(2018, Month.JANUARY, 2), LocalDate.from(parseResult.getPayload()));
+
+    parseResult = TEXTDATE_PARSER.parse("2018.0", "jan", "02.0");
+    assertEquals(LocalDate.of(2018, Month.JANUARY, 2), LocalDate.from(parseResult.getPayload()));
+
+    parseResult = TEXTDATE_PARSER.parse("2018.0", "jan", "");
+    assertEquals(YearMonth.of(2018, Month.JANUARY), YearMonth.from(parseResult.getPayload()));
   }
 
   @Test
