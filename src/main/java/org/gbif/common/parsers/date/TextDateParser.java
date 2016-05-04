@@ -58,5 +58,11 @@ public class TextDateParser implements Parsable<TemporalAccessor> {
     }
     return ParseResult.fail();
   }
+  
+  public ParseResult<TemporalAccessor> parse(String year, String month, String day) {
+    DateNormalizer.NormalizedYearMonthDay normalizedYearMonthDay = DateNormalizer.normalize(
+            year, month ,day);
+    return ThreeTenNumericalDateParser.parse(normalizedYearMonthDay.getYear(), normalizedYearMonthDay.getMonth(), normalizedYearMonthDay.getDay());
+  }
 
 }

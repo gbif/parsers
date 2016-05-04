@@ -221,6 +221,24 @@ public class ThreeTenNumericalDateParser implements Parsable<TemporalAccessor> {
   }
 
   /**
+   * Parse year, month, day integers as a TemporalAccessor.
+   *
+   * @param year
+   * @param month
+   * @param day
+   * @return
+   */
+  public static ParseResult<TemporalAccessor> parse(@Nullable Integer year, @Nullable Integer month, @Nullable Integer day) {
+    String date = Joiner.on(CHAR_HYPHEN).skipNulls().join(year, month, day);
+    TemporalAccessor tp = tryParse(date, ISO_PARSER, null);
+
+    if(tp != null){
+      return ParseResult.success(ParseResult.CONFIDENCE.DEFINITE, tp);
+    }
+    return ParseResult.fail();
+  }
+
+  /**
    *
    * @param input
    * @param hint help to speed up the parsing and possibly return a better confidence

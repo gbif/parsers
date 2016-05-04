@@ -156,6 +156,7 @@ public class ThreeTenNumericalDateParserTest {
   public void testParseAsLocalDateByDateParts(){
     ThreeTenNumericalDateParser parser = ThreeTenNumericalDateParser.getParser();
     assertEquals(LocalDate.of(1978, Month.DECEMBER, 21), LocalDate.from(parser.parse("1978", "12", "21").getPayload()));
+    assertEquals(LocalDate.of(1978, Month.DECEMBER, 21), LocalDate.from(parser.parse(1978, 12, 21).getPayload()));
     assertEquals(LocalDate.of(1978, Month.DECEMBER, 1), LocalDate.from(parser.parse("1978", "12", "1").getPayload()));
     assertEquals(YearMonth.of(1978,12), YearMonth.from(parser.parse("1978", "12", null).getPayload()));
     assertEquals(Year.of(1978), Year.from(parser.parse("1978","",null).getPayload()));
