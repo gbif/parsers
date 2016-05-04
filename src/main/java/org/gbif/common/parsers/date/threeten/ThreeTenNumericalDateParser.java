@@ -57,11 +57,10 @@ public class ThreeTenNumericalDateParser implements Parsable<TemporalAccessor> {
 
   public enum DateParsingHint {MIN, MAX}
 
-  private static List<ThreeTenDateTimeParser> DEFINITE_FORMATTERS;
   private static final Map<DateFormatHint, List<ThreeTenDateTimeParser>> FORMATTERS_BY_HINT = Maps.newHashMap();
 
   // DateTimeFormatter includes some ISO parsers but just to make it explicit we define our own
-  private final static DateTimeFormatter ISO_PARSER = (new DateTimeFormatterBuilder()
+  private static final DateTimeFormatter ISO_PARSER = (new DateTimeFormatterBuilder()
           .appendValue(ChronoField.YEAR, 2, 4, SignStyle.NEVER)
           .optionalStart().appendLiteral('-')
           .appendValue(ChronoField.MONTH_OF_YEAR, 1, 2, SignStyle.NEVER)
@@ -73,62 +72,52 @@ public class ThreeTenNumericalDateParser implements Parsable<TemporalAccessor> {
 
   //brackets [] represent optional section of the pattern
   //separator is a CHAR_HYPHEN
-  private static List<ThreeTenDateTimeParser> DEFINITE_PATTERNS_LIST = ThreeTenNumericalDateParserBuilder
-          .newParserListBuilder()
-          .appendDateTimeParser("uuuuMMdd", DateFormatHint.YMD)
-          .appendDateTimeParser("uuuu-M-d[ HH:mm:ss]", DateFormatHint.YMDT)
-          .appendDateTimeParser("uuuu-M-d'T'HH[:mm[:ss]]", DateFormatHint.YMDT)
-          .appendDateTimeParser("uuuu-M-d'T'HHmm[ss]", DateFormatHint.YMDT)
-          .appendDateTimeParser("uuuu-M-d'T'HH:mm:ssZ", DateFormatHint.YMDT)
-          .appendDateTimeParser("uuuu-M-d'T'HH:mm:ssxxx", DateFormatHint.YMDT) //covers 1978-12-21T02:12:43+01:00
-          .appendDateTimeParser("uuuu-M-d'T'HH:mm:ss'Z'", DateFormatHint.YMDT)
-          .appendDateTimeParser("uuuu-M", DateFormatHint.YM)
-          .appendDateTimeParser("uuuu", DateFormatHint.Y)
-          .appendDateTimeParser("uuuu年MM月dd日", DateFormatHint.HAN)
-          .appendDateTimeParser("uuuu年M月d日", DateFormatHint.HAN)
-          .appendDateTimeParser("uu年M月d日", DateFormatHint.HAN)
-          .build();
+  private static final List<ThreeTenDateTimeParser> BASE_PARSER_LIST = ImmutableList.copyOf(
+          ThreeTenNumericalDateParserBuilder.newParserListBuilder()
+                  .appendDateTimeParser("uuuuMMdd", DateFormatHint.YMD)
+                  .appendDateTimeParser("uuuu-M-d[ HH:mm:ss]", DateFormatHint.YMDT)
+                  .appendDateTimeParser("uuuu-M-d'T'HH[:mm[:ss]]", DateFormatHint.YMDT)
+                  .appendDateTimeParser("uuuu-M-d'T'HHmm[ss]", DateFormatHint.YMDT)
+                  .appendDateTimeParser("uuuu-M-d'T'HH:mm:ssZ", DateFormatHint.YMDT)
+                  .appendDateTimeParser("uuuu-M-d'T'HH:mm:ssxxx", DateFormatHint.YMDT) //covers 1978-12-21T02:12:43+01:00
+                  .appendDateTimeParser("uuuu-M-d'T'HH:mm:ss'Z'", DateFormatHint.YMDT)
+                  .appendDateTimeParser("uuuu-M", DateFormatHint.YM)
+                  .appendDateTimeParser("uuuu", DateFormatHint.Y)
+                  .appendDateTimeParser("uuuu年MM月dd日", DateFormatHint.HAN)
+                  .appendDateTimeParser("uuuu年M月d日", DateFormatHint.HAN)
+                  .appendDateTimeParser("uu年M月d日", DateFormatHint.HAN)
+                  .build()
+  );
 
-  //Possibly ambiguous dates will record an error in case more than one pattern can be applied
-  private static List<ThreeTenDateTimeMultiParser> POSSIBLY_AMBIGUOUS_PATTERNS =
-          Lists.newArrayList(
-                  ThreeTenNumericalDateParserBuilder.newMultiParserListBuilder()
-                          .preferredDateTimeParser("d.M.uuuu", DateFormatHint.DMY) //DE, DK, NO
-                          .appendDateTimeParser("M.d.uuuu", DateFormatHint.MDY)
-                          .build(),
-                  // the followings are mostly derived of the difference between FR,GB,ES (DMY) format and US format (MDY)
-                  ThreeTenNumericalDateParserBuilder.newMultiParserListBuilder()
-                          .appendDateTimeParser("d/M/uuuu", DateFormatHint.DMY, "/", String.valueOf(CHAR_HYPHEN) + String.valueOf(CHAR_MINUS))
-                          .appendDateTimeParser("M/d/uuuu", DateFormatHint.MDY, "/", String.valueOf(CHAR_HYPHEN) + String.valueOf(CHAR_MINUS))
-                          .build(),
-                  ThreeTenNumericalDateParserBuilder.newMultiParserListBuilder()
-                          .appendDateTimeParser("ddMMuuuu", DateFormatHint.DMY)
-                          .appendDateTimeParser("MMdduuuu", DateFormatHint.MDY)
-                          .build(),
-                  // the followings are not officially supported by any countries but are sometimes used
-                  ThreeTenNumericalDateParserBuilder.newMultiParserListBuilder()
-                          .appendDateTimeParser("d\\M\\uuuu", DateFormatHint.DMY, "\\", "_")
-                          .appendDateTimeParser("M\\d\\uuuu", DateFormatHint.MDY, "\\", "_")
-                          .build()
-          );
+  // Possibly ambiguous dates will record an error in case more than one pattern can be applied
+  private static final List<ThreeTenDateTimeMultiParser> MULTIPARSER_PARSER_LIST = ImmutableList.of(
+          ThreeTenNumericalDateParserBuilder.newMultiParserListBuilder()
+                  .preferredDateTimeParser("d.M.uuuu", DateFormatHint.DMY) //DE, DK, NO
+                  .appendDateTimeParser("M.d.uuuu", DateFormatHint.MDY)
+                  .build(),
+          // the followings are mostly derived of the difference between FR,GB,ES (DMY) format and US format (MDY)
+          ThreeTenNumericalDateParserBuilder.newMultiParserListBuilder()
+                  .appendDateTimeParser("d/M/uuuu", DateFormatHint.DMY, "/", String.valueOf(CHAR_HYPHEN) + String.valueOf(CHAR_MINUS))
+                  .appendDateTimeParser("M/d/uuuu", DateFormatHint.MDY, "/", String.valueOf(CHAR_HYPHEN) + String.valueOf(CHAR_MINUS))
+                  .build(),
+          ThreeTenNumericalDateParserBuilder.newMultiParserListBuilder()
+                  .appendDateTimeParser("ddMMuuuu", DateFormatHint.DMY)
+                  .appendDateTimeParser("MMdduuuu", DateFormatHint.MDY)
+                  .build(),
+          // the followings are not officially supported by any countries but are sometimes used
+          ThreeTenNumericalDateParserBuilder.newMultiParserListBuilder()
+                  .appendDateTimeParser("d\\M\\uuuu", DateFormatHint.DMY, "\\", "_")
+                  .appendDateTimeParser("M\\d\\uuuu", DateFormatHint.MDY, "\\", "_")
+                  .build()
+  );
 
-  public static ThreeTenNumericalDateParser getParser(){
-    return new ThreeTenNumericalDateParser();
-  }
-
-  public static ThreeTenNumericalDateParser getParser(Year baseYear){
-    return new ThreeTenNumericalDateParser(baseYear);
-  }
-
-  private ThreeTenNumericalDateParser(){
-    DEFINITE_FORMATTERS = ImmutableList.copyOf(DEFINITE_PATTERNS_LIST);
-
-    for(ThreeTenDateTimeParser parser : DEFINITE_PATTERNS_LIST){
+  static{
+    for(ThreeTenDateTimeParser parser : BASE_PARSER_LIST){
       FORMATTERS_BY_HINT.putIfAbsent(parser.getHint(), new ArrayList<ThreeTenDateTimeParser>());
       FORMATTERS_BY_HINT.get(parser.getHint()).add(parser);
     }
 
-    for(ThreeTenDateTimeMultiParser parserAmbiguity : POSSIBLY_AMBIGUOUS_PATTERNS){
+    for(ThreeTenDateTimeMultiParser parserAmbiguity : MULTIPARSER_PARSER_LIST){
       for(ThreeTenDateTimeParser parser : parserAmbiguity.getAllParsers()) {
         FORMATTERS_BY_HINT.putIfAbsent(parser.getHint(), new ArrayList<ThreeTenDateTimeParser>());
         FORMATTERS_BY_HINT.get(parser.getHint()).add(parser);
@@ -136,24 +125,47 @@ public class ThreeTenNumericalDateParser implements Parsable<TemporalAccessor> {
     }
   }
 
-  private ThreeTenNumericalDateParser(Year baseYear) {
-    this();
-    Preconditions.checkState(baseYear.getValue() <= LocalDate.now().getYear(), "Base year is less or equals to" +
-            " the current year");
-    addPossiblyAmbiguous2DigitsYear(baseYear);
+  // the active list/map are related to a specific instance
+  private final Map<DateFormatHint, List<ThreeTenDateTimeParser>> activeFormattersByHint;
+  private final List<ThreeTenDateTimeMultiParser> activeMultiParserList;
+
+  /**
+   * Get an instance of a default ThreeTenNumericalDateParser.
+   *
+   * @return
+   */
+  public static ThreeTenNumericalDateParser getParser(){
+    return new ThreeTenNumericalDateParser();
   }
 
   /**
-   * TODO review this
+   * Get an instance of a ThreeTenNumericalDateParser from a base year.
+   * Base year is used to handle year represented by 2 digits.
    * @param baseYear
+   * @return
    */
-  private void addPossiblyAmbiguous2DigitsYear(Year baseYear){
+  public static ThreeTenNumericalDateParser getParser(Year baseYear){
+    return new ThreeTenNumericalDateParser(baseYear);
+  }
 
-    List<ThreeTenDateTimeMultiParser> POSSIBLY_AMBIGUOUS_2DIGITS_YEAR_PATTERNS = Lists.newArrayList(
+  private ThreeTenNumericalDateParser() {
+    this.activeFormattersByHint = FORMATTERS_BY_HINT;
+    this.activeMultiParserList = MULTIPARSER_PARSER_LIST;
+  }
+
+  private ThreeTenNumericalDateParser(Year baseYear) {
+
+    Preconditions.checkState(baseYear.getValue() <= LocalDate.now().getYear(), "Base year is less or equals to" +
+              " the current year");
+
+    Map<DateFormatHint, List<ThreeTenDateTimeParser>> formattersByHint = Maps.newHashMap(FORMATTERS_BY_HINT);
+
+    List<ThreeTenDateTimeMultiParser> multiParserList = Lists.newArrayList(MULTIPARSER_PARSER_LIST);
+    multiParserList.addAll(Lists.newArrayList(
             ThreeTenNumericalDateParserBuilder.newMultiParserListBuilder()
-              .preferredDateTimeParser("d.M.uu", DateFormatHint.DMY, baseYear) //DE, DK, NO
-            .appendDateTimeParser("M.d.uu", DateFormatHint.MDY, baseYear)
-            .build(),
+                    .preferredDateTimeParser("d.M.uu", DateFormatHint.DMY, baseYear) //DE, DK, NO
+                    .appendDateTimeParser("M.d.uu", DateFormatHint.MDY, baseYear)
+                    .build(),
             ThreeTenNumericalDateParserBuilder.newMultiParserListBuilder()
                     .appendDateTimeParser("d/M/uu", DateFormatHint.DMY, "/",
                             String.valueOf(CHAR_HYPHEN) + String.valueOf(CHAR_MINUS), baseYear)
@@ -168,19 +180,19 @@ public class ThreeTenNumericalDateParser implements Parsable<TemporalAccessor> {
                     .appendDateTimeParser("d\\M\\uu", DateFormatHint.DMY, "\\", "_", baseYear)
                     .appendDateTimeParser("M\\d\\uu", DateFormatHint.MDY, "\\", "_", baseYear)
                     .build()
-    );
+    ));
+    //2 digits year pattern is too ambiguous ?
+    // buildPossibleAmbiguousDateTimeParser(buildDateTimeParserFor2DigitYear("uu", DateFormatHint.Y, baseYear))
 
-      //2 digits year pattern is ambiguous
-     // buildPossibleAmbiguousDateTimeParser(buildDateTimeParserFor2DigitYear("uu", DateFormatHint.Y, baseYear))
-    //};
-
-    for(ThreeTenDateTimeMultiParser parserAmbiguity : POSSIBLY_AMBIGUOUS_2DIGITS_YEAR_PATTERNS){
-      for(ThreeTenDateTimeParser parser : parserAmbiguity.getAllParsers()) {
-        FORMATTERS_BY_HINT.putIfAbsent(parser.getHint(), new ArrayList<ThreeTenDateTimeParser>());
-        FORMATTERS_BY_HINT.get(parser.getHint()).add(parser);
+    for(ThreeTenDateTimeMultiParser multiParser : multiParserList){
+      for(ThreeTenDateTimeParser parser : multiParser.getAllParsers()) {
+        formattersByHint.putIfAbsent(parser.getHint(), new ArrayList<ThreeTenDateTimeParser>());
+        formattersByHint.get(parser.getHint()).add(parser);
       }
     }
-    POSSIBLY_AMBIGUOUS_PATTERNS.addAll(Lists.newArrayList(POSSIBLY_AMBIGUOUS_2DIGITS_YEAR_PATTERNS));
+
+    this.activeMultiParserList = multiParserList;
+    this.activeFormattersByHint = formattersByHint;
   }
 
   @Override
@@ -223,7 +235,7 @@ public class ThreeTenNumericalDateParser implements Parsable<TemporalAccessor> {
       hint = DateFormatHint.NONE;
     }
 
-    List<ThreeTenDateTimeParser> parserList = FORMATTERS_BY_HINT.containsKey(hint) ? FORMATTERS_BY_HINT.get(hint) : DEFINITE_FORMATTERS;
+    List<ThreeTenDateTimeParser> parserList = activeFormattersByHint.containsKey(hint) ? activeFormattersByHint.get(hint) : BASE_PARSER_LIST;
 
     TemporalAccessor parsedTemporalAccessor;
     for(ThreeTenDateTimeParser parser : parserList){
@@ -243,7 +255,7 @@ public class ThreeTenNumericalDateParser implements Parsable<TemporalAccessor> {
     TemporalAccessor lastParsedPreferred = null;
     ThreeTenDateTimeMultiParser.MultipleParseResult result;
 
-    for(ThreeTenDateTimeMultiParser parserAmbiguity : POSSIBLY_AMBIGUOUS_PATTERNS){
+    for(ThreeTenDateTimeMultiParser parserAmbiguity : activeMultiParserList){
       result = parserAmbiguity.parse(input);
       numberOfPossiblyAmbiguousMatch += result.getNumberParsed();
 
