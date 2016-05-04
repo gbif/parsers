@@ -3,13 +3,14 @@ package org.gbif.common.parsers.date.threeten;
 import org.gbif.common.parsers.date.DateFormatHint;
 
 import java.util.List;
-
+import java.util.Set;
 import javax.validation.constraints.NotNull;
 
 import com.google.common.base.CharMatcher;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 import org.apache.commons.lang3.StringUtils;
 import org.threeten.bp.Year;
 import org.threeten.bp.format.DateTimeFormatter;
@@ -18,6 +19,8 @@ import org.threeten.bp.format.ResolverStyle;
 import org.threeten.bp.temporal.ChronoField;
 
 /**
+ * The ThreeTenNumericalDateParserBuilder can build objects directly (build(..) methods) or return an instance
+ * of itself to create more complex object.
  *
  */
 public class ThreeTenNumericalDateParserBuilder {
@@ -28,10 +31,19 @@ public class ThreeTenNumericalDateParserBuilder {
 
   private ThreeTenNumericalDateParserBuilder(){}
 
+  /**
+   * Get a new builder to create a list of ThreeTenDateTimeParser.
+   *
+   * @return
+   */
   public static ThreeTenDateParserListBuilder newParserListBuilder(){
     return new ThreeTenDateParserListBuilder();
   }
 
+  /**
+   * Get a new builder to create a list of ThreeTenDateTimeMultiParser.
+   * @return
+   */
   public static ThreeTenDateMultiParserListBuilder newMultiParserListBuilder(){
     return new ThreeTenDateMultiParserListBuilder();
   }
@@ -225,7 +237,28 @@ public class ThreeTenNumericalDateParserBuilder {
       return this;
     }
 
-    public ThreeTenDateTimeMultiParser build(){
+    /**
+     * Ensure the builder is used with content we expect.
+     * Currently (this could change) we should only have one ThreeTenDateTimeParser per DateFormatHint.
+     *
+     * @throws IllegalStateException
+     */
+    private void validate() throws IllegalStateException {
+      Set<DateFormatHint> hints = Sets.newHashSet();
+      if(preferred != null){
+        hints.add(preferred.getHint());
+      }
+
+      for(ThreeTenDateTimeParser parser : otherParsers){
+        if(!hints.add(parser.getHint())){
+          throw new IllegalStateException("DateFormatHint can only be used once in a ThreeTenDateTimeMultiParser." +
+                  "[" + parser.getHint() + "]");
+        }
+      }
+    }
+
+    public ThreeTenDateTimeMultiParser build() throws IllegalStateException {
+      validate();
       return new ThreeTenDateTimeMultiParser(preferred, otherParsers);
     }
   }

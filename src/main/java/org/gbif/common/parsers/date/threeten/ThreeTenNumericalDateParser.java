@@ -14,6 +14,7 @@ import com.google.common.base.Joiner;
 import com.google.common.base.Preconditions;
 import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import org.apache.commons.lang3.StringUtils;
@@ -149,7 +150,7 @@ public class ThreeTenNumericalDateParser implements Parsable<TemporalAccessor> {
   }
 
   private ThreeTenNumericalDateParser() {
-    this.activeFormattersByHint = FORMATTERS_BY_HINT;
+    this.activeFormattersByHint = ImmutableMap.copyOf(FORMATTERS_BY_HINT);
     this.activeMultiParserList = MULTIPARSER_PARSER_LIST;
   }
 
@@ -191,8 +192,8 @@ public class ThreeTenNumericalDateParser implements Parsable<TemporalAccessor> {
       }
     }
 
-    this.activeMultiParserList = multiParserList;
-    this.activeFormattersByHint = formattersByHint;
+    this.activeMultiParserList = ImmutableList.copyOf(multiParserList);
+    this.activeFormattersByHint = ImmutableMap.copyOf(formattersByHint);
   }
 
   @Override
@@ -222,7 +223,7 @@ public class ThreeTenNumericalDateParser implements Parsable<TemporalAccessor> {
   /**
    *
    * @param input
-   * @param hint
+   * @param hint help to speed up the parsing and possibly return a better confidence
    * @return
    */
   public ParseResult<TemporalAccessor> parse(String input, DateFormatHint hint) {
