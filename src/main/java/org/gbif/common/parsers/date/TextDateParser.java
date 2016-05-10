@@ -12,12 +12,13 @@ import org.threeten.bp.LocalDate;
 import org.threeten.bp.temporal.TemporalAccessor;
 
 /**
- * Main class to parse a date represented as a single String or date parts as String.
+ * Main class to parse a date represented as a single String or as date parts into a {@link TemporalAccessor}.
  * If the String contains letters, the {@link TextualMonthDateTokenizer} and the {@link DatePartsNormalizer} will be used.
  * Otherwise, {@link ThreeTenNumericalDateParser} will be used.
  */
 public class TextDateParser implements Parsable<TemporalAccessor> {
 
+  private static final Pattern ISO_TIME_MARKER =  Pattern.compile("\\dT\\d");
   private static final Pattern AT_LEAST_ONE_LETTER =  Pattern.compile("[a-zA-Z]+");
   private static final TextualMonthDateTokenizer TEXT_MONTH_TOKENIZER = new TextualMonthDateTokenizer();
   private static final ThreeTenNumericalDateParser THREETEN_NUMERICAL_PARSER = ThreeTenNumericalDateParser.getParser();
@@ -29,8 +30,10 @@ public class TextDateParser implements Parsable<TemporalAccessor> {
       return ParseResult.fail();
     }
 
-    //check if the input text contains only punctuations and numbers
-    if(!AT_LEAST_ONE_LETTER.matcher(input).find()) {
+    // Check if the input text contains only punctuations and numbers
+    // Also accept the T marker (e.g. 1978-12-21T02:12) from the ISO format
+    // We could also simply try to parse it but it is probably not optimal
+    if(!AT_LEAST_ONE_LETTER.matcher(input).find() || ISO_TIME_MARKER.matcher(input).find()) {
       return THREETEN_NUMERICAL_PARSER.parse(input, DateFormatHint.NONE);
     }
 
