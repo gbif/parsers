@@ -92,7 +92,7 @@ public class DatePartsNormalizer {
    *
    * @param value To check
    *
-   * @return the integer value
+   * @return the integer value (as String)
    */
   public static String normalizeFloat(String value) {
     if (value != null && value.contains(".0")) {
@@ -107,7 +107,17 @@ public class DatePartsNormalizer {
     return value;
   }
 
+  /**
+   * Try to parse the provided String as Integer. Returns null if not possible.
+   * This function will trim the provided String.
+   * @param integer
+   * @return
+   */
   private static Integer parseOrNull(String integer){
+    if(integer != null){
+      integer = integer.trim();
+    }
+
     try{
       return Integer.valueOf(integer);
     }

@@ -26,6 +26,14 @@ public class DateNormalizerTest {
   }
 
   @Test
+  public void testNormalizationWithSpaces(){
+    DatePartsNormalizer.NormalizedYearMonthDay result = DatePartsNormalizer.normalize("1975 ", " 2 ", " 1");
+    assertEquals(new Integer(1), result.getDay());
+    assertEquals(Month.FEBRUARY.getValue(), result.getMonth().intValue());
+    assertEquals(new Integer(1975), result.getYear());
+  }
+
+  @Test
   public void testMonthNameNormalization(){
     assertEquals(Month.JANUARY.getValue(), DatePartsNormalizer.monthNameToNumerical("January").intValue());
     assertEquals(Month.JANUARY.getValue(), DatePartsNormalizer.monthNameToNumerical("JANUARY").intValue());

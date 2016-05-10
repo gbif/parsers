@@ -65,4 +65,10 @@ public class TextDateParserTest {
     parseResult = TEXTDATE_PARSER.parse("15 jan-fev 2018");
     assertFalse(parseResult.isSuccessful());
   }
+
+  @Test
+  public void testTextDatePartsParsing(){
+    ParseResult<TemporalAccessor> parseResult = TEXTDATE_PARSER.parse("1879", "11", "1");
+    assertEquals(LocalDate.of(1879, Month.NOVEMBER, 1), LocalDate.from(parseResult.getPayload()));
+  }
 }
