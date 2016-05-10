@@ -76,5 +76,8 @@ public class TextDateParserTest {
   public void testTextDatePartsParsing(){
     ParseResult<TemporalAccessor> parseResult = TEXTDATE_PARSER.parse("1879", "11", "1");
     assertEquals(LocalDate.of(1879, Month.NOVEMBER, 1), LocalDate.from(parseResult.getPayload()));
+
+    parseResult = TEXTDATE_PARSER.parse("1879", "a", "1");
+    assertFalse(parseResult.isSuccessful());
   }
 }

@@ -210,6 +210,12 @@ public class ThreeTenNumericalDateParser implements Parsable<TemporalAccessor> {
    * @return
    */
   public static ParseResult<TemporalAccessor> parse(@Nullable String year, @Nullable String month, @Nullable String day) {
+
+    // avoid possible misinterpretation when month is not provided (but day is)
+    if(StringUtils.isBlank(month) && StringUtils.isNotBlank(day)){
+      return ParseResult.fail();
+    }
+
     String date = Joiner.on(CHAR_HYPHEN).skipNulls().join(Strings.emptyToNull(year), Strings.emptyToNull(month),
             Strings.emptyToNull(day));
     TemporalAccessor tp = tryParse(date, ISO_PARSER, null);
@@ -229,6 +235,12 @@ public class ThreeTenNumericalDateParser implements Parsable<TemporalAccessor> {
    * @return
    */
   public static ParseResult<TemporalAccessor> parse(@Nullable Integer year, @Nullable Integer month, @Nullable Integer day) {
+
+    // avoid possible misinterpretation when month is not provided (but day is)
+    if(month == null && day != null){
+      return ParseResult.fail();
+    }
+
     String date = Joiner.on(CHAR_HYPHEN).skipNulls().join(year, month, day);
     TemporalAccessor tp = tryParse(date, ISO_PARSER, null);
 

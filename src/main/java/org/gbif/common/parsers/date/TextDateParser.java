@@ -75,6 +75,10 @@ public class TextDateParser implements Parsable<TemporalAccessor> {
     DatePartsNormalizer.NormalizedYearMonthDay normalizedYearMonthDay = DatePartsNormalizer.normalize(
             year, month, day);
 
+    // TODO when we can get the day but not the month in NormalizedYearMonthDay the parsing fails
+    // we could actually keep the year by calling ThreeTenNumericalDateParser.parse(normalizedYearMonthDay.getYear(),
+    // null, null); the CONFIDENCE would be set at PROBABLE.
+
     ParseResult<TemporalAccessor> parseResult = ThreeTenNumericalDateParser.parse(normalizedYearMonthDay.getYear(),
             normalizedYearMonthDay.getMonth(), normalizedYearMonthDay.getDay());
 
