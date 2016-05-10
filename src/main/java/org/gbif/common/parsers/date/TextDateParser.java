@@ -13,7 +13,7 @@ import org.threeten.bp.temporal.TemporalAccessor;
 
 /**
  * Main class to parse a date represented as a single String or date parts as String.
- * If the String contains letters, the {@link TextualMonthDateTokenizer} and the {@link DateNormalizer} will be used.
+ * If the String contains letters, the {@link TextualMonthDateTokenizer} and the {@link DatePartsNormalizer} will be used.
  * Otherwise, {@link ThreeTenNumericalDateParser} will be used.
  */
 public class TextDateParser implements Parsable<TemporalAccessor> {
@@ -37,7 +37,7 @@ public class TextDateParser implements Parsable<TemporalAccessor> {
     TextualMonthDateTokenizer.DateTokens dt = TEXT_MONTH_TOKENIZER.tokenize(input);
     // for now we only handle cases where we can find year, month, day with confidence.
     if(!dt.containsDiscardedTokens() && dt.size() == 3){
-      DateNormalizer.NormalizedYearMonthDay normalizedYearMonthDay = DateNormalizer.normalize(
+      DatePartsNormalizer.NormalizedYearMonthDay normalizedYearMonthDay = DatePartsNormalizer.normalize(
               dt.getToken(TextualMonthDateTokenizer.TokenType.INT_4).getToken(),
               dt.getToken(TextualMonthDateTokenizer.TokenType.TEXT).getToken(),
               dt.getToken(TextualMonthDateTokenizer.TokenType.INT_2).getToken());
@@ -61,7 +61,7 @@ public class TextDateParser implements Parsable<TemporalAccessor> {
 
   /**
    * Parse date parts into a TemporalAccessor.
-   * The {@link DateNormalizer} will be applied on raw data.
+   * The {@link DatePartsNormalizer} will be applied on raw data.
    *
    * @param year
    * @param month
@@ -69,10 +69,18 @@ public class TextDateParser implements Parsable<TemporalAccessor> {
    * @return
    */
   public ParseResult<TemporalAccessor> parse(String year, String month, String day) {
-    DateNormalizer.NormalizedYearMonthDay normalizedYearMonthDay = DateNormalizer.normalize(
-            year, month ,day);
-    return ThreeTenNumericalDateParser.parse(normalizedYearMonthDay.getYear(), normalizedYearMonthDay.getMonth(),
-            normalizedYearMonthDay.getDay());
+    DatePartsNormalizer.NormalizedYearMonthDay normalizedYearMonthDay = DatePartsNormalizer.normalize(
+            year, month, day);
+
+    ParseResult<TemporalAccessor> parseResult = ThreeTenNumericalDateParser.parse(normalizedYearMonthDay.getYear(),
+            normalizedYearMonthDay.getMonth(), normalizedYearMonthDay.getDay());
+
+    //If we got a successful parsing BUT a part of the date was discarded we reduce confidence.
+    if(parseResult.isSuccessful() && normalizedYearMonthDay.containsDiscardedPart()){
+      return ParseResult.success(ParseResult.CONFIDENCE.PROBABLE, parseResult.getPayload());
+    }
+
+    return parseResult;
   }
 
 }

@@ -3,13 +3,13 @@ package org.gbif.common.parsers.date;
 import org.apache.commons.lang3.StringUtils;
 
 /**
- * DateNormalizer contract is to take String representing Year, Month and Day and return the corresponding
+ * DatePartsNormalizer contract is to take String representing Year, Month and Day and return the corresponding
  * Integer as {@link NormalizedYearMonthDay} if possible.
  *
  * No validation will be applied to the normalized values.
  *
  */
-public class DateNormalizer {
+public class DatePartsNormalizer {
 
   // Dictionary for interpreting string months
   // Important that the FIRST is the canonical form, followed
@@ -175,6 +175,14 @@ public class DateNormalizer {
 
     public boolean dDiscarded() {
       return dDiscarded;
+    }
+
+    /**
+     * The NormalizedYearMonthDay contains at least one discarded part.
+     * @return
+     */
+    public boolean containsDiscardedPart(){
+      return yDiscarded || mDiscarded || dDiscarded;
     }
   }
 }
