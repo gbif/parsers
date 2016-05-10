@@ -32,13 +32,15 @@ public class DateNormalizer {
           {"December", "Dec", "D", "De"}
   };
 
+  private static final String STRING_NULL = "\\N";
+
   /**
    * Normalize date parts value.
    *
    * @param year
    * @param month
    * @param day
-   * @return
+   * @return result of normalization as NormalizedYearMonthDay
    */
   public static NormalizedYearMonthDay normalize(String year, String month, String day){
     year = normalizeFloat(year);
@@ -49,7 +51,16 @@ public class DateNormalizer {
     if(monthAsInt == null){
       monthAsInt = monthNameToNumerical(month);
     }
-    return new NormalizedYearMonthDay(parseOrNull(year), monthAsInt, parseOrNull(day));
+
+    Integer iYear = parseOrNull(year);
+    Integer iMonth = monthAsInt;
+    Integer iDay = parseOrNull(day);
+
+    boolean yearDiscarded = wasDiscarded(year, iYear);
+    boolean monthDiscarded = wasDiscarded(month, iMonth);
+    boolean dayDiscarded = wasDiscarded(day, iDay);
+
+    return new NormalizedYearMonthDay(iYear, iMonth, iDay, yearDiscarded, monthDiscarded, dayDiscarded);
   }
 
   /**
@@ -105,8 +116,21 @@ public class DateNormalizer {
   }
 
   /**
-   * The only reason why a such class exists is simply to possibly hold "invalid" data.
-   * The normalizer job is simply to return Integer based on String.
+   * Assert if a String value was discarded in the normalization process.
+   *
+   * @param strValue
+   * @param intValue
+   * @return the value should be considered discarded or not
+   */
+  private static boolean wasDiscarded(String strValue, Integer intValue){
+    if(StringUtils.isBlank(strValue) || STRING_NULL.equals(strValue)){
+      return false;
+    }
+    return intValue == null;
+  }
+
+  /**
+   * Hold result of the normalization process.
    */
   public static class NormalizedYearMonthDay {
 
@@ -114,10 +138,19 @@ public class DateNormalizer {
     private Integer month;
     private Integer day;
 
-    public NormalizedYearMonthDay(Integer year, Integer month, Integer day){
+    private boolean yDiscarded;
+    private boolean mDiscarded;
+    private boolean dDiscarded;
+
+    NormalizedYearMonthDay(Integer year, Integer month, Integer day, boolean yDiscarded, boolean mDiscarded,
+                           boolean dDiscarded){
       this.year = year;
       this.month = month;
       this.day = day;
+
+      this.yDiscarded = yDiscarded;
+      this.mDiscarded = mDiscarded;
+      this.dDiscarded = dDiscarded;
     }
 
     public Integer getYear() {
@@ -130,6 +163,18 @@ public class DateNormalizer {
 
     public Integer getDay() {
       return day;
+    }
+
+    public boolean yDiscarded() {
+      return yDiscarded;
+    }
+
+    public boolean mDiscarded() {
+      return mDiscarded;
+    }
+
+    public boolean dDiscarded() {
+      return dDiscarded;
     }
   }
 }

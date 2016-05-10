@@ -4,6 +4,10 @@ import org.junit.Test;
 import org.threeten.bp.Month;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Tests related to {@link DateNormalizer}
@@ -34,5 +38,38 @@ public class DateNormalizerTest {
     assertEquals(Month.JUNE.getValue(), DateNormalizer.monthNameToNumerical("Jun").intValue());
     assertEquals(Month.JUNE.getValue(), DateNormalizer.monthNameToNumerical("JUNE").intValue());
     assertEquals(Month.NOVEMBER.getValue(), DateNormalizer.monthNameToNumerical("November").intValue());
+  }
+
+  @Test
+  public void testDiscardedDateParts(){
+
+    DateNormalizer.NormalizedYearMonthDay result = DateNormalizer.normalize("a", "5", "3");
+    assertTrue(result.yDiscarded());
+    assertNull(result.getYear());
+    assertNotNull(result.getMonth());
+
+    result = DateNormalizer.normalize("2000", "a", "3");
+    assertTrue(result.mDiscarded());
+    assertNull(result.getMonth());
+    assertNotNull(result.getYear());
+
+    result = DateNormalizer.normalize("2000", "5", "a");
+    assertTrue(result.dDiscarded());
+    assertNull(result.getDay());
+    assertNotNull(result.getYear());
+
+    // empty String, null and \\N should NOT be considered as "discarded"
+    // they simply represent "not provided"
+    result = DateNormalizer.normalize("2000", "5", "");
+    assertFalse(result.dDiscarded());
+    assertNull(result.getDay());
+
+    result = DateNormalizer.normalize("2000", "5", null);
+    assertFalse(result.dDiscarded());
+    assertNull(result.getDay());
+
+    result = DateNormalizer.normalize("2000", "5", "\\N");
+    assertFalse(result.dDiscarded());
+    assertNull(result.getDay());
   }
 }
