@@ -76,7 +76,8 @@ public class ThreeTenNumericalDateParser implements Parsable<TemporalAccessor> {
   private static final List<ThreeTenDateTimeParser> BASE_PARSER_LIST = ImmutableList.copyOf(
           ThreeTenNumericalDateParserBuilder.newParserListBuilder()
                   .appendDateTimeParser("uuuuMMdd", DateFormatHint.YMD)
-                  .appendDateTimeParser("uuuu-M-d[ HH:mm:ss]", DateFormatHint.YMDT)
+                  .appendDateTimeParser("uuuu-M-d[ HH:mm:ss]", DateFormatHint.YMDT, String.valueOf(CHAR_HYPHEN),
+                          String.valueOf(CHAR_MINUS) + ".")
                   .appendDateTimeParser("uuuu-M-d'T'HH[:mm[:ss]]", DateFormatHint.YMDT)
                   .appendDateTimeParser("uuuu-M-d'T'HHmm[ss]", DateFormatHint.YMDT)
                   .appendDateTimeParser("uuuu-M-d'T'HH:mm:ssZ", DateFormatHint.YMDT)
@@ -114,13 +115,21 @@ public class ThreeTenNumericalDateParser implements Parsable<TemporalAccessor> {
 
   static{
     for(ThreeTenDateTimeParser parser : BASE_PARSER_LIST){
-      FORMATTERS_BY_HINT.putIfAbsent(parser.getHint(), new ArrayList<ThreeTenDateTimeParser>());
+      //TODO: when updated to Java 8 FORMATTERS_BY_HINT.putIfAbsent(parser.getHint(), new ArrayList<ThreeTenDateTimeParser>());
+      if(!FORMATTERS_BY_HINT.containsKey(parser.getHint())){
+        FORMATTERS_BY_HINT.put(parser.getHint(), new ArrayList<ThreeTenDateTimeParser>());
+      }
+      // end TODO
       FORMATTERS_BY_HINT.get(parser.getHint()).add(parser);
     }
 
     for(ThreeTenDateTimeMultiParser parserAmbiguity : MULTIPARSER_PARSER_LIST){
       for(ThreeTenDateTimeParser parser : parserAmbiguity.getAllParsers()) {
-        FORMATTERS_BY_HINT.putIfAbsent(parser.getHint(), new ArrayList<ThreeTenDateTimeParser>());
+        //TODO: when updated to Java 8 FORMATTERS_BY_HINT.putIfAbsent(parser.getHint(), new ArrayList<ThreeTenDateTimeParser>());
+        if(!FORMATTERS_BY_HINT.containsKey(parser.getHint())){
+          FORMATTERS_BY_HINT.put(parser.getHint(), new ArrayList<ThreeTenDateTimeParser>());
+        }
+        // end TODO
         FORMATTERS_BY_HINT.get(parser.getHint()).add(parser);
       }
     }
@@ -187,7 +196,11 @@ public class ThreeTenNumericalDateParser implements Parsable<TemporalAccessor> {
 
     for(ThreeTenDateTimeMultiParser multiParser : multiParserList){
       for(ThreeTenDateTimeParser parser : multiParser.getAllParsers()) {
-        formattersByHint.putIfAbsent(parser.getHint(), new ArrayList<ThreeTenDateTimeParser>());
+        //TODO: when updated to Java 8 formattersByHint.putIfAbsent(parser.getHint(), new ArrayList<ThreeTenDateTimeParser>());
+        if(!formattersByHint.containsKey(parser.getHint())){
+          formattersByHint.put(parser.getHint(), new ArrayList<ThreeTenDateTimeParser>());
+        }
+        // end TODO
         formattersByHint.get(parser.getHint()).add(parser);
       }
     }
