@@ -37,6 +37,9 @@ public class TextDateParserTest {
   public void testTextDateTimeParsing(){
     ParseResult<TemporalAccessor> parseResult = TEXTDATE_PARSER.parse("1978-1-1T00:00");
     assertEquals(LocalDate.of(1978, Month.JANUARY, 1), LocalDate.from(parseResult.getPayload()));
+
+    parseResult = TEXTDATE_PARSER.parse("1978-01-01T02:12:43Z");
+    assertEquals(LocalDate.of(1978, Month.JANUARY, 1), LocalDate.from(parseResult.getPayload()));
   }
 
   @Test
