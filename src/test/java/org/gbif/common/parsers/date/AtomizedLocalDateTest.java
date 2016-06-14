@@ -6,7 +6,7 @@ import org.threeten.bp.Month;
 import org.threeten.bp.Year;
 import org.threeten.bp.YearMonth;
 
-import static junit.framework.Assert.assertEquals;
+import static org.junit.Assert.assertEquals;
 
 /**
  * Unit tests for {@link AtomizedLocalDate}.

@@ -16,6 +16,8 @@ import org.threeten.bp.LocalDateTime;
 import org.threeten.bp.Month;
 import org.threeten.bp.Year;
 import org.threeten.bp.YearMonth;
+import org.threeten.bp.ZoneOffset;
+import org.threeten.bp.ZonedDateTime;
 import org.threeten.bp.temporal.TemporalAccessor;
 
 import static org.junit.Assert.assertEquals;
@@ -166,6 +168,13 @@ public class ThreeTenNumericalDateParserTest {
     // providing the day without the month should result in an error
     assertEquals(ParseResult.STATUS.FAIL, parser.parse("1978", "", "2").getStatus());
     assertEquals(ParseResult.STATUS.FAIL, parser.parse(1978, null, 2).getStatus());
+  }
+
+  @Test
+  public void testParsePreserveZoneOffset(){
+    ThreeTenNumericalDateParser parser = ThreeTenNumericalDateParser.getParser();
+    ZonedDateTime offsetDateTime = ZonedDateTime.of(1978, 12, 21, 0, 0, 0, 0, ZoneOffset.of("+02:00"));
+    assertEquals(offsetDateTime, parser.parse("1978-12-21T00:00:00+02:00").getPayload());
   }
 
   @Test

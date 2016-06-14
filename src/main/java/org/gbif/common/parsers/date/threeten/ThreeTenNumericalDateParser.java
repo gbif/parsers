@@ -24,6 +24,7 @@ import org.threeten.bp.LocalDate;
 import org.threeten.bp.LocalDateTime;
 import org.threeten.bp.Year;
 import org.threeten.bp.YearMonth;
+import org.threeten.bp.ZonedDateTime;
 import org.threeten.bp.format.DateTimeFormatter;
 import org.threeten.bp.format.DateTimeFormatterBuilder;
 import org.threeten.bp.format.DateTimeParseException;
@@ -343,9 +344,8 @@ public class ThreeTenNumericalDateParser implements Parsable<TemporalAccessor> {
     if(normalizer != null){
       input = normalizer.normalize(input);
     }
-
     try {
-      return formatter.parseBest(input, LocalDateTime.FROM, LocalDate.FROM, YearMonth.FROM, Year.FROM);
+      return formatter.parseBest(input, ZonedDateTime.FROM, LocalDateTime.FROM, LocalDate.FROM, YearMonth.FROM, Year.FROM);
     }
     catch (DateTimeParseException dpe){}
     return null;

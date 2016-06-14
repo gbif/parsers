@@ -7,6 +7,7 @@ import org.threeten.bp.LocalDate;
 import org.threeten.bp.LocalDateTime;
 import org.threeten.bp.Year;
 import org.threeten.bp.YearMonth;
+import org.threeten.bp.ZonedDateTime;
 import org.threeten.bp.format.DateTimeFormatter;
 import org.threeten.bp.format.DateTimeParseException;
 import org.threeten.bp.temporal.TemporalAccessor;
@@ -52,7 +53,7 @@ class ThreeTenDateTimeParser {
    */
   private TemporalQuery<?>[] getTypesFromHint(DateFormatHint hint){
     switch(hint){
-      case YMDT: return new TemporalQuery<?>[]{LocalDateTime.FROM, LocalDate.FROM, YearMonth.FROM, Year.FROM};
+      case YMDT: return new TemporalQuery<?>[]{ZonedDateTime.FROM, LocalDateTime.FROM, LocalDate.FROM, YearMonth.FROM, Year.FROM};
       case YMD: return new TemporalQuery<?>[]{LocalDate.FROM, YearMonth.FROM, Year.FROM};
       case YM: return new TemporalQuery<?>[]{YearMonth.FROM, Year.FROM};
       case Y: return new TemporalQuery<?>[]{Year.FROM};
