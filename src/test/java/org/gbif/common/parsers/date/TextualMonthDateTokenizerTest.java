@@ -48,11 +48,11 @@ public class TextualMonthDateTokenizerTest {
         String int2Token = row[INT_2_IDX];
 
         TextualMonthDateTokenizer.DateTokens dateTokens = DATE_TOKENIZER.tokenize(raw);
-        assertEquals(new TextualMonthDateTokenizer.DateToken(int2Token, TextualMonthDateTokenizer.TokenType.INT_2),
+        assertEquals("Raw: " + raw, new TextualMonthDateTokenizer.DateToken(int2Token, TextualMonthDateTokenizer.TokenType.INT_2),
                 dateTokens.getToken(TextualMonthDateTokenizer.TokenType.INT_2));
-        assertEquals(new TextualMonthDateTokenizer.DateToken(textToken, TextualMonthDateTokenizer.TokenType.TEXT),
+        assertEquals("Raw: " + raw, new TextualMonthDateTokenizer.DateToken(textToken, TextualMonthDateTokenizer.TokenType.TEXT),
                 dateTokens.getToken(TextualMonthDateTokenizer.TokenType.TEXT));
-        assertEquals(new TextualMonthDateTokenizer.DateToken(int4Token, TextualMonthDateTokenizer.TokenType.INT_4),
+        assertEquals("Raw: " + raw, new TextualMonthDateTokenizer.DateToken(int4Token, TextualMonthDateTokenizer.TokenType.INT_4),
                 dateTokens.getToken(TextualMonthDateTokenizer.TokenType.INT_4));
 
         return null;

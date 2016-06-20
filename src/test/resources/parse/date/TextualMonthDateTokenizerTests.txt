@@ -2,3 +2,5 @@ raw;TokenType.INT_4,TokenType.TEXT,TokenType.INT_2
 2018, March 1st;2018;March;1
 2nd jan. 2018;2018;jan.;2
 March 3th 2018;2018;March;3
+1. Jan. 1913;1913;Jan.;1
+1. Jand. 1913;1913;Jand.;1

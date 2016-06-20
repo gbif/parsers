@@ -33,7 +33,8 @@ public class TextualMonthDateTokenizer {
   }
 
   private static final Pattern SEPARATOR_PATTERN =  Pattern.compile("[^A-Za-z0-9.]+");
-  private static final Pattern DAY_SUFFIXES_PATTERN =  Pattern.compile("(?<=[0-9])st|nd|rd|th");
+  private static final Pattern DAY_SUFFIXES_PATTERN =  Pattern.compile("(?<=[0-9]{1,2})(st|nd|rd|th|\\.)",
+          Pattern.CASE_INSENSITIVE);
 
   private static final Map<TokenType, Pattern> PATTERNS_BY_TYPE = ImmutableMap.of(
           TokenType.INT_2, Pattern.compile("[0-9]{1,2}"),
@@ -118,6 +119,13 @@ public class TextualMonthDateTokenizer {
 
     public List<DateToken> getDiscardedTokens() {
       return ImmutableList.copyOf(discardedTokens);
+    }
+
+    @Override
+    public String toString(){
+      return MoreObjects.toStringHelper(this)
+              .add("tokens", tokens)
+              .add("discardedTokens", discardedTokens).toString();
     }
 
   }
