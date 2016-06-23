@@ -17,17 +17,17 @@ public class DatePartsNormalizer {
   // such as "J" "A" etc.  Do not add a "." at the end of abbreviations
   // as normalization will automatically do this.
   protected static final String[][] MONTHS = {
-          {"January", "Jan", "J", "Ene", "Ja"},  // Ene. is abbreviated Spanish
+          {"January", "Jan", "Ene", "Ja"},  // Ene. is abbreviated Spanish
           {"February", "Feb", "F", "Fe"},
           {"March", "Mar"},
           {"April", "Apr", "Ap", "Abr"},  // Abr. is abbreviated Spanish
           {"May"},
-          {"June", "Jun"},
-          {"July", "Jul"},
+          {"June", "Jun", "Juni"},
+          {"July", "Jul", "Juli"},
           {"August", "Aug", "Au", "Ago"},
           // Ago seen a lot in data
           {"September", "Sep", "Sept", "Set", "S"}, // Set is a common misspelling
-          {"October", "Oct", "O", "Oc"},
+          {"October", "Oct", "O", "Oc", "Okt"},
           {"November", "Novermber", "Nov", "N", "No"},
           {"December", "Dec", "D", "De"}
   };

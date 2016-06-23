@@ -298,6 +298,8 @@ public class ThreeTenNumericalDateParser implements Parsable<TemporalAccessor> {
     int numberOfPossiblyAmbiguousMatch = 0;
     TemporalAccessor lastParsedSuccess = null;
     TemporalAccessor lastParsedPreferred = null;
+    // Is that all results are equal in case there is no preferred result defined
+    boolean lastParsedSuccessOtherResultsEqual = false;
     ThreeTenDateTimeMultiParser.MultipleParseResult result;
 
     for(ThreeTenDateTimeMultiParser parserAmbiguity : activeMultiParserList){
@@ -307,11 +309,24 @@ public class ThreeTenNumericalDateParser implements Parsable<TemporalAccessor> {
       if(result.getNumberParsed() > 0){
         lastParsedSuccess = result.getResult();
 
+        // make sure to log in case lastParsedSuccessEqual already equals true
+        if (lastParsedSuccessOtherResultsEqual) {
+          LOGGER.warn("Issue with ThreeTenDateTimeMultiParser configuration: Input {} produces more results even " +
+                  "if lastParsedSuccessEqual is set to true.", input);
+        }
+        lastParsedSuccessOtherResultsEqual = false;
+
         if(result.getPreferredResult() != null){
           if(lastParsedPreferred != null){
-            LOGGER.warn("Issue with ThreeTenDateTimeMultiParser configuration. {} produces 2 preferred result", input);
+            LOGGER.warn("Issue with ThreeTenDateTimeMultiParser configuration: Input {} produces 2 preferred results", input);
           }
           lastParsedPreferred = result.getPreferredResult();
+        }
+        else{
+          //if we have no PreferredResult but all results represent the same TemporalAccessor
+          if(result.getOtherResults() != null && result.getOtherResults().size() > 1) {
+            lastParsedSuccessOtherResultsEqual = allEquals(result.getOtherResults());
+          }
         }
       }
     }
@@ -321,6 +336,12 @@ public class ThreeTenNumericalDateParser implements Parsable<TemporalAccessor> {
       return ParseResult.success(ParseResult.CONFIDENCE.DEFINITE, lastParsedSuccess);
     }
     else if ( numberOfPossiblyAmbiguousMatch > 1 ){
+
+      //if all the possible ambiguities are equal, there is no ambiguity
+      if(lastParsedSuccessOtherResultsEqual){
+        return ParseResult.success(ParseResult.CONFIDENCE.DEFINITE, lastParsedSuccess);
+      }
+
       //check if we have result from the preferred parser
       if(lastParsedPreferred != null){
         return ParseResult.success(ParseResult.CONFIDENCE.PROBABLE, lastParsedPreferred);
@@ -349,6 +370,29 @@ public class ThreeTenNumericalDateParser implements Parsable<TemporalAccessor> {
     }
     catch (DateTimeParseException dpe){}
     return null;
+  }
+
+  /**
+   * Check if all the TemporalAccessor of the list are equal.
+   * If the list contains 0 element is will return false, if the list contains 1 element it will return true.
+   * @param taList
+   * @return
+   */
+  private static boolean allEquals(List<TemporalAccessor> taList){
+
+    if(taList == null || taList.isEmpty()){
+      return false;
+    }
+
+    TemporalAccessor reference = null;
+    boolean allEqual = false;
+    for(TemporalAccessor ta: taList){
+      if(reference == null){
+        reference = ta;
+      }
+      allEqual = reference.equals(ta);
+    }
+    return allEqual;
   }
 
 }
