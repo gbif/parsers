@@ -1,7 +1,7 @@
 # Date Parsing - Design Notes
 
 Design overview
-![Design](./assets/date_parsing_design.png)
+![Design](./date_parsing_design.png)
 
 ## Entry points
 There is 2 main methods in [TextDateParser](http://gbif.github.io/parsers/apidocs/org/gbif/common/parsers/date/TextDateParser.html) to parse dates represented in String.
