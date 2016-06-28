@@ -6,7 +6,7 @@ import com.google.common.collect.Lists;
 import org.threeten.bp.temporal.TemporalAccessor;
 
 /**
- * Allows to support more than one ThreeTenDateTimeParser that are considered "vague".
+ * Internal (package protected) wrapper to support more than one ThreeTenDateTimeParser that are considered "vague".
  * This class will try all the parsers and record all the results.
  */
 class ThreeTenDateTimeMultiParser {
