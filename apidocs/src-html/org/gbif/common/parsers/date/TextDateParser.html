@@ -1,0 +1,180 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en">
+<head>
+<title>Source code</title>
+<link rel="stylesheet" type="text/css" href="../../../../../../stylesheet.css" title="Style">
+</head>
+<body>
+<div class="sourceContainer">
+<pre><span class="sourceLineNo">001</span>package org.gbif.common.parsers.date;<a name="line.1"></a>
+<span class="sourceLineNo">002</span><a name="line.2"></a>
+<span class="sourceLineNo">003</span>import org.gbif.common.parsers.core.Parsable;<a name="line.3"></a>
+<span class="sourceLineNo">004</span>import org.gbif.common.parsers.core.ParseResult;<a name="line.4"></a>
+<span class="sourceLineNo">005</span>import org.gbif.common.parsers.date.threeten.ThreeTenNumericalDateParser;<a name="line.5"></a>
+<span class="sourceLineNo">006</span><a name="line.6"></a>
+<span class="sourceLineNo">007</span>import java.util.regex.Pattern;<a name="line.7"></a>
+<span class="sourceLineNo">008</span><a name="line.8"></a>
+<span class="sourceLineNo">009</span>import org.apache.commons.lang3.StringUtils;<a name="line.9"></a>
+<span class="sourceLineNo">010</span>import org.threeten.bp.DateTimeException;<a name="line.10"></a>
+<span class="sourceLineNo">011</span>import org.threeten.bp.LocalDate;<a name="line.11"></a>
+<span class="sourceLineNo">012</span>import org.threeten.bp.temporal.TemporalAccessor;<a name="line.12"></a>
+<span class="sourceLineNo">013</span><a name="line.13"></a>
+<span class="sourceLineNo">014</span>/**<a name="line.14"></a>
+<span class="sourceLineNo">015</span> * Main class to parse a date represented as a single String or as date parts into a {@link TemporalAccessor}.<a name="line.15"></a>
+<span class="sourceLineNo">016</span> * If the String contains letters, the {@link TextualMonthDateTokenizer} and the {@link DatePartsNormalizer} will be used.<a name="line.16"></a>
+<span class="sourceLineNo">017</span> * Otherwise, {@link ThreeTenNumericalDateParser} will be used.<a name="line.17"></a>
+<span class="sourceLineNo">018</span> */<a name="line.18"></a>
+<span class="sourceLineNo">019</span>public class TextDateParser implements Parsable&lt;TemporalAccessor&gt; {<a name="line.19"></a>
+<span class="sourceLineNo">020</span><a name="line.20"></a>
+<span class="sourceLineNo">021</span>  //private static final Pattern ISO_TIME_MARKER =  Pattern.compile("\\dT\\d");<a name="line.21"></a>
+<span class="sourceLineNo">022</span>  //private static final Pattern AT_LEAST_ONE_LETTER =  Pattern.compile("[a-zA-Z]+");<a name="line.22"></a>
+<span class="sourceLineNo">023</span>  //This regex is not complete and will NOT handle date when the time zone is provided as text GMT<a name="line.23"></a>
+<span class="sourceLineNo">024</span>  private static final Pattern NUMERICAL_DATE_PATTERN =  Pattern.compile("[^a-zA-Z]+[\\dT\\d]?[^a-zA-Z]+[Z]?$");<a name="line.24"></a>
+<span class="sourceLineNo">025</span>  private static final TextualMonthDateTokenizer TEXT_MONTH_TOKENIZER = new TextualMonthDateTokenizer();<a name="line.25"></a>
+<span class="sourceLineNo">026</span>  private static final ThreeTenNumericalDateParser THREETEN_NUMERICAL_PARSER = ThreeTenNumericalDateParser.getParser();<a name="line.26"></a>
+<span class="sourceLineNo">027</span><a name="line.27"></a>
+<span class="sourceLineNo">028</span>  public static void main(String[] args){<a name="line.28"></a>
+<span class="sourceLineNo">029</span>    TextDateParser dateParser = new TextDateParser();<a name="line.29"></a>
+<span class="sourceLineNo">030</span>    ParseResult&lt;TemporalAccessor&gt; ta = dateParser.parse("2nd jan. 1999");<a name="line.30"></a>
+<span class="sourceLineNo">031</span><a name="line.31"></a>
+<span class="sourceLineNo">032</span>    LocalDate localDate = LocalDate.from(ta.getPayload());<a name="line.32"></a>
+<span class="sourceLineNo">033</span>    //System.out.println(localDate);<a name="line.33"></a>
+<span class="sourceLineNo">034</span><a name="line.34"></a>
+<span class="sourceLineNo">035</span>    ta = dateParser.parse("1999", "jan.", "2");<a name="line.35"></a>
+<span class="sourceLineNo">036</span>    localDate = LocalDate.from(ta.getPayload());<a name="line.36"></a>
+<span class="sourceLineNo">037</span>    System.out.println(localDate);<a name="line.37"></a>
+<span class="sourceLineNo">038</span>  }<a name="line.38"></a>
+<span class="sourceLineNo">039</span><a name="line.39"></a>
+<span class="sourceLineNo">040</span>  @Override<a name="line.40"></a>
+<span class="sourceLineNo">041</span>  public ParseResult&lt;TemporalAccessor&gt; parse(String input) {<a name="line.41"></a>
+<span class="sourceLineNo">042</span><a name="line.42"></a>
+<span class="sourceLineNo">043</span>    if(StringUtils.isBlank(input)){<a name="line.43"></a>
+<span class="sourceLineNo">044</span>      return ParseResult.fail();<a name="line.44"></a>
+<span class="sourceLineNo">045</span>    }<a name="line.45"></a>
+<span class="sourceLineNo">046</span><a name="line.46"></a>
+<span class="sourceLineNo">047</span>    // Check if the input text contains only punctuations and numbers<a name="line.47"></a>
+<span class="sourceLineNo">048</span>    // Also accept the T marker (e.g. 1978-12-21T02:12) from the ISO format<a name="line.48"></a>
+<span class="sourceLineNo">049</span>    // We could also simply try to parse it but it is probably not optimal<a name="line.49"></a>
+<span class="sourceLineNo">050</span>    //if(!AT_LEAST_ONE_LETTER.matcher(input).find() || ISO_TIME_MARKER.matcher(input).find()) {<a name="line.50"></a>
+<span class="sourceLineNo">051</span>    if(NUMERICAL_DATE_PATTERN.matcher(input).matches()) {<a name="line.51"></a>
+<span class="sourceLineNo">052</span>      return THREETEN_NUMERICAL_PARSER.parse(input, DateFormatHint.NONE);<a name="line.52"></a>
+<span class="sourceLineNo">053</span>    }<a name="line.53"></a>
+<span class="sourceLineNo">054</span><a name="line.54"></a>
+<span class="sourceLineNo">055</span>    TextualMonthDateTokenizer.DateTokens dt = TEXT_MONTH_TOKENIZER.tokenize(input);<a name="line.55"></a>
+<span class="sourceLineNo">056</span>    // for now we only handle cases where we can find year, month, day with confidence.<a name="line.56"></a>
+<span class="sourceLineNo">057</span>    if(!dt.containsDiscardedTokens() &amp;&amp; dt.size() == 3){<a name="line.57"></a>
+<span class="sourceLineNo">058</span>      DatePartsNormalizer.NormalizedYearMonthDay normalizedYearMonthDay = DatePartsNormalizer.normalize(<a name="line.58"></a>
+<span class="sourceLineNo">059</span>              dt.getToken(TextualMonthDateTokenizer.TokenType.INT_4).getToken(),<a name="line.59"></a>
+<span class="sourceLineNo">060</span>              dt.getToken(TextualMonthDateTokenizer.TokenType.TEXT).getToken(),<a name="line.60"></a>
+<span class="sourceLineNo">061</span>              dt.getToken(TextualMonthDateTokenizer.TokenType.INT_2).getToken());<a name="line.61"></a>
+<span class="sourceLineNo">062</span><a name="line.62"></a>
+<span class="sourceLineNo">063</span>      //no handling for partial dates with textual month for now<a name="line.63"></a>
+<span class="sourceLineNo">064</span>      if(normalizedYearMonthDay.getYear() != null &amp;&amp;<a name="line.64"></a>
+<span class="sourceLineNo">065</span>              normalizedYearMonthDay.getMonth() != null &amp;&amp;<a name="line.65"></a>
+<span class="sourceLineNo">066</span>              normalizedYearMonthDay.getDay() != null){<a name="line.66"></a>
+<span class="sourceLineNo">067</span>        try {<a name="line.67"></a>
+<span class="sourceLineNo">068</span>          return ParseResult.success(ParseResult.CONFIDENCE.DEFINITE,<a name="line.68"></a>
+<span class="sourceLineNo">069</span>                  (TemporalAccessor)LocalDate.of(normalizedYearMonthDay.getYear(),<a name="line.69"></a>
+<span class="sourceLineNo">070</span>                          normalizedYearMonthDay.getMonth(), normalizedYearMonthDay.getDay()));<a name="line.70"></a>
+<span class="sourceLineNo">071</span>        }<a name="line.71"></a>
+<span class="sourceLineNo">072</span>        catch (DateTimeException ignore){<a name="line.72"></a>
+<span class="sourceLineNo">073</span>          //simply ignore bad dates<a name="line.73"></a>
+<span class="sourceLineNo">074</span>        }<a name="line.74"></a>
+<span class="sourceLineNo">075</span>      }<a name="line.75"></a>
+<span class="sourceLineNo">076</span>    }<a name="line.76"></a>
+<span class="sourceLineNo">077</span>    return ParseResult.fail();<a name="line.77"></a>
+<span class="sourceLineNo">078</span>  }<a name="line.78"></a>
+<span class="sourceLineNo">079</span><a name="line.79"></a>
+<span class="sourceLineNo">080</span>  /**<a name="line.80"></a>
+<span class="sourceLineNo">081</span>   * Parse date parts into a TemporalAccessor.<a name="line.81"></a>
+<span class="sourceLineNo">082</span>   * The {@link DatePartsNormalizer} will be applied on raw data.<a name="line.82"></a>
+<span class="sourceLineNo">083</span>   *<a name="line.83"></a>
+<span class="sourceLineNo">084</span>   * @param year<a name="line.84"></a>
+<span class="sourceLineNo">085</span>   * @param month<a name="line.85"></a>
+<span class="sourceLineNo">086</span>   * @param day<a name="line.86"></a>
+<span class="sourceLineNo">087</span>   * @return<a name="line.87"></a>
+<span class="sourceLineNo">088</span>   */<a name="line.88"></a>
+<span class="sourceLineNo">089</span>  public ParseResult&lt;TemporalAccessor&gt; parse(String year, String month, String day) {<a name="line.89"></a>
+<span class="sourceLineNo">090</span>    DatePartsNormalizer.NormalizedYearMonthDay normalizedYearMonthDay = DatePartsNormalizer.normalize(<a name="line.90"></a>
+<span class="sourceLineNo">091</span>            year, month, day);<a name="line.91"></a>
+<span class="sourceLineNo">092</span><a name="line.92"></a>
+<span class="sourceLineNo">093</span>    // TODO when we can get the day but not the month in NormalizedYearMonthDay the parsing fails<a name="line.93"></a>
+<span class="sourceLineNo">094</span>    // we could actually keep the year by calling ThreeTenNumericalDateParser.parse(normalizedYearMonthDay.getYear(),<a name="line.94"></a>
+<span class="sourceLineNo">095</span>    // null, null); the CONFIDENCE would be set at PROBABLE.<a name="line.95"></a>
+<span class="sourceLineNo">096</span><a name="line.96"></a>
+<span class="sourceLineNo">097</span>    ParseResult&lt;TemporalAccessor&gt; parseResult = ThreeTenNumericalDateParser.parse(normalizedYearMonthDay.getYear(),<a name="line.97"></a>
+<span class="sourceLineNo">098</span>            normalizedYearMonthDay.getMonth(), normalizedYearMonthDay.getDay());<a name="line.98"></a>
+<span class="sourceLineNo">099</span><a name="line.99"></a>
+<span class="sourceLineNo">100</span>    //If we got a successful parsing BUT a part of the date was discarded we reduce confidence.<a name="line.100"></a>
+<span class="sourceLineNo">101</span>    if(parseResult.isSuccessful() &amp;&amp; normalizedYearMonthDay.containsDiscardedPart()){<a name="line.101"></a>
+<span class="sourceLineNo">102</span>      return ParseResult.success(ParseResult.CONFIDENCE.PROBABLE, parseResult.getPayload());<a name="line.102"></a>
+<span class="sourceLineNo">103</span>    }<a name="line.103"></a>
+<span class="sourceLineNo">104</span><a name="line.104"></a>
+<span class="sourceLineNo">105</span>    return parseResult;<a name="line.105"></a>
+<span class="sourceLineNo">106</span>  }<a name="line.106"></a>
+<span class="sourceLineNo">107</span><a name="line.107"></a>
+<span class="sourceLineNo">108</span>}<a name="line.108"></a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</pre>
+</div>
+</body>
+</html>

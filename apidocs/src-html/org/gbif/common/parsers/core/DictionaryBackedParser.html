@@ -1,0 +1,170 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en">
+<head>
+<title>Source code</title>
+<link rel="stylesheet" type="text/css" href="../../../../../../stylesheet.css" title="Style">
+</head>
+<body>
+<div class="sourceContainer">
+<pre><span class="sourceLineNo">001</span>package org.gbif.common.parsers.core;<a name="line.1"></a>
+<span class="sourceLineNo">002</span><a name="line.2"></a>
+<span class="sourceLineNo">003</span>import java.util.HashMap;<a name="line.3"></a>
+<span class="sourceLineNo">004</span>import java.util.Iterator;<a name="line.4"></a>
+<span class="sourceLineNo">005</span>import java.util.Map;<a name="line.5"></a>
+<span class="sourceLineNo">006</span><a name="line.6"></a>
+<span class="sourceLineNo">007</span>import com.google.common.base.Preconditions;<a name="line.7"></a>
+<span class="sourceLineNo">008</span>import com.google.common.base.Strings;<a name="line.8"></a>
+<span class="sourceLineNo">009</span>import org.apache.commons.lang3.StringUtils;<a name="line.9"></a>
+<span class="sourceLineNo">010</span>import org.slf4j.Logger;<a name="line.10"></a>
+<span class="sourceLineNo">011</span>import org.slf4j.LoggerFactory;<a name="line.11"></a>
+<span class="sourceLineNo">012</span><a name="line.12"></a>
+<span class="sourceLineNo">013</span>/**<a name="line.13"></a>
+<span class="sourceLineNo">014</span> * A simple parser that will initialise with source data, and will<a name="line.14"></a>
+<span class="sourceLineNo">015</span> * use that as a lookup to replace values. This was written with<a name="line.15"></a>
+<span class="sourceLineNo">016</span> * basis of record lookup and country names in mind.<a name="line.16"></a>
+<span class="sourceLineNo">017</span> * Future improvements to this implementation might call a<a name="line.17"></a>
+<span class="sourceLineNo">018</span> * dictionary web service for example, to achieve the same,<a name="line.18"></a>
+<span class="sourceLineNo">019</span> * but allow the abstraction of the dictionary management to a<a name="line.19"></a>
+<span class="sourceLineNo">020</span> * better project (separation of concerns)<a name="line.20"></a>
+<span class="sourceLineNo">021</span> */<a name="line.21"></a>
+<span class="sourceLineNo">022</span>public class DictionaryBackedParser&lt;V&gt; implements Parsable&lt;V&gt; {<a name="line.22"></a>
+<span class="sourceLineNo">023</span>  protected final Logger log = LoggerFactory.getLogger(getClass());<a name="line.23"></a>
+<span class="sourceLineNo">024</span>  private final Map&lt;String, V&gt; dictionary = new HashMap&lt;String, V&gt;();<a name="line.24"></a>
+<span class="sourceLineNo">025</span>  private boolean caseSensitive = false;<a name="line.25"></a>
+<span class="sourceLineNo">026</span><a name="line.26"></a>
+<span class="sourceLineNo">027</span>  /**<a name="line.27"></a>
+<span class="sourceLineNo">028</span>   * @param caseSensitive If the dictionary should be case sensitive (only applicable to String keys)<a name="line.28"></a>
+<span class="sourceLineNo">029</span>   */<a name="line.29"></a>
+<span class="sourceLineNo">030</span>  public DictionaryBackedParser(boolean caseSensitive) {<a name="line.30"></a>
+<span class="sourceLineNo">031</span>    this.caseSensitive = caseSensitive;<a name="line.31"></a>
+<span class="sourceLineNo">032</span>  }<a name="line.32"></a>
+<span class="sourceLineNo">033</span><a name="line.33"></a>
+<span class="sourceLineNo">034</span>  /**<a name="line.34"></a>
+<span class="sourceLineNo">035</span>   * @param source To build the dictionary from<a name="line.35"></a>
+<span class="sourceLineNo">036</span>   */<a name="line.36"></a>
+<span class="sourceLineNo">037</span>  @SuppressWarnings("unchecked")<a name="line.37"></a>
+<span class="sourceLineNo">038</span>  public void init(Iterator&lt;KeyValue&lt;String, V&gt;&gt; source) {<a name="line.38"></a>
+<span class="sourceLineNo">039</span>    while (source.hasNext()) {<a name="line.39"></a>
+<span class="sourceLineNo">040</span>      KeyValue&lt;String, V&gt; kvp = source.next();<a name="line.40"></a>
+<span class="sourceLineNo">041</span>      add(kvp.getKey(), kvp.getValue());<a name="line.41"></a>
+<span class="sourceLineNo">042</span>    }<a name="line.42"></a>
+<span class="sourceLineNo">043</span>  }<a name="line.43"></a>
+<span class="sourceLineNo">044</span><a name="line.44"></a>
+<span class="sourceLineNo">045</span>  final protected void add(String key, V value) {<a name="line.45"></a>
+<span class="sourceLineNo">046</span>    Preconditions.checkNotNull("Adding a null value to the parser dictionary is not allowed", value);<a name="line.46"></a>
+<span class="sourceLineNo">047</span>    String normedKey = normalize(key);<a name="line.47"></a>
+<span class="sourceLineNo">048</span>    if (!Strings.isNullOrEmpty(normedKey)) {<a name="line.48"></a>
+<span class="sourceLineNo">049</span>      V existingValue = dictionary.get(normedKey);<a name="line.49"></a>
+<span class="sourceLineNo">050</span>      if (existingValue != null &amp;&amp; !existingValue.equals(value)) {<a name="line.50"></a>
+<span class="sourceLineNo">051</span>        log.warn("Ignoring mapping {}→{} as {} is already mapped to {}", key, value, key, existingValue);<a name="line.51"></a>
+<span class="sourceLineNo">052</span>      } else {<a name="line.52"></a>
+<span class="sourceLineNo">053</span>        dictionary.put(normedKey, value);<a name="line.53"></a>
+<span class="sourceLineNo">054</span>      }<a name="line.54"></a>
+<span class="sourceLineNo">055</span>    }<a name="line.55"></a>
+<span class="sourceLineNo">056</span>  }<a name="line.56"></a>
+<span class="sourceLineNo">057</span><a name="line.57"></a>
+<span class="sourceLineNo">058</span>  /**<a name="line.58"></a>
+<span class="sourceLineNo">059</span>   * Normalisation of a value used both by adding to the internal dictionary and parsing values.<a name="line.59"></a>
+<span class="sourceLineNo">060</span>   * The default does trim and uppercase the value for Strings, but leaves other types unaltered.<a name="line.60"></a>
+<span class="sourceLineNo">061</span>   * Override this method to provide specific normalisations for parsers.<a name="line.61"></a>
+<span class="sourceLineNo">062</span>   *<a name="line.62"></a>
+<span class="sourceLineNo">063</span>   * @param value the value to be normalised.<a name="line.63"></a>
+<span class="sourceLineNo">064</span>   *<a name="line.64"></a>
+<span class="sourceLineNo">065</span>   * @return the normalised value<a name="line.65"></a>
+<span class="sourceLineNo">066</span>   */<a name="line.66"></a>
+<span class="sourceLineNo">067</span>  protected String normalize(String value) {<a name="line.67"></a>
+<span class="sourceLineNo">068</span>    if (value != null) {<a name="line.68"></a>
+<span class="sourceLineNo">069</span>      if (!caseSensitive) {<a name="line.69"></a>
+<span class="sourceLineNo">070</span>        return StringUtils.trimToNull(value.toUpperCase());<a name="line.70"></a>
+<span class="sourceLineNo">071</span>      } else {<a name="line.71"></a>
+<span class="sourceLineNo">072</span>        return StringUtils.trimToNull(value);<a name="line.72"></a>
+<span class="sourceLineNo">073</span>      }<a name="line.73"></a>
+<span class="sourceLineNo">074</span>    }<a name="line.74"></a>
+<span class="sourceLineNo">075</span>    return value;<a name="line.75"></a>
+<span class="sourceLineNo">076</span>  }<a name="line.76"></a>
+<span class="sourceLineNo">077</span><a name="line.77"></a>
+<span class="sourceLineNo">078</span>  /**<a name="line.78"></a>
+<span class="sourceLineNo">079</span>   * Tries to parse the input data according to its backing dictionary.<a name="line.79"></a>
+<span class="sourceLineNo">080</span>   * If no entry in the dictionary can be found the result will be {@link ParseResult.STATUS FAIL} otherwise the<a name="line.80"></a>
+<span class="sourceLineNo">081</span>   * result will be a {@link org.gbif.common.parsers.core.ParseResult.CONFIDENCE DEFINITE} {@link ParseResult.STATUS<a name="line.81"></a>
+<span class="sourceLineNo">082</span>   * SUCCESS}.<a name="line.82"></a>
+<span class="sourceLineNo">083</span>   *<a name="line.83"></a>
+<span class="sourceLineNo">084</span>   * @param input To lookup in the dictionary<a name="line.84"></a>
+<span class="sourceLineNo">085</span>   *<a name="line.85"></a>
+<span class="sourceLineNo">086</span>   * @return the replacement from the dictionary<a name="line.86"></a>
+<span class="sourceLineNo">087</span>   */<a name="line.87"></a>
+<span class="sourceLineNo">088</span>  @Override<a name="line.88"></a>
+<span class="sourceLineNo">089</span>  public ParseResult&lt;V&gt; parse(String input) {<a name="line.89"></a>
+<span class="sourceLineNo">090</span>    String normed = normalize(input);<a name="line.90"></a>
+<span class="sourceLineNo">091</span>    V value = dictionary.get(normed);<a name="line.91"></a>
+<span class="sourceLineNo">092</span>    if (value == null) {<a name="line.92"></a>
+<span class="sourceLineNo">093</span>      return ParseResult.fail();<a name="line.93"></a>
+<span class="sourceLineNo">094</span>    } else {<a name="line.94"></a>
+<span class="sourceLineNo">095</span>      return ParseResult.success(ParseResult.CONFIDENCE.DEFINITE, value);<a name="line.95"></a>
+<span class="sourceLineNo">096</span>    }<a name="line.96"></a>
+<span class="sourceLineNo">097</span>  }<a name="line.97"></a>
+<span class="sourceLineNo">098</span>}<a name="line.98"></a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</pre>
+</div>
+</body>
+</html>
