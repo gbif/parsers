@@ -17,6 +17,7 @@ import org.slf4j.LoggerFactory;
 /**
  * Implementation to take String and algorithmically convert to Date objects.
  */
+@Deprecated
 class StringToDateParser implements Parsable<Date> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(StringToDateParser.class);

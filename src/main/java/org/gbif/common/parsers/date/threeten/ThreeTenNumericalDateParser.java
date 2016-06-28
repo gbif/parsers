@@ -40,7 +40,7 @@ import org.threeten.bp.temporal.TemporalAccessor;
  *
  * Months are in numerical value starting at 1 for January.
  *
- * This parser uses LocalDateTime and LocalDate which means it is TimeZone agnostic.
+ * Note that LocalDateTime and LocalDate are TimeZone agnostic.
  *
  * Be aware that LocalDate and LocalDateTime doesn't map correctly to Date object for all dates before the
  * Gregorian cut-off date (1582-10-15). To transform a such date use GregorianCalendar by setting the date according
@@ -56,8 +56,6 @@ public class ThreeTenNumericalDateParser implements Parsable<TemporalAccessor> {
   // ISO 8601 specifies a Unicode minus (CHAR_MINUS), with a hyphen (CHAR_HYPHEN) as an alternative.
   public static final char CHAR_HYPHEN = '\u002d'; // Unicode hyphen, U+002d, char '-'
   public static final char CHAR_MINUS = '\u2212'; // Unicode minus, U+2212, char '−'
-
-  public enum DateParsingHint {MIN, MAX}
 
   private static final Map<DateFormatHint, List<ThreeTenDateTimeParser>> FORMATTERS_BY_HINT = Maps.newHashMap();
 
@@ -159,6 +157,9 @@ public class ThreeTenNumericalDateParser implements Parsable<TemporalAccessor> {
     return new ThreeTenNumericalDateParser(baseYear);
   }
 
+  /**
+   * Private constructor, use static methods {@link #getParser()} and {@link #getParser(Year)}.
+   */
   private ThreeTenNumericalDateParser() {
     this.activeFormattersByHint = ImmutableMap.copyOf(FORMATTERS_BY_HINT);
     this.activeMultiParserList = MULTIPARSER_PARSER_LIST;
@@ -192,8 +193,6 @@ public class ThreeTenNumericalDateParser implements Parsable<TemporalAccessor> {
                     .appendDateTimeParser("M\\d\\uu", DateFormatHint.MDY, "\\", "_", baseYear)
                     .build()
     ));
-    //2 digits year pattern is too ambiguous ?
-    // buildPossibleAmbiguousDateTimeParser(buildDateTimeParserFor2DigitYear("uu", DateFormatHint.Y, baseYear))
 
     for(ThreeTenDateTimeMultiParser multiParser : multiParserList){
       for(ThreeTenDateTimeParser parser : multiParser.getAllParsers()) {
@@ -265,6 +264,7 @@ public class ThreeTenNumericalDateParser implements Parsable<TemporalAccessor> {
   }
 
   /**
+   * Parse a date represented as a single String into a TemporalAccessor.
    *
    * @param input
    * @param hint help to speed up the parsing and possibly return a better confidence
@@ -282,6 +282,7 @@ public class ThreeTenNumericalDateParser implements Parsable<TemporalAccessor> {
 
     List<ThreeTenDateTimeParser> parserList = activeFormattersByHint.containsKey(hint) ? activeFormattersByHint.get(hint) : BASE_PARSER_LIST;
 
+    // First attempt: find a match with definite confidence
     TemporalAccessor parsedTemporalAccessor;
     for(ThreeTenDateTimeParser parser : parserList){
       parsedTemporalAccessor = parser.parse(input);
@@ -295,13 +296,15 @@ public class ThreeTenNumericalDateParser implements Parsable<TemporalAccessor> {
       return ParseResult.fail();
     }
 
+    // Second attempt: find one or multiple match(es) in the list of ThreeTenDateTimeMultiParser
     int numberOfPossiblyAmbiguousMatch = 0;
     TemporalAccessor lastParsedSuccess = null;
     TemporalAccessor lastParsedPreferred = null;
-    // Is that all results are equal in case there is no preferred result defined
+    // Is that all results are equal (the represent the same TemporalAccessor) in case there is no preferred result defined
     boolean lastParsedSuccessOtherResultsEqual = false;
     ThreeTenDateTimeMultiParser.MultipleParseResult result;
 
+    // here we do not stop when we find a match, we try them all to check for a possible ambiguity
     for(ThreeTenDateTimeMultiParser parserAmbiguity : activeMultiParserList){
       result = parserAmbiguity.parse(input);
       numberOfPossiblyAmbiguousMatch += result.getNumberParsed();

@@ -1,26 +1,28 @@
 package org.gbif.common.parsers.date;
 
 
-import com.google.common.base.Joiner;
-import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.time.DateUtils;
 import org.gbif.common.parsers.core.ParseResult;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-import javax.annotation.Nullable;
 import java.text.ParseException;
 import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import javax.annotation.Nullable;
+
+import com.google.common.base.Joiner;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.time.DateUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Utilities for parsing dates. Methods are implemented in static to reduce object creation and shorten coding for
  * clients. It is not anticipated that these methods would ever be mocked in unit tests.
  * Note: The returned date will always be in the systems default TimeZone. BE CAREFUL!
  */
+@Deprecated
 public class DateParseUtils {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(DateParseUtils.class);
