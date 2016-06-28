@@ -22,10 +22,11 @@ public class TemporalAccessorUtils {
   public static ZoneId UTC_ZONE_ID = ZoneId.of("UTC");
 
   /**
-   * Transform a {@link TemporalAccessor} to a {@link java.util.Date} in the UTC time zone.
-   * If the provided {@link TemporalAccessor} contains timezone information it will be honored.
+   * Transform a {@link TemporalAccessor} to a {@link java.util.Date} in the UTC time zone in case there is no
+   * timezone information available form the {@link TemporalAccessor} otherwise, the timezone information it will
+   * be honored.
    *
-   * Please note that a {@link Date} object will always display the date in the current timezone.
+   * Remember that a {@link Date} object will always display the date in the current timezone.
    *
    * @param temporalAccessor
    * @return
