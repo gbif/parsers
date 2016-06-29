@@ -92,6 +92,11 @@
       <version>${name-parser.version}</version>
     </dependency>
     <dependency>
+      <groupId>org.gbif</groupId>
+      <artifactId>gbif-common</artifactId>
+      <version>${gbif-common.version}</version>
+    </dependency>
+    <dependency>
       <groupId>org.threeten</groupId>
       <artifactId>threetenbp</artifactId>
       <version>${threeten-bp.version}</version>
@@ -116,12 +121,6 @@
       <scope>test</scope>
     </dependency>
 
-    <dependency>
-      <groupId>org.gbif</groupId>
-      <artifactId>gbif-common</artifactId>
-      <version>${gbif-common.version}</version>
-      <scope>test</scope>
-    </dependency>
   </dependencies>
 
 </project>

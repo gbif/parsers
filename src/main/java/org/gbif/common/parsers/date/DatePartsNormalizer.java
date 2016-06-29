@@ -1,6 +1,23 @@
 package org.gbif.common.parsers.date;
 
+import org.gbif.utils.file.FileUtils;
+import org.gbif.utils.file.csv.CSVReader;
+import org.gbif.utils.file.csv.CSVReaderFactory;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+
+import com.google.common.base.Strings;
+import com.google.common.collect.Maps;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.threeten.bp.Month;
 
 /**
  * DatePartsNormalizer contract is to take String representing Year, Month and Day and return the corresponding
@@ -11,29 +28,64 @@ import org.apache.commons.lang3.StringUtils;
  */
 public class DatePartsNormalizer {
 
-  // Dictionary for interpreting string months
-  // Important that the FIRST is the canonical form, followed
-  // by abbreviations.  Be very careful not to add any ambiguous terms
-  // such as "J" "A" etc.  Do not add a "." at the end of abbreviations
-  // as normalization will automatically do this.
-  protected static final String[][] MONTHS = {
-          {"January", "Jan", "Ene", "Ja"},  // Ene. is abbreviated Spanish
-          {"February", "Feb", "F", "Fe"},
-          {"March", "Mar"},
-          {"April", "Apr", "Ap", "Abr"},  // Abr. is abbreviated Spanish
-          {"May"},
-          {"June", "Jun", "Juni"},
-          {"July", "Jul", "Juli"},
-          {"August", "Aug", "Au", "Ago"},
-          // Ago seen a lot in data
-          {"September", "Sep", "Sept", "Set", "S"}, // Set is a common misspelling
-          {"October", "Oct", "O", "Oc", "Okt"},
-          {"November", "Novermber", "Nov", "N", "No"},
-          {"December", "Dec", "D", "De"}
-  };
+  private static final Logger LOG = LoggerFactory.getLogger(DatePartsNormalizer.class);
 
   private static final String STRING_NULL = "\\N";
+  private static final String COLUMN_SEPARATOR = ";";
+  private static final String ROW_ELEMENT_SEPARATOR = ",";
+  private static final String COMMENT_MARKER = "#";
+  private static final String MONTH_FILEPATH = "dictionaries/parse/month.csv";
 
+  private static final String[][] MONTHS = new String[Month.values().length][];
+
+  // Load all the month names and alternative month names from a file
+  static {
+    Map<String, Set<String>> monthMap = Maps.newHashMapWithExpectedSize(Month.values().length);
+    String keyName;
+    for(Month m : Month.values()){
+      keyName = m.name().toLowerCase();
+      monthMap.put(keyName, new HashSet<String>());
+      //add the key itself
+      monthMap.get(keyName).add(keyName);
+    }
+
+    File testInputFile = FileUtils.getClasspathFile(MONTH_FILEPATH);
+    if(testInputFile == null){
+      LOG.error("Month file can not be loaded. File not found: {}", MONTH_FILEPATH);
+    }
+    else{
+      try{
+        CSVReader csv = CSVReaderFactory.build(testInputFile, COLUMN_SEPARATOR, false);
+
+        String monthKey;
+        for (String[] row : csv) {
+          if (row == null || row[0].startsWith(COMMENT_MARKER)) {
+            continue;
+          }
+          monthKey = row[0].toLowerCase();
+          if(monthMap.containsKey(monthKey)){
+            for(String monthAltName : row[1].split(ROW_ELEMENT_SEPARATOR)){
+              if(!Strings.isNullOrEmpty(monthAltName)) {
+                monthMap.get(monthKey).add(monthAltName.trim().toLowerCase());
+              }
+            }
+          }
+          else{
+            LOG.error("Unknown month found in: {}", MONTH_FILEPATH);
+          }
+        }
+      } catch (IOException e) {
+        LOG.error("Error loading month alternative names", e);
+      }
+
+      // keep it in an array
+      int index = 0;
+      for(Month m : Month.values()){
+        MONTHS[index] = monthMap.get(m.name().toLowerCase()).toArray(new String[0]);
+        index++;
+      }
+    }
+  }
   /**
    * Normalize date parts value.
    *
@@ -75,7 +127,7 @@ public class DatePartsNormalizer {
       int m = 1;
       for (String[] monthValues : MONTHS) {
         for (String monthVal : monthValues) {
-          if (StringUtils.equalsIgnoreCase(monthVal, month) || StringUtils.equalsIgnoreCase(monthVal + ".", month)) {
+          if (monthVal.equals(month.toLowerCase()) || (monthVal+ ".").equals(month.toLowerCase())) {
             return m;
           }
         }
@@ -193,6 +245,18 @@ public class DatePartsNormalizer {
      */
     public boolean containsDiscardedPart(){
       return yDiscarded || mDiscarded || dDiscarded;
+    }
+
+    @Override
+    public String toString() {
+      return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+              .append("year", year)
+              .append("month", month)
+              .append("day", day)
+              .append("yDiscarded", yDiscarded)
+              .append("mDiscarded", mDiscarded)
+              .append("dDiscarded", dDiscarded)
+              .toString();
     }
   }
 }
