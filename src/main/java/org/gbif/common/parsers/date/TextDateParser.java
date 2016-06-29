@@ -23,7 +23,7 @@ public class TextDateParser implements Parsable<TemporalAccessor> {
   //This regex is not complete and will NOT handle date when the time zone is provided as text GMT
   private static final Pattern NUMERICAL_DATE_PATTERN =  Pattern.compile("[^a-zA-Z]+[\\dT\\d]?[^a-zA-Z]+[Z]?$");
   private static final TextualMonthDateTokenizer TEXT_MONTH_TOKENIZER = TextualMonthDateTokenizer.newInstance();
-  private static final ThreeTenNumericalDateParser THREETEN_NUMERICAL_PARSER = ThreeTenNumericalDateParser.newInstance();
+  private static final NumericalDateParser NUMERICAL_DATE_PARSER = ThreeTenNumericalDateParser.newInstance();
   private static final DatePartsNormalizer DATE_PARTS_NORMALIZER = DatePartsNormalizer.newInstance();
 
   @Override
@@ -38,7 +38,7 @@ public class TextDateParser implements Parsable<TemporalAccessor> {
     // We could also simply try to parse it but it is probably not optimal
     //if(!AT_LEAST_ONE_LETTER.matcher(input).find() || ISO_TIME_MARKER.matcher(input).find()) {
     if(NUMERICAL_DATE_PATTERN.matcher(input).matches()) {
-      return THREETEN_NUMERICAL_PARSER.parse(input, DateFormatHint.NONE);
+      return NUMERICAL_DATE_PARSER.parse(input, DateFormatHint.NONE);
     }
 
     TextualMonthDateTokenizer.DateTokens dt = TEXT_MONTH_TOKENIZER.tokenize(input);
@@ -83,7 +83,7 @@ public class TextDateParser implements Parsable<TemporalAccessor> {
     // we could actually keep the year by calling ThreeTenNumericalDateParser.parse(normalizedYearMonthDay.getYear(),
     // null, null); the CONFIDENCE would be set at PROBABLE.
 
-    ParseResult<TemporalAccessor> parseResult = ThreeTenNumericalDateParser.parse(normalizedYearMonthDay.getYear(),
+    ParseResult<TemporalAccessor> parseResult = NUMERICAL_DATE_PARSER.parse(normalizedYearMonthDay.getYear(),
             normalizedYearMonthDay.getMonth(), normalizedYearMonthDay.getDay());
 
     //If we got a successful parsing BUT a part of the date was discarded we reduce confidence.

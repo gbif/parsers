@@ -68,15 +68,15 @@ The enumeration [DateFormatHint](http://gbif.github.io/parsers/apidocs/org/gbif/
 contains the possible values.
 
 ```java
-ThreeTenNumericalDateParser THREETEN_NUMERICAL_PARSER = ThreeTenNumericalDateParser.newInstance();
+NumericalDateParser NUMERICAL_PARSER = ThreeTenNumericalDateParser.newInstance();
 
 //this ParseResult will not be successful since this date is ambiguous
-ParseResult<TemporalAccessor> ta = THREETEN_NUMERICAL_PARSER.parse("02/01/1999");
+ParseResult<TemporalAccessor> ta = NUMERICAL_PARSER.parse("02/01/1999");
 
 //but if we provide a DateFormatHint, we can get the expected result
-ta = THREETEN_NUMERICAL_PARSER.parse("02/01/1999", DateFormatHint.MDY);
+ta = NUMERICAL_PARSER.parse("02/01/1999", DateFormatHint.MDY);
 // or
-ta = THREETEN_NUMERICAL_PARSER.parse("02/01/1999", DateFormatHint.DMY);
+ta = NUMERICAL_PARSER.parse("02/01/1999", DateFormatHint.DMY);
 ```
 
 ### TextualMonthDateTokenizer

@@ -1,6 +1,7 @@
 package org.gbif.common.parsers.date.threeten;
 
 import org.gbif.common.parsers.core.ParseResult;
+import org.gbif.common.parsers.date.NumericalDateParser;
 import org.gbif.utils.file.FileUtils;
 import org.gbif.utils.file.csv.CSVReader;
 import org.gbif.utils.file.csv.CSVReaderFactory;
@@ -44,7 +45,7 @@ public class ThreeTenNumericalDateParserTest {
   private static final int MIN_VAL_IDX = 5;
   private static final int SEC_VAL_IDX = 6;
 
-  private static final ThreeTenNumericalDateParser PARSER = ThreeTenNumericalDateParser.newInstance();
+  private static final NumericalDateParser PARSER = ThreeTenNumericalDateParser.newInstance();
 
   @Test
   public void testLocalDateFromFile() {

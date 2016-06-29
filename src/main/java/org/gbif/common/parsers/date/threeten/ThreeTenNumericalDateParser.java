@@ -1,13 +1,14 @@
 package org.gbif.common.parsers.date.threeten;
 
-import org.gbif.common.parsers.core.Parsable;
 import org.gbif.common.parsers.core.ParseResult;
 import org.gbif.common.parsers.date.DateFormatHint;
+import org.gbif.common.parsers.date.NumericalDateParser;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
+
 import javax.annotation.Nullable;
 
 import com.google.common.base.Joiner;
@@ -49,7 +50,7 @@ import org.threeten.bp.temporal.TemporalAccessor;
  * Thread-Safe after creation.
  *
  */
-public class ThreeTenNumericalDateParser implements Parsable<TemporalAccessor> {
+public class ThreeTenNumericalDateParser implements NumericalDateParser {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(ThreeTenNumericalDateParser.class);
 
@@ -216,63 +217,8 @@ public class ThreeTenNumericalDateParser implements Parsable<TemporalAccessor> {
     return parse(input, DateFormatHint.NONE);
   }
 
-  /**
-   * Parse year, month, day strings as a TemporalAccessor.
-   *
-   * @param year
-   * @param month
-   * @param day
-   * @return
-   */
-  public static ParseResult<TemporalAccessor> parse(@Nullable String year, @Nullable String month, @Nullable String day) {
-
-    // avoid possible misinterpretation when month is not provided (but day is)
-    if(StringUtils.isBlank(month) && StringUtils.isNotBlank(day)){
-      return ParseResult.fail();
-    }
-
-    String date = Joiner.on(CHAR_HYPHEN).skipNulls().join(Strings.emptyToNull(year), Strings.emptyToNull(month),
-            Strings.emptyToNull(day));
-    TemporalAccessor tp = tryParse(date, ISO_PARSER, null);
-
-    if(tp != null){
-      return ParseResult.success(ParseResult.CONFIDENCE.DEFINITE, tp);
-    }
-    return ParseResult.fail();
-  }
-
-  /**
-   * Parse year, month, day integers as a TemporalAccessor.
-   *
-   * @param year
-   * @param month
-   * @param day
-   * @return
-   */
-  public static ParseResult<TemporalAccessor> parse(@Nullable Integer year, @Nullable Integer month, @Nullable Integer day) {
-
-    // avoid possible misinterpretation when month is not provided (but day is)
-    if(month == null && day != null){
-      return ParseResult.fail();
-    }
-
-    String date = Joiner.on(CHAR_HYPHEN).skipNulls().join(year, month, day);
-    TemporalAccessor tp = tryParse(date, ISO_PARSER, null);
-
-    if(tp != null){
-      return ParseResult.success(ParseResult.CONFIDENCE.DEFINITE, tp);
-    }
-    return ParseResult.fail();
-  }
-
-  /**
-   * Parse a date represented as a single String into a TemporalAccessor.
-   *
-   * @param input
-   * @param hint help to speed up the parsing and possibly return a better confidence
-   * @return
-   */
-  public ParseResult<TemporalAccessor> parse(String input, DateFormatHint hint) {
+  @Override
+  public ParseResult<TemporalAccessor> parse(String input, @Nullable DateFormatHint hint) {
 
     if(StringUtils.isBlank(input)){
       return ParseResult.fail();
@@ -354,6 +300,41 @@ public class ThreeTenNumericalDateParser implements Parsable<TemporalAccessor> {
     }
 
     LOGGER.debug("Number of matches for {} : {}", input, numberOfPossiblyAmbiguousMatch);
+    return ParseResult.fail();
+  }
+
+  @Override
+  public ParseResult<TemporalAccessor> parse(@Nullable String year, @Nullable String month, @Nullable String day) {
+
+    // avoid possible misinterpretation when month is not provided (but day is)
+    if(StringUtils.isBlank(month) && StringUtils.isNotBlank(day)){
+      return ParseResult.fail();
+    }
+
+    String date = Joiner.on(CHAR_HYPHEN).skipNulls().join(Strings.emptyToNull(year), Strings.emptyToNull(month),
+            Strings.emptyToNull(day));
+    TemporalAccessor tp = tryParse(date, ISO_PARSER, null);
+
+    if(tp != null){
+      return ParseResult.success(ParseResult.CONFIDENCE.DEFINITE, tp);
+    }
+    return ParseResult.fail();
+  }
+
+  @Override
+  public ParseResult<TemporalAccessor> parse(@Nullable Integer year, @Nullable Integer month, @Nullable Integer day) {
+
+    // avoid possible misinterpretation when month is not provided (but day is)
+    if(month == null && day != null){
+      return ParseResult.fail();
+    }
+
+    String date = Joiner.on(CHAR_HYPHEN).skipNulls().join(year, month, day);
+    TemporalAccessor tp = tryParse(date, ISO_PARSER, null);
+
+    if(tp != null){
+      return ParseResult.success(ParseResult.CONFIDENCE.DEFINITE, tp);
+    }
     return ParseResult.fail();
   }
 
