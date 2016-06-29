@@ -29,11 +29,6 @@ if (parsed.getConfidence() == ParseResult.CONFIDENCE.DEFINITE){
 ```
 
 ## Date parsing
-The date parsing is based on the [Java 8 DateTime API](http://www.oracle.com/technetwork/articles/java/jf14-date-time-2125367.html) but in order to support Java 6 and 7, this version is implemented using the [ThreeTen Backport
-](http://www.threeten.org/threetenbp/) project.
-
-Note that the TextDateParser returns a [TemporalAccessor](http://www.threeten.org/threetenbp/apidocs/org/threeten/bp/temporal/TemporalAccessor.html), an high-level and abstracted representation
-of a date/time.
 
 ```java
 TextDateParser dateParser = new TextDateParser();
@@ -45,6 +40,7 @@ LocalDate localDate = LocalDate.from(ta.getPayload());
 ta = dateParser.parse("1999", "jan.", "2");
 localDate = LocalDate.from(ta.getPayload());
 ```
+For more information and details about the date parsing see the [Date Parsing Documentation](/assests/DateParsingDocumentation.md).
 
 
 ## Policies
