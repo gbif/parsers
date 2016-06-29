@@ -30,8 +30,11 @@ if (parsed.getConfidence() == ParseResult.CONFIDENCE.DEFINITE){
 ## Date parsing
 
 ```java
+//make sure to use org.threeten.bp package
 import org.threeten.bp.LocalDate;
 import org.threeten.bp.temporal.TemporalAccessor;
+
+//...
 
 TextDateParser dateParser = new TextDateParser();
 ParseResult<TemporalAccessor> ta = dateParser.parse("2nd jan. 1999");
