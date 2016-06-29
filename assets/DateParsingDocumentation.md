@@ -22,7 +22,8 @@ instance to represent a date. The implementations of this interface include: [Lo
 [YearMonth](http://docs.oracle.com/javase/8/docs/api/java/time/YearMonth.html) and [Year](http://docs.oracle.com/javase/8/docs/api/java/time/Year.html).
 
 For backward compatibility it is possible to transform a `TemporalAccessor` into a `java.util.Date`.
-See [TemporalAccessorUtils](http://gbif.github.io/parsers/apidocs/org/gbif/common/parsers/date/TemporalAccessorUtils.html) for utility methods.
+See [TemporalAccessorUtils](http://gbif.github.io/parsers/apidocs/org/gbif/common/parsers/date/TemporalAccessorUtils.html) for utility methods and
+[AtomizedLocalDate](http://gbif.github.io/parsers/apidocs/org/gbif/common/parsers/date/AtomizedLocalDate.html) for simple operations.
 
 ### Entry points
 There is 2 main methods in [TextDateParser](http://gbif.github.io/parsers/apidocs/org/gbif/common/parsers/date/TextDateParser.html) to parse dates represented in String.
@@ -47,9 +48,20 @@ is written in text as opposed to its numerical value.
 
 ### ThreeTenNumericalDateParser
 The `ThreeTenNumericalDateParser` contains a predefined set of date formats built on top of the [Threeten Backport](http://www.threeten.org/threetenbp/) project.
+The set of predefined date formats can be seen as a set of 3 different types of format:
+
+ * Nom ambiguous format e.g. ISO based date formats
+ * Possibly ambiguous format with preference e.g. 2.6.2016 as used Germany
+ * Possibly ambiguous format e.g. 6/2/2016
+
+The difference between "possibly ambiguous format with preference" and simply "possibly ambiguous format" appears when 2 patterns
+can be applied to the provided String. In case of "with preference" we will prefer a format over the other and return the confidence
+`ParseResult.CONFIDENCE.PROBABLE`. For possibly ambiguous formats without a preference the parsing will fail in case 2 patterns can be matched
+unless the matches represent the excat same date e.g. 2/2/2016.
+
 
 By default, this parser will not parse dates containing the year expressed as 2 digits. This feature can be enabled by using
-the static method `getParser(Year baseYear)`.
+the static method `newInstance(Year baseYear)`.
 
 It is also possible to give a hint to the parser when the order or the granularity of the date components is known.
 The enumeration [DateFormatHint](http://gbif.github.io/parsers/apidocs/org/gbif/common/parsers/date/DateFormatHint.html)
