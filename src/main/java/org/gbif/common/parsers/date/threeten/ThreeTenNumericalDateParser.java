@@ -46,6 +46,8 @@ import org.threeten.bp.temporal.TemporalAccessor;
  * Gregorian cut-off date (1582-10-15). To transform a such date use GregorianCalendar by setting the date according
  * to the TemporalAccessor you got back from that class.
  *
+ * Thread-Safe after creation.
+ *
  */
 public class ThreeTenNumericalDateParser implements Parsable<TemporalAccessor> {
 
@@ -143,7 +145,7 @@ public class ThreeTenNumericalDateParser implements Parsable<TemporalAccessor> {
    *
    * @return
    */
-  public static ThreeTenNumericalDateParser getParser(){
+  public static ThreeTenNumericalDateParser newInstance(){
     return new ThreeTenNumericalDateParser();
   }
 
@@ -153,12 +155,12 @@ public class ThreeTenNumericalDateParser implements Parsable<TemporalAccessor> {
    * @param baseYear
    * @return
    */
-  public static ThreeTenNumericalDateParser getParser(Year baseYear){
+  public static ThreeTenNumericalDateParser newInstance(Year baseYear){
     return new ThreeTenNumericalDateParser(baseYear);
   }
 
   /**
-   * Private constructor, use static methods {@link #getParser()} and {@link #getParser(Year)}.
+   * Private constructor, use static methods {@link #newInstance()} and {@link #newInstance(Year)}.
    */
   private ThreeTenNumericalDateParser() {
     this.activeFormattersByHint = ImmutableMap.copyOf(FORMATTERS_BY_HINT);

@@ -25,6 +25,8 @@ import org.threeten.bp.Month;
  *
  * No validation will be applied to the normalized values.
  *
+ * Thread-Safe after creation.
+ *
  */
 public class DatePartsNormalizer {
 
@@ -86,6 +88,16 @@ public class DatePartsNormalizer {
       }
     }
   }
+
+  /**
+   * Private constructor use static method {@link #newInstance()}
+   */
+  private DatePartsNormalizer(){}
+
+  public static DatePartsNormalizer newInstance(){
+    return new DatePartsNormalizer();
+  }
+
   /**
    * Normalize date parts value.
    *
@@ -94,7 +106,7 @@ public class DatePartsNormalizer {
    * @param day
    * @return result of normalization as NormalizedYearMonthDay
    */
-  public static NormalizedYearMonthDay normalize(String year, String month, String day){
+  public NormalizedYearMonthDay normalize(String year, String month, String day){
     year = normalizeFloat(year);
     month = normalizeFloat(month);
     day = normalizeFloat(day);
@@ -165,7 +177,7 @@ public class DatePartsNormalizer {
    * @param integer
    * @return
    */
-  private static Integer parseOrNull(String integer){
+  private Integer parseOrNull(String integer){
     if(integer != null){
       integer = integer.trim();
     }
@@ -184,7 +196,7 @@ public class DatePartsNormalizer {
    * @param intValue
    * @return the value should be considered discarded or not
    */
-  private static boolean wasDiscarded(String strValue, Integer intValue){
+  private boolean wasDiscarded(String strValue, Integer intValue){
     if(StringUtils.isBlank(strValue) || STRING_NULL.equals(strValue)){
       return false;
     }

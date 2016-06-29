@@ -14,12 +14,14 @@ import static org.junit.Assert.assertTrue;
  */
 public class DateNormalizerTest {
 
+  private static DatePartsNormalizer NORMALIZER = DatePartsNormalizer.newInstance();
+
   /**
    * This happens when integer are exported as float/double by a data publisher.
    */
   @Test
   public void testFloatNormalization(){
-    DatePartsNormalizer.NormalizedYearMonthDay result = DatePartsNormalizer.normalize("1975.0", "2.0", "1.0");
+    DatePartsNormalizer.NormalizedYearMonthDay result = NORMALIZER.normalize("1975.0", "2.0", "1.0");
     assertEquals(new Integer(1), result.getDay());
     assertEquals(Month.FEBRUARY.getValue(), result.getMonth().intValue());
     assertEquals(new Integer(1975), result.getYear());
@@ -27,7 +29,7 @@ public class DateNormalizerTest {
 
   @Test
   public void testNormalizationWithSpaces(){
-    DatePartsNormalizer.NormalizedYearMonthDay result = DatePartsNormalizer.normalize("1975 ", " 2 ", " 1");
+    DatePartsNormalizer.NormalizedYearMonthDay result = NORMALIZER.normalize("1975 ", " 2 ", " 1");
     assertEquals(new Integer(1), result.getDay());
     assertEquals(Month.FEBRUARY.getValue(), result.getMonth().intValue());
     assertEquals(new Integer(1975), result.getYear());
@@ -51,32 +53,32 @@ public class DateNormalizerTest {
   @Test
   public void testDiscardedDateParts(){
 
-    DatePartsNormalizer.NormalizedYearMonthDay result = DatePartsNormalizer.normalize("a", "5", "3");
+    DatePartsNormalizer.NormalizedYearMonthDay result = NORMALIZER.normalize("a", "5", "3");
     assertTrue(result.yDiscarded());
     assertNull(result.getYear());
     assertNotNull(result.getMonth());
 
-    result = DatePartsNormalizer.normalize("2000", "a", "3");
+    result = NORMALIZER.normalize("2000", "a", "3");
     assertTrue(result.mDiscarded());
     assertNull(result.getMonth());
     assertNotNull(result.getYear());
 
-    result = DatePartsNormalizer.normalize("2000", "5", "a");
+    result = NORMALIZER.normalize("2000", "5", "a");
     assertTrue(result.dDiscarded());
     assertNull(result.getDay());
     assertNotNull(result.getYear());
 
     // empty String, null and \\N should NOT be considered as "discarded"
     // they simply represent "not provided"
-    result = DatePartsNormalizer.normalize("2000", "5", "");
+    result = NORMALIZER.normalize("2000", "5", "");
     assertFalse(result.dDiscarded());
     assertNull(result.getDay());
 
-    result = DatePartsNormalizer.normalize("2000", "5", null);
+    result = NORMALIZER.normalize("2000", "5", null);
     assertFalse(result.dDiscarded());
     assertNull(result.getDay());
 
-    result = DatePartsNormalizer.normalize("2000", "5", "\\N");
+    result = NORMALIZER.normalize("2000", "5", "\\N");
     assertFalse(result.dDiscarded());
     assertNull(result.getDay());
   }

@@ -31,7 +31,7 @@ public class TextualMonthDateTokenizerTest {
   private static final int TEXT_IDX = 2;
   private static final int INT_2_IDX = 3;
 
-  private TextualMonthDateTokenizer DATE_TOKENIZER = new TextualMonthDateTokenizer();
+  private TextualMonthDateTokenizer DATE_TOKENIZER = TextualMonthDateTokenizer.newInstance();
 
   @Test
   public void testDateTokenizerFromFile(){

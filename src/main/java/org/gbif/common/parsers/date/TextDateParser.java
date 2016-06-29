@@ -22,8 +22,9 @@ public class TextDateParser implements Parsable<TemporalAccessor> {
   //private static final Pattern AT_LEAST_ONE_LETTER =  Pattern.compile("[a-zA-Z]+");
   //This regex is not complete and will NOT handle date when the time zone is provided as text GMT
   private static final Pattern NUMERICAL_DATE_PATTERN =  Pattern.compile("[^a-zA-Z]+[\\dT\\d]?[^a-zA-Z]+[Z]?$");
-  private static final TextualMonthDateTokenizer TEXT_MONTH_TOKENIZER = new TextualMonthDateTokenizer();
-  private static final ThreeTenNumericalDateParser THREETEN_NUMERICAL_PARSER = ThreeTenNumericalDateParser.getParser();
+  private static final TextualMonthDateTokenizer TEXT_MONTH_TOKENIZER = TextualMonthDateTokenizer.newInstance();
+  private static final ThreeTenNumericalDateParser THREETEN_NUMERICAL_PARSER = ThreeTenNumericalDateParser.newInstance();
+  private static final DatePartsNormalizer DATE_PARTS_NORMALIZER = DatePartsNormalizer.newInstance();
 
   @Override
   public ParseResult<TemporalAccessor> parse(String input) {
@@ -43,7 +44,7 @@ public class TextDateParser implements Parsable<TemporalAccessor> {
     TextualMonthDateTokenizer.DateTokens dt = TEXT_MONTH_TOKENIZER.tokenize(input);
     // for now we only handle cases where we can find year, month, day with confidence.
     if(!dt.containsDiscardedTokens() && dt.size() == 3){
-      DatePartsNormalizer.NormalizedYearMonthDay normalizedYearMonthDay = DatePartsNormalizer.normalize(
+      DatePartsNormalizer.NormalizedYearMonthDay normalizedYearMonthDay = DATE_PARTS_NORMALIZER.normalize(
               dt.getToken(TextualMonthDateTokenizer.TokenType.INT_4).getToken(),
               dt.getToken(TextualMonthDateTokenizer.TokenType.TEXT).getToken(),
               dt.getToken(TextualMonthDateTokenizer.TokenType.INT_2).getToken());
@@ -75,7 +76,7 @@ public class TextDateParser implements Parsable<TemporalAccessor> {
    * @return
    */
   public ParseResult<TemporalAccessor> parse(String year, String month, String day) {
-    DatePartsNormalizer.NormalizedYearMonthDay normalizedYearMonthDay = DatePartsNormalizer.normalize(
+    DatePartsNormalizer.NormalizedYearMonthDay normalizedYearMonthDay = DATE_PARTS_NORMALIZER.normalize(
             year, month, day);
 
     // TODO when we can get the day but not the month in NormalizedYearMonthDay the parsing fails

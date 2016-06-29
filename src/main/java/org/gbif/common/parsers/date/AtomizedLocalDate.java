@@ -11,6 +11,8 @@ import org.threeten.bp.temporal.TemporalAccessor;
  * AtomizedLocalDate is a simple immutable class to hold data from a
  * {@link org.threeten.bp.temporal.TemporalAccessor}.
  *
+ * Thread-Safe, immutable class.
+ *
  */
 public class AtomizedLocalDate {
 
@@ -104,7 +106,11 @@ public class AtomizedLocalDate {
 
   @Override
   public String toString() {
-    return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).append("year", year).append("month", month)
-            .append("day", day).append("resolution", resolution).toString();
+    return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+            .append("year", year)
+            .append("month", month)
+            .append("day", day)
+            .append("resolution", resolution)
+            .toString();
   }
 }

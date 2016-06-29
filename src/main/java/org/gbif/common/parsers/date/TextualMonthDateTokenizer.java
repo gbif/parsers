@@ -42,6 +42,15 @@ public class TextualMonthDateTokenizer {
           TokenType.TEXT, Pattern.compile("[A-Za-z.]{1,10}"));
 
   /**
+   * Private constructor use static method {@link #newInstance()}
+   */
+  private TextualMonthDateTokenizer() {}
+
+  public static TextualMonthDateTokenizer newInstance(){
+    return new TextualMonthDateTokenizer();
+  }
+
+  /**
    * Tokenize a string into a {@link DateTokens}.
    *
    * @param str

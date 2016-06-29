@@ -55,7 +55,7 @@ The enumeration [DateFormatHint](http://gbif.github.io/parsers/apidocs/org/gbif/
 contains the possible values.
 
 ```java
-ThreeTenNumericalDateParser THREETEN_NUMERICAL_PARSER = ThreeTenNumericalDateParser.getParser();
+ThreeTenNumericalDateParser THREETEN_NUMERICAL_PARSER = ThreeTenNumericalDateParser.newInstance();
 
 //this ParseResult will not be successful since this date is ambiguous
 ParseResult<TemporalAccessor> ta = THREETEN_NUMERICAL_PARSER.parse("02/01/1999");
@@ -74,7 +74,9 @@ This class is used to transform strings representing year, month and day and ret
 [NormalizedYearMonthDay](http://gbif.github.io/parsers/apidocs/org/gbif/common/parsers/date/DatePartsNormalizer.NormalizedYearMonthDay.html).
 
 ```java
-DatePartsNormalizer.NormalizedYearMonthDay result = DatePartsNormalizer.normalize("1975", "jan", "1");
+private static DatePartsNormalizer NORMALIZER = DatePartsNormalizer.newInstance();
+
+DatePartsNormalizer.NormalizedYearMonthDay result = NORMALIZER.normalize("1975", "jan", "1");
 // equals Integer 1975
 result.getYear();
 // equals Integer 1

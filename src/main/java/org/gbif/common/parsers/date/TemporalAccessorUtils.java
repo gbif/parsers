@@ -22,16 +22,20 @@ public class TemporalAccessorUtils {
   public static ZoneId UTC_ZONE_ID = ZoneId.of("UTC");
 
   /**
-   * Transform a {@link TemporalAccessor} to a {@link java.util.Date} in the UTC time zone in case there is no
+   * Transform a {@link TemporalAccessor} to a {@link java.util.Date} in the UTC timezone in case there is no
    * timezone information available form the {@link TemporalAccessor} otherwise, the timezone information it will
    * be honored.
    *
    * Remember that a {@link Date} object will always display the date in the current timezone.
    *
    * @param temporalAccessor
-   * @return
+   * @return the Date object or null if a Date object can not be created
    */
   public static Date toUTCDate(TemporalAccessor temporalAccessor){
+    if(temporalAccessor == null){
+      return null;
+    }
+
     if(temporalAccessor.isSupported(ChronoField.OFFSET_SECONDS)){
       return DateTimeUtils.toDate(temporalAccessor.query(ZonedDateTime.FROM).toInstant());
     }
@@ -57,7 +61,7 @@ public class TemporalAccessorUtils {
    *
    * @param ta1
    * @param ta2
-   * @return
+   * @return never null
    */
   public static Optional<? extends TemporalAccessor> getBestResolutionTemporalAccessor(@Nullable TemporalAccessor ta1,
                                                                                        @Nullable TemporalAccessor ta2){
