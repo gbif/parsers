@@ -40,7 +40,7 @@ LocalDate localDate = LocalDate.from(ta.getPayload());
 ta = dateParser.parse("1999", "jan.", "2");
 localDate = LocalDate.from(ta.getPayload());
 ```
-For more information and details about the date parsing see the [Date Parsing Documentation](/assests/DateParsingDocumentation.md).
+For more information and details about the date parsing see the [Date Parsing Documentation](/assets/DateParsingDocumentation.md).
 
 
 ## Policies
