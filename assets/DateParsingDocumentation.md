@@ -68,7 +68,7 @@ The enumeration [DateFormatHint](http://gbif.github.io/parsers/apidocs/org/gbif/
 contains the possible values.
 
 ```java
-NumericalDateParser NUMERICAL_PARSER = ThreeTenNumericalDateParser.newInstance();
+NumericalDateParser NUMERICAL_PARSER = DateParsers.defaultNumericalDateParser();
 
 //this ParseResult will not be successful since this date is ambiguous
 ParseResult<TemporalAccessor> ta = NUMERICAL_PARSER.parse("02/01/1999");
