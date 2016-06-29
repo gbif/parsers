@@ -22,7 +22,7 @@ import static org.junit.Assert.fail;
  */
 public class TextualMonthDateTokenizerTest {
 
-  private static final String TEST_FILE = "parse/date/TextualMonthDateTokenizerTests.txt";
+  private static final String TEST_FILE = "parse/date/textual_month_date_tokenizer_tests.txt";
   private static final String COLUMN_SEPARATOR = ";";
   private static final String COMMENT_MARKER = "#";
 
