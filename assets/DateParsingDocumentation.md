@@ -4,7 +4,8 @@
 ### Main usage
 The main purpose of these date parsing classes is to parse a String into a representation of a date when
 the date format used is unknown. It is not intended to be a replacement for [SimpleDateFormat](http://docs.oracle.com/javase/8/docs/api/java/text/SimpleDateFormat.html)
-or Java 8 [DateTimeFormatter](http://docs.oracle.com/javase/8/docs/api/java/time/format/DateTimeFormatter.html).
+or Java 8 [DateTimeFormatter](http://docs.oracle.com/javase/8/docs/api/java/time/format/DateTimeFormatter.html) and it is not based
+on natural language like [Natty](http://natty.joestelmach.com/).
 
 ### Threeten Backport and Java 8 Date/Time API
 The date parsing is based on the [Java 8 DateTime API](http://www.oracle.com/technetwork/articles/java/jf14-date-time-2125367.html) but in order to support Java 6 and 7, it is

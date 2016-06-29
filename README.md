@@ -3,7 +3,6 @@
 > A parser is a software component that takes input data (frequently text) and builds a data structure [1].
 
 
-
 The GBIF parsers library provides:
  * Dictionary backed parsers for countries, language, taxon ranks, etc.
  * Parsers for dates and coordinates
@@ -31,6 +30,9 @@ if (parsed.getConfidence() == ParseResult.CONFIDENCE.DEFINITE){
 ## Date parsing
 
 ```java
+import org.threeten.bp.LocalDate;
+import org.threeten.bp.temporal.TemporalAccessor;
+
 TextDateParser dateParser = new TextDateParser();
 ParseResult<TemporalAccessor> ta = dateParser.parse("2nd jan. 1999");
 

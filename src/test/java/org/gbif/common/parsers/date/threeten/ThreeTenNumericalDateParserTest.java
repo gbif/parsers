@@ -30,9 +30,9 @@ import static org.junit.Assert.fail;
  */
 public class ThreeTenNumericalDateParserTest {
 
-  private static final String LOCALDATE_TEST_FILE = "parse/date/ThreeTenLocalDateTests.txt";
-  private static final String LOCALDATETIME_TEST_FILE = "parse/date/ThreeTenLocalDateTimeTests.txt";
-  private static final String BADDATE_TEST_FILE = "parse/date/ThreeTenBadDateTests.txt";
+  private static final String LOCALDATE_TEST_FILE = "parse/date/threeten_localdate_tests.txt";
+  private static final String LOCALDATETIME_TEST_FILE = "parse/date/threeten_localdatetime_tests.txt";
+  private static final String BADDATE_TEST_FILE = "parse/date/threeten_bad_date_tests.txt";
   private static final String COLUMN_SEPARATOR = ";";
   private static final String COMMENT_MARKER = "#";
 
