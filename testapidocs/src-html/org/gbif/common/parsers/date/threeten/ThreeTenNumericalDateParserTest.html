@@ -38,9 +38,9 @@
 <span class="sourceLineNo">030</span> */<a name="line.30"></a>
 <span class="sourceLineNo">031</span>public class ThreeTenNumericalDateParserTest {<a name="line.31"></a>
 <span class="sourceLineNo">032</span><a name="line.32"></a>
-<span class="sourceLineNo">033</span>  private static final String LOCALDATE_TEST_FILE = "parse/date/ThreeTenLocalDateTests.txt";<a name="line.33"></a>
-<span class="sourceLineNo">034</span>  private static final String LOCALDATETIME_TEST_FILE = "parse/date/ThreeTenLocalDateTimeTests.txt";<a name="line.34"></a>
-<span class="sourceLineNo">035</span>  private static final String BADDATE_TEST_FILE = "parse/date/ThreeTenBadDateTests.txt";<a name="line.35"></a>
+<span class="sourceLineNo">033</span>  private static final String LOCALDATE_TEST_FILE = "parse/date/threeten_localdate_tests.txt";<a name="line.33"></a>
+<span class="sourceLineNo">034</span>  private static final String LOCALDATETIME_TEST_FILE = "parse/date/threeten_localdatetime_tests.txt";<a name="line.34"></a>
+<span class="sourceLineNo">035</span>  private static final String BADDATE_TEST_FILE = "parse/date/threeten_bad_date_tests.txt";<a name="line.35"></a>
 <span class="sourceLineNo">036</span>  private static final String COLUMN_SEPARATOR = ";";<a name="line.36"></a>
 <span class="sourceLineNo">037</span>  private static final String COMMENT_MARKER = "#";<a name="line.37"></a>
 <span class="sourceLineNo">038</span><a name="line.38"></a>
@@ -52,7 +52,7 @@
 <span class="sourceLineNo">044</span>  private static final int MIN_VAL_IDX = 5;<a name="line.44"></a>
 <span class="sourceLineNo">045</span>  private static final int SEC_VAL_IDX = 6;<a name="line.45"></a>
 <span class="sourceLineNo">046</span><a name="line.46"></a>
-<span class="sourceLineNo">047</span>  private static final ThreeTenNumericalDateParser PARSER = ThreeTenNumericalDateParser.getParser();<a name="line.47"></a>
+<span class="sourceLineNo">047</span>  private static final ThreeTenNumericalDateParser PARSER = ThreeTenNumericalDateParser.newInstance();<a name="line.47"></a>
 <span class="sourceLineNo">048</span><a name="line.48"></a>
 <span class="sourceLineNo">049</span>  @Test<a name="line.49"></a>
 <span class="sourceLineNo">050</span>  public void testLocalDateFromFile() {<a name="line.50"></a>
@@ -144,7 +144,7 @@
 <span class="sourceLineNo">136</span><a name="line.136"></a>
 <span class="sourceLineNo">137</span>  @Test<a name="line.137"></a>
 <span class="sourceLineNo">138</span>  public void testParseAsLocalDateTime(){<a name="line.138"></a>
-<span class="sourceLineNo">139</span>    ThreeTenNumericalDateParser parser = ThreeTenNumericalDateParser.getParser(Year.of(1900));<a name="line.139"></a>
+<span class="sourceLineNo">139</span>    ThreeTenNumericalDateParser parser = ThreeTenNumericalDateParser.newInstance(Year.of(1900));<a name="line.139"></a>
 <span class="sourceLineNo">140</span><a name="line.140"></a>
 <span class="sourceLineNo">141</span>    //month first with 2 digits years &gt;_&lt;<a name="line.141"></a>
 <span class="sourceLineNo">142</span>    assertEquals(LocalDate.of(1978, Month.DECEMBER, 21), LocalDate.from(parser.parse("122178").getPayload()));<a name="line.142"></a>
@@ -164,36 +164,33 @@
 <span class="sourceLineNo">156</span><a name="line.156"></a>
 <span class="sourceLineNo">157</span>  @Test<a name="line.157"></a>
 <span class="sourceLineNo">158</span>  public void testParseAsLocalDateByDateParts(){<a name="line.158"></a>
-<span class="sourceLineNo">159</span>    ThreeTenNumericalDateParser parser = ThreeTenNumericalDateParser.getParser();<a name="line.159"></a>
-<span class="sourceLineNo">160</span>    assertEquals(LocalDate.of(1978, Month.DECEMBER, 21), LocalDate.from(parser.parse("1978", "12", "21").getPayload()));<a name="line.160"></a>
-<span class="sourceLineNo">161</span>    assertEquals(LocalDate.of(1978, Month.DECEMBER, 21), LocalDate.from(parser.parse(1978, 12, 21).getPayload()));<a name="line.161"></a>
-<span class="sourceLineNo">162</span><a name="line.162"></a>
-<span class="sourceLineNo">163</span>    assertEquals(LocalDate.of(1978, Month.DECEMBER, 1), LocalDate.from(parser.parse("1978", "12", "1").getPayload()));<a name="line.163"></a>
-<span class="sourceLineNo">164</span>    assertEquals(YearMonth.of(1978,12), YearMonth.from(parser.parse("1978", "12", null).getPayload()));<a name="line.164"></a>
-<span class="sourceLineNo">165</span>    assertEquals(YearMonth.of(1978,12), YearMonth.from(parser.parse(1978, 12, null).getPayload()));<a name="line.165"></a>
-<span class="sourceLineNo">166</span>    assertEquals(Year.of(1978), Year.from(parser.parse("1978","",null).getPayload()));<a name="line.166"></a>
-<span class="sourceLineNo">167</span><a name="line.167"></a>
-<span class="sourceLineNo">168</span>    // providing the day without the month should result in an error<a name="line.168"></a>
-<span class="sourceLineNo">169</span>    assertEquals(ParseResult.STATUS.FAIL, parser.parse("1978", "", "2").getStatus());<a name="line.169"></a>
-<span class="sourceLineNo">170</span>    assertEquals(ParseResult.STATUS.FAIL, parser.parse(1978, null, 2).getStatus());<a name="line.170"></a>
-<span class="sourceLineNo">171</span>  }<a name="line.171"></a>
-<span class="sourceLineNo">172</span><a name="line.172"></a>
-<span class="sourceLineNo">173</span>  @Test<a name="line.173"></a>
-<span class="sourceLineNo">174</span>  public void testParsePreserveZoneOffset(){<a name="line.174"></a>
-<span class="sourceLineNo">175</span>    ThreeTenNumericalDateParser parser = ThreeTenNumericalDateParser.getParser();<a name="line.175"></a>
-<span class="sourceLineNo">176</span>    ZonedDateTime offsetDateTime = ZonedDateTime.of(1978, 12, 21, 0, 0, 0, 0, ZoneOffset.of("+02:00"));<a name="line.176"></a>
-<span class="sourceLineNo">177</span>    assertEquals(offsetDateTime, parser.parse("1978-12-21T00:00:00+02:00").getPayload());<a name="line.177"></a>
-<span class="sourceLineNo">178</span>  }<a name="line.178"></a>
-<span class="sourceLineNo">179</span><a name="line.179"></a>
-<span class="sourceLineNo">180</span>  @Test<a name="line.180"></a>
-<span class="sourceLineNo">181</span>  public void testBlankDates(){<a name="line.181"></a>
-<span class="sourceLineNo">182</span>    ThreeTenNumericalDateParser parser = ThreeTenNumericalDateParser.getParser();<a name="line.182"></a>
-<span class="sourceLineNo">183</span>    assertEquals(ParseResult.STATUS.FAIL, parser.parse(" ").getStatus());<a name="line.183"></a>
-<span class="sourceLineNo">184</span>    assertEquals(ParseResult.STATUS.FAIL, parser.parse("").getStatus());<a name="line.184"></a>
-<span class="sourceLineNo">185</span>    assertEquals(ParseResult.STATUS.FAIL, parser.parse(null).getStatus());<a name="line.185"></a>
-<span class="sourceLineNo">186</span>  }<a name="line.186"></a>
-<span class="sourceLineNo">187</span><a name="line.187"></a>
-<span class="sourceLineNo">188</span>}<a name="line.188"></a>
+<span class="sourceLineNo">159</span>    assertEquals(LocalDate.of(1978, Month.DECEMBER, 21), LocalDate.from(PARSER.parse("1978", "12", "21").getPayload()));<a name="line.159"></a>
+<span class="sourceLineNo">160</span>    assertEquals(LocalDate.of(1978, Month.DECEMBER, 21), LocalDate.from(PARSER.parse(1978, 12, 21).getPayload()));<a name="line.160"></a>
+<span class="sourceLineNo">161</span><a name="line.161"></a>
+<span class="sourceLineNo">162</span>    assertEquals(LocalDate.of(1978, Month.DECEMBER, 1), LocalDate.from(PARSER.parse("1978", "12", "1").getPayload()));<a name="line.162"></a>
+<span class="sourceLineNo">163</span>    assertEquals(YearMonth.of(1978,12), YearMonth.from(PARSER.parse("1978", "12", null).getPayload()));<a name="line.163"></a>
+<span class="sourceLineNo">164</span>    assertEquals(YearMonth.of(1978,12), YearMonth.from(PARSER.parse(1978, 12, null).getPayload()));<a name="line.164"></a>
+<span class="sourceLineNo">165</span>    assertEquals(Year.of(1978), Year.from(PARSER.parse("1978","",null).getPayload()));<a name="line.165"></a>
+<span class="sourceLineNo">166</span><a name="line.166"></a>
+<span class="sourceLineNo">167</span>    // providing the day without the month should result in an error<a name="line.167"></a>
+<span class="sourceLineNo">168</span>    assertEquals(ParseResult.STATUS.FAIL, PARSER.parse("1978", "", "2").getStatus());<a name="line.168"></a>
+<span class="sourceLineNo">169</span>    assertEquals(ParseResult.STATUS.FAIL, PARSER.parse(1978, null, 2).getStatus());<a name="line.169"></a>
+<span class="sourceLineNo">170</span>  }<a name="line.170"></a>
+<span class="sourceLineNo">171</span><a name="line.171"></a>
+<span class="sourceLineNo">172</span>  @Test<a name="line.172"></a>
+<span class="sourceLineNo">173</span>  public void testParsePreserveZoneOffset(){<a name="line.173"></a>
+<span class="sourceLineNo">174</span>    ZonedDateTime offsetDateTime = ZonedDateTime.of(1978, 12, 21, 0, 0, 0, 0, ZoneOffset.of("+02:00"));<a name="line.174"></a>
+<span class="sourceLineNo">175</span>    assertEquals(offsetDateTime, PARSER.parse("1978-12-21T00:00:00+02:00").getPayload());<a name="line.175"></a>
+<span class="sourceLineNo">176</span>  }<a name="line.176"></a>
+<span class="sourceLineNo">177</span><a name="line.177"></a>
+<span class="sourceLineNo">178</span>  @Test<a name="line.178"></a>
+<span class="sourceLineNo">179</span>  public void testBlankDates(){<a name="line.179"></a>
+<span class="sourceLineNo">180</span>    assertEquals(ParseResult.STATUS.FAIL, PARSER.parse(" ").getStatus());<a name="line.180"></a>
+<span class="sourceLineNo">181</span>    assertEquals(ParseResult.STATUS.FAIL, PARSER.parse("").getStatus());<a name="line.181"></a>
+<span class="sourceLineNo">182</span>    assertEquals(ParseResult.STATUS.FAIL, PARSER.parse(null).getStatus());<a name="line.182"></a>
+<span class="sourceLineNo">183</span>  }<a name="line.183"></a>
+<span class="sourceLineNo">184</span><a name="line.184"></a>
+<span class="sourceLineNo">185</span>}<a name="line.185"></a>
 
 
 

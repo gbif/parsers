@@ -38,9 +38,9 @@
 <a class="jxr_linenumber" name="L30" href="#L30">30</a>  <em class="jxr_javadoccomment"> */</em>
 <a class="jxr_linenumber" name="L31" href="#L31">31</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../../../org/gbif/common/parsers/date/threeten/ThreeTenNumericalDateParserTest.html">ThreeTenNumericalDateParserTest</a> {
 <a class="jxr_linenumber" name="L32" href="#L32">32</a>  
-<a class="jxr_linenumber" name="L33" href="#L33">33</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String LOCALDATE_TEST_FILE = <span class="jxr_string">"parse/date/ThreeTenLocalDateTests.txt"</span>;
-<a class="jxr_linenumber" name="L34" href="#L34">34</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String LOCALDATETIME_TEST_FILE = <span class="jxr_string">"parse/date/ThreeTenLocalDateTimeTests.txt"</span>;
-<a class="jxr_linenumber" name="L35" href="#L35">35</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String BADDATE_TEST_FILE = <span class="jxr_string">"parse/date/ThreeTenBadDateTests.txt"</span>;
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String LOCALDATE_TEST_FILE = <span class="jxr_string">"parse/date/threeten_localdate_tests.txt"</span>;
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String LOCALDATETIME_TEST_FILE = <span class="jxr_string">"parse/date/threeten_localdatetime_tests.txt"</span>;
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String BADDATE_TEST_FILE = <span class="jxr_string">"parse/date/threeten_bad_date_tests.txt"</span>;
 <a class="jxr_linenumber" name="L36" href="#L36">36</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String COLUMN_SEPARATOR = <span class="jxr_string">";"</span>;
 <a class="jxr_linenumber" name="L37" href="#L37">37</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String COMMENT_MARKER = <span class="jxr_string">"#"</span>;
 <a class="jxr_linenumber" name="L38" href="#L38">38</a>  
@@ -52,7 +52,7 @@
 <a class="jxr_linenumber" name="L44" href="#L44">44</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> MIN_VAL_IDX = 5;
 <a class="jxr_linenumber" name="L45" href="#L45">45</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> SEC_VAL_IDX = 6;
 <a class="jxr_linenumber" name="L46" href="#L46">46</a>  
-<a class="jxr_linenumber" name="L47" href="#L47">47</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> ThreeTenNumericalDateParser PARSER = ThreeTenNumericalDateParser.getParser();
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> ThreeTenNumericalDateParser PARSER = ThreeTenNumericalDateParser.newInstance();
 <a class="jxr_linenumber" name="L48" href="#L48">48</a>  
 <a class="jxr_linenumber" name="L49" href="#L49">49</a>    @Test
 <a class="jxr_linenumber" name="L50" href="#L50">50</a>    <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testLocalDateFromFile() {
@@ -144,7 +144,7 @@
 <a class="jxr_linenumber" name="L136" href="#L136">136</a> 
 <a class="jxr_linenumber" name="L137" href="#L137">137</a>   @Test
 <a class="jxr_linenumber" name="L138" href="#L138">138</a>   <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testParseAsLocalDateTime(){
-<a class="jxr_linenumber" name="L139" href="#L139">139</a>     ThreeTenNumericalDateParser parser = ThreeTenNumericalDateParser.getParser(Year.of(1900));
+<a class="jxr_linenumber" name="L139" href="#L139">139</a>     ThreeTenNumericalDateParser parser = ThreeTenNumericalDateParser.newInstance(Year.of(1900));
 <a class="jxr_linenumber" name="L140" href="#L140">140</a> 
 <a class="jxr_linenumber" name="L141" href="#L141">141</a>     <em class="jxr_comment">//month first with 2 digits years &gt;_&lt;</em>
 <a class="jxr_linenumber" name="L142" href="#L142">142</a>     assertEquals(LocalDate.of(1978, Month.DECEMBER, 21), LocalDate.from(parser.parse(<span class="jxr_string">"122178"</span>).getPayload()));
@@ -164,36 +164,33 @@
 <a class="jxr_linenumber" name="L156" href="#L156">156</a> 
 <a class="jxr_linenumber" name="L157" href="#L157">157</a>   @Test
 <a class="jxr_linenumber" name="L158" href="#L158">158</a>   <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testParseAsLocalDateByDateParts(){
-<a class="jxr_linenumber" name="L159" href="#L159">159</a>     ThreeTenNumericalDateParser parser = ThreeTenNumericalDateParser.getParser();
-<a class="jxr_linenumber" name="L160" href="#L160">160</a>     assertEquals(LocalDate.of(1978, Month.DECEMBER, 21), LocalDate.from(parser.parse(<span class="jxr_string">"1978"</span>, <span class="jxr_string">"12"</span>, <span class="jxr_string">"21"</span>).getPayload()));
-<a class="jxr_linenumber" name="L161" href="#L161">161</a>     assertEquals(LocalDate.of(1978, Month.DECEMBER, 21), LocalDate.from(parser.parse(1978, 12, 21).getPayload()));
-<a class="jxr_linenumber" name="L162" href="#L162">162</a> 
-<a class="jxr_linenumber" name="L163" href="#L163">163</a>     assertEquals(LocalDate.of(1978, Month.DECEMBER, 1), LocalDate.from(parser.parse(<span class="jxr_string">"1978"</span>, <span class="jxr_string">"12"</span>, <span class="jxr_string">"1"</span>).getPayload()));
-<a class="jxr_linenumber" name="L164" href="#L164">164</a>     assertEquals(YearMonth.of(1978,12), YearMonth.from(parser.parse(<span class="jxr_string">"1978"</span>, <span class="jxr_string">"12"</span>, <strong class="jxr_keyword">null</strong>).getPayload()));
-<a class="jxr_linenumber" name="L165" href="#L165">165</a>     assertEquals(YearMonth.of(1978,12), YearMonth.from(parser.parse(1978, 12, <strong class="jxr_keyword">null</strong>).getPayload()));
-<a class="jxr_linenumber" name="L166" href="#L166">166</a>     assertEquals(Year.of(1978), Year.from(parser.parse(<span class="jxr_string">"1978"</span>,<span class="jxr_string">""</span>,<strong class="jxr_keyword">null</strong>).getPayload()));
-<a class="jxr_linenumber" name="L167" href="#L167">167</a> 
-<a class="jxr_linenumber" name="L168" href="#L168">168</a>     <em class="jxr_comment">// providing the day without the month should result in an error</em>
-<a class="jxr_linenumber" name="L169" href="#L169">169</a>     assertEquals(ParseResult.STATUS.FAIL, parser.parse(<span class="jxr_string">"1978"</span>, <span class="jxr_string">""</span>, <span class="jxr_string">"2"</span>).getStatus());
-<a class="jxr_linenumber" name="L170" href="#L170">170</a>     assertEquals(ParseResult.STATUS.FAIL, parser.parse(1978, <strong class="jxr_keyword">null</strong>, 2).getStatus());
-<a class="jxr_linenumber" name="L171" href="#L171">171</a>   }
-<a class="jxr_linenumber" name="L172" href="#L172">172</a> 
-<a class="jxr_linenumber" name="L173" href="#L173">173</a>   @Test
-<a class="jxr_linenumber" name="L174" href="#L174">174</a>   <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testParsePreserveZoneOffset(){
-<a class="jxr_linenumber" name="L175" href="#L175">175</a>     ThreeTenNumericalDateParser parser = ThreeTenNumericalDateParser.getParser();
-<a class="jxr_linenumber" name="L176" href="#L176">176</a>     ZonedDateTime offsetDateTime = ZonedDateTime.of(1978, 12, 21, 0, 0, 0, 0, ZoneOffset.of(<span class="jxr_string">"+02:00"</span>));
-<a class="jxr_linenumber" name="L177" href="#L177">177</a>     assertEquals(offsetDateTime, parser.parse(<span class="jxr_string">"1978-12-21T00:00:00+02:00"</span>).getPayload());
-<a class="jxr_linenumber" name="L178" href="#L178">178</a>   }
-<a class="jxr_linenumber" name="L179" href="#L179">179</a> 
-<a class="jxr_linenumber" name="L180" href="#L180">180</a>   @Test
-<a class="jxr_linenumber" name="L181" href="#L181">181</a>   <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testBlankDates(){
-<a class="jxr_linenumber" name="L182" href="#L182">182</a>     ThreeTenNumericalDateParser parser = ThreeTenNumericalDateParser.getParser();
-<a class="jxr_linenumber" name="L183" href="#L183">183</a>     assertEquals(ParseResult.STATUS.FAIL, parser.parse(<span class="jxr_string">" "</span>).getStatus());
-<a class="jxr_linenumber" name="L184" href="#L184">184</a>     assertEquals(ParseResult.STATUS.FAIL, parser.parse(<span class="jxr_string">""</span>).getStatus());
-<a class="jxr_linenumber" name="L185" href="#L185">185</a>     assertEquals(ParseResult.STATUS.FAIL, parser.parse(<strong class="jxr_keyword">null</strong>).getStatus());
-<a class="jxr_linenumber" name="L186" href="#L186">186</a>   }
-<a class="jxr_linenumber" name="L187" href="#L187">187</a> 
-<a class="jxr_linenumber" name="L188" href="#L188">188</a> }
+<a class="jxr_linenumber" name="L159" href="#L159">159</a>     assertEquals(LocalDate.of(1978, Month.DECEMBER, 21), LocalDate.from(PARSER.parse(<span class="jxr_string">"1978"</span>, <span class="jxr_string">"12"</span>, <span class="jxr_string">"21"</span>).getPayload()));
+<a class="jxr_linenumber" name="L160" href="#L160">160</a>     assertEquals(LocalDate.of(1978, Month.DECEMBER, 21), LocalDate.from(PARSER.parse(1978, 12, 21).getPayload()));
+<a class="jxr_linenumber" name="L161" href="#L161">161</a> 
+<a class="jxr_linenumber" name="L162" href="#L162">162</a>     assertEquals(LocalDate.of(1978, Month.DECEMBER, 1), LocalDate.from(PARSER.parse(<span class="jxr_string">"1978"</span>, <span class="jxr_string">"12"</span>, <span class="jxr_string">"1"</span>).getPayload()));
+<a class="jxr_linenumber" name="L163" href="#L163">163</a>     assertEquals(YearMonth.of(1978,12), YearMonth.from(PARSER.parse(<span class="jxr_string">"1978"</span>, <span class="jxr_string">"12"</span>, <strong class="jxr_keyword">null</strong>).getPayload()));
+<a class="jxr_linenumber" name="L164" href="#L164">164</a>     assertEquals(YearMonth.of(1978,12), YearMonth.from(PARSER.parse(1978, 12, <strong class="jxr_keyword">null</strong>).getPayload()));
+<a class="jxr_linenumber" name="L165" href="#L165">165</a>     assertEquals(Year.of(1978), Year.from(PARSER.parse(<span class="jxr_string">"1978"</span>,<span class="jxr_string">""</span>,<strong class="jxr_keyword">null</strong>).getPayload()));
+<a class="jxr_linenumber" name="L166" href="#L166">166</a> 
+<a class="jxr_linenumber" name="L167" href="#L167">167</a>     <em class="jxr_comment">// providing the day without the month should result in an error</em>
+<a class="jxr_linenumber" name="L168" href="#L168">168</a>     assertEquals(ParseResult.STATUS.FAIL, PARSER.parse(<span class="jxr_string">"1978"</span>, <span class="jxr_string">""</span>, <span class="jxr_string">"2"</span>).getStatus());
+<a class="jxr_linenumber" name="L169" href="#L169">169</a>     assertEquals(ParseResult.STATUS.FAIL, PARSER.parse(1978, <strong class="jxr_keyword">null</strong>, 2).getStatus());
+<a class="jxr_linenumber" name="L170" href="#L170">170</a>   }
+<a class="jxr_linenumber" name="L171" href="#L171">171</a> 
+<a class="jxr_linenumber" name="L172" href="#L172">172</a>   @Test
+<a class="jxr_linenumber" name="L173" href="#L173">173</a>   <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testParsePreserveZoneOffset(){
+<a class="jxr_linenumber" name="L174" href="#L174">174</a>     ZonedDateTime offsetDateTime = ZonedDateTime.of(1978, 12, 21, 0, 0, 0, 0, ZoneOffset.of(<span class="jxr_string">"+02:00"</span>));
+<a class="jxr_linenumber" name="L175" href="#L175">175</a>     assertEquals(offsetDateTime, PARSER.parse(<span class="jxr_string">"1978-12-21T00:00:00+02:00"</span>).getPayload());
+<a class="jxr_linenumber" name="L176" href="#L176">176</a>   }
+<a class="jxr_linenumber" name="L177" href="#L177">177</a> 
+<a class="jxr_linenumber" name="L178" href="#L178">178</a>   @Test
+<a class="jxr_linenumber" name="L179" href="#L179">179</a>   <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testBlankDates(){
+<a class="jxr_linenumber" name="L180" href="#L180">180</a>     assertEquals(ParseResult.STATUS.FAIL, PARSER.parse(<span class="jxr_string">" "</span>).getStatus());
+<a class="jxr_linenumber" name="L181" href="#L181">181</a>     assertEquals(ParseResult.STATUS.FAIL, PARSER.parse(<span class="jxr_string">""</span>).getStatus());
+<a class="jxr_linenumber" name="L182" href="#L182">182</a>     assertEquals(ParseResult.STATUS.FAIL, PARSER.parse(<strong class="jxr_keyword">null</strong>).getStatus());
+<a class="jxr_linenumber" name="L183" href="#L183">183</a>   }
+<a class="jxr_linenumber" name="L184" href="#L184">184</a> 
+<a class="jxr_linenumber" name="L185" href="#L185">185</a> }
 </pre>
 <hr/>
 <div id="footer">Copyright &#169; 2016 <a href="http://www.gbif.org">Global Biodiversity Information Facility</a>. All rights reserved.</div>

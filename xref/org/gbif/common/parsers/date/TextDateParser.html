@@ -30,90 +30,79 @@
 <a class="jxr_linenumber" name="L22" href="#L22">22</a>    <em class="jxr_comment">//private static final Pattern AT_LEAST_ONE_LETTER =  Pattern.compile("[a-zA-Z]+");</em>
 <a class="jxr_linenumber" name="L23" href="#L23">23</a>    <em class="jxr_comment">//This regex is not complete and will NOT handle date when the time zone is provided as text GMT</em>
 <a class="jxr_linenumber" name="L24" href="#L24">24</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Pattern NUMERICAL_DATE_PATTERN =  Pattern.compile(<span class="jxr_string">"[^a-zA-Z]+[&#92;&#92;dT&#92;&#92;d]?[^a-zA-Z]+[Z]?$"</span>);
-<a class="jxr_linenumber" name="L25" href="#L25">25</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <a href="../../../../../org/gbif/common/parsers/date/TextualMonthDateTokenizer.html">TextualMonthDateTokenizer</a> TEXT_MONTH_TOKENIZER = <strong class="jxr_keyword">new</strong> <a href="../../../../../org/gbif/common/parsers/date/TextualMonthDateTokenizer.html">TextualMonthDateTokenizer</a>();
-<a class="jxr_linenumber" name="L26" href="#L26">26</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <a href="../../../../../org/gbif/common/parsers/date/threeten/ThreeTenNumericalDateParser.html">ThreeTenNumericalDateParser</a> THREETEN_NUMERICAL_PARSER = ThreeTenNumericalDateParser.getParser();
-<a class="jxr_linenumber" name="L27" href="#L27">27</a>  
-<a class="jxr_linenumber" name="L28" href="#L28">28</a>    <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> main(String[] args){
-<a class="jxr_linenumber" name="L29" href="#L29">29</a>      <a href="../../../../../org/gbif/common/parsers/date/TextDateParser.html">TextDateParser</a> dateParser = <strong class="jxr_keyword">new</strong> <a href="../../../../../org/gbif/common/parsers/date/TextDateParser.html">TextDateParser</a>();
-<a class="jxr_linenumber" name="L30" href="#L30">30</a>      ParseResult&lt;TemporalAccessor&gt; ta = dateParser.parse(<span class="jxr_string">"2nd jan. 1999"</span>);
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <a href="../../../../../org/gbif/common/parsers/date/TextualMonthDateTokenizer.html">TextualMonthDateTokenizer</a> TEXT_MONTH_TOKENIZER = TextualMonthDateTokenizer.newInstance();
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <a href="../../../../../org/gbif/common/parsers/date/threeten/ThreeTenNumericalDateParser.html">ThreeTenNumericalDateParser</a> THREETEN_NUMERICAL_PARSER = ThreeTenNumericalDateParser.newInstance();
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <a href="../../../../../org/gbif/common/parsers/date/DatePartsNormalizer.html">DatePartsNormalizer</a> DATE_PARTS_NORMALIZER = DatePartsNormalizer.newInstance();
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>  
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>    @Override
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>    <strong class="jxr_keyword">public</strong> ParseResult&lt;TemporalAccessor&gt; parse(String input) {
 <a class="jxr_linenumber" name="L31" href="#L31">31</a>  
-<a class="jxr_linenumber" name="L32" href="#L32">32</a>      LocalDate localDate = LocalDate.from(ta.getPayload());
-<a class="jxr_linenumber" name="L33" href="#L33">33</a>      <em class="jxr_comment">//System.out.println(localDate);</em>
-<a class="jxr_linenumber" name="L34" href="#L34">34</a>  
-<a class="jxr_linenumber" name="L35" href="#L35">35</a>      ta = dateParser.parse(<span class="jxr_string">"1999"</span>, <span class="jxr_string">"jan."</span>, <span class="jxr_string">"2"</span>);
-<a class="jxr_linenumber" name="L36" href="#L36">36</a>      localDate = LocalDate.from(ta.getPayload());
-<a class="jxr_linenumber" name="L37" href="#L37">37</a>      System.out.println(localDate);
-<a class="jxr_linenumber" name="L38" href="#L38">38</a>    }
-<a class="jxr_linenumber" name="L39" href="#L39">39</a>  
-<a class="jxr_linenumber" name="L40" href="#L40">40</a>    @Override
-<a class="jxr_linenumber" name="L41" href="#L41">41</a>    <strong class="jxr_keyword">public</strong> ParseResult&lt;TemporalAccessor&gt; parse(String input) {
-<a class="jxr_linenumber" name="L42" href="#L42">42</a>  
-<a class="jxr_linenumber" name="L43" href="#L43">43</a>      <strong class="jxr_keyword">if</strong>(StringUtils.isBlank(input)){
-<a class="jxr_linenumber" name="L44" href="#L44">44</a>        <strong class="jxr_keyword">return</strong> ParseResult.fail();
-<a class="jxr_linenumber" name="L45" href="#L45">45</a>      }
-<a class="jxr_linenumber" name="L46" href="#L46">46</a>  
-<a class="jxr_linenumber" name="L47" href="#L47">47</a>      <em class="jxr_comment">// Check if the input text contains only punctuations and numbers</em>
-<a class="jxr_linenumber" name="L48" href="#L48">48</a>      <em class="jxr_comment">// Also accept the T marker (e.g. 1978-12-21T02:12) from the ISO format</em>
-<a class="jxr_linenumber" name="L49" href="#L49">49</a>      <em class="jxr_comment">// We could also simply try to parse it but it is probably not optimal</em>
-<a class="jxr_linenumber" name="L50" href="#L50">50</a>      <em class="jxr_comment">//if(!AT_LEAST_ONE_LETTER.matcher(input).find() || ISO_TIME_MARKER.matcher(input).find()) {</em>
-<a class="jxr_linenumber" name="L51" href="#L51">51</a>      <strong class="jxr_keyword">if</strong>(NUMERICAL_DATE_PATTERN.matcher(input).matches()) {
-<a class="jxr_linenumber" name="L52" href="#L52">52</a>        <strong class="jxr_keyword">return</strong> THREETEN_NUMERICAL_PARSER.parse(input, DateFormatHint.NONE);
-<a class="jxr_linenumber" name="L53" href="#L53">53</a>      }
-<a class="jxr_linenumber" name="L54" href="#L54">54</a>  
-<a class="jxr_linenumber" name="L55" href="#L55">55</a>      TextualMonthDateTokenizer.DateTokens dt = TEXT_MONTH_TOKENIZER.tokenize(input);
-<a class="jxr_linenumber" name="L56" href="#L56">56</a>      <em class="jxr_comment">// for now we only handle cases where we can find year, month, day with confidence.</em>
-<a class="jxr_linenumber" name="L57" href="#L57">57</a>      <strong class="jxr_keyword">if</strong>(!dt.containsDiscardedTokens() &amp;&amp; dt.size() == 3){
-<a class="jxr_linenumber" name="L58" href="#L58">58</a>        DatePartsNormalizer.NormalizedYearMonthDay normalizedYearMonthDay = DatePartsNormalizer.normalize(
-<a class="jxr_linenumber" name="L59" href="#L59">59</a>                dt.getToken(TextualMonthDateTokenizer.TokenType.INT_4).getToken(),
-<a class="jxr_linenumber" name="L60" href="#L60">60</a>                dt.getToken(TextualMonthDateTokenizer.TokenType.TEXT).getToken(),
-<a class="jxr_linenumber" name="L61" href="#L61">61</a>                dt.getToken(TextualMonthDateTokenizer.TokenType.INT_2).getToken());
-<a class="jxr_linenumber" name="L62" href="#L62">62</a>  
-<a class="jxr_linenumber" name="L63" href="#L63">63</a>        <em class="jxr_comment">//no handling for partial dates with textual month for now</em>
-<a class="jxr_linenumber" name="L64" href="#L64">64</a>        <strong class="jxr_keyword">if</strong>(normalizedYearMonthDay.getYear() != <strong class="jxr_keyword">null</strong> &amp;&amp;
-<a class="jxr_linenumber" name="L65" href="#L65">65</a>                normalizedYearMonthDay.getMonth() != <strong class="jxr_keyword">null</strong> &amp;&amp;
-<a class="jxr_linenumber" name="L66" href="#L66">66</a>                normalizedYearMonthDay.getDay() != <strong class="jxr_keyword">null</strong>){
-<a class="jxr_linenumber" name="L67" href="#L67">67</a>          <strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L68" href="#L68">68</a>            <strong class="jxr_keyword">return</strong> ParseResult.success(ParseResult.CONFIDENCE.DEFINITE,
-<a class="jxr_linenumber" name="L69" href="#L69">69</a>                    (TemporalAccessor)LocalDate.of(normalizedYearMonthDay.getYear(),
-<a class="jxr_linenumber" name="L70" href="#L70">70</a>                            normalizedYearMonthDay.getMonth(), normalizedYearMonthDay.getDay()));
-<a class="jxr_linenumber" name="L71" href="#L71">71</a>          }
-<a class="jxr_linenumber" name="L72" href="#L72">72</a>          <strong class="jxr_keyword">catch</strong> (DateTimeException ignore){
-<a class="jxr_linenumber" name="L73" href="#L73">73</a>            <em class="jxr_comment">//simply ignore bad dates</em>
-<a class="jxr_linenumber" name="L74" href="#L74">74</a>          }
-<a class="jxr_linenumber" name="L75" href="#L75">75</a>        }
-<a class="jxr_linenumber" name="L76" href="#L76">76</a>      }
-<a class="jxr_linenumber" name="L77" href="#L77">77</a>      <strong class="jxr_keyword">return</strong> ParseResult.fail();
-<a class="jxr_linenumber" name="L78" href="#L78">78</a>    }
-<a class="jxr_linenumber" name="L79" href="#L79">79</a>  
-<a class="jxr_linenumber" name="L80" href="#L80">80</a>    <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L81" href="#L81">81</a>  <em class="jxr_javadoccomment">   * Parse date parts into a TemporalAccessor.</em>
-<a class="jxr_linenumber" name="L82" href="#L82">82</a>  <em class="jxr_javadoccomment">   * The {@link DatePartsNormalizer} will be applied on raw data.</em>
-<a class="jxr_linenumber" name="L83" href="#L83">83</a>  <em class="jxr_javadoccomment">   *</em>
-<a class="jxr_linenumber" name="L84" href="#L84">84</a>  <em class="jxr_javadoccomment">   * @param year</em>
-<a class="jxr_linenumber" name="L85" href="#L85">85</a>  <em class="jxr_javadoccomment">   * @param month</em>
-<a class="jxr_linenumber" name="L86" href="#L86">86</a>  <em class="jxr_javadoccomment">   * @param day</em>
-<a class="jxr_linenumber" name="L87" href="#L87">87</a>  <em class="jxr_javadoccomment">   * @return</em>
-<a class="jxr_linenumber" name="L88" href="#L88">88</a>  <em class="jxr_javadoccomment">   */</em>
-<a class="jxr_linenumber" name="L89" href="#L89">89</a>    <strong class="jxr_keyword">public</strong> ParseResult&lt;TemporalAccessor&gt; parse(String year, String month, String day) {
-<a class="jxr_linenumber" name="L90" href="#L90">90</a>      DatePartsNormalizer.NormalizedYearMonthDay normalizedYearMonthDay = DatePartsNormalizer.normalize(
-<a class="jxr_linenumber" name="L91" href="#L91">91</a>              year, month, day);
-<a class="jxr_linenumber" name="L92" href="#L92">92</a>  
-<a class="jxr_linenumber" name="L93" href="#L93">93</a>      <em class="jxr_comment">// TODO when we can get the day but not the month in NormalizedYearMonthDay the parsing fails</em>
-<a class="jxr_linenumber" name="L94" href="#L94">94</a>      <em class="jxr_comment">// we could actually keep the year by calling ThreeTenNumericalDateParser.parse(normalizedYearMonthDay.getYear(),</em>
-<a class="jxr_linenumber" name="L95" href="#L95">95</a>      <em class="jxr_comment">// null, null); the CONFIDENCE would be set at PROBABLE.</em>
+<a class="jxr_linenumber" name="L32" href="#L32">32</a>      <strong class="jxr_keyword">if</strong>(StringUtils.isBlank(input)){
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>        <strong class="jxr_keyword">return</strong> ParseResult.fail();
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>      }
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>  
+<a class="jxr_linenumber" name="L36" href="#L36">36</a>      <em class="jxr_comment">// Check if the input text contains only punctuations and numbers</em>
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>      <em class="jxr_comment">// Also accept the T marker (e.g. 1978-12-21T02:12) from the ISO format</em>
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>      <em class="jxr_comment">// We could also simply try to parse it but it is probably not optimal</em>
+<a class="jxr_linenumber" name="L39" href="#L39">39</a>      <em class="jxr_comment">//if(!AT_LEAST_ONE_LETTER.matcher(input).find() || ISO_TIME_MARKER.matcher(input).find()) {</em>
+<a class="jxr_linenumber" name="L40" href="#L40">40</a>      <strong class="jxr_keyword">if</strong>(NUMERICAL_DATE_PATTERN.matcher(input).matches()) {
+<a class="jxr_linenumber" name="L41" href="#L41">41</a>        <strong class="jxr_keyword">return</strong> THREETEN_NUMERICAL_PARSER.parse(input, DateFormatHint.NONE);
+<a class="jxr_linenumber" name="L42" href="#L42">42</a>      }
+<a class="jxr_linenumber" name="L43" href="#L43">43</a>  
+<a class="jxr_linenumber" name="L44" href="#L44">44</a>      TextualMonthDateTokenizer.DateTokens dt = TEXT_MONTH_TOKENIZER.tokenize(input);
+<a class="jxr_linenumber" name="L45" href="#L45">45</a>      <em class="jxr_comment">// for now we only handle cases where we can find year, month, day with confidence.</em>
+<a class="jxr_linenumber" name="L46" href="#L46">46</a>      <strong class="jxr_keyword">if</strong>(!dt.containsDiscardedTokens() &amp;&amp; dt.size() == 3){
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>        DatePartsNormalizer.NormalizedYearMonthDay normalizedYearMonthDay = DATE_PARTS_NORMALIZER.normalize(
+<a class="jxr_linenumber" name="L48" href="#L48">48</a>                dt.getToken(TextualMonthDateTokenizer.TokenType.INT_4).getToken(),
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>                dt.getToken(TextualMonthDateTokenizer.TokenType.TEXT).getToken(),
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>                dt.getToken(TextualMonthDateTokenizer.TokenType.INT_2).getToken());
+<a class="jxr_linenumber" name="L51" href="#L51">51</a>  
+<a class="jxr_linenumber" name="L52" href="#L52">52</a>        <em class="jxr_comment">//no handling for partial dates with textual month for now</em>
+<a class="jxr_linenumber" name="L53" href="#L53">53</a>        <strong class="jxr_keyword">if</strong>(normalizedYearMonthDay.getYear() != <strong class="jxr_keyword">null</strong> &amp;&amp;
+<a class="jxr_linenumber" name="L54" href="#L54">54</a>                normalizedYearMonthDay.getMonth() != <strong class="jxr_keyword">null</strong> &amp;&amp;
+<a class="jxr_linenumber" name="L55" href="#L55">55</a>                normalizedYearMonthDay.getDay() != <strong class="jxr_keyword">null</strong>){
+<a class="jxr_linenumber" name="L56" href="#L56">56</a>          <strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L57" href="#L57">57</a>            <strong class="jxr_keyword">return</strong> ParseResult.success(ParseResult.CONFIDENCE.DEFINITE,
+<a class="jxr_linenumber" name="L58" href="#L58">58</a>                    (TemporalAccessor)LocalDate.of(normalizedYearMonthDay.getYear(),
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>                            normalizedYearMonthDay.getMonth(), normalizedYearMonthDay.getDay()));
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>          }
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>          <strong class="jxr_keyword">catch</strong> (DateTimeException ignore){
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>            <em class="jxr_comment">//simply ignore bad dates</em>
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>          }
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>        }
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>      }
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>      <strong class="jxr_keyword">return</strong> ParseResult.fail();
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>    }
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>  
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>    <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>  <em class="jxr_javadoccomment">   * Parse date parts into a TemporalAccessor.</em>
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>  <em class="jxr_javadoccomment">   * The {@link DatePartsNormalizer} will be applied on raw data.</em>
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>  <em class="jxr_javadoccomment">   *</em>
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>  <em class="jxr_javadoccomment">   * @param year</em>
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>  <em class="jxr_javadoccomment">   * @param month</em>
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>  <em class="jxr_javadoccomment">   * @param day</em>
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>  <em class="jxr_javadoccomment">   * @return</em>
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>  <em class="jxr_javadoccomment">   */</em>
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>    <strong class="jxr_keyword">public</strong> ParseResult&lt;TemporalAccessor&gt; parse(String year, String month, String day) {
+<a class="jxr_linenumber" name="L79" href="#L79">79</a>      DatePartsNormalizer.NormalizedYearMonthDay normalizedYearMonthDay = DATE_PARTS_NORMALIZER.normalize(
+<a class="jxr_linenumber" name="L80" href="#L80">80</a>              year, month, day);
+<a class="jxr_linenumber" name="L81" href="#L81">81</a>  
+<a class="jxr_linenumber" name="L82" href="#L82">82</a>      <em class="jxr_comment">// TODO when we can get the day but not the month in NormalizedYearMonthDay the parsing fails</em>
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>      <em class="jxr_comment">// we could actually keep the year by calling ThreeTenNumericalDateParser.parse(normalizedYearMonthDay.getYear(),</em>
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>      <em class="jxr_comment">// null, null); the CONFIDENCE would be set at PROBABLE.</em>
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>  
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>      ParseResult&lt;TemporalAccessor&gt; parseResult = ThreeTenNumericalDateParser.parse(normalizedYearMonthDay.getYear(),
+<a class="jxr_linenumber" name="L87" href="#L87">87</a>              normalizedYearMonthDay.getMonth(), normalizedYearMonthDay.getDay());
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>  
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>      <em class="jxr_comment">//If we got a successful parsing BUT a part of the date was discarded we reduce confidence.</em>
+<a class="jxr_linenumber" name="L90" href="#L90">90</a>      <strong class="jxr_keyword">if</strong>(parseResult.isSuccessful() &amp;&amp; normalizedYearMonthDay.containsDiscardedPart()){
+<a class="jxr_linenumber" name="L91" href="#L91">91</a>        <strong class="jxr_keyword">return</strong> ParseResult.success(ParseResult.CONFIDENCE.PROBABLE, parseResult.getPayload());
+<a class="jxr_linenumber" name="L92" href="#L92">92</a>      }
+<a class="jxr_linenumber" name="L93" href="#L93">93</a>  
+<a class="jxr_linenumber" name="L94" href="#L94">94</a>      <strong class="jxr_keyword">return</strong> parseResult;
+<a class="jxr_linenumber" name="L95" href="#L95">95</a>    }
 <a class="jxr_linenumber" name="L96" href="#L96">96</a>  
-<a class="jxr_linenumber" name="L97" href="#L97">97</a>      ParseResult&lt;TemporalAccessor&gt; parseResult = ThreeTenNumericalDateParser.parse(normalizedYearMonthDay.getYear(),
-<a class="jxr_linenumber" name="L98" href="#L98">98</a>              normalizedYearMonthDay.getMonth(), normalizedYearMonthDay.getDay());
-<a class="jxr_linenumber" name="L99" href="#L99">99</a>  
-<a class="jxr_linenumber" name="L100" href="#L100">100</a>     <em class="jxr_comment">//If we got a successful parsing BUT a part of the date was discarded we reduce confidence.</em>
-<a class="jxr_linenumber" name="L101" href="#L101">101</a>     <strong class="jxr_keyword">if</strong>(parseResult.isSuccessful() &amp;&amp; normalizedYearMonthDay.containsDiscardedPart()){
-<a class="jxr_linenumber" name="L102" href="#L102">102</a>       <strong class="jxr_keyword">return</strong> ParseResult.success(ParseResult.CONFIDENCE.PROBABLE, parseResult.getPayload());
-<a class="jxr_linenumber" name="L103" href="#L103">103</a>     }
-<a class="jxr_linenumber" name="L104" href="#L104">104</a> 
-<a class="jxr_linenumber" name="L105" href="#L105">105</a>     <strong class="jxr_keyword">return</strong> parseResult;
-<a class="jxr_linenumber" name="L106" href="#L106">106</a>   }
-<a class="jxr_linenumber" name="L107" href="#L107">107</a> 
-<a class="jxr_linenumber" name="L108" href="#L108">108</a> }
+<a class="jxr_linenumber" name="L97" href="#L97">97</a>  }
 </pre>
 <hr/>
 <div id="footer">Copyright &#169; 2016 <a href="http://www.gbif.org">Global Biodiversity Information Facility</a>. All rights reserved.</div>
