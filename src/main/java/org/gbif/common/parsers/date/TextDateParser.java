@@ -2,7 +2,6 @@ package org.gbif.common.parsers.date;
 
 import org.gbif.common.parsers.core.Parsable;
 import org.gbif.common.parsers.core.ParseResult;
-import org.gbif.common.parsers.date.threeten.ThreeTenNumericalDateParser;
 
 import java.util.regex.Pattern;
 
@@ -14,7 +13,7 @@ import org.threeten.bp.temporal.TemporalAccessor;
 /**
  * Main class to parse a date represented as a single String or as date parts into a {@link TemporalAccessor}.
  * If the String contains letters, the {@link TextualMonthDateTokenizer} and the {@link DatePartsNormalizer} will be used.
- * Otherwise, {@link ThreeTenNumericalDateParser} will be used.
+ * Otherwise, {@link NumericalDateParser} will be used.
  */
 public class TextDateParser implements Parsable<TemporalAccessor> {
 
@@ -23,7 +22,7 @@ public class TextDateParser implements Parsable<TemporalAccessor> {
   //This regex is not complete and will NOT handle date when the time zone is provided as text GMT
   private static final Pattern NUMERICAL_DATE_PATTERN =  Pattern.compile("[^a-zA-Z]+[\\dT\\d]?[^a-zA-Z]+[Z]?$");
   private static final TextualMonthDateTokenizer TEXT_MONTH_TOKENIZER = TextualMonthDateTokenizer.newInstance();
-  private static final NumericalDateParser NUMERICAL_DATE_PARSER = ThreeTenNumericalDateParser.newInstance();
+  private static final NumericalDateParser NUMERICAL_DATE_PARSER = DateParsers.defaultNumericalDateParser();
   private static final DatePartsNormalizer DATE_PARTS_NORMALIZER = DatePartsNormalizer.newInstance();
 
   @Override

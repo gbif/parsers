@@ -10,6 +10,8 @@ import org.threeten.bp.temporal.TemporalAccessor;
 /**
  *
  * Main interface for date parsing based on numerical values.
+ * This means it is NOT responsible to parse dates that contains text for representing
+ * a part of the dates (e.g. January 1 1980).
  *
  */
 public interface NumericalDateParser extends Parsable<TemporalAccessor> {
@@ -19,27 +21,27 @@ public interface NumericalDateParser extends Parsable<TemporalAccessor> {
    *
    * @param input
    * @param hint help to speed up the parsing and possibly return a better confidence
-   * @return
+   * @return result, never null
    */
   ParseResult<TemporalAccessor> parse(String input, @Nullable DateFormatHint hint);
 
   /**
    * Parse year, month, day strings as a TemporalAccessor.
    *
-   * @param year
-   * @param month
-   * @param day
-   * @return
+   * @param year numerical value of a year
+   * @param month numerical value of a month (starting at 1 for January)
+   * @param day numerical value of a day
+   * @return result, never null
    */
   ParseResult<TemporalAccessor> parse(@Nullable String year, @Nullable String month, @Nullable String day);
 
   /**
    * Parse year, month, day integers as a TemporalAccessor.
    *
-   * @param year
-   * @param month
-   * @param day
-   * @return
+   * @param year numerical value of a year
+   * @param month numerical value of a month (starting at 1 for January)
+   * @param day numerical value of a day
+   * @return result, never null
    */
   ParseResult<TemporalAccessor> parse(@Nullable Integer year, @Nullable Integer month, @Nullable Integer day);
 

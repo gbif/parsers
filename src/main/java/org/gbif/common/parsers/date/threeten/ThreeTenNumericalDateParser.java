@@ -36,8 +36,6 @@ import org.threeten.bp.temporal.TemporalAccessor;
 
 /**
  * Numerical DateParser based on threetenbp (JSR310 backport) library which also means it is almost ready for Java 8.
- * This is a numerical Date Parser which means it is not responsible to parse dates that contains text for representing
- * a part of the dates (e.g. January 1 1980)
  *
  * Months are in numerical value starting at 1 for January.
  *
