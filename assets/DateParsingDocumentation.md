@@ -1,4 +1,4 @@
-# Date Parsing - Documentations and Design Notes
+# Date Parsing - Documentation and Design Notes
 
 ## Documentation
 ### Main usage
@@ -12,7 +12,7 @@ implemented using the [ThreeTen Backport](http://www.threeten.org/threetenbp/) p
 ThreeTen Backport uses its own namespace `org.threeten.bp` which allows it to run on Java 6, 7 and 8.
 
 The use of ThreeTen Backport must be considered temporary since the project will be moved to Java 8 code as soon as possible.
-
+Classes like `TemporalAccessor` and all its implementation will keep the same name but will use the `java.time.temporal` namespace.
 
 ### TemporalAccessor and java.util.Date
 The date parsing classes are all working with a [TemporalAccessor](http://docs.oracle.com/javase/8/docs/api/java/time/temporal/TemporalAccessor.html)
@@ -25,13 +25,13 @@ See [TemporalAccessorUtils](http://gbif.github.io/parsers/apidocs/org/gbif/commo
 
 ### Entry points
 There is 2 main methods in [TextDateParser](http://gbif.github.io/parsers/apidocs/org/gbif/common/parsers/date/TextDateParser.html) to parse dates represented in String.
-They both return a ParseResult<TemporalAccessor> object.
+They both return a `ParseResult<TemporalAccessor>` object.
 ```
 - parse(String input)
 - parse(String year, String month, String day)
 ```
 
-## Design and implementation details.
+## Design and implementation details
 
 
 Design overview
@@ -40,12 +40,12 @@ Design overview
 
 ### TextDateParser Workflow
 
-In order to use the right parser, the TextDateParser will use a regex to determine if the input String contains only
+In order to use the right parser, the `TextDateParser` will use a regular expression to determine if the input String contains only
 numerical characters and separators or if it also include some letters. the presence of letters may indicate the month
 is written in text as opposed to its numerical value.
 
 ### ThreeTenNumericalDateParser
-The ThreeTenNumericalDateParser contains a predefined set of date formats built on top of the [Threeten Backport](http://www.threeten.org/threetenbp/) project.
+The `ThreeTenNumericalDateParser` contains a predefined set of date formats built on top of the [Threeten Backport](http://www.threeten.org/threetenbp/) project.
 
 By default, this parser will not parse dates containing the year expressed as 2 digits. This feature can be enabled by using
 the static method `getParser(Year baseYear)`.
@@ -71,7 +71,7 @@ This class is mostly use to break a string into different tokens.
 
 ### DatePartsNormalizer
 This class is used to transform strings representing year, month and day and return the corresponding Integer as
-{@link NormalizedYearMonthDay}.
+[NormalizedYearMonthDay](http://gbif.github.io/parsers/apidocs/org/gbif/common/parsers/date/DatePartsNormalizer.NormalizedYearMonthDay.html).
 
 ```java
 DatePartsNormalizer.NormalizedYearMonthDay result = DatePartsNormalizer.normalize("1975", "jan", "1");
