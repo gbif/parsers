@@ -37,17 +37,17 @@ public class DatePartsNormalizerTest {
 
   @Test
   public void testMonthNameNormalization(){
-    assertEquals(Month.JANUARY.getValue(), DatePartsNormalizer.monthNameToNumerical("January").intValue());
-    assertEquals(Month.JANUARY.getValue(), DatePartsNormalizer.monthNameToNumerical("JANUARY").intValue());
-    assertEquals(Month.JANUARY.getValue(), DatePartsNormalizer.monthNameToNumerical("Jan").intValue());
-    assertEquals(Month.JANUARY.getValue(), DatePartsNormalizer.monthNameToNumerical("JAN.").intValue());
-    assertEquals(Month.DECEMBER.getValue(), DatePartsNormalizer.monthNameToNumerical("DEC").intValue());
-    assertEquals(Month.APRIL.getValue(), DatePartsNormalizer.monthNameToNumerical("April").intValue());
-    assertEquals(Month.SEPTEMBER.getValue(), DatePartsNormalizer.monthNameToNumerical("Sept").intValue());
-    assertEquals(Month.JUNE.getValue(), DatePartsNormalizer.monthNameToNumerical("June").intValue());
-    assertEquals(Month.JUNE.getValue(), DatePartsNormalizer.monthNameToNumerical("Jun").intValue());
-    assertEquals(Month.JUNE.getValue(), DatePartsNormalizer.monthNameToNumerical("JUNE").intValue());
-    assertEquals(Month.NOVEMBER.getValue(), DatePartsNormalizer.monthNameToNumerical("November").intValue());
+    assertEquals(Month.JANUARY.getValue(), NORMALIZER.monthNameToNumerical("January").intValue());
+    assertEquals(Month.JANUARY.getValue(), NORMALIZER.monthNameToNumerical("JANUARY").intValue());
+    assertEquals(Month.JANUARY.getValue(), NORMALIZER.monthNameToNumerical("Jan").intValue());
+    assertEquals(Month.JANUARY.getValue(), NORMALIZER.monthNameToNumerical("JAN.").intValue());
+    assertEquals(Month.DECEMBER.getValue(), NORMALIZER.monthNameToNumerical("DEC").intValue());
+    assertEquals(Month.APRIL.getValue(), NORMALIZER.monthNameToNumerical("April").intValue());
+    assertEquals(Month.SEPTEMBER.getValue(), NORMALIZER.monthNameToNumerical("Sept").intValue());
+    assertEquals(Month.JUNE.getValue(), NORMALIZER.monthNameToNumerical("June").intValue());
+    assertEquals(Month.JUNE.getValue(), NORMALIZER.monthNameToNumerical("Jun").intValue());
+    assertEquals(Month.JUNE.getValue(), NORMALIZER.monthNameToNumerical("JUNE").intValue());
+    assertEquals(Month.NOVEMBER.getValue(), NORMALIZER.monthNameToNumerical("November").intValue());
   }
 
   @Test
