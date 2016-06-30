@@ -10,6 +10,7 @@ import org.threeten.bp.LocalDateTime;
 import org.threeten.bp.Year;
 import org.threeten.bp.YearMonth;
 import org.threeten.bp.ZoneId;
+import org.threeten.bp.ZoneOffset;
 import org.threeten.bp.ZonedDateTime;
 import org.threeten.bp.temporal.ChronoField;
 import org.threeten.bp.temporal.TemporalAccessor;
@@ -21,12 +22,22 @@ import org.threeten.bp.temporal.TemporalQueries;
  */
 public class TemporalAccessorUtils {
 
-  public static ZoneId UTC_ZONE_ID = ZoneId.of("UTC");
+  public static ZoneId UTC_ZONE_ID = ZoneOffset.UTC;
 
   /**
-   * Transform a {@link TemporalAccessor} to a {@link java.util.Date} in the UTC timezone in case there is no
-   * timezone information available form the {@link TemporalAccessor} otherwise, the timezone information it will
-   * be honored.
+   * Transform a {@link TemporalAccessor} to a {@link java.util.Date}.
+   * If the provided {@link TemporalAccessor} contains offset(timezone) information it will be used.
+   * See {@link #toDate(TemporalAccessor, boolean)} for more details.
+   *
+   * @param temporalAccessor
+   * @return  the Date object or null if a Date object can not be created
+   */
+  public static Date toDate(TemporalAccessor temporalAccessor) {
+    return toDate(temporalAccessor, false);
+  }
+
+  /**
+   * Transform a {@link TemporalAccessor} to a {@link java.util.Date}.
    *
    * For {@link YearMonth}, the {@link java.util.Date} will represent the first day of the month.
    * For {@link Year}, the {@link java.util.Date} will represent the first day of January.
@@ -34,14 +45,16 @@ public class TemporalAccessorUtils {
    * Remember that a {@link Date} object will always display the date in the current timezone.
    *
    * @param temporalAccessor
+   * @param ignoreOffset in case offset information is available in the provided {@link TemporalAccessor}, should it
+   *                     be used ?
    * @return the Date object or null if a Date object can not be created
    */
-  public static Date toUTCDate(TemporalAccessor temporalAccessor){
+  public static Date toDate(TemporalAccessor temporalAccessor, boolean ignoreOffset) {
     if(temporalAccessor == null){
       return null;
     }
 
-    if(temporalAccessor.isSupported(ChronoField.OFFSET_SECONDS)){
+    if(!ignoreOffset && temporalAccessor.isSupported(ChronoField.OFFSET_SECONDS)){
       return DateTimeUtils.toDate(temporalAccessor.query(ZonedDateTime.FROM).toInstant());
     }
 

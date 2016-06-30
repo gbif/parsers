@@ -7,6 +7,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.threeten.bp.LocalDate;
 import org.threeten.bp.LocalDateTime;
+import org.threeten.bp.OffsetDateTime;
 import org.threeten.bp.Year;
 import org.threeten.bp.YearMonth;
 import org.threeten.bp.ZoneId;
@@ -37,33 +38,47 @@ public class TemporalAccessorUtilsTest {
   private long YEAR2000_1JAN_0H_0M_0S_EPOCH_UTC = 946684800000l;
 
   @Test
-  public void testToUTCDate(){
+  public void testToDate(){
     TemporalAccessor ta = LocalDate.of(2000,01,01);
-    Date date = TemporalAccessorUtils.toUTCDate(ta);
+    Date date = TemporalAccessorUtils.toDate(ta, false);
     assertEquals(YEAR2000_1JAN_EPOCH_UTC, date.getTime());
 
     ta = LocalDateTime.of(2000, 01, 01, 2, 3, 4);
-    date = TemporalAccessorUtils.toUTCDate(ta);
+    date = TemporalAccessorUtils.toDate(ta, false);
     assertEquals(YEAR2000_1JAN_2H_3M_4S_EPOCH_UTC, date.getTime());
 
     //test partial date transformed to Date
     //YearMonth should use the first of the month
     ta = YearMonth.of(2000, 2);
-    date = TemporalAccessorUtils.toUTCDate(ta);
+    date = TemporalAccessorUtils.toDate(ta, false);
     assertEquals(YEAR2000_2FEB_0H_0M_0S_EPOCH_UTC, date.getTime());
 
     //Year should use the first of January
     ta = Year.of(2000);
-    date = TemporalAccessorUtils.toUTCDate(ta);
+    date = TemporalAccessorUtils.toDate(ta, false);
     assertEquals(YEAR2000_1JAN_0H_0M_0S_EPOCH_UTC, date.getTime());
   }
 
   @Test
-  public void testToUTCDateTimeZone(){
-    ZonedDateTime testTime = ZonedDateTime.of(2000, 1, 1, 4 , 20, 0, 0, EUROPE_CENTRAL_TIME);
-    Date date = TemporalAccessorUtils.toUTCDate(testTime);
+  public void testToDateWithTimeZone(){
 
-    assertEquals(testTime.toEpochSecond(), date.getTime()/1000);
+    // Test with ZonedDateTime
+    ZonedDateTime testZonedDateTime = ZonedDateTime.of(2000, 1, 1, 4 , 20, 0, 0, EUROPE_CENTRAL_TIME);
+    Date date = TemporalAccessorUtils.toDate(testZonedDateTime, false);
+    assertEquals(testZonedDateTime.toEpochSecond(), date.getTime()/1000);
+
+    // Test the same ZonedDateTime but ignore Offset information (timezone)
+    ZonedDateTime testTimeUTC = ZonedDateTime.of(2000, 1, 1, 4 , 20, 0, 0, TemporalAccessorUtils.UTC_ZONE_ID);
+    date = TemporalAccessorUtils.toDate(testZonedDateTime, true);
+    assertEquals(testTimeUTC.toEpochSecond(), date.getTime()/1000);
+
+    // Ensure it is also working with OffsetDateTime
+    OffsetDateTime testOffsetDateTimeTime = testZonedDateTime.toOffsetDateTime();
+    date = TemporalAccessorUtils.toDate(testOffsetDateTimeTime, false);
+    assertEquals(testOffsetDateTimeTime.toEpochSecond(), date.getTime()/1000);
+
+    date = TemporalAccessorUtils.toDate(testOffsetDateTimeTime, true);
+    assertEquals(testTimeUTC.toEpochSecond(), date.getTime()/1000);
   }
 
   @Test
