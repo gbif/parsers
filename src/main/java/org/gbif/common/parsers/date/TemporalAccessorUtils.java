@@ -1,17 +1,19 @@
 package org.gbif.common.parsers.date;
 
 import java.util.Date;
-
 import javax.annotation.Nullable;
 
 import com.google.common.base.Optional;
 import org.threeten.bp.DateTimeUtils;
 import org.threeten.bp.LocalDate;
 import org.threeten.bp.LocalDateTime;
+import org.threeten.bp.Year;
+import org.threeten.bp.YearMonth;
 import org.threeten.bp.ZoneId;
 import org.threeten.bp.ZonedDateTime;
 import org.threeten.bp.temporal.ChronoField;
 import org.threeten.bp.temporal.TemporalAccessor;
+import org.threeten.bp.temporal.TemporalQueries;
 
 /**
  * Utility methods to work with {@link TemporalAccessor}
@@ -25,6 +27,9 @@ public class TemporalAccessorUtils {
    * Transform a {@link TemporalAccessor} to a {@link java.util.Date} in the UTC timezone in case there is no
    * timezone information available form the {@link TemporalAccessor} otherwise, the timezone information it will
    * be honored.
+   *
+   * For {@link YearMonth}, the {@link java.util.Date} will represent the first day of the month.
+   * For {@link Year}, the {@link java.util.Date} will represent the first day of January.
    *
    * Remember that a {@link Date} object will always display the date in the current timezone.
    *
@@ -44,7 +49,21 @@ public class TemporalAccessorUtils {
       return DateTimeUtils.toDate(temporalAccessor.query(LocalDateTime.FROM).atZone(UTC_ZONE_ID).toInstant());
     }
 
-    LocalDate localDate = temporalAccessor.query(LocalDate.FROM);
+    // this may return null in case of partial dates
+    LocalDate localDate = temporalAccessor.query(TemporalQueries.localDate());
+
+    // try YearMonth
+    if(localDate == null && temporalAccessor.isSupported(ChronoField.MONTH_OF_YEAR)) {
+      YearMonth yearMonth = YearMonth.from(temporalAccessor);
+      localDate = yearMonth.atDay(1);
+    }
+
+    // try Year
+    if(localDate == null && temporalAccessor.isSupported(ChronoField.YEAR)) {
+      Year year = Year.from(temporalAccessor);
+      localDate = year.atDay(1);
+    }
+
     if (localDate != null) {
       return DateTimeUtils.toDate(localDate.atStartOfDay(UTC_ZONE_ID).toInstant());
     }
