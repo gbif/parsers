@@ -1,16 +1,16 @@
 package org.gbif.common.parsers.date;
 
-import org.gbif.utils.file.FileUtils;
 import org.gbif.utils.file.csv.CSVReader;
 import org.gbif.utils.file.csv.CSVReaderFactory;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import com.google.common.base.Strings;
+import com.google.common.base.Splitter;
 import com.google.common.collect.Maps;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -34,9 +34,10 @@ public class DatePartsNormalizer {
 
   private static final String STRING_NULL = "\\N";
   private static final String COLUMN_SEPARATOR = ";";
-  private static final String ROW_ELEMENT_SEPARATOR = ",";
+  private static final Splitter ROW_ELEMENT_SPLITTER = Splitter.on(',').trimResults().omitEmptyStrings();
+
   private static final String COMMENT_MARKER = "#";
-  private static final String MONTH_FILEPATH = "dictionaries/parse/month.csv";
+  private static final String MONTH_FILEPATH = "/dictionaries/parse/month.csv";
 
   private static final String[][] MONTHS = new String[Month.values().length][];
 
@@ -51,7 +52,12 @@ public class DatePartsNormalizer {
       monthMap.get(keyName).add(keyName);
     }
 
-    File testInputFile = FileUtils.getClasspathFile(MONTH_FILEPATH);
+    File testInputFile = null;
+    try {
+      testInputFile = new File(DatePartsNormalizer.class.getResource(MONTH_FILEPATH).toURI());
+    } catch (URISyntaxException e) {
+      LOG.error("Month file can not be loaded. File not found: {}", MONTH_FILEPATH, e);
+    }
     if(testInputFile == null){
       LOG.error("Month file can not be loaded. File not found: {}", MONTH_FILEPATH);
     }
@@ -66,10 +72,8 @@ public class DatePartsNormalizer {
           }
           monthKey = row[0].toLowerCase();
           if(monthMap.containsKey(monthKey)){
-            for(String monthAltName : row[1].split(ROW_ELEMENT_SEPARATOR)){
-              if(!Strings.isNullOrEmpty(monthAltName)) {
-                monthMap.get(monthKey).add(monthAltName.trim().toLowerCase());
-              }
+            for(String monthAltName : ROW_ELEMENT_SPLITTER.split(row[1])){
+              monthMap.get(monthKey).add(monthAltName.toLowerCase());
             }
           }
           else{
@@ -134,7 +138,7 @@ public class DatePartsNormalizer {
    *
    * @return the numerical value of the month (January == 1 )
    */
-  public static Integer monthNameToNumerical(String month) {
+  public Integer monthNameToNumerical(String month) {
     if (StringUtils.isNotBlank(month)) {
       int m = 1;
       for (String[] monthValues : MONTHS) {
@@ -158,7 +162,7 @@ public class DatePartsNormalizer {
    *
    * @return the integer value (as String)
    */
-  public static String normalizeFloat(String value) {
+  public String normalizeFloat(String value) {
     if (value != null && value.contains(".0")) {
       try {
         Double d = new Double(value);

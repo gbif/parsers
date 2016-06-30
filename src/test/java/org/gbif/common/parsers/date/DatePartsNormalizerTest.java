@@ -12,7 +12,7 @@ import static org.junit.Assert.assertTrue;
 /**
  * Tests related to {@link DatePartsNormalizer}
  */
-public class DateNormalizerTest {
+public class DatePartsNormalizerTest {
 
   private static DatePartsNormalizer NORMALIZER = DatePartsNormalizer.newInstance();
 
