@@ -3,13 +3,13 @@ package org.gbif.common.parsers.date;
 import org.gbif.utils.file.csv.CSVReader;
 import org.gbif.utils.file.csv.CSVReaderFactory;
 
-import java.io.File;
 import java.io.IOException;
-import java.net.URISyntaxException;
+import java.io.InputStream;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import com.google.common.base.Charsets;
 import com.google.common.base.Splitter;
 import com.google.common.collect.Maps;
 import org.apache.commons.lang3.StringUtils;
@@ -52,19 +52,14 @@ public class DatePartsNormalizer {
       monthMap.get(keyName).add(keyName);
     }
 
-    File testInputFile = null;
-    try {
-      testInputFile = new File(DatePartsNormalizer.class.getResource(MONTH_FILEPATH).toURI());
-    } catch (URISyntaxException e) {
-      LOG.error("Month file can not be loaded. File not found: {}", MONTH_FILEPATH, e);
-    }
-    if(testInputFile == null){
+    InputStream monthFileStream = DatePartsNormalizer.class.getResourceAsStream(MONTH_FILEPATH);
+
+    if(monthFileStream == null){
       LOG.error("Month file can not be loaded. File not found: {}", MONTH_FILEPATH);
     }
     else{
       try{
-        CSVReader csv = CSVReaderFactory.build(testInputFile, COLUMN_SEPARATOR, false);
-
+        CSVReader csv = CSVReaderFactory.build(monthFileStream, Charsets.UTF_8.name(), COLUMN_SEPARATOR, null, 0);
         String monthKey;
         for (String[] row : csv) {
           if (row == null || row[0].startsWith(COMMENT_MARKER)) {

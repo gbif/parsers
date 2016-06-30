@@ -3,6 +3,10 @@ package org.gbif.common.parsers.date.threeten;
 
 import org.gbif.common.parsers.date.DateFormatHint;
 
+import javax.annotation.Nullable;
+import javax.validation.constraints.NotNull;
+
+import com.google.common.base.Preconditions;
 import org.threeten.bp.LocalDate;
 import org.threeten.bp.LocalDateTime;
 import org.threeten.bp.Year;
@@ -14,30 +18,37 @@ import org.threeten.bp.temporal.TemporalAccessor;
 import org.threeten.bp.temporal.TemporalQuery;
 
 /**
- * Internal (package protected) wrapper of ThreeTen {@link DateTimeFormatter}.
- * It adds some flexibility with the {@link DateTimeSeparatorNormalizer} and
+ * Adds some flexibility around {@link DateTimeFormatter} with the {@link DateTimeSeparatorNormalizer} and
  * simple optimization the support of DateFormatHint.
+ *
+ * This class is thread-safe once an instance is created.
+ *
  */
 class DateTimeParser {
 
-  private DateTimeFormatter formatter;
-  private DateTimeSeparatorNormalizer normalizer;
-  private DateFormatHint hint;
+  private final DateTimeFormatter formatter;
+  private final DateTimeSeparatorNormalizer normalizer;
+  private final DateFormatHint hint;
 
-  private TemporalQuery<?>[] types;
-  private int minLength;
+  private final TemporalQuery<?>[] types;
+  private final int minLength;
 
   /**
    * Package protected constructor.
    * Use {@link ThreeTenNumericalDateParserBuilder}
    *
    * @param formatter
-   * @param normalizer
+   * @param normalizer optional, can be null
    * @param hint
    * @param minLength
    */
-  DateTimeParser(DateTimeFormatter formatter, DateTimeSeparatorNormalizer normalizer,
-                 DateFormatHint hint, int minLength){
+  DateTimeParser(@NotNull DateTimeFormatter formatter, @Nullable DateTimeSeparatorNormalizer normalizer,
+                 @NotNull DateFormatHint hint, int minLength){
+
+    Preconditions.checkNotNull(formatter, "DateTimeFormatter can not be null");
+    Preconditions.checkNotNull(hint, "DateFormatHint can not be null");
+    Preconditions.checkArgument(minLength > 0, "minLength must be greater than 0");
+
     this.formatter = formatter;
     this.hint = hint;
     this.normalizer = normalizer;
@@ -70,10 +81,16 @@ class DateTimeParser {
   }
 
   /**
-   * Parse the provided String as a TemporalAccessor if possible, otherwise return null;
+   * Parses the provided String as a TemporalAccessor if possible, otherwise returns null.
+   *
+   * This function fully support partial dates and will return the best possible date resolution based
+   * on the {@link DateFormatHint} provided.
+   *
+   * This function will not throw DateTimeParseException but returns null in case the input
+   * can not be parsed.
    *
    * @param input
-   * @return
+   * @return TemporalAccessor or null in case the input can not be parsed.
    */
   public TemporalAccessor parse(String input){
 
