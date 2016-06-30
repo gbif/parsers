@@ -18,7 +18,7 @@ import org.threeten.bp.temporal.TemporalQuery;
  * It adds some flexibility with the {@link DateTimeSeparatorNormalizer} and
  * simple optimization the support of DateFormatHint.
  */
-class ThreeTenDateTimeParser {
+class DateTimeParser {
 
   private DateTimeFormatter formatter;
   private DateTimeSeparatorNormalizer normalizer;
@@ -36,8 +36,8 @@ class ThreeTenDateTimeParser {
    * @param hint
    * @param minLength
    */
-  ThreeTenDateTimeParser(DateTimeFormatter formatter, DateTimeSeparatorNormalizer normalizer,
-                         DateFormatHint hint, int minLength){
+  DateTimeParser(DateTimeFormatter formatter, DateTimeSeparatorNormalizer normalizer,
+                 DateFormatHint hint, int minLength){
     this.formatter = formatter;
     this.hint = hint;
     this.normalizer = normalizer;

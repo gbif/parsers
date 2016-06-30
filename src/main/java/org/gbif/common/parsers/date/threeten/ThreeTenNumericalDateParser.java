@@ -58,7 +58,7 @@ public class ThreeTenNumericalDateParser implements NumericalDateParser {
   public static final char CHAR_HYPHEN = '\u002d'; // Unicode hyphen, U+002d, char '-'
   public static final char CHAR_MINUS = '\u2212'; // Unicode minus, U+2212, char '−'
 
-  private static final Map<DateFormatHint, List<ThreeTenDateTimeParser>> FORMATTERS_BY_HINT = Maps.newHashMap();
+  private static final Map<DateFormatHint, List<DateTimeParser>> FORMATTERS_BY_HINT = Maps.newHashMap();
 
   // DateTimeFormatter includes some ISO parsers but just to make it explicit we define our own
   private static final DateTimeFormatter ISO_PARSER = (new DateTimeFormatterBuilder()
@@ -73,7 +73,7 @@ public class ThreeTenNumericalDateParser implements NumericalDateParser {
 
   //brackets [] represent optional section of the pattern
   //separator is a CHAR_HYPHEN
-  private static final List<ThreeTenDateTimeParser> BASE_PARSER_LIST = ImmutableList.copyOf(
+  private static final List<DateTimeParser> BASE_PARSER_LIST = ImmutableList.copyOf(
           ThreeTenNumericalDateParserBuilder.newParserListBuilder()
                   .appendDateTimeParser("uuuuMMdd", DateFormatHint.YMD)
                   .appendDateTimeParser("uuuu-M-d[ HH:mm:ss]", DateFormatHint.YMDT, String.valueOf(CHAR_HYPHEN),
@@ -92,7 +92,7 @@ public class ThreeTenNumericalDateParser implements NumericalDateParser {
   );
 
   // Possibly ambiguous dates will record an error in case more than one pattern can be applied
-  private static final List<ThreeTenDateTimeMultiParser> MULTIPARSER_PARSER_LIST = ImmutableList.of(
+  private static final List<DateTimeMultiParser> MULTIPARSER_PARSER_LIST = ImmutableList.of(
           ThreeTenNumericalDateParserBuilder.newMultiParserListBuilder()
                   .preferredDateTimeParser("d.M.uuuu", DateFormatHint.DMY) //DE, DK, NO
                   .appendDateTimeParser("M.d.uuuu", DateFormatHint.MDY)
@@ -114,20 +114,20 @@ public class ThreeTenNumericalDateParser implements NumericalDateParser {
   );
 
   static{
-    for(ThreeTenDateTimeParser parser : BASE_PARSER_LIST){
-      //TODO: when updated to Java 8 FORMATTERS_BY_HINT.putIfAbsent(parser.getHint(), new ArrayList<ThreeTenDateTimeParser>());
+    for(DateTimeParser parser : BASE_PARSER_LIST){
+      //TODO: when updated to Java 8 FORMATTERS_BY_HINT.putIfAbsent(parser.getHint(), new ArrayList<DateTimeParser>());
       if(!FORMATTERS_BY_HINT.containsKey(parser.getHint())){
-        FORMATTERS_BY_HINT.put(parser.getHint(), new ArrayList<ThreeTenDateTimeParser>());
+        FORMATTERS_BY_HINT.put(parser.getHint(), new ArrayList<DateTimeParser>());
       }
       // end TODO
       FORMATTERS_BY_HINT.get(parser.getHint()).add(parser);
     }
 
-    for(ThreeTenDateTimeMultiParser parserAmbiguity : MULTIPARSER_PARSER_LIST){
-      for(ThreeTenDateTimeParser parser : parserAmbiguity.getAllParsers()) {
-        //TODO: when updated to Java 8 FORMATTERS_BY_HINT.putIfAbsent(parser.getHint(), new ArrayList<ThreeTenDateTimeParser>());
+    for(DateTimeMultiParser parserAmbiguity : MULTIPARSER_PARSER_LIST){
+      for(DateTimeParser parser : parserAmbiguity.getAllParsers()) {
+        //TODO: when updated to Java 8 FORMATTERS_BY_HINT.putIfAbsent(parser.getHint(), new ArrayList<DateTimeParser>());
         if(!FORMATTERS_BY_HINT.containsKey(parser.getHint())){
-          FORMATTERS_BY_HINT.put(parser.getHint(), new ArrayList<ThreeTenDateTimeParser>());
+          FORMATTERS_BY_HINT.put(parser.getHint(), new ArrayList<DateTimeParser>());
         }
         // end TODO
         FORMATTERS_BY_HINT.get(parser.getHint()).add(parser);
@@ -136,8 +136,8 @@ public class ThreeTenNumericalDateParser implements NumericalDateParser {
   }
 
   // the active list/map are related to a specific instance
-  private final Map<DateFormatHint, List<ThreeTenDateTimeParser>> activeFormattersByHint;
-  private final List<ThreeTenDateTimeMultiParser> activeMultiParserList;
+  private final Map<DateFormatHint, List<DateTimeParser>> activeFormattersByHint;
+  private final List<DateTimeMultiParser> activeMultiParserList;
 
   /**
    * Get an instance of a default ThreeTenNumericalDateParser.
@@ -171,9 +171,9 @@ public class ThreeTenNumericalDateParser implements NumericalDateParser {
     Preconditions.checkState(baseYear.getValue() <= LocalDate.now().getYear(), "Base year is less or equals to" +
               " the current year");
 
-    Map<DateFormatHint, List<ThreeTenDateTimeParser>> formattersByHint = Maps.newHashMap(FORMATTERS_BY_HINT);
+    Map<DateFormatHint, List<DateTimeParser>> formattersByHint = Maps.newHashMap(FORMATTERS_BY_HINT);
 
-    List<ThreeTenDateTimeMultiParser> multiParserList = Lists.newArrayList(MULTIPARSER_PARSER_LIST);
+    List<DateTimeMultiParser> multiParserList = Lists.newArrayList(MULTIPARSER_PARSER_LIST);
     multiParserList.addAll(Lists.newArrayList(
             ThreeTenNumericalDateParserBuilder.newMultiParserListBuilder()
                     .preferredDateTimeParser("d.M.uu", DateFormatHint.DMY, baseYear) //DE, DK, NO
@@ -195,11 +195,11 @@ public class ThreeTenNumericalDateParser implements NumericalDateParser {
                     .build()
     ));
 
-    for(ThreeTenDateTimeMultiParser multiParser : multiParserList){
-      for(ThreeTenDateTimeParser parser : multiParser.getAllParsers()) {
-        //TODO: when updated to Java 8 formattersByHint.putIfAbsent(parser.getHint(), new ArrayList<ThreeTenDateTimeParser>());
+    for(DateTimeMultiParser multiParser : multiParserList){
+      for(DateTimeParser parser : multiParser.getAllParsers()) {
+        //TODO: when updated to Java 8 formattersByHint.putIfAbsent(parser.getHint(), new ArrayList<DateTimeParser>());
         if(!formattersByHint.containsKey(parser.getHint())){
-          formattersByHint.put(parser.getHint(), new ArrayList<ThreeTenDateTimeParser>());
+          formattersByHint.put(parser.getHint(), new ArrayList<DateTimeParser>());
         }
         // end TODO
         formattersByHint.get(parser.getHint()).add(parser);
@@ -226,11 +226,11 @@ public class ThreeTenNumericalDateParser implements NumericalDateParser {
       hint = DateFormatHint.NONE;
     }
 
-    List<ThreeTenDateTimeParser> parserList = activeFormattersByHint.containsKey(hint) ? activeFormattersByHint.get(hint) : BASE_PARSER_LIST;
+    List<DateTimeParser> parserList = activeFormattersByHint.containsKey(hint) ? activeFormattersByHint.get(hint) : BASE_PARSER_LIST;
 
     // First attempt: find a match with definite confidence
     TemporalAccessor parsedTemporalAccessor;
-    for(ThreeTenDateTimeParser parser : parserList){
+    for(DateTimeParser parser : parserList){
       parsedTemporalAccessor = parser.parse(input);
       if(parsedTemporalAccessor != null){
         return ParseResult.success(ParseResult.CONFIDENCE.DEFINITE, parsedTemporalAccessor);
@@ -242,16 +242,16 @@ public class ThreeTenNumericalDateParser implements NumericalDateParser {
       return ParseResult.fail();
     }
 
-    // Second attempt: find one or multiple match(es) in the list of ThreeTenDateTimeMultiParser
+    // Second attempt: find one or multiple match(es) in the list of DateTimeMultiParser
     int numberOfPossiblyAmbiguousMatch = 0;
     TemporalAccessor lastParsedSuccess = null;
     TemporalAccessor lastParsedPreferred = null;
     // Is that all results are equal (the represent the same TemporalAccessor) in case there is no preferred result defined
     boolean lastParsedSuccessOtherResultsEqual = false;
-    ThreeTenDateTimeMultiParser.MultipleParseResult result;
+    DateTimeMultiParser.MultipleParseResult result;
 
     // here we do not stop when we find a match, we try them all to check for a possible ambiguity
-    for(ThreeTenDateTimeMultiParser parserAmbiguity : activeMultiParserList){
+    for(DateTimeMultiParser parserAmbiguity : activeMultiParserList){
       result = parserAmbiguity.parse(input);
       numberOfPossiblyAmbiguousMatch += result.getNumberParsed();
 
@@ -260,14 +260,14 @@ public class ThreeTenNumericalDateParser implements NumericalDateParser {
 
         // make sure to log in case lastParsedSuccessEqual already equals true
         if (lastParsedSuccessOtherResultsEqual) {
-          LOGGER.warn("Issue with ThreeTenDateTimeMultiParser configuration: Input {} produces more results even " +
+          LOGGER.warn("Issue with DateTimeMultiParser configuration: Input {} produces more results even " +
                   "if lastParsedSuccessEqual is set to true.", input);
         }
         lastParsedSuccessOtherResultsEqual = false;
 
         if(result.getPreferredResult() != null){
           if(lastParsedPreferred != null){
-            LOGGER.warn("Issue with ThreeTenDateTimeMultiParser configuration: Input {} produces 2 preferred results", input);
+            LOGGER.warn("Issue with DateTimeMultiParser configuration: Input {} produces 2 preferred results", input);
           }
           lastParsedPreferred = result.getPreferredResult();
         }

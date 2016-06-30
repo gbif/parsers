@@ -32,7 +32,7 @@ public class ThreeTenNumericalDateParserBuilder {
   private ThreeTenNumericalDateParserBuilder(){}
 
   /**
-   * Get a new builder to create a list of ThreeTenDateTimeParser.
+   * Get a new builder to create a list of DateTimeParser.
    *
    * @return
    */
@@ -41,7 +41,7 @@ public class ThreeTenNumericalDateParserBuilder {
   }
 
   /**
-   * Get a new builder to create a list of ThreeTenDateTimeMultiParser.
+   * Get a new builder to create a list of DateTimeMultiParser.
    * @return
    */
   public static ThreeTenDateMultiParserListBuilder newMultiParserListBuilder(){
@@ -49,23 +49,23 @@ public class ThreeTenNumericalDateParserBuilder {
   }
 
   /**
-   * Build a single ThreeTenDateTimeParser.
+   * Build a single DateTimeParser.
    *
    * @param pattern
    * @param hint
    * @return
    */
-  public static ThreeTenDateTimeParser build(@NotNull String pattern, @NotNull DateFormatHint hint){
+  public static DateTimeParser build(@NotNull String pattern, @NotNull DateFormatHint hint){
     Preconditions.checkNotNull(pattern);
     Preconditions.checkNotNull(hint);
 
     int minLength = getMinimumStringLengthForPattern(pattern);
     DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(pattern).withResolverStyle(ResolverStyle.STRICT);
-    return new ThreeTenDateTimeParser(dateTimeFormatter, null, hint, minLength);
+    return new DateTimeParser(dateTimeFormatter, null, hint, minLength);
   }
 
   /**
-   * Build a single ThreeTenDateTimeParser with support for separator normalization.
+   * Build a single DateTimeParser with support for separator normalization.
    *
    * @param pattern
    * @param hint
@@ -73,7 +73,7 @@ public class ThreeTenNumericalDateParserBuilder {
    * @param alternativeSeparators
    * @return
    */
-  public static ThreeTenDateTimeParser build(String pattern, DateFormatHint hint, String separator,
+  public static DateTimeParser build(String pattern, DateFormatHint hint, String separator,
                                              String alternativeSeparators){
     Preconditions.checkNotNull(pattern);
     Preconditions.checkNotNull(hint);
@@ -83,12 +83,12 @@ public class ThreeTenNumericalDateParserBuilder {
     DateTimeSeparatorNormalizer dateTimeNormalizer = new DateTimeSeparatorNormalizer(CharMatcher.anyOf(alternativeSeparators), separator);
     DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(pattern).withResolverStyle(ResolverStyle.STRICT);
     int minLength = getMinimumStringLengthForPattern(pattern);
-    return new ThreeTenDateTimeParser(dateTimeFormatter, dateTimeNormalizer, hint, minLength);
+    return new DateTimeParser(dateTimeFormatter, dateTimeNormalizer, hint, minLength);
   }
 
   /**
    *
-   * Build a single ThreeTenDateTimeParser from a baseYear.
+   * Build a single DateTimeParser from a baseYear.
    *
    *
    * @param pattern pattern that includes a 2 digits year (-uu)
@@ -96,15 +96,15 @@ public class ThreeTenNumericalDateParserBuilder {
    * @param baseYear
    * @return
    */
-  public static ThreeTenDateTimeParser build(String pattern, DateFormatHint hint, Year baseYear){
+  public static DateTimeParser build(String pattern, DateFormatHint hint, Year baseYear){
     int minLength = getMinimumStringLengthForPattern(pattern);
     DateTimeFormatter dateTimeFormatter = build2DigitsYearDateTimeFormatter(pattern, baseYear);
-    return new ThreeTenDateTimeParser(dateTimeFormatter, null, hint, minLength);
+    return new DateTimeParser(dateTimeFormatter, null, hint, minLength);
   }
 
   /**
    *
-   * Build a single ThreeTenDateTimeParser from a baseYear with support for separator normalization.
+   * Build a single DateTimeParser from a baseYear with support for separator normalization.
    *
    * @param pattern pattern that includes a 2 digits year (-uu)
    * @param hint
@@ -113,7 +113,7 @@ public class ThreeTenNumericalDateParserBuilder {
    * @param baseYear
    * @return
    */
-  public static ThreeTenDateTimeParser build(String pattern, DateFormatHint hint, String separator,
+  public static DateTimeParser build(String pattern, DateFormatHint hint, String separator,
                                              String alternativeSeparators, Year baseYear){
     Preconditions.checkNotNull(pattern);
     Preconditions.checkNotNull(hint);
@@ -123,7 +123,7 @@ public class ThreeTenNumericalDateParserBuilder {
     DateTimeSeparatorNormalizer dateTimeNormalizer = new DateTimeSeparatorNormalizer(CharMatcher.anyOf(alternativeSeparators), separator);
     DateTimeFormatter dateTimeFormatter = build2DigitsYearDateTimeFormatter(pattern, baseYear);
     int minLength = getMinimumStringLengthForPattern(pattern);
-    return new ThreeTenDateTimeParser(dateTimeFormatter, dateTimeNormalizer, hint, minLength);
+    return new DateTimeParser(dateTimeFormatter, dateTimeNormalizer, hint, minLength);
   }
 
 
@@ -150,10 +150,10 @@ public class ThreeTenNumericalDateParserBuilder {
   }
 
   /**
-   * Builder used to build a List of {@link ThreeTenDateTimeParser}.
+   * Builder used to build a List of {@link DateTimeParser}.
    */
   public static class ThreeTenDateParserListBuilder {
-    private final List<ThreeTenDateTimeParser> dateTimeParsers = Lists.newArrayList();
+    private final List<DateTimeParser> dateTimeParsers = Lists.newArrayList();
 
     public ThreeTenDateParserListBuilder appendDateTimeParser(String pattern, DateFormatHint hint){
       dateTimeParsers.add(ThreeTenNumericalDateParserBuilder.build(pattern, hint));
@@ -178,7 +178,7 @@ public class ThreeTenNumericalDateParserBuilder {
                                                                               Year baseYear){
       int minLength = getMinimumStringLengthForPattern(pattern);
       DateTimeFormatter dateTimeFormatter = build2DigitsYearDateTimeFormatter(pattern, baseYear);
-      dateTimeParsers.add(new ThreeTenDateTimeParser(dateTimeFormatter, null, hint, minLength));
+      dateTimeParsers.add(new DateTimeParser(dateTimeFormatter, null, hint, minLength));
       return this;
     }
 
@@ -189,21 +189,21 @@ public class ThreeTenNumericalDateParserBuilder {
       int minLength = getMinimumStringLengthForPattern(pattern);
       DateTimeSeparatorNormalizer dateTimeNormalizer = new DateTimeSeparatorNormalizer(CharMatcher.anyOf(alternativeSeparators), separator);
       DateTimeFormatter dateTimeFormatter = build2DigitsYearDateTimeFormatter(pattern, baseYear);
-      dateTimeParsers.add(new ThreeTenDateTimeParser(dateTimeFormatter, dateTimeNormalizer, hint, minLength));
+      dateTimeParsers.add(new DateTimeParser(dateTimeFormatter, dateTimeNormalizer, hint, minLength));
       return this;
     }
 
-    public List<ThreeTenDateTimeParser> build(){
+    public List<DateTimeParser> build(){
       return ImmutableList.copyOf(dateTimeParsers);
     }
   }
 
   /**
-   * More specific builder Builder used to build a {@link ThreeTenDateTimeMultiParser}.
+   * More specific builder Builder used to build a {@link DateTimeMultiParser}.
    */
   public static class ThreeTenDateMultiParserListBuilder {
-    private ThreeTenDateTimeParser preferred;
-    private List<ThreeTenDateTimeParser> otherParsers = Lists.newArrayList();
+    private DateTimeParser preferred;
+    private List<DateTimeParser> otherParsers = Lists.newArrayList();
 
     public ThreeTenDateMultiParserListBuilder preferredDateTimeParser(String pattern, DateFormatHint hint){
       preferred = ThreeTenNumericalDateParserBuilder.build(pattern, hint);
@@ -239,7 +239,7 @@ public class ThreeTenNumericalDateParserBuilder {
 
     /**
      * Ensure the builder is used with content we expect.
-     * Currently (this could change) we should only have one ThreeTenDateTimeParser per DateFormatHint.
+     * Currently (this could change) we should only have one DateTimeParser per DateFormatHint.
      *
      * @throws IllegalStateException
      */
@@ -249,17 +249,17 @@ public class ThreeTenNumericalDateParserBuilder {
         hints.add(preferred.getHint());
       }
 
-      for(ThreeTenDateTimeParser parser : otherParsers){
+      for(DateTimeParser parser : otherParsers){
         if(!hints.add(parser.getHint())){
-          throw new IllegalStateException("DateFormatHint can only be used once in a ThreeTenDateTimeMultiParser." +
+          throw new IllegalStateException("DateFormatHint can only be used once in a DateTimeMultiParser." +
                   "[" + parser.getHint() + "]");
         }
       }
     }
 
-    public ThreeTenDateTimeMultiParser build() throws IllegalStateException {
+    public DateTimeMultiParser build() throws IllegalStateException {
       validate();
-      return new ThreeTenDateTimeMultiParser(preferred, otherParsers);
+      return new DateTimeMultiParser(preferred, otherParsers);
     }
   }
 

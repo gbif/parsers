@@ -6,20 +6,20 @@ import com.google.common.collect.Lists;
 import org.threeten.bp.temporal.TemporalAccessor;
 
 /**
- * Internal (package protected) wrapper to support more than one ThreeTenDateTimeParser that are considered "vague".
+ * Internal (package protected) wrapper to support more than one DateTimeParser that are considered "vague".
  * This class will try all the parsers and record all the results.
  */
-class ThreeTenDateTimeMultiParser {
+class DateTimeMultiParser {
 
-  private ThreeTenDateTimeParser preferred;
-  private List<ThreeTenDateTimeParser> otherParsers;
-  private List<ThreeTenDateTimeParser> allParsers;
+  private DateTimeParser preferred;
+  private List<DateTimeParser> otherParsers;
+  private List<DateTimeParser> allParsers;
 
-  ThreeTenDateTimeMultiParser(List<ThreeTenDateTimeParser> parsers){
+  DateTimeMultiParser(List<DateTimeParser> parsers){
     this(null, parsers);
   }
 
-  ThreeTenDateTimeMultiParser(ThreeTenDateTimeParser preferred, List<ThreeTenDateTimeParser> otherParsers){
+  DateTimeMultiParser(DateTimeParser preferred, List<DateTimeParser> otherParsers){
     this.preferred = preferred;
     this.otherParsers = Lists.newArrayList(otherParsers);
     this.allParsers = Lists.newArrayList();
@@ -30,7 +30,7 @@ class ThreeTenDateTimeMultiParser {
     allParsers.addAll(otherParsers);
   }
 
-  public List<ThreeTenDateTimeParser> getAllParsers(){
+  public List<DateTimeParser> getAllParsers(){
     return allParsers;
   }
 
@@ -41,7 +41,7 @@ class ThreeTenDateTimeMultiParser {
     TemporalAccessor preferredResult = null;
     //lazy initialized assuming it should not be used most of the time
     List<TemporalAccessor> otherResults = null;
-    for(ThreeTenDateTimeParser currParser : otherParsers){
+    for(DateTimeParser currParser : otherParsers){
       lastParsed = currParser.parse(input);
       if(lastParsed != null){
         numberParsed++;
@@ -52,7 +52,7 @@ class ThreeTenDateTimeMultiParser {
       }
     }
 
-    //try the preferred ThreeTenDateTimeParser
+    //try the preferred DateTimeParser
     if(this.preferred != null){
       lastParsed = this.preferred.parse(input);
       if(lastParsed != null){
