@@ -24,7 +24,8 @@ class TextDateParser implements TemporalParser {
   //This regex is not complete and will NOT handle date when the time zone is provided as text GMT
   private static final Pattern NUMERICAL_DATE_PATTERN =  Pattern.compile("[^a-zA-Z]+[\\dT\\d]?[^a-zA-Z]+[Z]?$");
   private static final TextualMonthDateTokenizer TEXT_MONTH_TOKENIZER = TextualMonthDateTokenizer.newInstance();
-  private static final TemporalParser NUMERICAL_DATE_PARSER = DateParsers.defaultNumericalDateParser();
+
+  private static final TemporalParser NUMERICAL_DATE_PARSER = ThreeTenNumericalDateParser.newInstance();
   private static final DatePartsNormalizer DATE_PARTS_NORMALIZER = DatePartsNormalizer.newInstance();
 
   @Override
