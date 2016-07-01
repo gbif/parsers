@@ -19,17 +19,17 @@ import org.threeten.bp.format.ResolverStyle;
 import org.threeten.bp.temporal.ChronoField;
 
 /**
- * The DateParserBuilder can build objects directly (build(..) methods) or return an instance
+ * The DateTimeParserBuilder can build objects directly (build(..) methods) or return an instance
  * of itself to create more complex object.
  *
  */
-public class DateParserBuilder {
+public class DateTimeParserBuilder {
 
   //the letter 'u' in all the patterns refers to YEAR as opposed to 'y' who refers to YEAR_OF_ERA
   private final static String YEAR_2_DIGITS_PATTERN_SUFFIX = "uu";
   private final static String IS_YEAR_2_DIGITS_PATTERN = "^.+[^u]"+YEAR_2_DIGITS_PATTERN_SUFFIX+"$";
 
-  private DateParserBuilder(){}
+  private DateTimeParserBuilder(){}
 
   /**
    * Get a new builder to create a list of DateTimeParser.
@@ -156,7 +156,7 @@ public class DateParserBuilder {
     private final List<DateTimeParser> dateTimeParsers = Lists.newArrayList();
 
     public ThreeTenDateParserListBuilder appendDateTimeParser(String pattern, DateFormatHint hint){
-      dateTimeParsers.add(DateParserBuilder.build(pattern, hint));
+      dateTimeParsers.add(DateTimeParserBuilder.build(pattern, hint));
       return this;
     }
 
@@ -170,7 +170,7 @@ public class DateParserBuilder {
      */
     public ThreeTenDateParserListBuilder appendDateTimeParser(String pattern, DateFormatHint hint,
                                                                    String separator, String alternativeSeparators){
-      dateTimeParsers.add(DateParserBuilder.build(pattern, hint, separator, alternativeSeparators));
+      dateTimeParsers.add(DateTimeParserBuilder.build(pattern, hint, separator, alternativeSeparators));
       return this;
     }
 
@@ -206,34 +206,34 @@ public class DateParserBuilder {
     private List<DateTimeParser> otherParsers = Lists.newArrayList();
 
     public ThreeTenDateMultiParserListBuilder preferredDateTimeParser(String pattern, DateFormatHint hint){
-      preferred = DateParserBuilder.build(pattern, hint);
+      preferred = DateTimeParserBuilder.build(pattern, hint);
       return this;
     }
 
     public ThreeTenDateMultiParserListBuilder preferredDateTimeParser(String pattern, DateFormatHint hint, Year year){
-      preferred = DateParserBuilder.build(pattern, hint, year);
+      preferred = DateTimeParserBuilder.build(pattern, hint, year);
       return this;
     }
 
     public ThreeTenDateMultiParserListBuilder appendDateTimeParser(String pattern, DateFormatHint hint){
-      otherParsers.add(DateParserBuilder.build(pattern, hint));
+      otherParsers.add(DateTimeParserBuilder.build(pattern, hint));
       return this;
     }
 
     public ThreeTenDateMultiParserListBuilder appendDateTimeParser(String pattern, DateFormatHint hint, Year year){
-      otherParsers.add(DateParserBuilder.build(pattern, hint, year));
+      otherParsers.add(DateTimeParserBuilder.build(pattern, hint, year));
       return this;
     }
 
     public ThreeTenDateMultiParserListBuilder appendDateTimeParser(String pattern, DateFormatHint hint,
                                                                String separator, String alternativeSeparators){
-      otherParsers.add(DateParserBuilder.build(pattern, hint, separator, alternativeSeparators));
+      otherParsers.add(DateTimeParserBuilder.build(pattern, hint, separator, alternativeSeparators));
       return this;
     }
 
     public ThreeTenDateMultiParserListBuilder appendDateTimeParser(String pattern, DateFormatHint hint,
                                                                String separator, String alternativeSeparators, Year year){
-      otherParsers.add(DateParserBuilder.build(pattern, hint, separator, alternativeSeparators, year));
+      otherParsers.add(DateTimeParserBuilder.build(pattern, hint, separator, alternativeSeparators, year));
       return this;
     }
 
