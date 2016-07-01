@@ -45,7 +45,7 @@ import org.threeten.bp.temporal.TemporalAccessor;
  * Thread-Safe after creation.
  *
  */
-class ThreeTenNumericalDateParser implements NumericalDateParser {
+class ThreeTenNumericalDateParser implements TemporalParser {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(ThreeTenNumericalDateParser.class);
 

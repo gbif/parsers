@@ -9,12 +9,10 @@ import org.threeten.bp.temporal.TemporalAccessor;
 
 /**
  *
- * Main interface for date parsing based on numerical values.
- * This means it is NOT responsible to parse dates that contains text for representing
- * a part of the dates (e.g. January 1 1980).
+ * Main interface for date/time parsing based.
  *
  */
-public interface NumericalDateParser extends Parsable<TemporalAccessor> {
+public interface TemporalParser extends Parsable<TemporalAccessor> {
 
   /**
    * Parse a date represented as a single String into a TemporalAccessor.

@@ -6,11 +6,11 @@ package org.gbif.common.parsers.date;
 public class DateParsers {
 
   /**
-   * Get a new instance of the default implementation of NumericalDateParser.
+   * Get a new instance of the default implementation of TemporalParser.
    *
    * @return
    */
-  public static NumericalDateParser defaultNumericalDateParser(){
+  public static TemporalParser defaultNumericalDateParser(){
     return ThreeTenNumericalDateParser.newInstance();
   }
 }

@@ -44,7 +44,7 @@ public class ThreeTenNumericalDateParserTest {
   private static final int MIN_VAL_IDX = 5;
   private static final int SEC_VAL_IDX = 6;
 
-  private static final NumericalDateParser PARSER = DateParsers.defaultNumericalDateParser();
+  private static final TemporalParser PARSER = DateParsers.defaultNumericalDateParser();
 
   @Test
   public void testLocalDateFromFile() {
