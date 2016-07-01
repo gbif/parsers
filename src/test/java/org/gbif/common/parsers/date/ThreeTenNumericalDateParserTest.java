@@ -1,7 +1,8 @@
-package org.gbif.common.parsers.date.threeten;
+package org.gbif.common.parsers.date;
 
 import org.gbif.common.parsers.core.ParseResult;
 import org.gbif.common.parsers.date.NumericalDateParser;
+import org.gbif.common.parsers.date.ThreeTenNumericalDateParser;
 import org.gbif.utils.file.FileUtils;
 import org.gbif.utils.file.csv.CSVReader;
 import org.gbif.utils.file.csv.CSVReaderFactory;

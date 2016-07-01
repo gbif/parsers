@@ -1,6 +1,4 @@
-package org.gbif.common.parsers.date.threeten;
-
-import org.gbif.common.parsers.date.DateFormatHint;
+package org.gbif.common.parsers.date;
 
 import java.util.List;
 import java.util.Set;

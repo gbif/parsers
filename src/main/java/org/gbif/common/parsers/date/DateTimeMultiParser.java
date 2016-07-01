@@ -1,4 +1,4 @@
-package org.gbif.common.parsers.date.threeten;
+package org.gbif.common.parsers.date;
 
 import java.util.List;
 import javax.annotation.Nullable;

@@ -1,4 +1,4 @@
-package org.gbif.common.parsers.date.threeten;
+package org.gbif.common.parsers.date;
 
 import com.google.common.base.CharMatcher;
 
