@@ -19,10 +19,11 @@ import org.threeten.bp.temporal.TemporalQuery;
  * Adds some flexibility around {@link DateTimeFormatter} with the {@link DateTimeSeparatorNormalizer} and
  * simple optimization the support of DateFormatHint.
  *
+ *
  * This class is thread-safe once an instance is created.
  *
  */
-class DateTimeParser {
+public class DateTimeParser {
 
   private final DateTimeFormatter formatter;
   private final DateTimeSeparatorNormalizer normalizer;

@@ -14,11 +14,12 @@ import org.threeten.bp.temporal.TemporalAccessor;
  * ambiguous when they can possibly produce 2 different {@link TemporalAccessor}.
  * e.g. "dd/MM/yyyy" and "MM/dd/yyyy"
  *
+ *
  * This class will try all the parsers and keep the all the successful results.
  *
  * This class is thread-safe once an instance is created.
  */
-class DateTimeMultiParser {
+public class DateTimeMultiParser {
 
   private final DateTimeParser preferred;
   private final List<DateTimeParser> otherParsers;
