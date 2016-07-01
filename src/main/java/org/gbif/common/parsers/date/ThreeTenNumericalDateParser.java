@@ -49,11 +49,11 @@ class ThreeTenNumericalDateParser implements TemporalParser {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(ThreeTenNumericalDateParser.class);
 
-  public static final Pattern OPTIONAL_PATTERN_PART = Pattern.compile("\\[.*\\]");
+  private static final Pattern OPTIONAL_PATTERN_PART = Pattern.compile("\\[.*\\]");
 
   // ISO 8601 specifies a Unicode minus (CHAR_MINUS), with a hyphen (CHAR_HYPHEN) as an alternative.
-  public static final char CHAR_HYPHEN = '\u002d'; // Unicode hyphen, U+002d, char '-'
-  public static final char CHAR_MINUS = '\u2212'; // Unicode minus, U+2212, char '−'
+  private static final char CHAR_HYPHEN = '\u002d'; // Unicode hyphen, U+002d, char '-'
+  private static final char CHAR_MINUS = '\u2212'; // Unicode minus, U+2212, char '−'
 
   private static final Map<DateFormatHint, List<DateTimeParser>> FORMATTERS_BY_HINT = Maps.newHashMap();
 

@@ -27,7 +27,8 @@ public interface TemporalParser extends Parsable<TemporalAccessor> {
    * Parse year, month, day strings as a TemporalAccessor.
    *
    * @param year numerical value of a year
-   * @param month numerical value of a month (starting at 1 for January)
+   * @param month value of the mont depending on the implementation, numerical value of a
+   *              month (starting at 1 for January) or possibly text.
    * @param day numerical value of a day
    * @return result, never null
    */
