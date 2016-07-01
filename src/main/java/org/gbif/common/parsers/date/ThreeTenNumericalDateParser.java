@@ -1,16 +1,11 @@
 package org.gbif.common.parsers.date;
 
 import org.gbif.common.parsers.core.ParseResult;
-import org.gbif.common.parsers.date.threeten.DateTimeMultiParser;
-import org.gbif.common.parsers.date.threeten.DateTimeParser;
-import org.gbif.common.parsers.date.threeten.DateTimeParserBuilder;
-import org.gbif.common.parsers.date.threeten.DateTimeSeparatorNormalizer;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
-
 import javax.annotation.Nullable;
 
 import com.google.common.base.Joiner;
@@ -50,7 +45,7 @@ import org.threeten.bp.temporal.TemporalAccessor;
  * Thread-Safe after creation.
  *
  */
-public class ThreeTenNumericalDateParser implements NumericalDateParser {
+class ThreeTenNumericalDateParser implements NumericalDateParser {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(ThreeTenNumericalDateParser.class);
 
