@@ -19,17 +19,17 @@ import org.threeten.bp.format.ResolverStyle;
 import org.threeten.bp.temporal.ChronoField;
 
 /**
- * The ThreeTenNumericalDateParserBuilder can build objects directly (build(..) methods) or return an instance
+ * The NumericalDateParserBuilder can build objects directly (build(..) methods) or return an instance
  * of itself to create more complex object.
  *
  */
-public class ThreeTenNumericalDateParserBuilder {
+public class NumericalDateParserBuilder {
 
   //the letter 'u' in all the patterns refers to YEAR as opposed to 'y' who refers to YEAR_OF_ERA
   private final static String YEAR_2_DIGITS_PATTERN_SUFFIX = "uu";
   private final static String IS_YEAR_2_DIGITS_PATTERN = "^.+[^u]"+YEAR_2_DIGITS_PATTERN_SUFFIX+"$";
 
-  private ThreeTenNumericalDateParserBuilder(){}
+  private NumericalDateParserBuilder(){}
 
   /**
    * Get a new builder to create a list of DateTimeParser.
@@ -156,7 +156,7 @@ public class ThreeTenNumericalDateParserBuilder {
     private final List<DateTimeParser> dateTimeParsers = Lists.newArrayList();
 
     public ThreeTenDateParserListBuilder appendDateTimeParser(String pattern, DateFormatHint hint){
-      dateTimeParsers.add(ThreeTenNumericalDateParserBuilder.build(pattern, hint));
+      dateTimeParsers.add(NumericalDateParserBuilder.build(pattern, hint));
       return this;
     }
 
@@ -170,7 +170,7 @@ public class ThreeTenNumericalDateParserBuilder {
      */
     public ThreeTenDateParserListBuilder appendDateTimeParser(String pattern, DateFormatHint hint,
                                                                    String separator, String alternativeSeparators){
-      dateTimeParsers.add(ThreeTenNumericalDateParserBuilder.build(pattern, hint, separator, alternativeSeparators));
+      dateTimeParsers.add(NumericalDateParserBuilder.build(pattern, hint, separator, alternativeSeparators));
       return this;
     }
 
@@ -206,34 +206,34 @@ public class ThreeTenNumericalDateParserBuilder {
     private List<DateTimeParser> otherParsers = Lists.newArrayList();
 
     public ThreeTenDateMultiParserListBuilder preferredDateTimeParser(String pattern, DateFormatHint hint){
-      preferred = ThreeTenNumericalDateParserBuilder.build(pattern, hint);
+      preferred = NumericalDateParserBuilder.build(pattern, hint);
       return this;
     }
 
     public ThreeTenDateMultiParserListBuilder preferredDateTimeParser(String pattern, DateFormatHint hint, Year year){
-      preferred = ThreeTenNumericalDateParserBuilder.build(pattern, hint, year);
+      preferred = NumericalDateParserBuilder.build(pattern, hint, year);
       return this;
     }
 
     public ThreeTenDateMultiParserListBuilder appendDateTimeParser(String pattern, DateFormatHint hint){
-      otherParsers.add(ThreeTenNumericalDateParserBuilder.build(pattern, hint));
+      otherParsers.add(NumericalDateParserBuilder.build(pattern, hint));
       return this;
     }
 
     public ThreeTenDateMultiParserListBuilder appendDateTimeParser(String pattern, DateFormatHint hint, Year year){
-      otherParsers.add(ThreeTenNumericalDateParserBuilder.build(pattern, hint, year));
+      otherParsers.add(NumericalDateParserBuilder.build(pattern, hint, year));
       return this;
     }
 
     public ThreeTenDateMultiParserListBuilder appendDateTimeParser(String pattern, DateFormatHint hint,
                                                                String separator, String alternativeSeparators){
-      otherParsers.add(ThreeTenNumericalDateParserBuilder.build(pattern, hint, separator, alternativeSeparators));
+      otherParsers.add(NumericalDateParserBuilder.build(pattern, hint, separator, alternativeSeparators));
       return this;
     }
 
     public ThreeTenDateMultiParserListBuilder appendDateTimeParser(String pattern, DateFormatHint hint,
                                                                String separator, String alternativeSeparators, Year year){
-      otherParsers.add(ThreeTenNumericalDateParserBuilder.build(pattern, hint, separator, alternativeSeparators, year));
+      otherParsers.add(NumericalDateParserBuilder.build(pattern, hint, separator, alternativeSeparators, year));
       return this;
     }
 

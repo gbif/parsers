@@ -35,7 +35,7 @@ class DateTimeParser {
 
   /**
    * Package protected constructor.
-   * Use {@link ThreeTenNumericalDateParserBuilder}
+   * Use {@link NumericalDateParserBuilder}
    *
    * @param formatter
    * @param normalizer optional, can be null

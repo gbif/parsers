@@ -57,7 +57,7 @@ The set of predefined date formats can be seen as a set of 3 different types of 
 The difference between "possibly ambiguous format with preference" and simply "possibly ambiguous format" appears when 2 patterns
 can be applied to the provided String. In case of "with preference" we will prefer a format over the other and return the confidence
 `ParseResult.CONFIDENCE.PROBABLE`. For possibly ambiguous formats without a preference the parsing will fail in case 2 patterns can be matched
-unless the matches represent the excat same date e.g. 2/2/2016.
+unless the matches represent the exact same date e.g. 2/2/2016.
 
 
 By default, this parser will not parse dates containing the year expressed as 2 digits. This feature can be enabled by using
