@@ -1,9 +1,9 @@
 package org.gbif.common.parsers.date;
 
-import org.gbif.common.parsers.core.Parsable;
 import org.gbif.common.parsers.core.ParseResult;
 
 import java.util.regex.Pattern;
+import javax.annotation.Nullable;
 
 import org.apache.commons.lang3.StringUtils;
 import org.threeten.bp.DateTimeException;
@@ -13,9 +13,11 @@ import org.threeten.bp.temporal.TemporalAccessor;
 /**
  * Main class to parse a date represented as a single String or as date parts into a {@link TemporalAccessor}.
  * If the String contains letters, the {@link TextualMonthDateTokenizer} and the {@link DatePartsNormalizer} will be used.
- * Otherwise, {@link TemporalParser} will be used.
+ * Otherwise, a {@link TemporalParser} configured for numerical dates will be used.
+ *
+ * This class is basically a decorator on top of default NumericalDateParser to handle months written in text.
  */
-public class TextDateParser implements Parsable<TemporalAccessor> {
+class TextDateParser implements TemporalParser {
 
   //private static final Pattern ISO_TIME_MARKER =  Pattern.compile("\\dT\\d");
   //private static final Pattern AT_LEAST_ONE_LETTER =  Pattern.compile("[a-zA-Z]+");
@@ -66,6 +68,18 @@ public class TextDateParser implements Parsable<TemporalAccessor> {
   }
 
   /**
+   * For now this is directly delegated the NumericalDateParser.
+   *
+   * @param input
+   * @param hint help to speed up the parsing and possibly return a better confidence
+   * @return
+   */
+  @Override
+  public ParseResult<TemporalAccessor> parse(String input, @Nullable DateFormatHint hint) {
+    return NUMERICAL_DATE_PARSER.parse(input, hint);
+  }
+
+  /**
    * Parse date parts into a TemporalAccessor.
    * The {@link DatePartsNormalizer} will be applied on raw data.
    *
@@ -91,6 +105,11 @@ public class TextDateParser implements Parsable<TemporalAccessor> {
     }
 
     return parseResult;
+  }
+
+  @Override
+  public ParseResult<TemporalAccessor> parse(@Nullable Integer year, @Nullable Integer month, @Nullable Integer day) {
+    return NUMERICAL_DATE_PARSER.parse(year, month, day);
   }
 
 }
