@@ -76,7 +76,7 @@ public final class ClassificationUtils {
     }
 
     // remove the " from names with it at the beginning and end
-    while (cleanedTaxon.charAt(0) == '\"' && cleanedTaxon.charAt(cleanedTaxon.length() - 1) == '\"') {
+    while (cleanedTaxon.length()> 0 && cleanedTaxon.charAt(0) == '\"' && cleanedTaxon.charAt(cleanedTaxon.length() - 1) == '\"') {
       if (cleanedTaxon.length() == 1) {
         return null;
       }
@@ -84,7 +84,7 @@ public final class ClassificationUtils {
     }
 
     // remove the " from names with it just at the beginning
-    while (cleanedTaxon.charAt(0) == '\"') {
+    while (cleanedTaxon.length()> 0 && cleanedTaxon.charAt(0) == '\"') {
       if (cleanedTaxon.length() == 1) {
         return null;
       }
@@ -92,7 +92,7 @@ public final class ClassificationUtils {
     }
 
     // remove the " from names with it just at the end
-    while (cleanedTaxon.charAt(cleanedTaxon.length() - 1) == '\"') {
+    while (cleanedTaxon.length()> 0 && cleanedTaxon.charAt(cleanedTaxon.length() - 1) == '\"') {
       if (cleanedTaxon.length() == 1) {
         return null;
       }
@@ -129,7 +129,7 @@ public final class ClassificationUtils {
     String cleanedAuthor = author;
 
     // remove the " from names with it at the beginning and end
-    while (cleanedAuthor.charAt(0) == '\"' && cleanedAuthor.charAt(cleanedAuthor.length() - 1) == '\"') {
+    while (cleanedAuthor.length() >0 && cleanedAuthor.charAt(0) == '\"' && cleanedAuthor.charAt(cleanedAuthor.length() - 1) == '\"') {
       if (cleanedAuthor.length() == 1) {
         return null;
       }

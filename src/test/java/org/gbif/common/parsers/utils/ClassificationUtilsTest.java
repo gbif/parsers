@@ -37,6 +37,7 @@ public class ClassificationUtilsTest {
         put("{ ", null);
         put("\\", null);
         put("\"", null);
+        put("\"\"", null);
         put("\"?", null);
         put("  Aus Bus   ", "Aus Bus");
         put("\"{Aus\"", "Aus");
