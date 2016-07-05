@@ -45,57 +45,58 @@
 <span class="sourceLineNo">037</span>        put("{ ", null);<a name="line.37"></a>
 <span class="sourceLineNo">038</span>        put("\\", null);<a name="line.38"></a>
 <span class="sourceLineNo">039</span>        put("\"", null);<a name="line.39"></a>
-<span class="sourceLineNo">040</span>        put("\"?", null);<a name="line.40"></a>
-<span class="sourceLineNo">041</span>        put("  Aus Bus   ", "Aus Bus");<a name="line.41"></a>
-<span class="sourceLineNo">042</span>        put("\"{Aus\"", "Aus");<a name="line.42"></a>
-<span class="sourceLineNo">043</span>        put("\"\"\"{Aus\"\"\"", "Aus");<a name="line.43"></a>
-<span class="sourceLineNo">044</span>        put("\"? gryphoids", "gryphoids");<a name="line.44"></a>
-<span class="sourceLineNo">045</span>      }<a name="line.45"></a>
-<span class="sourceLineNo">046</span>    };<a name="line.46"></a>
-<span class="sourceLineNo">047</span><a name="line.47"></a>
-<span class="sourceLineNo">048</span>    for (Map.Entry&lt;String, String&gt; taxon : taxons.entrySet()) {<a name="line.48"></a>
-<span class="sourceLineNo">049</span>      assertEquals(taxon.getValue(), clean(taxon.getKey()));<a name="line.49"></a>
-<span class="sourceLineNo">050</span>    }<a name="line.50"></a>
-<span class="sourceLineNo">051</span><a name="line.51"></a>
-<span class="sourceLineNo">052</span>    assertNull(clean(null));<a name="line.52"></a>
-<span class="sourceLineNo">053</span>    assertNull("Empty strings should return null", clean(""));<a name="line.53"></a>
-<span class="sourceLineNo">054</span>  }<a name="line.54"></a>
-<span class="sourceLineNo">055</span><a name="line.55"></a>
-<span class="sourceLineNo">056</span>  @Test<a name="line.56"></a>
-<span class="sourceLineNo">057</span>  public void testCleanAuthor() {<a name="line.57"></a>
-<span class="sourceLineNo">058</span>    Map&lt;String, String&gt; authors = new HashMap&lt;String, String&gt;() {<a name="line.58"></a>
-<span class="sourceLineNo">059</span><a name="line.59"></a>
-<span class="sourceLineNo">060</span>      {<a name="line.60"></a>
-<span class="sourceLineNo">061</span>        put("Ant. Müller", "Ant. Müller");<a name="line.61"></a>
-<span class="sourceLineNo">062</span>        put("Lineé", "Lineé");<a name="line.62"></a>
-<span class="sourceLineNo">063</span>        put("Mull", "Mull");<a name="line.63"></a>
-<span class="sourceLineNo">064</span>        put("(A. Müller) B. Meyer", "(A. Müller) B. Meyer");<a name="line.64"></a>
-<span class="sourceLineNo">065</span>        put("B. Meyer", "B. Meyer");<a name="line.65"></a>
-<span class="sourceLineNo">066</span>        put("L.", "L.");<a name="line.66"></a>
-<span class="sourceLineNo">067</span>        put("A. Müller &amp; B. Meier", "A. Müller &amp; B. Meier");<a name="line.67"></a>
-<span class="sourceLineNo">068</span>        put("A. Müller, B. Mei. C. Sone", "A. Müller, B. Mei. C. Sone");<a name="line.68"></a>
-<span class="sourceLineNo">069</span>        put("L", "L");<a name="line.69"></a>
-<span class="sourceLineNo">070</span>        put("\"A. Meyer\"", "A. Meyer");<a name="line.70"></a>
-<span class="sourceLineNo">071</span>        // put("a. meier", "A. Meier");<a name="line.71"></a>
-<span class="sourceLineNo">072</span>        put(" L.", "L.");<a name="line.72"></a>
-<span class="sourceLineNo">073</span>        put("L. ", "L.");<a name="line.73"></a>
-<span class="sourceLineNo">074</span>        put("L. {", "L.");<a name="line.74"></a>
-<span class="sourceLineNo">075</span>        put("\\", null);<a name="line.75"></a>
-<span class="sourceLineNo">076</span>        put("\\\\", null);<a name="line.76"></a>
-<span class="sourceLineNo">077</span>        put("\"", null);<a name="line.77"></a>
-<span class="sourceLineNo">078</span>        put("{} ", null);<a name="line.78"></a>
-<span class="sourceLineNo">079</span>      }<a name="line.79"></a>
-<span class="sourceLineNo">080</span>    };<a name="line.80"></a>
-<span class="sourceLineNo">081</span><a name="line.81"></a>
-<span class="sourceLineNo">082</span>    for (Map.Entry&lt;String, String&gt; author : authors.entrySet()) {<a name="line.82"></a>
-<span class="sourceLineNo">083</span>      assertEquals(author.getValue(), cleanAuthor(author.getKey()));<a name="line.83"></a>
-<span class="sourceLineNo">084</span>    }<a name="line.84"></a>
-<span class="sourceLineNo">085</span><a name="line.85"></a>
-<span class="sourceLineNo">086</span>    assertNull(cleanAuthor(null));<a name="line.86"></a>
-<span class="sourceLineNo">087</span>    assertNull("Empty strings should return null", cleanAuthor(""));<a name="line.87"></a>
-<span class="sourceLineNo">088</span>  }<a name="line.88"></a>
-<span class="sourceLineNo">089</span><a name="line.89"></a>
-<span class="sourceLineNo">090</span>}<a name="line.90"></a>
+<span class="sourceLineNo">040</span>        put("\"\"", null);<a name="line.40"></a>
+<span class="sourceLineNo">041</span>        put("\"?", null);<a name="line.41"></a>
+<span class="sourceLineNo">042</span>        put("  Aus Bus   ", "Aus Bus");<a name="line.42"></a>
+<span class="sourceLineNo">043</span>        put("\"{Aus\"", "Aus");<a name="line.43"></a>
+<span class="sourceLineNo">044</span>        put("\"\"\"{Aus\"\"\"", "Aus");<a name="line.44"></a>
+<span class="sourceLineNo">045</span>        put("\"? gryphoids", "gryphoids");<a name="line.45"></a>
+<span class="sourceLineNo">046</span>      }<a name="line.46"></a>
+<span class="sourceLineNo">047</span>    };<a name="line.47"></a>
+<span class="sourceLineNo">048</span><a name="line.48"></a>
+<span class="sourceLineNo">049</span>    for (Map.Entry&lt;String, String&gt; taxon : taxons.entrySet()) {<a name="line.49"></a>
+<span class="sourceLineNo">050</span>      assertEquals(taxon.getValue(), clean(taxon.getKey()));<a name="line.50"></a>
+<span class="sourceLineNo">051</span>    }<a name="line.51"></a>
+<span class="sourceLineNo">052</span><a name="line.52"></a>
+<span class="sourceLineNo">053</span>    assertNull(clean(null));<a name="line.53"></a>
+<span class="sourceLineNo">054</span>    assertNull("Empty strings should return null", clean(""));<a name="line.54"></a>
+<span class="sourceLineNo">055</span>  }<a name="line.55"></a>
+<span class="sourceLineNo">056</span><a name="line.56"></a>
+<span class="sourceLineNo">057</span>  @Test<a name="line.57"></a>
+<span class="sourceLineNo">058</span>  public void testCleanAuthor() {<a name="line.58"></a>
+<span class="sourceLineNo">059</span>    Map&lt;String, String&gt; authors = new HashMap&lt;String, String&gt;() {<a name="line.59"></a>
+<span class="sourceLineNo">060</span><a name="line.60"></a>
+<span class="sourceLineNo">061</span>      {<a name="line.61"></a>
+<span class="sourceLineNo">062</span>        put("Ant. Müller", "Ant. Müller");<a name="line.62"></a>
+<span class="sourceLineNo">063</span>        put("Lineé", "Lineé");<a name="line.63"></a>
+<span class="sourceLineNo">064</span>        put("Mull", "Mull");<a name="line.64"></a>
+<span class="sourceLineNo">065</span>        put("(A. Müller) B. Meyer", "(A. Müller) B. Meyer");<a name="line.65"></a>
+<span class="sourceLineNo">066</span>        put("B. Meyer", "B. Meyer");<a name="line.66"></a>
+<span class="sourceLineNo">067</span>        put("L.", "L.");<a name="line.67"></a>
+<span class="sourceLineNo">068</span>        put("A. Müller &amp; B. Meier", "A. Müller &amp; B. Meier");<a name="line.68"></a>
+<span class="sourceLineNo">069</span>        put("A. Müller, B. Mei. C. Sone", "A. Müller, B. Mei. C. Sone");<a name="line.69"></a>
+<span class="sourceLineNo">070</span>        put("L", "L");<a name="line.70"></a>
+<span class="sourceLineNo">071</span>        put("\"A. Meyer\"", "A. Meyer");<a name="line.71"></a>
+<span class="sourceLineNo">072</span>        // put("a. meier", "A. Meier");<a name="line.72"></a>
+<span class="sourceLineNo">073</span>        put(" L.", "L.");<a name="line.73"></a>
+<span class="sourceLineNo">074</span>        put("L. ", "L.");<a name="line.74"></a>
+<span class="sourceLineNo">075</span>        put("L. {", "L.");<a name="line.75"></a>
+<span class="sourceLineNo">076</span>        put("\\", null);<a name="line.76"></a>
+<span class="sourceLineNo">077</span>        put("\\\\", null);<a name="line.77"></a>
+<span class="sourceLineNo">078</span>        put("\"", null);<a name="line.78"></a>
+<span class="sourceLineNo">079</span>        put("{} ", null);<a name="line.79"></a>
+<span class="sourceLineNo">080</span>      }<a name="line.80"></a>
+<span class="sourceLineNo">081</span>    };<a name="line.81"></a>
+<span class="sourceLineNo">082</span><a name="line.82"></a>
+<span class="sourceLineNo">083</span>    for (Map.Entry&lt;String, String&gt; author : authors.entrySet()) {<a name="line.83"></a>
+<span class="sourceLineNo">084</span>      assertEquals(author.getValue(), cleanAuthor(author.getKey()));<a name="line.84"></a>
+<span class="sourceLineNo">085</span>    }<a name="line.85"></a>
+<span class="sourceLineNo">086</span><a name="line.86"></a>
+<span class="sourceLineNo">087</span>    assertNull(cleanAuthor(null));<a name="line.87"></a>
+<span class="sourceLineNo">088</span>    assertNull("Empty strings should return null", cleanAuthor(""));<a name="line.88"></a>
+<span class="sourceLineNo">089</span>  }<a name="line.89"></a>
+<span class="sourceLineNo">090</span><a name="line.90"></a>
+<span class="sourceLineNo">091</span>}<a name="line.91"></a>
 
 
 

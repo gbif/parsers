@@ -9,105 +9,137 @@
 <pre><span class="sourceLineNo">001</span>package org.gbif.common.parsers.date;<a name="line.1"></a>
 <span class="sourceLineNo">002</span><a name="line.2"></a>
 <span class="sourceLineNo">003</span>import java.util.Date;<a name="line.3"></a>
-<span class="sourceLineNo">004</span><a name="line.4"></a>
-<span class="sourceLineNo">005</span>import javax.annotation.Nullable;<a name="line.5"></a>
-<span class="sourceLineNo">006</span><a name="line.6"></a>
-<span class="sourceLineNo">007</span>import com.google.common.base.Optional;<a name="line.7"></a>
-<span class="sourceLineNo">008</span>import org.threeten.bp.DateTimeUtils;<a name="line.8"></a>
-<span class="sourceLineNo">009</span>import org.threeten.bp.LocalDate;<a name="line.9"></a>
-<span class="sourceLineNo">010</span>import org.threeten.bp.LocalDateTime;<a name="line.10"></a>
-<span class="sourceLineNo">011</span>import org.threeten.bp.ZoneId;<a name="line.11"></a>
-<span class="sourceLineNo">012</span>import org.threeten.bp.ZonedDateTime;<a name="line.12"></a>
-<span class="sourceLineNo">013</span>import org.threeten.bp.temporal.ChronoField;<a name="line.13"></a>
-<span class="sourceLineNo">014</span>import org.threeten.bp.temporal.TemporalAccessor;<a name="line.14"></a>
-<span class="sourceLineNo">015</span><a name="line.15"></a>
-<span class="sourceLineNo">016</span>/**<a name="line.16"></a>
-<span class="sourceLineNo">017</span> * Utility methods to work with {@link TemporalAccessor}<a name="line.17"></a>
-<span class="sourceLineNo">018</span> *<a name="line.18"></a>
-<span class="sourceLineNo">019</span> */<a name="line.19"></a>
-<span class="sourceLineNo">020</span>public class TemporalAccessorUtils {<a name="line.20"></a>
-<span class="sourceLineNo">021</span><a name="line.21"></a>
-<span class="sourceLineNo">022</span>  public static ZoneId UTC_ZONE_ID = ZoneId.of("UTC");<a name="line.22"></a>
-<span class="sourceLineNo">023</span><a name="line.23"></a>
-<span class="sourceLineNo">024</span>  /**<a name="line.24"></a>
-<span class="sourceLineNo">025</span>   * Transform a {@link TemporalAccessor} to a {@link java.util.Date} in the UTC timezone in case there is no<a name="line.25"></a>
-<span class="sourceLineNo">026</span>   * timezone information available form the {@link TemporalAccessor} otherwise, the timezone information it will<a name="line.26"></a>
-<span class="sourceLineNo">027</span>   * be honored.<a name="line.27"></a>
-<span class="sourceLineNo">028</span>   *<a name="line.28"></a>
-<span class="sourceLineNo">029</span>   * Remember that a {@link Date} object will always display the date in the current timezone.<a name="line.29"></a>
-<span class="sourceLineNo">030</span>   *<a name="line.30"></a>
-<span class="sourceLineNo">031</span>   * @param temporalAccessor<a name="line.31"></a>
-<span class="sourceLineNo">032</span>   * @return the Date object or null if a Date object can not be created<a name="line.32"></a>
-<span class="sourceLineNo">033</span>   */<a name="line.33"></a>
-<span class="sourceLineNo">034</span>  public static Date toUTCDate(TemporalAccessor temporalAccessor){<a name="line.34"></a>
-<span class="sourceLineNo">035</span>    if(temporalAccessor == null){<a name="line.35"></a>
-<span class="sourceLineNo">036</span>      return null;<a name="line.36"></a>
-<span class="sourceLineNo">037</span>    }<a name="line.37"></a>
+<span class="sourceLineNo">004</span>import javax.annotation.Nullable;<a name="line.4"></a>
+<span class="sourceLineNo">005</span><a name="line.5"></a>
+<span class="sourceLineNo">006</span>import com.google.common.base.Optional;<a name="line.6"></a>
+<span class="sourceLineNo">007</span>import org.threeten.bp.DateTimeUtils;<a name="line.7"></a>
+<span class="sourceLineNo">008</span>import org.threeten.bp.LocalDate;<a name="line.8"></a>
+<span class="sourceLineNo">009</span>import org.threeten.bp.LocalDateTime;<a name="line.9"></a>
+<span class="sourceLineNo">010</span>import org.threeten.bp.Year;<a name="line.10"></a>
+<span class="sourceLineNo">011</span>import org.threeten.bp.YearMonth;<a name="line.11"></a>
+<span class="sourceLineNo">012</span>import org.threeten.bp.ZoneId;<a name="line.12"></a>
+<span class="sourceLineNo">013</span>import org.threeten.bp.ZoneOffset;<a name="line.13"></a>
+<span class="sourceLineNo">014</span>import org.threeten.bp.ZonedDateTime;<a name="line.14"></a>
+<span class="sourceLineNo">015</span>import org.threeten.bp.temporal.ChronoField;<a name="line.15"></a>
+<span class="sourceLineNo">016</span>import org.threeten.bp.temporal.TemporalAccessor;<a name="line.16"></a>
+<span class="sourceLineNo">017</span>import org.threeten.bp.temporal.TemporalQueries;<a name="line.17"></a>
+<span class="sourceLineNo">018</span><a name="line.18"></a>
+<span class="sourceLineNo">019</span>/**<a name="line.19"></a>
+<span class="sourceLineNo">020</span> * Utility methods to work with {@link TemporalAccessor}<a name="line.20"></a>
+<span class="sourceLineNo">021</span> *<a name="line.21"></a>
+<span class="sourceLineNo">022</span> */<a name="line.22"></a>
+<span class="sourceLineNo">023</span>public class TemporalAccessorUtils {<a name="line.23"></a>
+<span class="sourceLineNo">024</span><a name="line.24"></a>
+<span class="sourceLineNo">025</span>  public static ZoneId UTC_ZONE_ID = ZoneOffset.UTC;<a name="line.25"></a>
+<span class="sourceLineNo">026</span><a name="line.26"></a>
+<span class="sourceLineNo">027</span>  /**<a name="line.27"></a>
+<span class="sourceLineNo">028</span>   * Transform a {@link TemporalAccessor} to a {@link java.util.Date}.<a name="line.28"></a>
+<span class="sourceLineNo">029</span>   * If the provided {@link TemporalAccessor} contains offset(timezone) information it will be used.<a name="line.29"></a>
+<span class="sourceLineNo">030</span>   * See {@link #toDate(TemporalAccessor, boolean)} for more details.<a name="line.30"></a>
+<span class="sourceLineNo">031</span>   *<a name="line.31"></a>
+<span class="sourceLineNo">032</span>   * @param temporalAccessor<a name="line.32"></a>
+<span class="sourceLineNo">033</span>   * @return  the Date object or null if a Date object can not be created<a name="line.33"></a>
+<span class="sourceLineNo">034</span>   */<a name="line.34"></a>
+<span class="sourceLineNo">035</span>  public static Date toDate(TemporalAccessor temporalAccessor) {<a name="line.35"></a>
+<span class="sourceLineNo">036</span>    return toDate(temporalAccessor, false);<a name="line.36"></a>
+<span class="sourceLineNo">037</span>  }<a name="line.37"></a>
 <span class="sourceLineNo">038</span><a name="line.38"></a>
-<span class="sourceLineNo">039</span>    if(temporalAccessor.isSupported(ChronoField.OFFSET_SECONDS)){<a name="line.39"></a>
-<span class="sourceLineNo">040</span>      return DateTimeUtils.toDate(temporalAccessor.query(ZonedDateTime.FROM).toInstant());<a name="line.40"></a>
-<span class="sourceLineNo">041</span>    }<a name="line.41"></a>
-<span class="sourceLineNo">042</span><a name="line.42"></a>
-<span class="sourceLineNo">043</span>    if(temporalAccessor.isSupported(ChronoField.SECOND_OF_DAY)){<a name="line.43"></a>
-<span class="sourceLineNo">044</span>      return DateTimeUtils.toDate(temporalAccessor.query(LocalDateTime.FROM).atZone(UTC_ZONE_ID).toInstant());<a name="line.44"></a>
-<span class="sourceLineNo">045</span>    }<a name="line.45"></a>
-<span class="sourceLineNo">046</span><a name="line.46"></a>
-<span class="sourceLineNo">047</span>    LocalDate localDate = temporalAccessor.query(LocalDate.FROM);<a name="line.47"></a>
-<span class="sourceLineNo">048</span>    if (localDate != null) {<a name="line.48"></a>
-<span class="sourceLineNo">049</span>      return DateTimeUtils.toDate(localDate.atStartOfDay(UTC_ZONE_ID).toInstant());<a name="line.49"></a>
-<span class="sourceLineNo">050</span>    }<a name="line.50"></a>
-<span class="sourceLineNo">051</span><a name="line.51"></a>
-<span class="sourceLineNo">052</span>    return null;<a name="line.52"></a>
-<span class="sourceLineNo">053</span>  }<a name="line.53"></a>
-<span class="sourceLineNo">054</span><a name="line.54"></a>
-<span class="sourceLineNo">055</span>  /**<a name="line.55"></a>
-<span class="sourceLineNo">056</span>   * The idea of "best resolution" TemporalAccessor is to get the TemporalAccessor that offers more resolution than<a name="line.56"></a>
-<span class="sourceLineNo">057</span>   * the other but they must NOT contradict.<a name="line.57"></a>
-<span class="sourceLineNo">058</span>   * e.g. 2005-01 and 2005-01-01 will return 2005-01-01.<a name="line.58"></a>
-<span class="sourceLineNo">059</span>   *<a name="line.59"></a>
-<span class="sourceLineNo">060</span>   * Note that if one of the 2 parameters is null the other one will be considered having the best resolution<a name="line.60"></a>
-<span class="sourceLineNo">061</span>   *<a name="line.61"></a>
-<span class="sourceLineNo">062</span>   * @param ta1<a name="line.62"></a>
-<span class="sourceLineNo">063</span>   * @param ta2<a name="line.63"></a>
-<span class="sourceLineNo">064</span>   * @return never null<a name="line.64"></a>
-<span class="sourceLineNo">065</span>   */<a name="line.65"></a>
-<span class="sourceLineNo">066</span>  public static Optional&lt;? extends TemporalAccessor&gt; getBestResolutionTemporalAccessor(@Nullable TemporalAccessor ta1,<a name="line.66"></a>
-<span class="sourceLineNo">067</span>                                                                                       @Nullable TemporalAccessor ta2){<a name="line.67"></a>
-<span class="sourceLineNo">068</span>    //handle nulls combinations<a name="line.68"></a>
-<span class="sourceLineNo">069</span>    if(ta1 == null &amp;&amp; ta2 == null){<a name="line.69"></a>
-<span class="sourceLineNo">070</span>      return Optional.absent();<a name="line.70"></a>
-<span class="sourceLineNo">071</span>    }<a name="line.71"></a>
-<span class="sourceLineNo">072</span>    if(ta1 == null){<a name="line.72"></a>
-<span class="sourceLineNo">073</span>      return Optional.of(ta2);<a name="line.73"></a>
-<span class="sourceLineNo">074</span>    }<a name="line.74"></a>
-<span class="sourceLineNo">075</span>    if(ta2 == null){<a name="line.75"></a>
-<span class="sourceLineNo">076</span>      return Optional.of(ta1);<a name="line.76"></a>
-<span class="sourceLineNo">077</span>    }<a name="line.77"></a>
-<span class="sourceLineNo">078</span><a name="line.78"></a>
-<span class="sourceLineNo">079</span>    AtomizedLocalDate ymd1 = AtomizedLocalDate.fromTemporalAccessor(ta1);<a name="line.79"></a>
-<span class="sourceLineNo">080</span>    AtomizedLocalDate ymd2 = AtomizedLocalDate.fromTemporalAccessor(ta2);<a name="line.80"></a>
-<span class="sourceLineNo">081</span><a name="line.81"></a>
-<span class="sourceLineNo">082</span>    // If they both provide the year, it must match<a name="line.82"></a>
-<span class="sourceLineNo">083</span>    if(ymd1.getYear() != null &amp;&amp; ymd2.getYear() != null &amp;&amp; !ymd1.getYear().equals(ymd2.getYear())){<a name="line.83"></a>
-<span class="sourceLineNo">084</span>      return Optional.absent();<a name="line.84"></a>
-<span class="sourceLineNo">085</span>    }<a name="line.85"></a>
-<span class="sourceLineNo">086</span>    // If they both provide the month, it must match<a name="line.86"></a>
-<span class="sourceLineNo">087</span>    if(ymd1.getMonth() != null &amp;&amp; ymd2.getMonth() != null &amp;&amp; !ymd1.getMonth().equals(ymd2.getMonth())){<a name="line.87"></a>
-<span class="sourceLineNo">088</span>      return Optional.absent();<a name="line.88"></a>
-<span class="sourceLineNo">089</span>    }<a name="line.89"></a>
-<span class="sourceLineNo">090</span>    // If they both provide the day, it must match<a name="line.90"></a>
-<span class="sourceLineNo">091</span>    if(ymd1.getDay() != null &amp;&amp; ymd2.getDay() != null &amp;&amp; !ymd1.getDay().equals(ymd2.getDay())){<a name="line.91"></a>
-<span class="sourceLineNo">092</span>      return Optional.absent();<a name="line.92"></a>
-<span class="sourceLineNo">093</span>    }<a name="line.93"></a>
-<span class="sourceLineNo">094</span><a name="line.94"></a>
-<span class="sourceLineNo">095</span>    if(ymd1.getResolution() &gt; ymd2.getResolution()){<a name="line.95"></a>
-<span class="sourceLineNo">096</span>      return Optional.of(ta1);<a name="line.96"></a>
-<span class="sourceLineNo">097</span>    }<a name="line.97"></a>
-<span class="sourceLineNo">098</span><a name="line.98"></a>
-<span class="sourceLineNo">099</span>    return Optional.of(ta2);<a name="line.99"></a>
-<span class="sourceLineNo">100</span>  }<a name="line.100"></a>
-<span class="sourceLineNo">101</span><a name="line.101"></a>
-<span class="sourceLineNo">102</span>}<a name="line.102"></a>
+<span class="sourceLineNo">039</span>  /**<a name="line.39"></a>
+<span class="sourceLineNo">040</span>   * Transform a {@link TemporalAccessor} to a {@link java.util.Date}.<a name="line.40"></a>
+<span class="sourceLineNo">041</span>   *<a name="line.41"></a>
+<span class="sourceLineNo">042</span>   * For {@link YearMonth}, the {@link java.util.Date} will represent the first day of the month.<a name="line.42"></a>
+<span class="sourceLineNo">043</span>   * For {@link Year}, the {@link java.util.Date} will represent the first day of January.<a name="line.43"></a>
+<span class="sourceLineNo">044</span>   *<a name="line.44"></a>
+<span class="sourceLineNo">045</span>   * Remember that a {@link Date} object will always display the date in the current timezone.<a name="line.45"></a>
+<span class="sourceLineNo">046</span>   *<a name="line.46"></a>
+<span class="sourceLineNo">047</span>   * @param temporalAccessor<a name="line.47"></a>
+<span class="sourceLineNo">048</span>   * @param ignoreOffset in case offset information is available in the provided {@link TemporalAccessor}, should it<a name="line.48"></a>
+<span class="sourceLineNo">049</span>   *                     be used ?<a name="line.49"></a>
+<span class="sourceLineNo">050</span>   * @return the Date object or null if a Date object can not be created<a name="line.50"></a>
+<span class="sourceLineNo">051</span>   */<a name="line.51"></a>
+<span class="sourceLineNo">052</span>  public static Date toDate(TemporalAccessor temporalAccessor, boolean ignoreOffset) {<a name="line.52"></a>
+<span class="sourceLineNo">053</span>    if(temporalAccessor == null){<a name="line.53"></a>
+<span class="sourceLineNo">054</span>      return null;<a name="line.54"></a>
+<span class="sourceLineNo">055</span>    }<a name="line.55"></a>
+<span class="sourceLineNo">056</span><a name="line.56"></a>
+<span class="sourceLineNo">057</span>    if(!ignoreOffset &amp;&amp; temporalAccessor.isSupported(ChronoField.OFFSET_SECONDS)){<a name="line.57"></a>
+<span class="sourceLineNo">058</span>      return DateTimeUtils.toDate(temporalAccessor.query(ZonedDateTime.FROM).toInstant());<a name="line.58"></a>
+<span class="sourceLineNo">059</span>    }<a name="line.59"></a>
+<span class="sourceLineNo">060</span><a name="line.60"></a>
+<span class="sourceLineNo">061</span>    if(temporalAccessor.isSupported(ChronoField.SECOND_OF_DAY)){<a name="line.61"></a>
+<span class="sourceLineNo">062</span>      return DateTimeUtils.toDate(temporalAccessor.query(LocalDateTime.FROM).atZone(UTC_ZONE_ID).toInstant());<a name="line.62"></a>
+<span class="sourceLineNo">063</span>    }<a name="line.63"></a>
+<span class="sourceLineNo">064</span><a name="line.64"></a>
+<span class="sourceLineNo">065</span>    // this may return null in case of partial dates<a name="line.65"></a>
+<span class="sourceLineNo">066</span>    LocalDate localDate = temporalAccessor.query(TemporalQueries.localDate());<a name="line.66"></a>
+<span class="sourceLineNo">067</span><a name="line.67"></a>
+<span class="sourceLineNo">068</span>    // try YearMonth<a name="line.68"></a>
+<span class="sourceLineNo">069</span>    if(localDate == null &amp;&amp; temporalAccessor.isSupported(ChronoField.MONTH_OF_YEAR)) {<a name="line.69"></a>
+<span class="sourceLineNo">070</span>      YearMonth yearMonth = YearMonth.from(temporalAccessor);<a name="line.70"></a>
+<span class="sourceLineNo">071</span>      localDate = yearMonth.atDay(1);<a name="line.71"></a>
+<span class="sourceLineNo">072</span>    }<a name="line.72"></a>
+<span class="sourceLineNo">073</span><a name="line.73"></a>
+<span class="sourceLineNo">074</span>    // try Year<a name="line.74"></a>
+<span class="sourceLineNo">075</span>    if(localDate == null &amp;&amp; temporalAccessor.isSupported(ChronoField.YEAR)) {<a name="line.75"></a>
+<span class="sourceLineNo">076</span>      Year year = Year.from(temporalAccessor);<a name="line.76"></a>
+<span class="sourceLineNo">077</span>      localDate = year.atDay(1);<a name="line.77"></a>
+<span class="sourceLineNo">078</span>    }<a name="line.78"></a>
+<span class="sourceLineNo">079</span><a name="line.79"></a>
+<span class="sourceLineNo">080</span>    if (localDate != null) {<a name="line.80"></a>
+<span class="sourceLineNo">081</span>      return DateTimeUtils.toDate(localDate.atStartOfDay(UTC_ZONE_ID).toInstant());<a name="line.81"></a>
+<span class="sourceLineNo">082</span>    }<a name="line.82"></a>
+<span class="sourceLineNo">083</span><a name="line.83"></a>
+<span class="sourceLineNo">084</span>    return null;<a name="line.84"></a>
+<span class="sourceLineNo">085</span>  }<a name="line.85"></a>
+<span class="sourceLineNo">086</span><a name="line.86"></a>
+<span class="sourceLineNo">087</span>  /**<a name="line.87"></a>
+<span class="sourceLineNo">088</span>   * The idea of "best resolution" TemporalAccessor is to get the TemporalAccessor that offers more resolution than<a name="line.88"></a>
+<span class="sourceLineNo">089</span>   * the other but they must NOT contradict.<a name="line.89"></a>
+<span class="sourceLineNo">090</span>   * e.g. 2005-01 and 2005-01-01 will return 2005-01-01.<a name="line.90"></a>
+<span class="sourceLineNo">091</span>   *<a name="line.91"></a>
+<span class="sourceLineNo">092</span>   * Note that if one of the 2 parameters is null the other one will be considered having the best resolution<a name="line.92"></a>
+<span class="sourceLineNo">093</span>   *<a name="line.93"></a>
+<span class="sourceLineNo">094</span>   * @param ta1<a name="line.94"></a>
+<span class="sourceLineNo">095</span>   * @param ta2<a name="line.95"></a>
+<span class="sourceLineNo">096</span>   * @return never null<a name="line.96"></a>
+<span class="sourceLineNo">097</span>   */<a name="line.97"></a>
+<span class="sourceLineNo">098</span>  public static Optional&lt;? extends TemporalAccessor&gt; getBestResolutionTemporalAccessor(@Nullable TemporalAccessor ta1,<a name="line.98"></a>
+<span class="sourceLineNo">099</span>                                                                                       @Nullable TemporalAccessor ta2){<a name="line.99"></a>
+<span class="sourceLineNo">100</span>    //handle nulls combinations<a name="line.100"></a>
+<span class="sourceLineNo">101</span>    if(ta1 == null &amp;&amp; ta2 == null){<a name="line.101"></a>
+<span class="sourceLineNo">102</span>      return Optional.absent();<a name="line.102"></a>
+<span class="sourceLineNo">103</span>    }<a name="line.103"></a>
+<span class="sourceLineNo">104</span>    if(ta1 == null){<a name="line.104"></a>
+<span class="sourceLineNo">105</span>      return Optional.of(ta2);<a name="line.105"></a>
+<span class="sourceLineNo">106</span>    }<a name="line.106"></a>
+<span class="sourceLineNo">107</span>    if(ta2 == null){<a name="line.107"></a>
+<span class="sourceLineNo">108</span>      return Optional.of(ta1);<a name="line.108"></a>
+<span class="sourceLineNo">109</span>    }<a name="line.109"></a>
+<span class="sourceLineNo">110</span><a name="line.110"></a>
+<span class="sourceLineNo">111</span>    AtomizedLocalDate ymd1 = AtomizedLocalDate.fromTemporalAccessor(ta1);<a name="line.111"></a>
+<span class="sourceLineNo">112</span>    AtomizedLocalDate ymd2 = AtomizedLocalDate.fromTemporalAccessor(ta2);<a name="line.112"></a>
+<span class="sourceLineNo">113</span><a name="line.113"></a>
+<span class="sourceLineNo">114</span>    // If they both provide the year, it must match<a name="line.114"></a>
+<span class="sourceLineNo">115</span>    if(ymd1.getYear() != null &amp;&amp; ymd2.getYear() != null &amp;&amp; !ymd1.getYear().equals(ymd2.getYear())){<a name="line.115"></a>
+<span class="sourceLineNo">116</span>      return Optional.absent();<a name="line.116"></a>
+<span class="sourceLineNo">117</span>    }<a name="line.117"></a>
+<span class="sourceLineNo">118</span>    // If they both provide the month, it must match<a name="line.118"></a>
+<span class="sourceLineNo">119</span>    if(ymd1.getMonth() != null &amp;&amp; ymd2.getMonth() != null &amp;&amp; !ymd1.getMonth().equals(ymd2.getMonth())){<a name="line.119"></a>
+<span class="sourceLineNo">120</span>      return Optional.absent();<a name="line.120"></a>
+<span class="sourceLineNo">121</span>    }<a name="line.121"></a>
+<span class="sourceLineNo">122</span>    // If they both provide the day, it must match<a name="line.122"></a>
+<span class="sourceLineNo">123</span>    if(ymd1.getDay() != null &amp;&amp; ymd2.getDay() != null &amp;&amp; !ymd1.getDay().equals(ymd2.getDay())){<a name="line.123"></a>
+<span class="sourceLineNo">124</span>      return Optional.absent();<a name="line.124"></a>
+<span class="sourceLineNo">125</span>    }<a name="line.125"></a>
+<span class="sourceLineNo">126</span><a name="line.126"></a>
+<span class="sourceLineNo">127</span>    if(ymd1.getResolution() &gt; ymd2.getResolution()){<a name="line.127"></a>
+<span class="sourceLineNo">128</span>      return Optional.of(ta1);<a name="line.128"></a>
+<span class="sourceLineNo">129</span>    }<a name="line.129"></a>
+<span class="sourceLineNo">130</span><a name="line.130"></a>
+<span class="sourceLineNo">131</span>    return Optional.of(ta2);<a name="line.131"></a>
+<span class="sourceLineNo">132</span>  }<a name="line.132"></a>
+<span class="sourceLineNo">133</span><a name="line.133"></a>
+<span class="sourceLineNo">134</span>}<a name="line.134"></a>
 
 
 

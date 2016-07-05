@@ -15,7 +15,6 @@ org.gbif.api.vocabulary
 org.gbif.common.parsers
 org.gbif.common.parsers.core
 org.gbif.common.parsers.date
-org.gbif.common.parsers.date.threeten
 org.gbif.common.parsers.geospatial
 org.gbif.common.parsers.utils
 org.gbif.nameparser

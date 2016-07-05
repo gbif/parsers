@@ -84,7 +84,7 @@
 <span class="sourceLineNo">076</span>    }<a name="line.76"></a>
 <span class="sourceLineNo">077</span><a name="line.77"></a>
 <span class="sourceLineNo">078</span>    // remove the " from names with it at the beginning and end<a name="line.78"></a>
-<span class="sourceLineNo">079</span>    while (cleanedTaxon.charAt(0) == '\"' &amp;&amp; cleanedTaxon.charAt(cleanedTaxon.length() - 1) == '\"') {<a name="line.79"></a>
+<span class="sourceLineNo">079</span>    while (cleanedTaxon.length()&gt; 0 &amp;&amp; cleanedTaxon.charAt(0) == '\"' &amp;&amp; cleanedTaxon.charAt(cleanedTaxon.length() - 1) == '\"') {<a name="line.79"></a>
 <span class="sourceLineNo">080</span>      if (cleanedTaxon.length() == 1) {<a name="line.80"></a>
 <span class="sourceLineNo">081</span>        return null;<a name="line.81"></a>
 <span class="sourceLineNo">082</span>      }<a name="line.82"></a>
@@ -92,7 +92,7 @@
 <span class="sourceLineNo">084</span>    }<a name="line.84"></a>
 <span class="sourceLineNo">085</span><a name="line.85"></a>
 <span class="sourceLineNo">086</span>    // remove the " from names with it just at the beginning<a name="line.86"></a>
-<span class="sourceLineNo">087</span>    while (cleanedTaxon.charAt(0) == '\"') {<a name="line.87"></a>
+<span class="sourceLineNo">087</span>    while (cleanedTaxon.length()&gt; 0 &amp;&amp; cleanedTaxon.charAt(0) == '\"') {<a name="line.87"></a>
 <span class="sourceLineNo">088</span>      if (cleanedTaxon.length() == 1) {<a name="line.88"></a>
 <span class="sourceLineNo">089</span>        return null;<a name="line.89"></a>
 <span class="sourceLineNo">090</span>      }<a name="line.90"></a>
@@ -100,7 +100,7 @@
 <span class="sourceLineNo">092</span>    }<a name="line.92"></a>
 <span class="sourceLineNo">093</span><a name="line.93"></a>
 <span class="sourceLineNo">094</span>    // remove the " from names with it just at the end<a name="line.94"></a>
-<span class="sourceLineNo">095</span>    while (cleanedTaxon.charAt(cleanedTaxon.length() - 1) == '\"') {<a name="line.95"></a>
+<span class="sourceLineNo">095</span>    while (cleanedTaxon.length()&gt; 0 &amp;&amp; cleanedTaxon.charAt(cleanedTaxon.length() - 1) == '\"') {<a name="line.95"></a>
 <span class="sourceLineNo">096</span>      if (cleanedTaxon.length() == 1) {<a name="line.96"></a>
 <span class="sourceLineNo">097</span>        return null;<a name="line.97"></a>
 <span class="sourceLineNo">098</span>      }<a name="line.98"></a>
@@ -137,7 +137,7 @@
 <span class="sourceLineNo">129</span>    String cleanedAuthor = author;<a name="line.129"></a>
 <span class="sourceLineNo">130</span><a name="line.130"></a>
 <span class="sourceLineNo">131</span>    // remove the " from names with it at the beginning and end<a name="line.131"></a>
-<span class="sourceLineNo">132</span>    while (cleanedAuthor.charAt(0) == '\"' &amp;&amp; cleanedAuthor.charAt(cleanedAuthor.length() - 1) == '\"') {<a name="line.132"></a>
+<span class="sourceLineNo">132</span>    while (cleanedAuthor.length() &gt;0 &amp;&amp; cleanedAuthor.charAt(0) == '\"' &amp;&amp; cleanedAuthor.charAt(cleanedAuthor.length() - 1) == '\"') {<a name="line.132"></a>
 <span class="sourceLineNo">133</span>      if (cleanedAuthor.length() == 1) {<a name="line.133"></a>
 <span class="sourceLineNo">134</span>        return null;<a name="line.134"></a>
 <span class="sourceLineNo">135</span>      }<a name="line.135"></a>

@@ -84,7 +84,7 @@
 <a class="jxr_linenumber" name="L76" href="#L76">76</a>      }
 <a class="jxr_linenumber" name="L77" href="#L77">77</a>  
 <a class="jxr_linenumber" name="L78" href="#L78">78</a>      <em class="jxr_comment">// remove the " from names with it at the beginning and end</em>
-<a class="jxr_linenumber" name="L79" href="#L79">79</a>      <strong class="jxr_keyword">while</strong> (cleanedTaxon.charAt(0) == '\&quot;' &amp;&amp; cleanedTaxon.charAt(cleanedTaxon.length() - 1) == '\&quot;') {
+<a class="jxr_linenumber" name="L79" href="#L79">79</a>      <strong class="jxr_keyword">while</strong> (cleanedTaxon.length()&gt; 0 &amp;&amp; cleanedTaxon.charAt(0) == '\&quot;' &amp;&amp; cleanedTaxon.charAt(cleanedTaxon.length() - 1) == '\&quot;') {
 <a class="jxr_linenumber" name="L80" href="#L80">80</a>        <strong class="jxr_keyword">if</strong> (cleanedTaxon.length() == 1) {
 <a class="jxr_linenumber" name="L81" href="#L81">81</a>          <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L82" href="#L82">82</a>        }
@@ -92,7 +92,7 @@
 <a class="jxr_linenumber" name="L84" href="#L84">84</a>      }
 <a class="jxr_linenumber" name="L85" href="#L85">85</a>  
 <a class="jxr_linenumber" name="L86" href="#L86">86</a>      <em class="jxr_comment">// remove the " from names with it just at the beginning</em>
-<a class="jxr_linenumber" name="L87" href="#L87">87</a>      <strong class="jxr_keyword">while</strong> (cleanedTaxon.charAt(0) == '\&quot;') {
+<a class="jxr_linenumber" name="L87" href="#L87">87</a>      <strong class="jxr_keyword">while</strong> (cleanedTaxon.length()&gt; 0 &amp;&amp; cleanedTaxon.charAt(0) == '\&quot;') {
 <a class="jxr_linenumber" name="L88" href="#L88">88</a>        <strong class="jxr_keyword">if</strong> (cleanedTaxon.length() == 1) {
 <a class="jxr_linenumber" name="L89" href="#L89">89</a>          <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L90" href="#L90">90</a>        }
@@ -100,7 +100,7 @@
 <a class="jxr_linenumber" name="L92" href="#L92">92</a>      }
 <a class="jxr_linenumber" name="L93" href="#L93">93</a>  
 <a class="jxr_linenumber" name="L94" href="#L94">94</a>      <em class="jxr_comment">// remove the " from names with it just at the end</em>
-<a class="jxr_linenumber" name="L95" href="#L95">95</a>      <strong class="jxr_keyword">while</strong> (cleanedTaxon.charAt(cleanedTaxon.length() - 1) == '\&quot;') {
+<a class="jxr_linenumber" name="L95" href="#L95">95</a>      <strong class="jxr_keyword">while</strong> (cleanedTaxon.length()&gt; 0 &amp;&amp; cleanedTaxon.charAt(cleanedTaxon.length() - 1) == '\&quot;') {
 <a class="jxr_linenumber" name="L96" href="#L96">96</a>        <strong class="jxr_keyword">if</strong> (cleanedTaxon.length() == 1) {
 <a class="jxr_linenumber" name="L97" href="#L97">97</a>          <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L98" href="#L98">98</a>        }
@@ -137,7 +137,7 @@
 <a class="jxr_linenumber" name="L129" href="#L129">129</a>     String cleanedAuthor = author;
 <a class="jxr_linenumber" name="L130" href="#L130">130</a> 
 <a class="jxr_linenumber" name="L131" href="#L131">131</a>     <em class="jxr_comment">// remove the " from names with it at the beginning and end</em>
-<a class="jxr_linenumber" name="L132" href="#L132">132</a>     <strong class="jxr_keyword">while</strong> (cleanedAuthor.charAt(0) == '\&quot;' &amp;&amp; cleanedAuthor.charAt(cleanedAuthor.length() - 1) == '\&quot;') {
+<a class="jxr_linenumber" name="L132" href="#L132">132</a>     <strong class="jxr_keyword">while</strong> (cleanedAuthor.length() &gt;0 &amp;&amp; cleanedAuthor.charAt(0) == '\&quot;' &amp;&amp; cleanedAuthor.charAt(cleanedAuthor.length() - 1) == '\&quot;') {
 <a class="jxr_linenumber" name="L133" href="#L133">133</a>       <strong class="jxr_keyword">if</strong> (cleanedAuthor.length() == 1) {
 <a class="jxr_linenumber" name="L134" href="#L134">134</a>         <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L135" href="#L135">135</a>       }
