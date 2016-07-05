@@ -26,11 +26,14 @@ See [TemporalAccessorUtils](http://gbif.github.io/parsers/apidocs/org/gbif/commo
 [AtomizedLocalDate](http://gbif.github.io/parsers/apidocs/org/gbif/common/parsers/date/AtomizedLocalDate.html) for simple operations.
 
 ### Entry points
-There is 2 main methods in [TextDateParser](http://gbif.github.io/parsers/apidocs/org/gbif/common/parsers/date/TextDateParser.html) to parse dates represented in String.
-They both return a `ParseResult<TemporalAccessor>` object.
+There is 4 methods on the [TemporalParser](http://gbif.github.io/parsers/apidocs/org/gbif/common/parsers/date/TemporalParser.html) interface
+to parse dates.
+They all return a `ParseResult<TemporalAccessor>` object.
 ```
 - parse(String input)
+- parse(String input), DateFormatHint hint)
 - parse(String year, String month, String day)
+- parse(Integer year, Integer month, Integer day)
 ```
 
 ## Design and implementation details
@@ -40,9 +43,8 @@ Design overview
 ![Design](./date_parsing_design.png)
 
 
-### TextDateParser Workflow
-
-In order to use the right parser, the `TextDateParser` will use a regular expression to determine if the input String contains only
+### TemporalParser Workflow
+In order to use the right parser, the `TemporalParser` default implementation (`TextDateParser`) will use a regular expression to determine if the input String contains only
 numerical characters and separators or if it also include some letters. the presence of letters may indicate the month
 is written in text as opposed to its numerical value.
 

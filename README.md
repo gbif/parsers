@@ -36,7 +36,7 @@ import org.threeten.bp.temporal.TemporalAccessor;
 
 //...
 
-TextDateParser dateParser = new TextDateParser();
+TemporalParser dateParser = DateParsers.defaultTemporalParser();
 ParseResult<TemporalAccessor> ta = dateParser.parse("2nd jan. 1999");
 
 LocalDate localDate = LocalDate.from(ta.getPayload());
