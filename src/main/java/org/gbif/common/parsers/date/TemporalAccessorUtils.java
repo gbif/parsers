@@ -3,7 +3,6 @@ package org.gbif.common.parsers.date;
 import java.util.Date;
 import javax.annotation.Nullable;
 
-import com.google.common.base.Optional;
 import org.threeten.bp.DateTimeUtils;
 import org.threeten.bp.LocalDate;
 import org.threeten.bp.LocalDateTime;
@@ -85,6 +84,50 @@ public class TemporalAccessorUtils {
   }
 
   /**
+   * Only enable this function when we move to Java 8, do NOT use Guava Optional<>, it introduced some
+   * incompatibility in shaded jars (e.g. occurrence)
+   *
+   * @param ta1
+   * @param ta2
+   * @return never null
+   */
+//  public static Optional<? extends TemporalAccessor> getBestResolutionTemporalAccessor(@Nullable TemporalAccessor ta1,
+//                                                                                       @Nullable TemporalAccessor ta2){
+//    //handle nulls combinations
+//    if(ta1 == null && ta2 == null){
+//      return Optional.absent();
+//    }
+//    if(ta1 == null){
+//      return Optional.of(ta2);
+//    }
+//    if(ta2 == null){
+//      return Optional.of(ta1);
+//    }
+//
+//    AtomizedLocalDate ymd1 = AtomizedLocalDate.fromTemporalAccessor(ta1);
+//    AtomizedLocalDate ymd2 = AtomizedLocalDate.fromTemporalAccessor(ta2);
+//
+//    // If they both provide the year, it must match
+//    if(ymd1.getYear() != null && ymd2.getYear() != null && !ymd1.getYear().equals(ymd2.getYear())){
+//      return Optional.absent();
+//    }
+//    // If they both provide the month, it must match
+//    if(ymd1.getMonth() != null && ymd2.getMonth() != null && !ymd1.getMonth().equals(ymd2.getMonth())){
+//      return Optional.absent();
+//    }
+//    // If they both provide the day, it must match
+//    if(ymd1.getDay() != null && ymd2.getDay() != null && !ymd1.getDay().equals(ymd2.getDay())){
+//      return Optional.absent();
+//    }
+//
+//    if(ymd1.getResolution() > ymd2.getResolution()){
+//      return Optional.of(ta1);
+//    }
+//
+//    return Optional.of(ta2);
+//  }
+
+  /**
    * The idea of "best resolution" TemporalAccessor is to get the TemporalAccessor that offers more resolution than
    * the other but they must NOT contradict.
    * e.g. 2005-01 and 2005-01-01 will return 2005-01-01.
@@ -93,19 +136,19 @@ public class TemporalAccessorUtils {
    *
    * @param ta1
    * @param ta2
-   * @return never null
+   * @return TemporalAccessor representing the best resolution or null
    */
-  public static Optional<? extends TemporalAccessor> getBestResolutionTemporalAccessor(@Nullable TemporalAccessor ta1,
-                                                                                       @Nullable TemporalAccessor ta2){
+  public static TemporalAccessor getBestResolutionTemporalAccessor(@Nullable TemporalAccessor ta1,
+                                                                    @Nullable TemporalAccessor ta2){
     //handle nulls combinations
     if(ta1 == null && ta2 == null){
-      return Optional.absent();
+      return null;
     }
     if(ta1 == null){
-      return Optional.of(ta2);
+      return ta2;
     }
     if(ta2 == null){
-      return Optional.of(ta1);
+      return ta1;
     }
 
     AtomizedLocalDate ymd1 = AtomizedLocalDate.fromTemporalAccessor(ta1);
@@ -113,22 +156,21 @@ public class TemporalAccessorUtils {
 
     // If they both provide the year, it must match
     if(ymd1.getYear() != null && ymd2.getYear() != null && !ymd1.getYear().equals(ymd2.getYear())){
-      return Optional.absent();
+      return null;
     }
     // If they both provide the month, it must match
     if(ymd1.getMonth() != null && ymd2.getMonth() != null && !ymd1.getMonth().equals(ymd2.getMonth())){
-      return Optional.absent();
+      return null;
     }
     // If they both provide the day, it must match
     if(ymd1.getDay() != null && ymd2.getDay() != null && !ymd1.getDay().equals(ymd2.getDay())){
-      return Optional.absent();
+      return null;
     }
 
     if(ymd1.getResolution() > ymd2.getResolution()){
-      return Optional.of(ta1);
+      return ta1;
     }
-
-    return Optional.of(ta2);
+    return ta2;
   }
 
 }
