@@ -8,7 +8,7 @@ import org.threeten.bp.temporal.ChronoField;
 import org.threeten.bp.temporal.TemporalAccessor;
 
 /**
- * AtomizedLocalDate is a simple immutable class to hold data from a
+ * AtomizedLocalDate is a simple immutable class to hold local date data from a
  * {@link org.threeten.bp.temporal.TemporalAccessor}.
  *
  * Thread-Safe, immutable class.
