@@ -24,7 +24,7 @@ public class DateParsersTest {
     assertNotNull(DateParsers.ISO_YEAR.parse("2016"));
   }
 
-  @Test//(expected = DateTimeParseException.class)
+  @Test(expected = DateTimeParseException.class)
   public void testParsersISOYearException1(){
     TemporalAccessor ta = DateParsers.ISO_YEAR.parse("2016-10-45");
     YearMonth.from(ta);
@@ -53,7 +53,6 @@ public class DateParsersTest {
   }
 
   //  -- ISO_LOCAL_PARTIAL_DATE --
-
   @Test
   public void testIsoLocalPartialDateParser(){
     DateTimeFormatter parser = DateParsers.ISO_LOCAL_PARTIAL_DATE;
