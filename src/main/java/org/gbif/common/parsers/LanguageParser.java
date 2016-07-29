@@ -26,7 +26,8 @@ public class LanguageParser extends EnumParser<Language> {
 
 
   private LanguageParser() {
-    super(Language.class, false);
+    super(Language.class, false, LanguageParser.class.getResourceAsStream("/dictionaries/parse/language.txt"));
+
     try {
       BufferedReader r = new BufferedReader(
         new InputStreamReader(LanguageParser.class.getResourceAsStream("/dictionaries/parse/iso-639-1.txt"),
