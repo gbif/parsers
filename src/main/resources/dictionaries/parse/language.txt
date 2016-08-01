@@ -1,0 +1,5 @@
+Chinese (Traditional)	CHINESE
+Traditional Chinese	CHINESE
+Simplified Chinese	CHINESE
+BOKMAL	NORWEGIAN_BOKMAL
+NYNORSK	NORWEGIAN_NYNORSK

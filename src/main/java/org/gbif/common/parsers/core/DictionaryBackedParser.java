@@ -4,7 +4,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-import com.google.common.base.Preconditions;
 import com.google.common.base.Strings;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -43,14 +42,15 @@ public class DictionaryBackedParser<V> implements Parsable<V> {
   }
 
   final protected void add(String key, V value) {
-    Preconditions.checkNotNull("Adding a null value to the parser dictionary is not allowed", value);
-    String normedKey = normalize(key);
-    if (!Strings.isNullOrEmpty(normedKey)) {
-      V existingValue = dictionary.get(normedKey);
-      if (existingValue != null && !existingValue.equals(value)) {
-        log.warn("Ignoring mapping {}→{} as {} is already mapped to {}", key, value, key, existingValue);
-      } else {
-        dictionary.put(normedKey, value);
+    if (!StringUtils.isBlank(key)) {
+      String normedKey = normalize(key);
+      if (!Strings.isNullOrEmpty(normedKey)) {
+        V existingValue = dictionary.get(normedKey);
+        if (existingValue == null) {
+          dictionary.put(normedKey, value);
+        } else if (!existingValue.equals(value)) {
+          log.warn("Ignoring mapping {}→{} as {} is already mapped to {}", key, value, key, existingValue);
+        }
       }
     }
   }

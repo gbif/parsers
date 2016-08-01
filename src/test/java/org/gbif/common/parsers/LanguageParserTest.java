@@ -18,6 +18,9 @@ public class LanguageParserTest extends ParserTestBase<Language> {
 
   @Test
   public void testParseSuccess() {
+    assertParseSuccess(Language.NORWEGIAN_BOKMAL, "NORWEGIAN_BOKMAL");
+    assertParseSuccess(Language.NORWEGIAN_BOKMAL, "norwegian bokmal");
+    assertParseSuccess(Language.NORWEGIAN_BOKMAL, "bokmal");
     assertParseSuccess(Language.GERMAN, "German");
     assertParseSuccess(Language.GERMAN, "deutsch");
     assertParseSuccess(Language.GERMAN, "de");
