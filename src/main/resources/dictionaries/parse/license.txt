@@ -45,9 +45,11 @@ http://creativecommons.org/licenses/by-nc/4.0	CC_BY_NC_4_0
 CC-BY	CC_BY_4_0
 CC-BY 4.0	CC_BY_4_0
 CC BY 4.0	CC_BY_4_0
+Creative Commons Attribution (CC-BY) 4.0 License	CC_BY_4_0
 CC-BY-NC	CC_BY_NC_4_0
 CC-BY-NC 4.0	CC_BY_NC_4_0
 CC BY-NC 4.0	CC_BY_NC_4_0
+Creative Commons Attribution Non Commercial (CC-BY-NC) 4.0 License	CC_BY_NC_4_0
 # Other supported licenses equivalent to CC-BY 4.0
 http://www.opendatacommons.org/licenses/by/1.0	CC_BY_4_0
 # Unsupported CC 4.0 licenses

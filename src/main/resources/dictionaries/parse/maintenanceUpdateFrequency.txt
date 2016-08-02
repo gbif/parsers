@@ -13,12 +13,16 @@ Bianual	BIANNUALLY
 Annual	ANNUALLY
 Annuel	ANNUALLY
 Atualmente	ANNUALLY
+Year	ANNUALLY
+Yearly	ANNUALLY
 Cuando sea necesario	AS_NEEDED
 Quand cela est nécessaire	AS_NEEDED
 Quando necessário AS_NEEDED
 Continuo	CONTINUALLY
 Continuellement	CONTINUALLY
 Continuamente	CONTINUALLY
+Continously	CONTINUALLY
+Continous	CONTINUALLY
 Irregular	IRREGULAR
 Irrègulière	IRREGULAR
 Irregular	IRREGULAR
