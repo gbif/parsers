@@ -63,6 +63,9 @@ public class LicenseParserTest extends ParserTestBase<License> {
     assertParseSuccess(License.CC_BY_NC_4_0, "http://creativecommons.org/licenses/by-nc/4.0");
     assertParseSuccess(License.CC_BY_NC_4_0, "http://creativecommons.org/licenses/by-nc/4.0/");
     assertParseSuccess(License.CC_BY_NC_4_0, "http://creativecommons.org/licenses/by-nc/4.0/legalcode");
+    assertParseSuccess(License.CC_BY_NC_4_0, "https://creativecommons.org/licenses/by-nc/4.0");
+    assertParseSuccess(License.CC_BY_NC_4_0, "https://creativecommons.org/licenses/by-nc/4.0/");
+    assertParseSuccess(License.CC_BY_NC_4_0, "https://creativecommons.org/licenses/by-nc/4.0/legalcode");
 
     assertParseSuccess(License.UNSUPPORTED, "http://creativecommons.org/licenses/by/1.0/legalcode");
     assertParseSuccess(License.UNSUPPORTED, "http://creativecommons.org/licenses/by/2.0/legalcode");

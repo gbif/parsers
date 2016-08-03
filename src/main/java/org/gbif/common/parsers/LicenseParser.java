@@ -5,6 +5,7 @@ import org.gbif.common.parsers.core.EnumParser;
 import org.gbif.common.parsers.core.ParseResult;
 
 import java.net.URI;
+import java.util.regex.Pattern;
 import javax.annotation.Nullable;
 
 import com.google.common.base.Strings;
@@ -24,6 +25,8 @@ public class LicenseParser extends EnumParser<License> {
 
   private static final String COMMENT_MARKER = "#";
   private static final String LICENSE_FILEPATH = "/dictionaries/parse/license.txt";
+  //allows us to remove the protocol part to for http:// and https://
+  private static final Pattern REMOVE_HTTP_PATTERN = Pattern.compile("^https?:\\/\\/", Pattern.CASE_INSENSITIVE);
   private static LicenseParser singletonObject = null;
 
   private LicenseParser() {
@@ -36,6 +39,14 @@ public class LicenseParser extends EnumParser<License> {
     }
     // use dict file last
     init(LicenseParser.class.getResourceAsStream(LICENSE_FILEPATH), COMMENT_MARKER);
+  }
+
+  @Override
+  protected String normalize(String value) {
+    if(value == null){
+      return null;
+    }
+    return super.normalize(REMOVE_HTTP_PATTERN.matcher(value).replaceAll(""));
   }
 
   public static LicenseParser getInstance() {
