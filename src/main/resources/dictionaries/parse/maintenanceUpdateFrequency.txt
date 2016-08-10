@@ -1,0 +1,37 @@
+Diario	DAILY
+Journalière	DAILY
+Diariamente	DAILY
+Semanal	WEEKLY
+Quotidienne	WEEKLY
+Semanalmente	WEEKLY
+Mensual	MONTHLY
+Mensuel	MONTHLY
+Mensalmente	MONTHLY
+Semestral	BIANNUALLY
+Bi-annuel	BIANNUALLY
+Bianual	BIANNUALLY
+Annual	ANNUALLY
+Annuel	ANNUALLY
+Atualmente	ANNUALLY
+Year	ANNUALLY
+Yearly	ANNUALLY
+Cuando sea necesario	AS_NEEDED
+Quand cela est nécessaire	AS_NEEDED
+Quando necessário AS_NEEDED
+Continuo	CONTINUALLY
+Continuellement	CONTINUALLY
+Continuamente	CONTINUALLY
+Continously	CONTINUALLY
+Continous	CONTINUALLY
+Irregular	IRREGULAR
+Irrègulière	IRREGULAR
+Irregular	IRREGULAR
+No planeado	NOT_PLANNED
+Non planifié	NOT_PLANNED
+Não plenejado	NOT_PLANNED
+Desconocido	UNKOWN
+Inconnue	UNKOWN
+Desconhecido	UNKOWN
+Otro periodo de mantenimiento	OTHER_MAINTENANCE_PERIOD
+Autre période de maintenance	OTHER_MAINTENANCE_PERIOD
+Outro período de manutenção	OTHER_MAINTENANCE_PERIOD

@@ -1,0 +1,58 @@
+# Dictionary to lookup a License enumeration by its URI or its acronym/title.
+# Non-CC licenses that GBIF considers equal to one of its three supported CC licenses can be added to this file.
+# To be explicit, widely used licenses GBIF does not support can be added to this file.
+# When adding new mappings, please separate them by CC version number.
+#
+# Supported CC 1.0 licenses
+creativecommons.org/publicdomain/zero/1.0	CC0_1_0
+CC0	CC0_1_0
+CC0 1.0	CC0_1_0
+cc-zero	CC0_1_0
+# Other supported licenses equivalent to CC0 1.0
+www.opendatacommons.org/licenses/pddl/1.0	CC0_1_0
+# Unsupported CC 1.0 licenses
+creativecommons.org/licenses/by/1.0/legalcode	UNSUPPORTED
+creativecommons.org/licenses/by-sa/1.0/legalcode	UNSUPPORTED
+creativecommons.org/licenses/by-nc/1.0/legalcode	UNSUPPORTED
+creativecommons.org/licenses/by-nc-sa/1.0/legalcode	UNSUPPORTED
+creativecommons.org/licenses/by-nd/1.0/legalcode	UNSUPPORTED
+creativecommons.org/licenses/by-nc-nd/1.0/legalcode	UNSUPPORTED
+# Unsupported CC 2.0 licenses
+creativecommons.org/licenses/by/2.0/legalcode	UNSUPPORTED
+creativecommons.org/licenses/by-sa/2.0/legalcode	UNSUPPORTED
+creativecommons.org/licenses/by-nc/2.0/legalcode	UNSUPPORTED
+creativecommons.org/licenses/by-nc-sa/2.0/legalcode	UNSUPPORTED
+creativecommons.org/licenses/by-nd/2.0/legalcode	UNSUPPORTED
+creativecommons.org/licenses/by-nc-nd/2.0/legalcode	UNSUPPORTED
+# Unsupported CC 2.5 licenses
+creativecommons.org/licenses/by/2.5/legalcode	UNSUPPORTED
+creativecommons.org/licenses/by-sa/2.5/legalcode	UNSUPPORTED
+creativecommons.org/licenses/by-nc/2.5/legalcode	UNSUPPORTED
+creativecommons.org/licenses/by-nc-sa/2.5/legalcode	UNSUPPORTED
+creativecommons.org/licenses/by-nd/2.5/legalcode	UNSUPPORTED
+creativecommons.org/licenses/by-nc-nd/2.5/legalcode	UNSUPPORTED
+# Unsupported CC 3.0 licenses
+creativecommons.org/licenses/by/3.0/legalcode	UNSUPPORTED
+creativecommons.org/licenses/by-sa/3.0/legalcode	UNSUPPORTED
+creativecommons.org/licenses/by-nc/3.0/legalcode	UNSUPPORTED
+creativecommons.org/licenses/by-nc-sa/3.0/legalcode	UNSUPPORTED
+creativecommons.org/licenses/by-nd/3.0/legalcode	UNSUPPORTED
+creativecommons.org/licenses/by-nc-nd/3.0/legalcode	UNSUPPORTED
+# Supported CC 4.0 licenses
+creativecommons.org/licenses/by/4.0	CC_BY_4_0
+creativecommons.org/licenses/by-nc/4.0	CC_BY_NC_4_0
+CC-BY	CC_BY_4_0
+CC-BY 4.0	CC_BY_4_0
+Creative Commons Attribution (CC-BY) 4.0 License	CC_BY_4_0
+CC-BY-NC	CC_BY_NC_4_0
+CC-BY-NC 4.0	CC_BY_NC_4_0
+Creative Commons Attribution Non Commercial (CC-BY-NC) 4.0 License	CC_BY_NC_4_0
+# Other supported licenses equivalent to CC-BY 4.0
+www.opendatacommons.org/licenses/by/1.0	CC_BY_4_0
+# Unsupported CC 4.0 licenses
+creativecommons.org/licenses/by-sa/4.0/legalcode	UNSUPPORTED
+creativecommons.org/licenses/by-nc-sa/4.0/legalcode	UNSUPPORTED
+creativecommons.org/licenses/by-nd/4.0/legalcode	UNSUPPORTED
+creativecommons.org/licenses/by-nc-nd/4.0/legalcode	UNSUPPORTED
+# Other unsupported licenses
+opendatacommons.org/licenses/odbl/1.0	UNSUPPORTED
