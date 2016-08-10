@@ -25,7 +25,7 @@ public class LicenseParser extends EnumParser<License> {
 
   private static final String COMMENT_MARKER = "#";
   private static final String LICENSE_FILEPATH = "/dictionaries/parse/license.txt";
-  //allows us to remove the protocol part to for http:// and https://
+  //allows us to remove the protocol part for http:// and https://
   private static final Pattern REMOVE_HTTP_PATTERN = Pattern.compile("^https?:\\/\\/", Pattern.CASE_INSENSITIVE);
   private static LicenseParser singletonObject = null;
 

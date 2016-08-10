@@ -9,7 +9,10 @@ http://creativecommons.org/publicdomain/zero/1.0	CC0_1_0
 CC0	CC0_1_0
 CC0 1.0	CC0_1_0
 cc-zero	CC0_1_0
+# TO BE REVIEWED
 public domain	CC0_1_0
+# commonly used sentence for CC0
+This work is licensed under a Creative Commons CCZero 1.0 License http://creativecommons.org/publicdomain/zero/1.0/legalcode	CC0_1_0
 # Other supported licenses equivalent to CC0 1.0
 http://www.opendatacommons.org/licenses/pddl/1.0	CC0_1_0
 # Unsupported CC 1.0 licenses
