@@ -45,9 +45,11 @@ public class LicenseParserTest extends ParserTestBase<License> {
     assertParseSuccess(License.CC0_1_0, "CC-ZERO");
     assertParseSuccess(License.CC0_1_0, "CCZERO");
     assertParseSuccess(License.CC0_1_0, "http://creativecommons.org/publicdomain/zero/1.0");
+    assertParseSuccess(License.CC0_1_0, "creativecommons.org/publicdomain/zero/1.0");
     assertParseSuccess(License.CC0_1_0, "http://creativecommons.org/publicdomain/zero/1.0/");
     assertParseSuccess(License.CC0_1_0, "http://creativecommons.org/publicdomain/zero/1.0/legalcode");
     assertParseSuccess(License.CC0_1_0, "http://www.opendatacommons.org/licenses/pddl/1.0");
+
 
     assertParseSuccess(License.CC_BY_4_0, "CC-BY");
     assertParseSuccess(License.CC_BY_4_0, "CC-BY 4.0");
