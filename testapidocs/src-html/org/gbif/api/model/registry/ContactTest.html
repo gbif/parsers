@@ -39,8 +39,17 @@
 <span class="sourceLineNo">031</span><a name="line.31"></a>
 <span class="sourceLineNo">032</span>    c.addUserId("http://orcid.org", "de/12-3421423");<a name="line.32"></a>
 <span class="sourceLineNo">033</span>    assertEquals("http://orcid.org/de/12-3421423", c.getUserId().get(5));<a name="line.33"></a>
-<span class="sourceLineNo">034</span>  }<a name="line.34"></a>
-<span class="sourceLineNo">035</span>}<a name="line.35"></a>
+<span class="sourceLineNo">034</span><a name="line.34"></a>
+<span class="sourceLineNo">035</span>    c.addUserId("https://scholar.google.com/citations?user=", "jvW0IrIAAAAJ");<a name="line.35"></a>
+<span class="sourceLineNo">036</span>    assertEquals("https://scholar.google.com/citations?user=jvW0IrIAAAAJ", c.getUserId().get(6));<a name="line.36"></a>
+<span class="sourceLineNo">037</span><a name="line.37"></a>
+<span class="sourceLineNo">038</span>    c.addUserId("https://www.linkedin.com/in/", "john-smith-12345");<a name="line.38"></a>
+<span class="sourceLineNo">039</span>    assertEquals("https://www.linkedin.com/in/john-smith-12345", c.getUserId().get(7));<a name="line.39"></a>
+<span class="sourceLineNo">040</span><a name="line.40"></a>
+<span class="sourceLineNo">041</span>    c.addUserId("https://www.linkedin.com/profile/view?id=", "AAkAAABiOnwBeoX3a3wKqe4IEqDkJ_ifoVj1234");<a name="line.41"></a>
+<span class="sourceLineNo">042</span>    assertEquals("https://www.linkedin.com/profile/view?id=AAkAAABiOnwBeoX3a3wKqe4IEqDkJ_ifoVj1234", c.getUserId().get(8));<a name="line.42"></a>
+<span class="sourceLineNo">043</span>  }<a name="line.43"></a>
+<span class="sourceLineNo">044</span>}<a name="line.44"></a>
 
 
 

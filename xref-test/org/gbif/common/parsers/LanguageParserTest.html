@@ -26,26 +26,29 @@
 <a class="jxr_linenumber" name="L18" href="#L18">18</a>  
 <a class="jxr_linenumber" name="L19" href="#L19">19</a>    @Test
 <a class="jxr_linenumber" name="L20" href="#L20">20</a>    <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testParseSuccess() {
-<a class="jxr_linenumber" name="L21" href="#L21">21</a>      assertParseSuccess(Language.GERMAN, <span class="jxr_string">"German"</span>);
-<a class="jxr_linenumber" name="L22" href="#L22">22</a>      assertParseSuccess(Language.GERMAN, <span class="jxr_string">"deutsch"</span>);
-<a class="jxr_linenumber" name="L23" href="#L23">23</a>      assertParseSuccess(Language.GERMAN, <span class="jxr_string">"de"</span>);
-<a class="jxr_linenumber" name="L24" href="#L24">24</a>      assertParseSuccess(Language.GERMAN, <span class="jxr_string">"ger"</span>);
-<a class="jxr_linenumber" name="L25" href="#L25">25</a>      assertParseSuccess(Language.BASQUE, <span class="jxr_string">"baq"</span>);
-<a class="jxr_linenumber" name="L26" href="#L26">26</a>      assertParseSuccess(Language.GERMAN, <span class="jxr_string">"German"</span>);
-<a class="jxr_linenumber" name="L27" href="#L27">27</a>      assertParseSuccess(Language.GERMAN, <span class="jxr_string">"Deutsch"</span>);
-<a class="jxr_linenumber" name="L28" href="#L28">28</a>      assertParseSuccess(Language.GERMAN, <span class="jxr_string">"deutsch"</span>);
-<a class="jxr_linenumber" name="L29" href="#L29">29</a>      assertParseSuccess(Language.GERMAN, <span class="jxr_string">"GER"</span>);
-<a class="jxr_linenumber" name="L30" href="#L30">30</a>      assertParseSuccess(Language.GERMAN, <span class="jxr_string">"DEU"</span>);
-<a class="jxr_linenumber" name="L31" href="#L31">31</a>      assertParseSuccess(Language.GERMAN, <span class="jxr_string">"de"</span>);
-<a class="jxr_linenumber" name="L32" href="#L32">32</a>      assertParseSuccess(Language.GERMAN, <span class="jxr_string">"De "</span>);
-<a class="jxr_linenumber" name="L33" href="#L33">33</a>      assertParseSuccess(Language.ENGLISH, <span class="jxr_string">"en_US"</span>);
-<a class="jxr_linenumber" name="L34" href="#L34">34</a>      assertParseSuccess(Language.ENGLISH, <span class="jxr_string">"eng_US"</span>);
-<a class="jxr_linenumber" name="L35" href="#L35">35</a>      assertParseSuccess(Language.ENGLISH, <span class="jxr_string">"english"</span>);
-<a class="jxr_linenumber" name="L36" href="#L36">36</a>      assertParseSuccess(Language.PORTUGUESE, <span class="jxr_string">"PORTUGUES"</span>);
-<a class="jxr_linenumber" name="L37" href="#L37">37</a>  
-<a class="jxr_linenumber" name="L38" href="#L38">38</a>    }
-<a class="jxr_linenumber" name="L39" href="#L39">39</a>  
-<a class="jxr_linenumber" name="L40" href="#L40">40</a>  }
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>      assertParseSuccess(Language.NORWEGIAN_BOKMAL, <span class="jxr_string">"NORWEGIAN_BOKMAL"</span>);
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>      assertParseSuccess(Language.NORWEGIAN_BOKMAL, <span class="jxr_string">"norwegian bokmal"</span>);
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>      assertParseSuccess(Language.NORWEGIAN_BOKMAL, <span class="jxr_string">"bokmal"</span>);
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>      assertParseSuccess(Language.GERMAN, <span class="jxr_string">"German"</span>);
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>      assertParseSuccess(Language.GERMAN, <span class="jxr_string">"deutsch"</span>);
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>      assertParseSuccess(Language.GERMAN, <span class="jxr_string">"de"</span>);
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>      assertParseSuccess(Language.GERMAN, <span class="jxr_string">"ger"</span>);
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>      assertParseSuccess(Language.BASQUE, <span class="jxr_string">"baq"</span>);
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>      assertParseSuccess(Language.GERMAN, <span class="jxr_string">"German"</span>);
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>      assertParseSuccess(Language.GERMAN, <span class="jxr_string">"Deutsch"</span>);
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>      assertParseSuccess(Language.GERMAN, <span class="jxr_string">"deutsch"</span>);
+<a class="jxr_linenumber" name="L32" href="#L32">32</a>      assertParseSuccess(Language.GERMAN, <span class="jxr_string">"GER"</span>);
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>      assertParseSuccess(Language.GERMAN, <span class="jxr_string">"DEU"</span>);
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>      assertParseSuccess(Language.GERMAN, <span class="jxr_string">"de"</span>);
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>      assertParseSuccess(Language.GERMAN, <span class="jxr_string">"De "</span>);
+<a class="jxr_linenumber" name="L36" href="#L36">36</a>      assertParseSuccess(Language.ENGLISH, <span class="jxr_string">"en_US"</span>);
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>      assertParseSuccess(Language.ENGLISH, <span class="jxr_string">"eng_US"</span>);
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>      assertParseSuccess(Language.ENGLISH, <span class="jxr_string">"english"</span>);
+<a class="jxr_linenumber" name="L39" href="#L39">39</a>      assertParseSuccess(Language.PORTUGUESE, <span class="jxr_string">"PORTUGUES"</span>);
+<a class="jxr_linenumber" name="L40" href="#L40">40</a>  
+<a class="jxr_linenumber" name="L41" href="#L41">41</a>    }
+<a class="jxr_linenumber" name="L42" href="#L42">42</a>  
+<a class="jxr_linenumber" name="L43" href="#L43">43</a>  }
 </pre>
 <hr/>
 <div id="footer">Copyright &#169; 2016 <a href="http://www.gbif.org">Global Biodiversity Information Facility</a>. All rights reserved.</div>

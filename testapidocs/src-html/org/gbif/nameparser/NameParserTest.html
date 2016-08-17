@@ -2223,101 +2223,109 @@
 <span class="sourceLineNo">2215</span>    assertTrue(isViralName("bacteriophage, 315.6"));<a name="line.2215"></a>
 <span class="sourceLineNo">2216</span>    assertTrue(isViralName("bacteriophages"));<a name="line.2216"></a>
 <span class="sourceLineNo">2217</span>    assertTrue(isViralName("\"T1-like viruses\""));<a name="line.2217"></a>
-<span class="sourceLineNo">2218</span><a name="line.2218"></a>
-<span class="sourceLineNo">2219</span>    assertFalse(isViralName("Forcipomyia flavirustica Remm, 1968"));<a name="line.2219"></a>
-<span class="sourceLineNo">2220</span><a name="line.2220"></a>
-<span class="sourceLineNo">2221</span>  }<a name="line.2221"></a>
-<span class="sourceLineNo">2222</span><a name="line.2222"></a>
-<span class="sourceLineNo">2223</span>  @Test<a name="line.2223"></a>
-<span class="sourceLineNo">2224</span>  public void testBacteriaNames() throws Exception {<a name="line.2224"></a>
-<span class="sourceLineNo">2225</span>    assertUnparsableDoubtful("HMWdDNA-degrading marine bacterium 10");<a name="line.2225"></a>
-<span class="sourceLineNo">2226</span>    assertUnparsableDoubtful("SAR11 cluster bacterium enrichment culture clone Pshtc-, 019");<a name="line.2226"></a>
-<span class="sourceLineNo">2227</span>    assertUnparsableDoubtful("SR1 bacterium canine oral taxon, 369");<a name="line.2227"></a>
-<span class="sourceLineNo">2228</span>    assertUnparsableDoubtful("bacterium 'glyphosate'");<a name="line.2228"></a>
-<span class="sourceLineNo">2229</span>    assertUnparsableDoubtful("bacterium 'hafez'");<a name="line.2229"></a>
-<span class="sourceLineNo">2230</span>    assertUnparsableDoubtful("bacterium A1");<a name="line.2230"></a>
-<span class="sourceLineNo">2231</span>  }<a name="line.2231"></a>
-<span class="sourceLineNo">2232</span><a name="line.2232"></a>
-<span class="sourceLineNo">2233</span>  public boolean isViralName(String name) {<a name="line.2233"></a>
-<span class="sourceLineNo">2234</span>    try {<a name="line.2234"></a>
-<span class="sourceLineNo">2235</span>      ParsedName pn = parser.parse(name, null);<a name="line.2235"></a>
-<span class="sourceLineNo">2236</span>    } catch (UnparsableException e) {<a name="line.2236"></a>
-<span class="sourceLineNo">2237</span>      // swallow<a name="line.2237"></a>
-<span class="sourceLineNo">2238</span>      if (NameType.VIRUS == e.type) {<a name="line.2238"></a>
-<span class="sourceLineNo">2239</span>        return true;<a name="line.2239"></a>
-<span class="sourceLineNo">2240</span>      }<a name="line.2240"></a>
-<span class="sourceLineNo">2241</span>    }<a name="line.2241"></a>
-<span class="sourceLineNo">2242</span>    return false;<a name="line.2242"></a>
-<span class="sourceLineNo">2243</span>  }<a name="line.2243"></a>
-<span class="sourceLineNo">2244</span><a name="line.2244"></a>
-<span class="sourceLineNo">2245</span>  @Test<a name="line.2245"></a>
-<span class="sourceLineNo">2246</span>  public void testWhitespaceEpitheta() throws Exception {<a name="line.2246"></a>
-<span class="sourceLineNo">2247</span>    ParsedName n = parser.parse("Nupserha van rooni usambarica", null);<a name="line.2247"></a>
-<span class="sourceLineNo">2248</span>    assertEquals("Nupserha", n.getGenusOrAbove());<a name="line.2248"></a>
-<span class="sourceLineNo">2249</span>    assertTrue(n.getInfraGeneric() == null);<a name="line.2249"></a>
-<span class="sourceLineNo">2250</span>    assertEquals("van rooni", n.getSpecificEpithet());<a name="line.2250"></a>
-<span class="sourceLineNo">2251</span>    assertEquals("usambarica", n.getInfraSpecificEpithet());<a name="line.2251"></a>
+<span class="sourceLineNo">2218</span>    // http://dev.gbif.org/issues/browse/PF-2574<a name="line.2218"></a>
+<span class="sourceLineNo">2219</span>    assertTrue(isViralName("Inachis io NPV"));<a name="line.2219"></a>
+<span class="sourceLineNo">2220</span>    assertTrue(isViralName("Hyloicus pinastri NPV"));<a name="line.2220"></a>
+<span class="sourceLineNo">2221</span>    assertTrue(isViralName("Dictyoploca japonica NPV"));<a name="line.2221"></a>
+<span class="sourceLineNo">2222</span>    assertTrue(isViralName("Apocheima pilosaria NPV"));<a name="line.2222"></a>
+<span class="sourceLineNo">2223</span>    assertTrue(isViralName("Lymantria xylina NPV"));<a name="line.2223"></a>
+<span class="sourceLineNo">2224</span>    assertTrue(isViralName("Feltia subterranea GV"));<a name="line.2224"></a>
+<span class="sourceLineNo">2225</span>    assertTrue(isViralName("Dionychopus amasis GV"));<a name="line.2225"></a>
+<span class="sourceLineNo">2226</span><a name="line.2226"></a>
+<span class="sourceLineNo">2227</span>    assertFalse(isViralName("Forcipomyia flavirustica Remm, 1968"));<a name="line.2227"></a>
+<span class="sourceLineNo">2228</span><a name="line.2228"></a>
+<span class="sourceLineNo">2229</span>  }<a name="line.2229"></a>
+<span class="sourceLineNo">2230</span><a name="line.2230"></a>
+<span class="sourceLineNo">2231</span>  @Test<a name="line.2231"></a>
+<span class="sourceLineNo">2232</span>  public void testBacteriaNames() throws Exception {<a name="line.2232"></a>
+<span class="sourceLineNo">2233</span>    assertUnparsableDoubtful("HMWdDNA-degrading marine bacterium 10");<a name="line.2233"></a>
+<span class="sourceLineNo">2234</span>    assertUnparsableDoubtful("SAR11 cluster bacterium enrichment culture clone Pshtc-, 019");<a name="line.2234"></a>
+<span class="sourceLineNo">2235</span>    assertUnparsableDoubtful("SR1 bacterium canine oral taxon, 369");<a name="line.2235"></a>
+<span class="sourceLineNo">2236</span>    assertUnparsableDoubtful("bacterium 'glyphosate'");<a name="line.2236"></a>
+<span class="sourceLineNo">2237</span>    assertUnparsableDoubtful("bacterium 'hafez'");<a name="line.2237"></a>
+<span class="sourceLineNo">2238</span>    assertUnparsableDoubtful("bacterium A1");<a name="line.2238"></a>
+<span class="sourceLineNo">2239</span>  }<a name="line.2239"></a>
+<span class="sourceLineNo">2240</span><a name="line.2240"></a>
+<span class="sourceLineNo">2241</span>  public boolean isViralName(String name) {<a name="line.2241"></a>
+<span class="sourceLineNo">2242</span>    try {<a name="line.2242"></a>
+<span class="sourceLineNo">2243</span>      ParsedName pn = parser.parse(name, null);<a name="line.2243"></a>
+<span class="sourceLineNo">2244</span>    } catch (UnparsableException e) {<a name="line.2244"></a>
+<span class="sourceLineNo">2245</span>      // swallow<a name="line.2245"></a>
+<span class="sourceLineNo">2246</span>      if (NameType.VIRUS == e.type) {<a name="line.2246"></a>
+<span class="sourceLineNo">2247</span>        return true;<a name="line.2247"></a>
+<span class="sourceLineNo">2248</span>      }<a name="line.2248"></a>
+<span class="sourceLineNo">2249</span>    }<a name="line.2249"></a>
+<span class="sourceLineNo">2250</span>    return false;<a name="line.2250"></a>
+<span class="sourceLineNo">2251</span>  }<a name="line.2251"></a>
 <span class="sourceLineNo">2252</span><a name="line.2252"></a>
-<span class="sourceLineNo">2253</span>    n = parser.parse("Sargassum flavicans van pervillei", null);<a name="line.2253"></a>
-<span class="sourceLineNo">2254</span>    assertEquals("Sargassum", n.getGenusOrAbove());<a name="line.2254"></a>
-<span class="sourceLineNo">2255</span>    assertTrue(n.getInfraGeneric() == null);<a name="line.2255"></a>
-<span class="sourceLineNo">2256</span>    assertEquals("flavicans", n.getSpecificEpithet());<a name="line.2256"></a>
-<span class="sourceLineNo">2257</span>    assertEquals("van pervillei", n.getInfraSpecificEpithet());<a name="line.2257"></a>
-<span class="sourceLineNo">2258</span><a name="line.2258"></a>
-<span class="sourceLineNo">2259</span>    n = parser.parse("Salix novae angliae lingulata ", null);<a name="line.2259"></a>
-<span class="sourceLineNo">2260</span>    assertEquals("Salix", n.getGenusOrAbove());<a name="line.2260"></a>
-<span class="sourceLineNo">2261</span>    assertTrue(n.getInfraGeneric() == null);<a name="line.2261"></a>
-<span class="sourceLineNo">2262</span>    assertEquals("novae angliae", n.getSpecificEpithet());<a name="line.2262"></a>
-<span class="sourceLineNo">2263</span>    assertEquals("lingulata", n.getInfraSpecificEpithet());<a name="line.2263"></a>
-<span class="sourceLineNo">2264</span><a name="line.2264"></a>
-<span class="sourceLineNo">2265</span>    n = parser.parse("Ilex collina van trompii", null);<a name="line.2265"></a>
-<span class="sourceLineNo">2266</span>    assertEquals("Ilex", n.getGenusOrAbove());<a name="line.2266"></a>
-<span class="sourceLineNo">2267</span>    assertTrue(n.getInfraGeneric() == null);<a name="line.2267"></a>
-<span class="sourceLineNo">2268</span>    assertEquals("collina", n.getSpecificEpithet());<a name="line.2268"></a>
-<span class="sourceLineNo">2269</span>    assertEquals("van trompii", n.getInfraSpecificEpithet());<a name="line.2269"></a>
-<span class="sourceLineNo">2270</span><a name="line.2270"></a>
-<span class="sourceLineNo">2271</span>    n = parser.parse("Gaultheria depressa novae zealandiae", null);<a name="line.2271"></a>
-<span class="sourceLineNo">2272</span>    assertEquals("Gaultheria", n.getGenusOrAbove());<a name="line.2272"></a>
-<span class="sourceLineNo">2273</span>    assertTrue(n.getInfraGeneric() == null);<a name="line.2273"></a>
-<span class="sourceLineNo">2274</span>    assertEquals("depressa", n.getSpecificEpithet());<a name="line.2274"></a>
-<span class="sourceLineNo">2275</span>    assertEquals("novae zealandiae", n.getInfraSpecificEpithet());<a name="line.2275"></a>
-<span class="sourceLineNo">2276</span><a name="line.2276"></a>
-<span class="sourceLineNo">2277</span>    n = parser.parse("Caraguata van volxemi gracilior", null);<a name="line.2277"></a>
-<span class="sourceLineNo">2278</span>    assertEquals("Caraguata", n.getGenusOrAbove());<a name="line.2278"></a>
-<span class="sourceLineNo">2279</span>    assertTrue(n.getInfraGeneric() == null);<a name="line.2279"></a>
-<span class="sourceLineNo">2280</span>    assertEquals("van volxemi", n.getSpecificEpithet());<a name="line.2280"></a>
-<span class="sourceLineNo">2281</span>    assertEquals("gracilior", n.getInfraSpecificEpithet());<a name="line.2281"></a>
-<span class="sourceLineNo">2282</span><a name="line.2282"></a>
-<span class="sourceLineNo">2283</span>    n = parser.parse("Ancistrocerus agilis novae guineae", null);<a name="line.2283"></a>
-<span class="sourceLineNo">2284</span>    assertEquals("Ancistrocerus", n.getGenusOrAbove());<a name="line.2284"></a>
-<span class="sourceLineNo">2285</span>    assertTrue(n.getInfraGeneric() == null);<a name="line.2285"></a>
-<span class="sourceLineNo">2286</span>    assertEquals("agilis", n.getSpecificEpithet());<a name="line.2286"></a>
-<span class="sourceLineNo">2287</span>    assertEquals("novae guineae", n.getInfraSpecificEpithet());<a name="line.2287"></a>
-<span class="sourceLineNo">2288</span><a name="line.2288"></a>
-<span class="sourceLineNo">2289</span>    // also test the authorless parsing<a name="line.2289"></a>
-<span class="sourceLineNo">2290</span>    n = parser.parse("Ancistrocerus agilis novae guineae", null);<a name="line.2290"></a>
-<span class="sourceLineNo">2291</span>    assertEquals("Ancistrocerus", n.getGenusOrAbove());<a name="line.2291"></a>
-<span class="sourceLineNo">2292</span>    assertTrue(n.getInfraGeneric() == null);<a name="line.2292"></a>
-<span class="sourceLineNo">2293</span>    assertEquals("agilis", n.getSpecificEpithet());<a name="line.2293"></a>
-<span class="sourceLineNo">2294</span>    assertEquals("novae guineae", n.getInfraSpecificEpithet());<a name="line.2294"></a>
-<span class="sourceLineNo">2295</span>  }<a name="line.2295"></a>
+<span class="sourceLineNo">2253</span>  @Test<a name="line.2253"></a>
+<span class="sourceLineNo">2254</span>  public void testWhitespaceEpitheta() throws Exception {<a name="line.2254"></a>
+<span class="sourceLineNo">2255</span>    ParsedName n = parser.parse("Nupserha van rooni usambarica", null);<a name="line.2255"></a>
+<span class="sourceLineNo">2256</span>    assertEquals("Nupserha", n.getGenusOrAbove());<a name="line.2256"></a>
+<span class="sourceLineNo">2257</span>    assertTrue(n.getInfraGeneric() == null);<a name="line.2257"></a>
+<span class="sourceLineNo">2258</span>    assertEquals("van rooni", n.getSpecificEpithet());<a name="line.2258"></a>
+<span class="sourceLineNo">2259</span>    assertEquals("usambarica", n.getInfraSpecificEpithet());<a name="line.2259"></a>
+<span class="sourceLineNo">2260</span><a name="line.2260"></a>
+<span class="sourceLineNo">2261</span>    n = parser.parse("Sargassum flavicans van pervillei", null);<a name="line.2261"></a>
+<span class="sourceLineNo">2262</span>    assertEquals("Sargassum", n.getGenusOrAbove());<a name="line.2262"></a>
+<span class="sourceLineNo">2263</span>    assertTrue(n.getInfraGeneric() == null);<a name="line.2263"></a>
+<span class="sourceLineNo">2264</span>    assertEquals("flavicans", n.getSpecificEpithet());<a name="line.2264"></a>
+<span class="sourceLineNo">2265</span>    assertEquals("van pervillei", n.getInfraSpecificEpithet());<a name="line.2265"></a>
+<span class="sourceLineNo">2266</span><a name="line.2266"></a>
+<span class="sourceLineNo">2267</span>    n = parser.parse("Salix novae angliae lingulata ", null);<a name="line.2267"></a>
+<span class="sourceLineNo">2268</span>    assertEquals("Salix", n.getGenusOrAbove());<a name="line.2268"></a>
+<span class="sourceLineNo">2269</span>    assertTrue(n.getInfraGeneric() == null);<a name="line.2269"></a>
+<span class="sourceLineNo">2270</span>    assertEquals("novae angliae", n.getSpecificEpithet());<a name="line.2270"></a>
+<span class="sourceLineNo">2271</span>    assertEquals("lingulata", n.getInfraSpecificEpithet());<a name="line.2271"></a>
+<span class="sourceLineNo">2272</span><a name="line.2272"></a>
+<span class="sourceLineNo">2273</span>    n = parser.parse("Ilex collina van trompii", null);<a name="line.2273"></a>
+<span class="sourceLineNo">2274</span>    assertEquals("Ilex", n.getGenusOrAbove());<a name="line.2274"></a>
+<span class="sourceLineNo">2275</span>    assertTrue(n.getInfraGeneric() == null);<a name="line.2275"></a>
+<span class="sourceLineNo">2276</span>    assertEquals("collina", n.getSpecificEpithet());<a name="line.2276"></a>
+<span class="sourceLineNo">2277</span>    assertEquals("van trompii", n.getInfraSpecificEpithet());<a name="line.2277"></a>
+<span class="sourceLineNo">2278</span><a name="line.2278"></a>
+<span class="sourceLineNo">2279</span>    n = parser.parse("Gaultheria depressa novae zealandiae", null);<a name="line.2279"></a>
+<span class="sourceLineNo">2280</span>    assertEquals("Gaultheria", n.getGenusOrAbove());<a name="line.2280"></a>
+<span class="sourceLineNo">2281</span>    assertTrue(n.getInfraGeneric() == null);<a name="line.2281"></a>
+<span class="sourceLineNo">2282</span>    assertEquals("depressa", n.getSpecificEpithet());<a name="line.2282"></a>
+<span class="sourceLineNo">2283</span>    assertEquals("novae zealandiae", n.getInfraSpecificEpithet());<a name="line.2283"></a>
+<span class="sourceLineNo">2284</span><a name="line.2284"></a>
+<span class="sourceLineNo">2285</span>    n = parser.parse("Caraguata van volxemi gracilior", null);<a name="line.2285"></a>
+<span class="sourceLineNo">2286</span>    assertEquals("Caraguata", n.getGenusOrAbove());<a name="line.2286"></a>
+<span class="sourceLineNo">2287</span>    assertTrue(n.getInfraGeneric() == null);<a name="line.2287"></a>
+<span class="sourceLineNo">2288</span>    assertEquals("van volxemi", n.getSpecificEpithet());<a name="line.2288"></a>
+<span class="sourceLineNo">2289</span>    assertEquals("gracilior", n.getInfraSpecificEpithet());<a name="line.2289"></a>
+<span class="sourceLineNo">2290</span><a name="line.2290"></a>
+<span class="sourceLineNo">2291</span>    n = parser.parse("Ancistrocerus agilis novae guineae", null);<a name="line.2291"></a>
+<span class="sourceLineNo">2292</span>    assertEquals("Ancistrocerus", n.getGenusOrAbove());<a name="line.2292"></a>
+<span class="sourceLineNo">2293</span>    assertTrue(n.getInfraGeneric() == null);<a name="line.2293"></a>
+<span class="sourceLineNo">2294</span>    assertEquals("agilis", n.getSpecificEpithet());<a name="line.2294"></a>
+<span class="sourceLineNo">2295</span>    assertEquals("novae guineae", n.getInfraSpecificEpithet());<a name="line.2295"></a>
 <span class="sourceLineNo">2296</span><a name="line.2296"></a>
-<span class="sourceLineNo">2297</span>  @Test<a name="line.2297"></a>
-<span class="sourceLineNo">2298</span>  @Ignore<a name="line.2298"></a>
-<span class="sourceLineNo">2299</span>  public void manuallyTestProblematicName() throws Exception {<a name="line.2299"></a>
-<span class="sourceLineNo">2300</span>    for (String n : new String[]{<a name="line.2300"></a>
-<span class="sourceLineNo">2301</span>        "Severinia turcomaniae amplialata Unknown, 1921",<a name="line.2301"></a>
-<span class="sourceLineNo">2302</span>        "Tipula (Unplaced) fumipennis Alexander, 1912",<a name="line.2302"></a>
-<span class="sourceLineNo">2303</span>    }) {<a name="line.2303"></a>
-<span class="sourceLineNo">2304</span>      System.out.println(parser.parse(n, null));<a name="line.2304"></a>
-<span class="sourceLineNo">2305</span>    }<a name="line.2305"></a>
-<span class="sourceLineNo">2306</span><a name="line.2306"></a>
-<span class="sourceLineNo">2307</span>  }<a name="line.2307"></a>
-<span class="sourceLineNo">2308</span><a name="line.2308"></a>
-<span class="sourceLineNo">2309</span>}<a name="line.2309"></a>
-<span class="sourceLineNo">2310</span><a name="line.2310"></a>
-<span class="sourceLineNo">2311</span><a name="line.2311"></a>
-<span class="sourceLineNo">2312</span><a name="line.2312"></a>
+<span class="sourceLineNo">2297</span>    // also test the authorless parsing<a name="line.2297"></a>
+<span class="sourceLineNo">2298</span>    n = parser.parse("Ancistrocerus agilis novae guineae", null);<a name="line.2298"></a>
+<span class="sourceLineNo">2299</span>    assertEquals("Ancistrocerus", n.getGenusOrAbove());<a name="line.2299"></a>
+<span class="sourceLineNo">2300</span>    assertTrue(n.getInfraGeneric() == null);<a name="line.2300"></a>
+<span class="sourceLineNo">2301</span>    assertEquals("agilis", n.getSpecificEpithet());<a name="line.2301"></a>
+<span class="sourceLineNo">2302</span>    assertEquals("novae guineae", n.getInfraSpecificEpithet());<a name="line.2302"></a>
+<span class="sourceLineNo">2303</span>  }<a name="line.2303"></a>
+<span class="sourceLineNo">2304</span><a name="line.2304"></a>
+<span class="sourceLineNo">2305</span>  @Test<a name="line.2305"></a>
+<span class="sourceLineNo">2306</span>  @Ignore<a name="line.2306"></a>
+<span class="sourceLineNo">2307</span>  public void manuallyTestProblematicName() throws Exception {<a name="line.2307"></a>
+<span class="sourceLineNo">2308</span>    for (String n : new String[]{<a name="line.2308"></a>
+<span class="sourceLineNo">2309</span>        "Severinia turcomaniae amplialata Unknown, 1921",<a name="line.2309"></a>
+<span class="sourceLineNo">2310</span>        "Tipula (Unplaced) fumipennis Alexander, 1912",<a name="line.2310"></a>
+<span class="sourceLineNo">2311</span>    }) {<a name="line.2311"></a>
+<span class="sourceLineNo">2312</span>      System.out.println(parser.parse(n, null));<a name="line.2312"></a>
+<span class="sourceLineNo">2313</span>    }<a name="line.2313"></a>
+<span class="sourceLineNo">2314</span><a name="line.2314"></a>
+<span class="sourceLineNo">2315</span>  }<a name="line.2315"></a>
+<span class="sourceLineNo">2316</span><a name="line.2316"></a>
+<span class="sourceLineNo">2317</span>}<a name="line.2317"></a>
+<span class="sourceLineNo">2318</span><a name="line.2318"></a>
+<span class="sourceLineNo">2319</span><a name="line.2319"></a>
+<span class="sourceLineNo">2320</span><a name="line.2320"></a>
 
 
 
