@@ -16,6 +16,7 @@ import org.threeten.bp.LocalDateTime;
 import org.threeten.bp.Month;
 import org.threeten.bp.Year;
 import org.threeten.bp.YearMonth;
+import org.threeten.bp.ZoneId;
 import org.threeten.bp.ZoneOffset;
 import org.threeten.bp.ZonedDateTime;
 import org.threeten.bp.temporal.TemporalAccessor;
@@ -30,9 +31,11 @@ import static org.junit.Assert.fail;
  */
 public class ThreeTenNumericalDateParserTest {
 
+  private static final String BADDATE_TEST_FILE = "parse/date/threeten_bad_date_tests.txt";
   private static final String LOCALDATE_TEST_FILE = "parse/date/threeten_localdate_tests.txt";
   private static final String LOCALDATETIME_TEST_FILE = "parse/date/threeten_localdatetime_tests.txt";
-  private static final String BADDATE_TEST_FILE = "parse/date/threeten_bad_date_tests.txt";
+  private static final String LOCALDATETIME_TZ_TEST_FILE = "parse/date/local_datetime_tz_tests.txt";
+
   private static final String COLUMN_SEPARATOR = ";";
   private static final String COMMENT_MARKER = "#";
 
@@ -43,6 +46,7 @@ public class ThreeTenNumericalDateParserTest {
   private static final int HOUR_VAL_IDX = 4;
   private static final int MIN_VAL_IDX = 5;
   private static final int SEC_VAL_IDX = 6;
+  private static final int TZ_VAL_IDX = 7;
 
   private static final TemporalParser PARSER = ThreeTenNumericalDateParser.newInstance();
 
@@ -92,6 +96,36 @@ public class ThreeTenNumericalDateParserTest {
 
                   assertEquals("Test file rawValue: " + raw, LocalDateTime.of(year, month, day, hour, minute, second),
                           LocalDateTime.from(result.getPayload()));
+                } catch (NumberFormatException nfEx) {
+                  fail("Error while parsing the test input file content." + nfEx.getMessage());
+                }
+                return null;
+              }
+            });
+  }
+
+  @Test
+  public void testLocalDateTimeWithTimezoneFromFile() {
+    assertTestFile(LOCALDATETIME_TZ_TEST_FILE,
+            new Function<String[], Void>() {
+              @Nullable
+              @Override
+              public Void apply(@Nullable String[] row) {
+                String raw = row[RAW_VAL_IDX];
+                try {
+                  int year = Integer.parseInt(row[YEAR_VAL_IDX]);
+                  int month = Integer.parseInt(row[MONTH_VAL_IDX]);
+                  int day = Integer.parseInt(row[DAY_VAL_IDX]);
+                  int hour = Integer.parseInt(row[HOUR_VAL_IDX]);
+                  int minute = Integer.parseInt(row[MIN_VAL_IDX]);
+                  int second = Integer.parseInt(row[SEC_VAL_IDX]);
+                  String zoneId = row[TZ_VAL_IDX];
+
+                  ParseResult<TemporalAccessor> result = PARSER.parse(raw);
+                  assertNotNull(raw + " generated null payload", result.getPayload());
+
+                  assertEquals("Test file rawValue: " + raw, ZonedDateTime.of(year, month, day, hour, minute, second,
+                                  0, ZoneId.of(zoneId)), ZonedDateTime.from(result.getPayload()));
                 } catch (NumberFormatException nfEx) {
                   fail("Error while parsing the test input file content." + nfEx.getMessage());
                 }

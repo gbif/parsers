@@ -11,10 +11,12 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import org.apache.commons.lang3.StringUtils;
 import org.threeten.bp.Year;
+import org.threeten.bp.ZoneId;
 import org.threeten.bp.format.DateTimeFormatter;
 import org.threeten.bp.format.DateTimeFormatterBuilder;
 import org.threeten.bp.format.ResolverStyle;
 import org.threeten.bp.temporal.ChronoField;
+import org.threeten.bp.temporal.TemporalQuery;
 
 /**
  * The DateTimeParserBuilder can build objects directly (build(..) methods) or return an instance
@@ -28,6 +30,7 @@ public class DateTimeParserBuilder {
   private final static String IS_YEAR_2_DIGITS_PATTERN = "^.+[^u]"+YEAR_2_DIGITS_PATTERN_SUFFIX+"$";
 
   private DateTimeParserBuilder(){}
+
 
   /**
    * Get a new builder to create a list of DateTimeParser.
@@ -47,23 +50,77 @@ public class DateTimeParserBuilder {
   }
 
   /**
-   * Build a single DateTimeParser.
+   * Build a single, strict,  DateTimeParser.
+   * @param pattern
+   * @param hint
+   * @param type
+   * @return
+   */
+  private static DateTimeParser build(@NotNull String pattern, @NotNull DateFormatHint hint,
+                                     @NotNull TemporalQuery<?> type){
+    Preconditions.checkNotNull(type);
+    return build(pattern, hint, new TemporalQuery[]{type});
+  }
+
+  /**
+   * Build a single, strict, DateTimeParser with a specific ZoneId.
+   * @param pattern
+   * @param hint
+   * @param type
+   * @param zoneId
+   * @return
+   */
+  private static DateTimeParser build(@NotNull String pattern, @NotNull DateFormatHint hint,
+                                      @NotNull TemporalQuery<?> type, ZoneId zoneId){
+    Preconditions.checkNotNull(type);
+    return build(pattern, hint, new TemporalQuery[]{type}, zoneId);
+  }
+
+  /**
+   * Build a single, possibly lenient, DateTimeParser.
    *
    * @param pattern
    * @param hint
+   * @param type
    * @return
    */
-  public static DateTimeParser build(@NotNull String pattern, @NotNull DateFormatHint hint){
+  private static DateTimeParser build(@NotNull String pattern, @NotNull DateFormatHint hint, @NotNull TemporalQuery<?>[] type){
     Preconditions.checkNotNull(pattern);
     Preconditions.checkNotNull(hint);
 
     int minLength = getMinimumStringLengthForPattern(pattern);
     DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(pattern).withResolverStyle(ResolverStyle.STRICT);
-    return new DateTimeParser(dateTimeFormatter, null, hint, minLength);
+    return new DateTimeParser(dateTimeFormatter, null, hint, type, minLength);
+  }
+
+  private static DateTimeParser build(@NotNull String pattern, @NotNull DateFormatHint hint,
+                                      @NotNull TemporalQuery<?>[] type, ZoneId zoneId){
+    Preconditions.checkNotNull(pattern);
+    Preconditions.checkNotNull(hint);
+
+    int minLength = getMinimumStringLengthForPattern(pattern);
+    DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(pattern).withZone(zoneId)
+            .withResolverStyle(ResolverStyle.STRICT);
+    return new DateTimeParser(dateTimeFormatter, null, hint, type, minLength);
   }
 
   /**
-   * Build a single DateTimeParser with support for separator normalization.
+   * Build a single, strict, DateTimeParser with support for separator normalization.
+   *
+   * @param pattern
+   * @param hint
+   * @param separator
+   * @param alternativeSeparators
+   * @param type
+   * @return
+   */
+  private static DateTimeParser build(String pattern, DateFormatHint hint,  @NotNull TemporalQuery<?> type,
+                                      String separator, String alternativeSeparators){
+    return build(pattern, hint, new TemporalQuery[]{type}, separator, alternativeSeparators);
+  }
+
+  /**
+   * Build a single, possibly lenient, DateTimeParser with support for separator normalization.
    *
    * @param pattern
    * @param hint
@@ -71,7 +128,7 @@ public class DateTimeParserBuilder {
    * @param alternativeSeparators
    * @return
    */
-  public static DateTimeParser build(String pattern, DateFormatHint hint, String separator,
+  private static DateTimeParser build(String pattern, DateFormatHint hint, @NotNull TemporalQuery<?>[] type, String separator,
                                              String alternativeSeparators){
     Preconditions.checkNotNull(pattern);
     Preconditions.checkNotNull(hint);
@@ -81,7 +138,7 @@ public class DateTimeParserBuilder {
     DateTimeSeparatorNormalizer dateTimeNormalizer = new DateTimeSeparatorNormalizer(CharMatcher.anyOf(alternativeSeparators), separator);
     DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(pattern).withResolverStyle(ResolverStyle.STRICT);
     int minLength = getMinimumStringLengthForPattern(pattern);
-    return new DateTimeParser(dateTimeFormatter, dateTimeNormalizer, hint, minLength);
+    return new DateTimeParser(dateTimeFormatter, dateTimeNormalizer, hint, type, minLength);
   }
 
   /**
@@ -94,10 +151,10 @@ public class DateTimeParserBuilder {
    * @param baseYear
    * @return
    */
-  public static DateTimeParser build(String pattern, DateFormatHint hint, Year baseYear){
+  private static DateTimeParser build(String pattern, DateFormatHint hint, @NotNull TemporalQuery<?>[] type, Year baseYear){
     int minLength = getMinimumStringLengthForPattern(pattern);
     DateTimeFormatter dateTimeFormatter = build2DigitsYearDateTimeFormatter(pattern, baseYear);
-    return new DateTimeParser(dateTimeFormatter, null, hint, minLength);
+    return new DateTimeParser(dateTimeFormatter, null, hint, type, minLength);
   }
 
   /**
@@ -111,7 +168,7 @@ public class DateTimeParserBuilder {
    * @param baseYear
    * @return
    */
-  public static DateTimeParser build(String pattern, DateFormatHint hint, String separator,
+  private static DateTimeParser build(String pattern, DateFormatHint hint, @NotNull TemporalQuery<?>[] type, String separator,
                                              String alternativeSeparators, Year baseYear){
     Preconditions.checkNotNull(pattern);
     Preconditions.checkNotNull(hint);
@@ -121,7 +178,7 @@ public class DateTimeParserBuilder {
     DateTimeSeparatorNormalizer dateTimeNormalizer = new DateTimeSeparatorNormalizer(CharMatcher.anyOf(alternativeSeparators), separator);
     DateTimeFormatter dateTimeFormatter = build2DigitsYearDateTimeFormatter(pattern, baseYear);
     int minLength = getMinimumStringLengthForPattern(pattern);
-    return new DateTimeParser(dateTimeFormatter, dateTimeNormalizer, hint, minLength);
+    return new DateTimeParser(dateTimeFormatter, dateTimeNormalizer, hint, type, minLength);
   }
 
 
@@ -153,41 +210,67 @@ public class DateTimeParserBuilder {
   public static class ThreeTenDateParserListBuilder {
     private final List<DateTimeParser> dateTimeParsers = Lists.newArrayList();
 
-    public ThreeTenDateParserListBuilder appendDateTimeParser(String pattern, DateFormatHint hint){
-      dateTimeParsers.add(DateTimeParserBuilder.build(pattern, hint));
+    /**
+     *
+     * @param pattern date pattern to use
+     * @param hint
+     * @param type expected {@link TemporalQuery} from the provided pattern
+     * @return the current builder
+     */
+    public ThreeTenDateParserListBuilder appendDateTimeParser(String pattern, DateFormatHint hint, TemporalQuery<?> type){
+      dateTimeParsers.add(DateTimeParserBuilder.build(pattern, hint, type));
       return this;
     }
 
     /**
      *
-     * @param pattern
+     * @param pattern date pattern to use
+     * @param hint
+     * @param type expected {@link TemporalQuery} from the provided pattern
+     * @param zoneId
+     * @return the current builder
+     */
+    public ThreeTenDateParserListBuilder appendDateTimeParser(String pattern, DateFormatHint hint, TemporalQuery<?> type, ZoneId zoneId){
+      dateTimeParsers.add(DateTimeParserBuilder.build(pattern, hint, type, zoneId));
+      return this;
+    }
+
+    /**
+     *
+     * @param pattern date pattern to use
+     * @param hint
+     * @param type possible {@link TemporalQuery} from the provided pattern (ordered)
+     * @return the current builder
+     */
+    public ThreeTenDateParserListBuilder appendDateTimeParser(String pattern, DateFormatHint hint, TemporalQuery<?>[] type){
+      dateTimeParsers.add(DateTimeParserBuilder.build(pattern, hint, type));
+      return this;
+    }
+    /**
+     *
+     * @param pattern date pattern to use
      * @param hint
      * @param separator
      * @param alternativeSeparators separator used in the pattern that should be used as replacement for alternativeSeparators
      * @return
      */
-    public ThreeTenDateParserListBuilder appendDateTimeParser(String pattern, DateFormatHint hint,
-                                                                   String separator, String alternativeSeparators){
-      dateTimeParsers.add(DateTimeParserBuilder.build(pattern, hint, separator, alternativeSeparators));
+    public ThreeTenDateParserListBuilder appendDateTimeParser(String pattern, DateFormatHint hint, TemporalQuery<?>[] type,
+                                                                   String separator, String alternativeSeparators
+                                                              ){
+      dateTimeParsers.add(DateTimeParserBuilder.build(pattern, hint, type, separator, alternativeSeparators));
       return this;
     }
 
-    public ThreeTenDateParserListBuilder append2DigitsYearDateTimeParser(String pattern, DateFormatHint hint,
+    public ThreeTenDateParserListBuilder append2DigitsYearDateTimeParser(String pattern, DateFormatHint hint, TemporalQuery<?> type,
                                                                               Year baseYear){
-      int minLength = getMinimumStringLengthForPattern(pattern);
-      DateTimeFormatter dateTimeFormatter = build2DigitsYearDateTimeFormatter(pattern, baseYear);
-      dateTimeParsers.add(new DateTimeParser(dateTimeFormatter, null, hint, minLength));
+      dateTimeParsers.add(DateTimeParserBuilder.build(pattern, hint, new TemporalQuery[]{type}, baseYear));
       return this;
     }
 
-    public ThreeTenDateParserListBuilder append2DigitsYearDateTimeParser(String pattern, DateFormatHint hint,
+    public ThreeTenDateParserListBuilder append2DigitsYearDateTimeParser(String pattern, DateFormatHint hint, TemporalQuery<?> type,
                                                                               String separator, String alternativeSeparators,
                                                                               Year baseYear){
-      //get length before removing year part
-      int minLength = getMinimumStringLengthForPattern(pattern);
-      DateTimeSeparatorNormalizer dateTimeNormalizer = new DateTimeSeparatorNormalizer(CharMatcher.anyOf(alternativeSeparators), separator);
-      DateTimeFormatter dateTimeFormatter = build2DigitsYearDateTimeFormatter(pattern, baseYear);
-      dateTimeParsers.add(new DateTimeParser(dateTimeFormatter, dateTimeNormalizer, hint, minLength));
+      dateTimeParsers.add(DateTimeParserBuilder.build(pattern, hint, new TemporalQuery[]{type}, separator, alternativeSeparators, baseYear));
       return this;
     }
 
@@ -203,35 +286,40 @@ public class DateTimeParserBuilder {
     private DateTimeParser preferred;
     private List<DateTimeParser> otherParsers = Lists.newArrayList();
 
-    public ThreeTenDateMultiParserListBuilder preferredDateTimeParser(String pattern, DateFormatHint hint){
-      preferred = DateTimeParserBuilder.build(pattern, hint);
+    public ThreeTenDateMultiParserListBuilder preferredDateTimeParser(String pattern, DateFormatHint hint, TemporalQuery<?> type){
+      preferred = DateTimeParserBuilder.build(pattern, hint, type);
       return this;
     }
 
-    public ThreeTenDateMultiParserListBuilder preferredDateTimeParser(String pattern, DateFormatHint hint, Year year){
-      preferred = DateTimeParserBuilder.build(pattern, hint, year);
+    public ThreeTenDateMultiParserListBuilder preferredDateTimeParser(String pattern, DateFormatHint hint, TemporalQuery<?> type,  Year year){
+      preferred = DateTimeParserBuilder.build(pattern, hint, new TemporalQuery[]{type}, year);
       return this;
     }
 
-    public ThreeTenDateMultiParserListBuilder appendDateTimeParser(String pattern, DateFormatHint hint){
-      otherParsers.add(DateTimeParserBuilder.build(pattern, hint));
+    public ThreeTenDateMultiParserListBuilder appendDateTimeParser(String pattern, DateFormatHint hint, TemporalQuery<?> type){
+      otherParsers.add(DateTimeParserBuilder.build(pattern, hint, type));
       return this;
     }
 
-    public ThreeTenDateMultiParserListBuilder appendDateTimeParser(String pattern, DateFormatHint hint, Year year){
-      otherParsers.add(DateTimeParserBuilder.build(pattern, hint, year));
+    public ThreeTenDateMultiParserListBuilder appendDateTimeFormatter(DateTimeFormatter dateTimeFormatter, DateFormatHint hint, TemporalQuery<?> type, int minLength){
+      otherParsers.add(new DateTimeParser(dateTimeFormatter, null, hint, new TemporalQuery[]{type},  minLength));
       return this;
     }
 
-    public ThreeTenDateMultiParserListBuilder appendDateTimeParser(String pattern, DateFormatHint hint,
+    public ThreeTenDateMultiParserListBuilder appendDateTimeParser(String pattern, DateFormatHint hint, TemporalQuery<?> type, Year year){
+      otherParsers.add(DateTimeParserBuilder.build(pattern, hint, new TemporalQuery[]{type}, year));
+      return this;
+    }
+
+    public ThreeTenDateMultiParserListBuilder appendDateTimeParser(String pattern, DateFormatHint hint, TemporalQuery<?> type,
                                                                String separator, String alternativeSeparators){
-      otherParsers.add(DateTimeParserBuilder.build(pattern, hint, separator, alternativeSeparators));
+      otherParsers.add(DateTimeParserBuilder.build(pattern, hint, new TemporalQuery[]{type}, separator, alternativeSeparators));
       return this;
     }
 
-    public ThreeTenDateMultiParserListBuilder appendDateTimeParser(String pattern, DateFormatHint hint,
+    public ThreeTenDateMultiParserListBuilder appendDateTimeParser(String pattern, DateFormatHint hint, TemporalQuery<?> type,
                                                                String separator, String alternativeSeparators, Year year){
-      otherParsers.add(DateTimeParserBuilder.build(pattern, hint, separator, alternativeSeparators, year));
+      otherParsers.add(DateTimeParserBuilder.build(pattern, hint, new TemporalQuery[]{type}, separator, alternativeSeparators, year));
       return this;
     }
 
