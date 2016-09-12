@@ -1,38 +1,39 @@
-*	UNRANKED
-**	UNRANKED
-***	UNRANKED
-****	UNRANKED
-*****	UNRANKED
+*	INFRASPECIFIC_NAME
+**	INFRASPECIFIC_NAME
+***	INFRASPECIFIC_NAME
+****	INFRASPECIFIC_NAME
+*****	INFRASPECIFIC_NAME
 ?	UNRANKED
 ??	UNRANKED
 ???	UNRANKED
-[alpha]	UNRANKED
-[beta]	UNRANKED
-[epsilon]	INFRASUBSPECIFICNAME
-[gamma]	INFRASUBSPECIFICNAME
-[infrafam unranked]	SUPRAGENERICNAME
-[infragen ]	INFRAGENERICNAME
-[infragen grex]	INFRAGENERICNAME
-[infragen unranked]	INFRAGENERICNAME
-[infragen]	INFRAGENERICNAME
-[infrasp unranked]	INFRASPECIFICNAME
+[alpha]	INFRASPECIFIC_NAME
+[beta]	INFRASPECIFIC_NAME
+[epsilon]	INFRASPECIFIC_NAME
+[gamma]	INFRASPECIFIC_NAME
+[infrafam unranked]	INFRAFAMILY
+[infragen ]	INFRAGENUS
+[infragen grex]	GREX
+[infragen unranked]	INFRAGENUS
+[infragen]	INFRAGENUS
+[infrasp unranked]	INFRASPECIFIC_NAME
 [unranked]	UNRANKED
 \n	UNRANKED
 a	UNRANKED
-abberation	ABBERATION
-aberrancy	ABBERATION
+abber	ABERRATION
+abberation	ABERRATION
+aberrancy	ABERRATION
 abt	PHYLUM
 abteilung	PHYLUM
 agamosp	SPECIES
 agamovar	VARIETY
-agg	INFRAGENERICNAME
-agglom	INFRAGENERICNAME
-aggr	INFRAGENERICNAME
-aggregate	INFRAGENERICNAME
-agregate	INFRAGENERICNAME
-alliance	UNRANKED
-alpha	UNRANKED
-ap	INFRASUBSPECIFICNAME
+agg	SPECIES_AGGREGATE
+agglom	SPECIES_AGGREGATE
+aggr	SPECIES_AGGREGATE
+aggregate	SPECIES_AGGREGATE
+agregate	SPECIES_AGGREGATE
+alliance
+alpha	INFRASPECIFIC_NAME
+ap	INFRASUBSPECIFIC_NAME
 b	UNRANKED
 beta	UNRANKED
 biotype	BIOVAR
@@ -50,25 +51,22 @@ classe	CLASS
 classis	CLASS
 cohors	SUPRAGENERICNAME
 cohort	SUPRAGENERICNAME
-coll sp	INFRASPECIFICNAME
-coll species	INFRASPECIFICNAME
-complex	INFRASPECIFICNAME
-convar	INFRASPECIFICNAME
+coll sp	INFRASPECIFIC_NAME
+coll species	INFRASPECIFIC_NAME
+complex	SPECIES_AGGREGATE
+convar	CONVARIETY
 ct	CHEMOFORM
 cultivar	CULTIVAR
 cultivar	CULTIVAR
 cultivar_group	CULTIVAR_GROUP
-cultivargroup	CULTIVARGROUP
+cultivargroup	CULTIVAR_GROUP
 cv	CULTIVAR
 d	UNRANKED
 div	PHYLUM
 divisao	PHYLUM
 divisio	PHYLUM
 division	PHYLUM
-dolichocera	DOLICHOCERA
 domain	DOMAIN
-domain	DOMAIN
-e	UNRANKED
 empire	DOMAIN
 es	SPECIES
 espece	SPECIES
@@ -102,38 +100,36 @@ groupgenus	GENUS
 groupspecies	SPECIES
 imperium	KINGDOM
 kingdomclade	KINGDOM
-grex	INFRAGENERICNAME
-grex sect	SECTION
-group	INFRASPECIFICNAME
+grex	GREX
+grex sect	GREX
+group	CULTIVAR_GROUP
 higher taxon	SUPRAGENERICNAME
 hybrid formula	HYBRID FORMULA
-informal	INFORMAL
-informal	INFORMAL
-infraclass	SUBCLASS
-infraclassis	SUBCLASS
-infragen	INFRAGENERICNAME
+infraclass	INFRACLASS
+infraclassis	INFRACLASS
+infragen	INFRAGENUS
 infragen.unranked	INFRAGENERICNAME
 infrageneric	INFRAGENERICNAME
 infrageneric_name	INFRAGENERIC_NAME
 infragenericname	INFRAGENERICNAME
 infragenerictaxon	INFRAGENERICTAXON
-infragenus	INFRAGENERICNAME
-infrakingdom	SUBKINGDOM
-infraregnum	SUBKINGDOM
+infragenus	INFRAGENUS
+infrakingdom	INFRAKINGDOM
+infraregnum	INFRAKINGDOM
 infraorder	INFRAORDER
 infraordo	INFRAORDER
 infraorder	INFRAORDER
-infraphylum	SUBPHYLUM
-infrasp	INFRASPECIFICNAME
-infrasp.unranked	INFRASPECIFICNAME
-infraspecies	INFRASPECIFICNAME
-infraspecific	INFRASPECIFICNAME
+infraphylum	INFRAPHYLUM
+infrasp	INFRASPECIFIC_NAME
+infrasp.unranked	INFRASPECIFIC_NAME
+infraspecies	INFRASPECIFIC_NAME
+infraspecific	INFRASPECIFIC_NAME
 infraspecific_name	INFRASPECIFIC_NAME
-infraspecificname	INFRASPECIFICNAME
-infraspecifictaxon	INFRASPECIFICTAXON
-infrasubspecific name	INFRASUBSPECIFICNAME
+infraspecificname	INFRASPECIFIC_NAME
+infraspecifictaxon	INFRASPECIFIC_NAME
+infrasubspecific name	INFRASUBSPECIFIC_NAME
 infrasubspecific_name	INFRASUBSPECIFIC_NAME
-infrasubspecificname	INFRASUBSPECIFICNAME
+infrasubspecificname	INFRASUBSPECIFIC_NAME
 intergen hybrid	UNRANKED
 k	KINGDOM
 kd	KINGDOM
@@ -146,12 +142,11 @@ klasse	CLASS
 legio	SUPRAGENERICNAME
 lysotype	PHAGOVAR
 microgen	INFRAGENERICNAME
-modif	MODIF
 monstr	MONSTR
 morphotype	MORPHOVAR
-nat	INFORMAL
-natio	INFORMAL
-nm	NM
+nat	NATIO
+natio	NATIO
+nm	
 no rank	UNRANKED
 norank	UNRANKED
 node	UNRANKED
@@ -160,10 +155,10 @@ nothof	FORM
 nothoform	FORM
 nothogenus	GENUS
 nothosect	SECTION
-nothoser	SUPRAGENERICNAME
+nothoser	SERIES
 nothospecies	SPECIES
 nothosubgen	SUBGENUS
-nothosubsect	SUPRAGENERICNAME
+nothosubsect	SUBSECTION
 nothosubsp	SUBSPECIES
 nothosubspecies	SUBSPECIES
 nothosubtrib	SUBTRIBE
@@ -179,8 +174,8 @@ orden	ORDER
 ordo	ORDER
 orderclade	ORDER
 p	PHYLUM
-pars	PARS
-parvorder	SUPRAGENERICNAME
+pars	
+parvorder	INFRAORDER
 pathotype	PATHOVAR
 ph	PHYLUM
 phagotype	PHAGOVAR
@@ -189,17 +184,17 @@ phylum	PHYLUM
 phylumclade	PHYLUM
 phylumdivision	PHYLUM
 physiological type	BIOVAR
-prol	INFRASPECIFICNAME
-prolata	INFRASPECIFICNAME
-proles	INFRASPECIFICNAME
-pseudovar	PSEUDOVAR
-race	INFRASUBSPECIFICNAME
+prol	PROLES
+prolata	PROLES
+proles	PROLES
+pseudovar	
+race	RACE
 reg	KINGDOM
 regn	KINGDOM
 regnum	KINGDOM
 reich	KINGDOM
 ribe	TRIBE
-root	SUPRAGENERICNAME
+root	UNRANKED
 s	SPECIES
 sec	SECTION
 sec ion	SECTION
@@ -217,14 +212,14 @@ sous-classe	SUBCLASS
 sp	SPECIES
 spe	SPECIES
 spec	SPECIES
-special form	FORM
+special form	FORMA_SPECIALIS
 special form	FORMA_SPECIALIS
 species	SPECIES
 species	SPECIES
-species group	INFRAGENERICNAME
-speciesgroup	INFRAGENERICNAME
-species subgroup	INFRAGENERICNAME
-speciesaggregate	INFRAGENERICNAME
+species group	SPECIES_AGGREGATE
+speciesgroup	SPECIES_AGGREGATE
+species subgroup	SPECIES_AGGREGATE
+speciesaggregate	SPECIES_AGGREGATE
 ss	SUBSPECIES
 ssp	SUBSPECIES
 sses	SUBSPECIES
@@ -258,10 +253,10 @@ subg	SUBGENUS
 subgen	SUBGENUS
 subgenus	SUBGENUS
 subgenus	SUBGENUS
-subhybr	INFRASUBSPECIFICNAME
+subhybr	INFRASUBSPECIFIC_NAME
 subkingdom	SUBKINGDOM
 subkingdom	SUBKINGDOM
-sublus	INFRASUBSPECIFICNAME
+sublus	INFRASUBSPECIFIC_NAME
 subord	SUBORDER
 suborder	SUBORDER
 suborder	SUBORDER
@@ -283,9 +278,9 @@ subsp	SUBSPECIES
 subspec	SUBSPECIES
 subspecies	SUBSPECIES
 subspecies	SUBSPECIES
-subspeciesaggregate	INFRASPECIFICNAME
-subsubf	INFRASUBSPECIFICNAME
-subsubvar	INFRASUBSPECIFICNAME
+subspeciesaggregate	INFRASPECIFIC_NAME
+subsubf	INFRASUBSPECIFIC_NAME
+subsubvar	INFRASUBSPECIFIC_NAME
 subtrib	SUBTRIBE
 subtribe	SUBTRIBE
 subtribe	SUBTRIBE
@@ -296,18 +291,18 @@ subvariety	SUBVARIETY
 subvariety	SUBVARIETY
 superclass	SUPERCLASS
 superclass	SUPERCLASS
-superclassis	SUPRAGENERICNAME
-superdivision	SUPRAGENERICNAME
+superclassis	SUPERCLASS
+superdivision	SUPERPHYLUM
 superfamily	SUPERFAMILY
 superfamily	SUPERFAMILY
 superkingdom	DOMAIN
 superorder	SUPERORDER
 superorder	SUPERORDER
 superordo	SUPERORDER
-superphyl	SUPRAGENERICNAME
+superphyl	SUPERPHYLUM
 superphylum	SUPERPHYLUM
 superphylum	SUPERPHYLUM
-superphylum	SUPRAGENERICNAME
+superphylum	SUPERPHYLUM
 superregnum	DOMAIN
 supersect	SUPRAGENERICNAME
 superser	SUPRAGENERICNAME
@@ -320,7 +315,7 @@ suprageneric_name	SUPRAGENERIC_NAME
 supragenericname	SUPRAGENERICNAME
 suprasect	SUPRAGENERICNAME
 t infgen	INFRAGENERICNAME
-t infr	INFRASPECIFICNAME
+t infr	INFRASPECIFIC_NAME
 tax infragen	INFRAGENERICNAME
 tax vag	UNRANKED
 trib	TRIBE

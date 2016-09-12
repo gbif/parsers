@@ -145,26 +145,28 @@ public final class ClassificationUtils {
 
   /**
    * Parses a scientific name without knowing its Rank.
+   * @deprecated unsufficiently documented; should be in NameParser project if it is needed at all
    */
+  @Deprecated
   public static String parseName(String scientificName) {
     return parseName(scientificName, null);
   }
 
   /**
    * Parses a scientific name of a specific rank.
+   * @deprecated unsufficiently documented; should be in NameParser project if it is needed at all
    */
+  @Deprecated
   public static String parseName(String scientificName, Rank rank) {
 
     try {
       ParsedName pn = PARSER.parse(scientificName, rank);
       // Handle Aus sp. and Aus bus spp.
-      if (pn.getRankMarker() != null && pn.getSpecificEpithet() == null && pn.getInfraSpecificEpithet() == null) {
-        pn.setRankMarker(null);
-      } else if (pn.getRankMarker() != null && pn.getSpecificEpithet() != null && pn.getInfraSpecificEpithet() == null) {
-        pn.setRankMarker(null);
+      if (pn.isIndetermined()) {
+          pn.setRank(null);
       }
-
       return pn.fullName();
+
     } catch (UnparsableException e) {
       // TODO: logging
     }
