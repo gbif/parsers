@@ -12,18 +12,16 @@ import org.threeten.bp.temporal.ChronoField;
 public class DateParsers {
 
   /**
-   * Do not use for now, see  DateParsersTest
-   * Different with DateTimeFormatter.ISO_LOCAL_DATE is that DAY and MONTH are optionals
+   * {@link DateTimeFormatter} for ISO Year-MonthOfYear-DayOfMonth (4 digits year)
+   * This formatter does NOT handle time and timezone.
    */
-  public static final DateTimeFormatter ISO_LOCAL_PARTIAL_DATE =
+  public static final DateTimeFormatter ISO_LOCAL_DATE =
           new DateTimeFormatterBuilder()
                   .appendValue(ChronoField.YEAR, 4, 4, SignStyle.NEVER)
-                  .optionalStart().appendLiteral('-')
+                  .appendLiteral('-')
                   .appendValue(ChronoField.MONTH_OF_YEAR, 1, 2, SignStyle.NEVER)
-                  .optionalStart().appendLiteral('-')
+                  .appendLiteral('-')
                   .appendValue(ChronoField.DAY_OF_MONTH, 1, 2, SignStyle.NEVER)
-                  .optionalEnd()
-                  .optionalEnd()
                   .toFormatter().withResolverStyle(ResolverStyle.STRICT);
 
   /**
@@ -44,6 +42,13 @@ public class DateParsers {
                   .appendValue(ChronoField.MONTH_OF_YEAR, 1, 2, SignStyle.NEVER)
                   .toFormatter().withResolverStyle(ResolverStyle.STRICT);
 
+
+//  public static final DateTimeMultiParser ISO_PARSER = DateTimeParserBuilder.newMultiParserListBuilder()
+//          .appendDateTimeFormatter(ISO_LOCAL_DATE, DateFormatHint.YMD, 8)
+//          .appendDateTimeFormatter(ISO_YEAR_MONTH, DateFormatHint.YM, 6)
+//          .appendDateTimeFormatter(ISO_YEAR, DateFormatHint.Y, 4)
+//          .build();
+
   /**
    * Return a pre-configured {@link TemporalParser} instance.
    */
@@ -57,15 +62,6 @@ public class DateParsers {
    */
   public static TemporalParser defaultNumericalDateParser() {
     return ThreeTenNumericalDateParser.newInstance();
-  }
-
-  /**
-   * Do not use for now, see  DateParsersTest
-   * Returns a new instance of DateTimeParser with support for partial local dates LocalDate, YearMonth and Year
-   * @return DateTimeParser
-   */
-  public static DateTimeParser isoLocalPartialDateParser(){
-    return new DateTimeParser(ISO_LOCAL_PARTIAL_DATE, null, DateFormatHint.YMD, 4);
   }
 
 }
