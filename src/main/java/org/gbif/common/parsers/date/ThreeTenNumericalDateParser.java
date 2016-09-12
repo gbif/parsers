@@ -22,6 +22,7 @@ import org.threeten.bp.LocalDate;
 import org.threeten.bp.LocalDateTime;
 import org.threeten.bp.Year;
 import org.threeten.bp.YearMonth;
+import org.threeten.bp.ZoneOffset;
 import org.threeten.bp.ZonedDateTime;
 import org.threeten.bp.format.DateTimeFormatter;
 import org.threeten.bp.format.DateTimeFormatterBuilder;
@@ -30,6 +31,7 @@ import org.threeten.bp.format.ResolverStyle;
 import org.threeten.bp.format.SignStyle;
 import org.threeten.bp.temporal.ChronoField;
 import org.threeten.bp.temporal.TemporalAccessor;
+import org.threeten.bp.temporal.TemporalQuery;
 
 /**
  * Numerical DateParser based on threetenbp (JSR310 backport) library which also means it is almost ready for Java 8.
@@ -72,41 +74,41 @@ class ThreeTenNumericalDateParser implements TemporalParser {
   //separator is a CHAR_HYPHEN
   private static final List<DateTimeParser> BASE_PARSER_LIST = ImmutableList.copyOf(
           DateTimeParserBuilder.newParserListBuilder()
-                  .appendDateTimeParser("uuuuMMdd", DateFormatHint.YMD)
-                  .appendDateTimeParser("uuuu-M-d[ HH:mm:ss]", DateFormatHint.YMDT, String.valueOf(CHAR_HYPHEN),
-                          String.valueOf(CHAR_MINUS) + ".")
-                  .appendDateTimeParser("uuuu-M-d'T'HH[:mm[:ss]]", DateFormatHint.YMDT)
-                  .appendDateTimeParser("uuuu-M-d'T'HHmm[ss]", DateFormatHint.YMDT)
-                  .appendDateTimeParser("uuuu-M-d'T'HH:mm:ssZ", DateFormatHint.YMDT)
-                  .appendDateTimeParser("uuuu-M-d'T'HH:mm:ssxxx", DateFormatHint.YMDT) //covers 1978-12-21T02:12:43+01:00
-                  .appendDateTimeParser("uuuu-M-d'T'HH:mm:ss'Z'", DateFormatHint.YMDT)
-                  .appendDateTimeParser("uuuu-M", DateFormatHint.YM)
-                  .appendDateTimeParser("uuuu", DateFormatHint.Y)
-                  .appendDateTimeParser("uuuu年MM月dd日", DateFormatHint.HAN)
-                  .appendDateTimeParser("uuuu年M月d日", DateFormatHint.HAN)
-                  .appendDateTimeParser("uu年M月d日", DateFormatHint.HAN)
+                  .appendDateTimeParser("uuuuMMdd", DateFormatHint.YMD, LocalDate.FROM)
+                  .appendDateTimeParser("uuuu-M-d[ HH:mm:ss]", DateFormatHint.YMDT,
+                          new TemporalQuery<?>[]{LocalDateTime.FROM, LocalDate.FROM},
+                          String.valueOf(CHAR_HYPHEN), String.valueOf(CHAR_MINUS) + ".")
+                  .appendDateTimeParser("uuuu-M-d'T'HH[:mm[:ss]]", DateFormatHint.YMDT, LocalDateTime.FROM)
+                  .appendDateTimeParser("uuuu-M-d'T'HHmm[ss]", DateFormatHint.YMDT, LocalDateTime.FROM)
+                  .appendDateTimeParser("uuuu-M-d'T'HH:mm:ssZ", DateFormatHint.YMDT, ZonedDateTime.FROM)
+                  .appendDateTimeParser("uuuu-M-d'T'HH:mm:ssxxx", DateFormatHint.YMDT, ZonedDateTime.FROM) //covers 1978-12-21T02:12:43+01:00
+                  .appendDateTimeParser("uuuu-M-d'T'HH:mm:ss'Z'", DateFormatHint.YMDT, ZonedDateTime.FROM, ZoneOffset.UTC)
+                  .appendDateTimeParser("uuuu-M", DateFormatHint.YM, YearMonth.FROM)
+                  .appendDateTimeParser("uuuu", DateFormatHint.Y, Year.FROM)
+                  .appendDateTimeParser("uuuu年MM月dd日", DateFormatHint.HAN, LocalDate.FROM)
+                  .appendDateTimeParser("uuuu年M月d日", DateFormatHint.HAN, LocalDate.FROM)
                   .build()
   );
 
   // Possibly ambiguous dates will record an error in case more than one pattern can be applied
   private static final List<DateTimeMultiParser> MULTIPARSER_PARSER_LIST = ImmutableList.of(
           DateTimeParserBuilder.newMultiParserListBuilder()
-                  .preferredDateTimeParser("d.M.uuuu", DateFormatHint.DMY) //DE, DK, NO
-                  .appendDateTimeParser("M.d.uuuu", DateFormatHint.MDY)
+                  .preferredDateTimeParser("d.M.uuuu", DateFormatHint.DMY, LocalDate.FROM) //DE, DK, NO
+                  .appendDateTimeParser("M.d.uuuu", DateFormatHint.MDY, LocalDate.FROM)
                   .build(),
           // the followings are mostly derived of the difference between FR,GB,ES (DMY) format and US format (MDY)
           DateTimeParserBuilder.newMultiParserListBuilder()
-                  .appendDateTimeParser("d/M/uuuu", DateFormatHint.DMY, "/", String.valueOf(CHAR_HYPHEN) + String.valueOf(CHAR_MINUS))
-                  .appendDateTimeParser("M/d/uuuu", DateFormatHint.MDY, "/", String.valueOf(CHAR_HYPHEN) + String.valueOf(CHAR_MINUS))
+                  .appendDateTimeParser("d/M/uuuu", DateFormatHint.DMY, LocalDate.FROM, "/", String.valueOf(CHAR_HYPHEN) + String.valueOf(CHAR_MINUS))
+                  .appendDateTimeParser("M/d/uuuu", DateFormatHint.MDY, LocalDate.FROM, "/", String.valueOf(CHAR_HYPHEN) + String.valueOf(CHAR_MINUS))
                   .build(),
           DateTimeParserBuilder.newMultiParserListBuilder()
-                  .appendDateTimeParser("ddMMuuuu", DateFormatHint.DMY)
-                  .appendDateTimeParser("MMdduuuu", DateFormatHint.MDY)
+                  .appendDateTimeParser("ddMMuuuu", DateFormatHint.DMY, LocalDate.FROM)
+                  .appendDateTimeParser("MMdduuuu", DateFormatHint.MDY, LocalDate.FROM)
                   .build(),
           // the followings are not officially supported by any countries but are sometimes used
           DateTimeParserBuilder.newMultiParserListBuilder()
-                  .appendDateTimeParser("d\\M\\uuuu", DateFormatHint.DMY, "\\", "_")
-                  .appendDateTimeParser("M\\d\\uuuu", DateFormatHint.MDY, "\\", "_")
+                  .appendDateTimeParser("d\\M\\uuuu", DateFormatHint.DMY, LocalDate.FROM, "\\", "_")
+                  .appendDateTimeParser("M\\d\\uuuu", DateFormatHint.MDY, LocalDate.FROM, "\\", "_")
                   .build()
   );
 
@@ -173,22 +175,22 @@ class ThreeTenNumericalDateParser implements TemporalParser {
     List<DateTimeMultiParser> multiParserList = Lists.newArrayList(MULTIPARSER_PARSER_LIST);
     multiParserList.addAll(Lists.newArrayList(
             DateTimeParserBuilder.newMultiParserListBuilder()
-                    .preferredDateTimeParser("d.M.uu", DateFormatHint.DMY, baseYear) //DE, DK, NO
-                    .appendDateTimeParser("M.d.uu", DateFormatHint.MDY, baseYear)
+                    .preferredDateTimeParser("d.M.uu", DateFormatHint.DMY, LocalDate.FROM, baseYear) //DE, DK, NO
+                    .appendDateTimeParser("M.d.uu", DateFormatHint.MDY, LocalDate.FROM, baseYear)
                     .build(),
             DateTimeParserBuilder.newMultiParserListBuilder()
-                    .appendDateTimeParser("d/M/uu", DateFormatHint.DMY, "/",
+                    .appendDateTimeParser("d/M/uu", DateFormatHint.DMY, LocalDate.FROM, "/",
                             String.valueOf(CHAR_HYPHEN) + String.valueOf(CHAR_MINUS), baseYear)
-                    .appendDateTimeParser("M/d/uu", DateFormatHint.MDY, "/",
+                    .appendDateTimeParser("M/d/uu", DateFormatHint.MDY, LocalDate.FROM, "/",
                             String.valueOf(CHAR_HYPHEN) + String.valueOf(CHAR_MINUS), baseYear)
                     .build(),
             DateTimeParserBuilder.newMultiParserListBuilder()
-                    .appendDateTimeParser("ddMMuu", DateFormatHint.DMY, baseYear)
-                    .appendDateTimeParser("MMdduu", DateFormatHint.MDY, baseYear)
+                    .appendDateTimeParser("ddMMuu", DateFormatHint.DMY, LocalDate.FROM, baseYear)
+                    .appendDateTimeParser("MMdduu", DateFormatHint.MDY, LocalDate.FROM, baseYear)
                     .build(),
             DateTimeParserBuilder.newMultiParserListBuilder()
-                    .appendDateTimeParser("d\\M\\uu", DateFormatHint.DMY, "\\", "_", baseYear)
-                    .appendDateTimeParser("M\\d\\uu", DateFormatHint.MDY, "\\", "_", baseYear)
+                    .appendDateTimeParser("d\\M\\uu", DateFormatHint.DMY, LocalDate.FROM, "\\", "_", baseYear)
+                    .appendDateTimeParser("M\\d\\uu", DateFormatHint.MDY, LocalDate.FROM, "\\", "_", baseYear)
                     .build()
     ));
 

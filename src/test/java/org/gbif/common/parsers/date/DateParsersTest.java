@@ -9,7 +9,8 @@ import org.threeten.bp.temporal.TemporalAccessor;
 import static org.junit.Assert.assertNotNull;
 
 /**
- * Validate predefined parsers from {@link DateParsers}
+ * Validate predefined parsers from {@link DateParsers}.
+ *
  */
 public class DateParsersTest {
 

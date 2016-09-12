@@ -5,11 +5,6 @@ import javax.annotation.Nullable;
 import javax.validation.constraints.NotNull;
 
 import com.google.common.base.Preconditions;
-import org.threeten.bp.LocalDate;
-import org.threeten.bp.LocalDateTime;
-import org.threeten.bp.Year;
-import org.threeten.bp.YearMonth;
-import org.threeten.bp.ZonedDateTime;
 import org.threeten.bp.format.DateTimeFormatter;
 import org.threeten.bp.format.DateTimeParseException;
 import org.threeten.bp.temporal.TemporalAccessor;
@@ -39,40 +34,22 @@ public class DateTimeParser {
    * @param formatter
    * @param normalizer optional, can be null
    * @param hint
+   * @param type
    * @param minLength
    */
   DateTimeParser(@NotNull DateTimeFormatter formatter, @Nullable DateTimeSeparatorNormalizer normalizer,
-                 @NotNull DateFormatHint hint, int minLength){
+                 @NotNull DateFormatHint hint, TemporalQuery<?>[] type, int minLength){
 
     Preconditions.checkNotNull(formatter, "DateTimeFormatter can not be null");
     Preconditions.checkNotNull(hint, "DateFormatHint can not be null");
+    Preconditions.checkNotNull(type, "TemporalQuery can not be null");
     Preconditions.checkArgument(minLength > 0, "minLength must be greater than 0");
 
     this.formatter = formatter;
     this.hint = hint;
     this.normalizer = normalizer;
     this.minLength = minLength;
-    this.types = getTypesFromHint(hint);
-  }
-
-  /**
-   * The idea is to only use the types that are possible with DateTimeFormatter.parseBest method.
-   *
-   * @param hint
-   * @return
-   */
-  private TemporalQuery<?>[] getTypesFromHint(DateFormatHint hint){
-    switch(hint){
-      case YMDT: return new TemporalQuery<?>[]{ZonedDateTime.FROM, LocalDateTime.FROM, LocalDate.FROM, YearMonth.FROM, Year.FROM};
-      case YMD: return new TemporalQuery<?>[]{LocalDate.FROM, YearMonth.FROM, Year.FROM};
-      case YM: return new TemporalQuery<?>[]{YearMonth.FROM, Year.FROM};
-      case Y: return new TemporalQuery<?>[]{Year.FROM};
-      case DMY:
-      case MDY:
-      case HAN:  return new TemporalQuery<?>[]{LocalDate.FROM, YearMonth.FROM, Year.FROM};
-      case NONE:
-      default: return new TemporalQuery<?>[]{LocalDateTime.FROM, LocalDate.FROM, YearMonth.FROM, Year.FROM};
-    }
+    this.types = type;
   }
 
   public DateFormatHint getHint() {
