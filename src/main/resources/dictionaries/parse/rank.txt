@@ -17,7 +17,6 @@
 [infragen]	INFRAGENUS
 [infrasp unranked]	INFRASPECIFIC_NAME
 [unranked]	UNRANKED
-\n	UNRANKED
 a	UNRANKED
 abber	ABERRATION
 abberation	ABERRATION
@@ -40,6 +39,7 @@ biotype	BIOVAR
 branch	UNRANKED
 bv	BIOVAR
 c	CLASS
+capaxorder	GRANDORDER
 chemotype	CHEMOFORM
 cl	CLASS
 clade	UNRANKED
@@ -49,8 +49,8 @@ class	CLASS
 classclade	CLASS
 classe	CLASS
 classis	CLASS
-cohors	SUPRAGENERICNAME
-cohort	SUPRAGENERICNAME
+cohors	COHORT
+cohort	COHORT
 coll sp	INFRASPECIFIC_NAME
 coll species	INFRASPECIFIC_NAME
 complex	SPECIES_AGGREGATE
@@ -93,18 +93,17 @@ genero	GENUS
 gennus	GENUS
 genus	GENUS
 genus	GENUS
-gn	GENUS
 genusclade	GENUS
+gn	GENUS
 gnero	GENUS
-groupgenus	GENUS
-groupspecies	SPECIES
-imperium	KINGDOM
-kingdomclade	KINGDOM
 grex	GREX
 grex sect	GREX
 group	CULTIVAR_GROUP
+groupgenus	GENUS
+groupspecies	SPECIES
 higher taxon	SUPRAGENERICNAME
 hybrid formula	HYBRID FORMULA
+imperium	KINGDOM
 infraclass	INFRACLASS
 infraclassis	INFRACLASS
 infragen	INFRAGENUS
@@ -115,11 +114,11 @@ infragenericname	INFRAGENERICNAME
 infragenerictaxon	INFRAGENERICTAXON
 infragenus	INFRAGENUS
 infrakingdom	INFRAKINGDOM
-infraregnum	INFRAKINGDOM
+infraorder	INFRAORDER
 infraorder	INFRAORDER
 infraordo	INFRAORDER
-infraorder	INFRAORDER
 infraphylum	INFRAPHYLUM
+infraregnum	INFRAKINGDOM
 infrasp	INFRASPECIFIC_NAME
 infrasp.unranked	INFRASPECIFIC_NAME
 infraspecies	INFRASPECIFIC_NAME
@@ -136,21 +135,23 @@ kd	KINGDOM
 king	KINGDOM
 kingdom	KINGDOM
 kingdom	KINGDOM
+kingdomclade	KINGDOM
 kl	CLASS
 kla	CLASS
 klasse	CLASS
-legio	SUPRAGENERICNAME
+legio	LEGION
 lysotype	PHAGOVAR
+megaorder	MAGNORDER
 microgen	INFRAGENERICNAME
-monstr	MONSTR
+monstr	
 morphotype	MORPHOVAR
 nat	NATIO
 natio	NATIO
 nm	
 no rank	UNRANKED
-norank	UNRANKED
 node	UNRANKED
 none	UNRANKED
+norank	UNRANKED
 nothof	FORM
 nothoform	FORM
 nothogenus	GENUS
@@ -169,13 +170,12 @@ o	ORDER
 or	ORDER
 ord	ORDER
 ordem	ORDER
-order	ORDER
 orden	ORDER
-ordo	ORDER
+order	ORDER
 orderclade	ORDER
+ordo	ORDER
 p	PHYLUM
 pars	
-parvorder	INFRAORDER
 pathotype	PATHOVAR
 ph	PHYLUM
 phagotype	PHAGOVAR
@@ -217,12 +217,12 @@ special form	FORMA_SPECIALIS
 species	SPECIES
 species	SPECIES
 species group	SPECIES_AGGREGATE
-speciesgroup	SPECIES_AGGREGATE
 species subgroup	SPECIES_AGGREGATE
 speciesaggregate	SPECIES_AGGREGATE
+speciesgroup	SPECIES_AGGREGATE
 ss	SUBSPECIES
-ssp	SUBSPECIES
 sses	SUBSPECIES
+ssp	SUBSPECIES
 stamm	PHYLUM
 stirps	UNRANKED
 strain	STRAIN
@@ -230,17 +230,16 @@ strain	STRAIN
 sub ribe	SUBTRIBE
 sub variety	SUBVARIETY
 sub_especie	SUBSPECIES
-subespecie	SUBSPECIES
-subgenero	SUBGENUS
 subbranch	UNRANKED
 subcl	SUBCLASS
+subclase	SUBCLASS
 subclass	SUBCLASS
 subclass	SUBCLASS
 subclassis	SUBCLASS
-subclase	SUBCLASS
 subdiv	SUBPHYLUM
 subdivisio	SUBPHYLUM
 subdivision	SUBPHYLUM
+subespecie	SUBSPECIES
 subf	SUBFAMILY
 subfam	SUBFAMILY
 subfamilia	SUBFAMILY
@@ -251,6 +250,7 @@ subform	SUBFORM
 subforma	SUBFORM
 subg	SUBGENUS
 subgen	SUBGENUS
+subgenero	SUBGENUS
 subgenus	SUBGENUS
 subgenus	SUBGENUS
 subhybr	INFRASUBSPECIFIC_NAME
@@ -303,14 +303,14 @@ superphyl	SUPERPHYLUM
 superphylum	SUPERPHYLUM
 superphylum	SUPERPHYLUM
 superphylum	SUPERPHYLUM
-superregnum	DOMAIN
-supersect	SUPRAGENERICNAME
-superser	SUPRAGENERICNAME
+superregnum	SUPERKINGDOM
+supersect	
+superser	SUPERSERIES
 superseries	SUPERSERIES
-supersubtrib	SUPRAGENERICNAME
-supersubtribe	SUPERSUBTRIBE
-supertrib	SUPRAGENERICNAME
-supertribe	SUPRAGENERICNAME
+supersubtrib	
+supersubtribe	
+supertrib	SUPERTRIBE
+supertribe	SUPERTRIBE
 suprageneric_name	SUPRAGENERIC_NAME
 supragenericname	SUPRAGENERICNAME
 suprasect	SUPRAGENERICNAME
@@ -337,8 +337,8 @@ varie y	VARIETY
 variedad	VARIETY
 variedade	VARIETY
 varietas	VARIETY
-variety	VARIETY
 variete	VARIETY
+variety	VARIETY
 zoodivisio	SUBCLASS
 zoosectio	INFRAORDER
 µ	UNRANKED
