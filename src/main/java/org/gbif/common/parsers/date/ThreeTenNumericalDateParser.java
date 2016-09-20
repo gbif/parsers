@@ -83,7 +83,7 @@ class ThreeTenNumericalDateParser implements TemporalParser {
                   .appendDateTimeParser("uuuu-M-d'T'HHmm[ss]", DateFormatHint.YMDT, LocalDateTime.FROM)
                   .appendDateTimeParser("uuuu-M-d'T'HH:mm:ssZ", DateFormatHint.YMDT, ZonedDateTime.FROM)
                   .appendDateTimeParser("uuuu-M-d'T'HH:mm:ssxxx", DateFormatHint.YMDT, ZonedDateTime.FROM) //covers 1978-12-21T02:12:43+01:00
-                  .appendDateTimeParser("uuuu-M-d'T'HH:mm:ss'Z'", DateFormatHint.YMDT, ZonedDateTime.FROM, ZoneOffset.UTC)
+                  .appendDateTimeParser("uuuu-M-d'T'HH:mm[:ss]'Z'", DateFormatHint.YMDT, ZonedDateTime.FROM, ZoneOffset.UTC)
                   .appendDateTimeParser("uuuu-M", DateFormatHint.YM, YearMonth.FROM)
                   .appendDateTimeParser("uuuu", DateFormatHint.Y, Year.FROM)
                   .appendDateTimeParser("uuuu年MM月dd日", DateFormatHint.HAN, LocalDate.FROM)
