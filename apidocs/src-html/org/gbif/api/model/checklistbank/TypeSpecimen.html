@@ -271,267 +271,271 @@
 <span class="sourceLineNo">263</span>   * @return the source<a name="line.263"></a>
 <span class="sourceLineNo">264</span>   */<a name="line.264"></a>
 <span class="sourceLineNo">265</span>  @Nullable<a name="line.265"></a>
-<span class="sourceLineNo">266</span>  public String getSource() {<a name="line.266"></a>
-<span class="sourceLineNo">267</span>    return source;<a name="line.267"></a>
-<span class="sourceLineNo">268</span>  }<a name="line.268"></a>
-<span class="sourceLineNo">269</span><a name="line.269"></a>
-<span class="sourceLineNo">270</span>  /**<a name="line.270"></a>
-<span class="sourceLineNo">271</span>   * @param source the source to set<a name="line.271"></a>
-<span class="sourceLineNo">272</span>   */<a name="line.272"></a>
-<span class="sourceLineNo">273</span>  public void setSource(String source) {<a name="line.273"></a>
-<span class="sourceLineNo">274</span>    this.source = source;<a name="line.274"></a>
-<span class="sourceLineNo">275</span>  }<a name="line.275"></a>
-<span class="sourceLineNo">276</span><a name="line.276"></a>
-<span class="sourceLineNo">277</span>  @Nullable<a name="line.277"></a>
-<span class="sourceLineNo">278</span>  public Integer getSourceTaxonKey() {<a name="line.278"></a>
-<span class="sourceLineNo">279</span>    return sourceTaxonKey;<a name="line.279"></a>
-<span class="sourceLineNo">280</span>  }<a name="line.280"></a>
-<span class="sourceLineNo">281</span><a name="line.281"></a>
-<span class="sourceLineNo">282</span>  public void setSourceTaxonKey(Integer sourceTaxonKey) {<a name="line.282"></a>
-<span class="sourceLineNo">283</span>    this.sourceTaxonKey = sourceTaxonKey;<a name="line.283"></a>
-<span class="sourceLineNo">284</span>  }<a name="line.284"></a>
-<span class="sourceLineNo">285</span><a name="line.285"></a>
-<span class="sourceLineNo">286</span>  /**<a name="line.286"></a>
-<span class="sourceLineNo">287</span>   * The rank of the taxon bearing the scientific name.<a name="line.287"></a>
-<span class="sourceLineNo">288</span>   *<a name="line.288"></a>
-<span class="sourceLineNo">289</span>   * @return the taxonRank<a name="line.289"></a>
-<span class="sourceLineNo">290</span>   */<a name="line.290"></a>
-<span class="sourceLineNo">291</span>  public Rank getTaxonRank() {<a name="line.291"></a>
-<span class="sourceLineNo">292</span>    return taxonRank;<a name="line.292"></a>
-<span class="sourceLineNo">293</span>  }<a name="line.293"></a>
-<span class="sourceLineNo">294</span><a name="line.294"></a>
-<span class="sourceLineNo">295</span>  /**<a name="line.295"></a>
-<span class="sourceLineNo">296</span>   * @param taxonRank the taxonRank to set<a name="line.296"></a>
-<span class="sourceLineNo">297</span>   */<a name="line.297"></a>
-<span class="sourceLineNo">298</span>  public void setTaxonRank(Rank taxonRank) {<a name="line.298"></a>
-<span class="sourceLineNo">299</span>    this.taxonRank = taxonRank;<a name="line.299"></a>
-<span class="sourceLineNo">300</span>  }<a name="line.300"></a>
-<span class="sourceLineNo">301</span><a name="line.301"></a>
-<span class="sourceLineNo">302</span>  /**<a name="line.302"></a>
-<span class="sourceLineNo">303</span>   * The citation of the publication where the type designation is found.<a name="line.303"></a>
-<span class="sourceLineNo">304</span>   * &lt;blockquote&gt;<a name="line.304"></a>
-<span class="sourceLineNo">305</span>   * &lt;p&gt;<a name="line.305"></a>
-<span class="sourceLineNo">306</span>   * &lt;i&gt;Examples:&lt;/i&gt; Vachal, J. (1897) Éclaircissements sur de genre Scrapter et description d’une espéce nouvelle de<a name="line.306"></a>
-<span class="sourceLineNo">307</span>   * Dufourea. Bulletin de la Société Entomologique de France, 1897, 61–64.<a name="line.307"></a>
-<span class="sourceLineNo">308</span>   * &lt;/p&gt;<a name="line.308"></a>
-<span class="sourceLineNo">309</span>   * &lt;/blockquote&gt;<a name="line.309"></a>
-<span class="sourceLineNo">310</span>   *<a name="line.310"></a>
-<span class="sourceLineNo">311</span>   * @return the typeDesignatedBy<a name="line.311"></a>
-<span class="sourceLineNo">312</span>   */<a name="line.312"></a>
-<span class="sourceLineNo">313</span>  @Nullable<a name="line.313"></a>
-<span class="sourceLineNo">314</span>  public String getTypeDesignatedBy() {<a name="line.314"></a>
-<span class="sourceLineNo">315</span>    return typeDesignatedBy;<a name="line.315"></a>
-<span class="sourceLineNo">316</span>  }<a name="line.316"></a>
-<span class="sourceLineNo">317</span><a name="line.317"></a>
-<span class="sourceLineNo">318</span>  /**<a name="line.318"></a>
-<span class="sourceLineNo">319</span>   * @param typeDesignatedBy the typeDesignatedBy to set<a name="line.319"></a>
-<span class="sourceLineNo">320</span>   */<a name="line.320"></a>
-<span class="sourceLineNo">321</span>  public void setTypeDesignatedBy(String typeDesignatedBy) {<a name="line.321"></a>
-<span class="sourceLineNo">322</span>    this.typeDesignatedBy = typeDesignatedBy;<a name="line.322"></a>
-<span class="sourceLineNo">323</span>  }<a name="line.323"></a>
-<span class="sourceLineNo">324</span><a name="line.324"></a>
-<span class="sourceLineNo">325</span>  /**<a name="line.325"></a>
-<span class="sourceLineNo">326</span>   * The reason why this specimen or name is designated as a type.<a name="line.326"></a>
-<span class="sourceLineNo">327</span>   * &lt;blockquote&gt;<a name="line.327"></a>
-<span class="sourceLineNo">328</span>   * &lt;p&gt;<a name="line.328"></a>
-<span class="sourceLineNo">329</span>   * &lt;i&gt;Examples:&lt;/i&gt; monotypy, original designation, tautonomy.<a name="line.329"></a>
-<span class="sourceLineNo">330</span>   * &lt;/p&gt;<a name="line.330"></a>
-<span class="sourceLineNo">331</span>   * &lt;/blockquote&gt;<a name="line.331"></a>
-<span class="sourceLineNo">332</span>   *<a name="line.332"></a>
-<span class="sourceLineNo">333</span>   * @return the typeDesignationType<a name="line.333"></a>
-<span class="sourceLineNo">334</span>   */<a name="line.334"></a>
-<span class="sourceLineNo">335</span>  @Nullable<a name="line.335"></a>
-<span class="sourceLineNo">336</span>  public TypeDesignationType getTypeDesignationType() {<a name="line.336"></a>
-<span class="sourceLineNo">337</span>    return typeDesignationType;<a name="line.337"></a>
-<span class="sourceLineNo">338</span>  }<a name="line.338"></a>
-<span class="sourceLineNo">339</span><a name="line.339"></a>
-<span class="sourceLineNo">340</span>  /**<a name="line.340"></a>
-<span class="sourceLineNo">341</span>   * @param typeDesignationType the typeDesignationType to set<a name="line.341"></a>
-<span class="sourceLineNo">342</span>   */<a name="line.342"></a>
-<span class="sourceLineNo">343</span>  public void setTypeDesignationType(TypeDesignationType typeDesignationType) {<a name="line.343"></a>
-<span class="sourceLineNo">344</span>    this.typeDesignationType = typeDesignationType;<a name="line.344"></a>
-<span class="sourceLineNo">345</span>  }<a name="line.345"></a>
-<span class="sourceLineNo">346</span><a name="line.346"></a>
-<span class="sourceLineNo">347</span>  /**<a name="line.347"></a>
-<span class="sourceLineNo">348</span>   * The type status of the specimen, not used for type species or type genus.<a name="line.348"></a>
-<span class="sourceLineNo">349</span>   * &lt;blockquote&gt;<a name="line.349"></a>
-<span class="sourceLineNo">350</span>   * &lt;p&gt;<a name="line.350"></a>
-<span class="sourceLineNo">351</span>   * &lt;i&gt;Examples:&lt;/i&gt; holotype, syntype, lectotype, type species.<a name="line.351"></a>
-<span class="sourceLineNo">352</span>   * &lt;/p&gt;<a name="line.352"></a>
-<span class="sourceLineNo">353</span>   * &lt;/blockquote&gt;<a name="line.353"></a>
-<span class="sourceLineNo">354</span>   *<a name="line.354"></a>
-<span class="sourceLineNo">355</span>   * @return the typeStatus<a name="line.355"></a>
-<span class="sourceLineNo">356</span>   */<a name="line.356"></a>
-<span class="sourceLineNo">357</span>  @Nullable<a name="line.357"></a>
-<span class="sourceLineNo">358</span>  @Deprecated<a name="line.358"></a>
-<span class="sourceLineNo">359</span>  public TypeStatus getTypeStatus() {<a name="line.359"></a>
-<span class="sourceLineNo">360</span>    return typeStatus;<a name="line.360"></a>
-<span class="sourceLineNo">361</span>  }<a name="line.361"></a>
-<span class="sourceLineNo">362</span><a name="line.362"></a>
-<span class="sourceLineNo">363</span>  /**<a name="line.363"></a>
-<span class="sourceLineNo">364</span>   * @param typeStatus the typeStatus to set<a name="line.364"></a>
-<span class="sourceLineNo">365</span>   */<a name="line.365"></a>
-<span class="sourceLineNo">366</span>  @Deprecated<a name="line.366"></a>
-<span class="sourceLineNo">367</span>  public void setTypeStatus(TypeStatus typeStatus) {<a name="line.367"></a>
-<span class="sourceLineNo">368</span>    this.typeStatus = typeStatus;<a name="line.368"></a>
-<span class="sourceLineNo">369</span>  }<a name="line.369"></a>
-<span class="sourceLineNo">370</span><a name="line.370"></a>
-<span class="sourceLineNo">371</span>  /**<a name="line.371"></a>
-<span class="sourceLineNo">372</span>   * The date when the specimen was collected.<a name="line.372"></a>
-<span class="sourceLineNo">373</span>   * &lt;blockquote&gt;<a name="line.373"></a>
-<span class="sourceLineNo">374</span>   * &lt;p&gt;<a name="line.374"></a>
-<span class="sourceLineNo">375</span>   * &lt;i&gt;Examples:&lt;/i&gt; "spring 1910", "Marzo 2002", "1999-03-XX", "17IV1934".<a name="line.375"></a>
-<span class="sourceLineNo">376</span>   * &lt;/p&gt;<a name="line.376"></a>
-<span class="sourceLineNo">377</span>   * &lt;/blockquote&gt;<a name="line.377"></a>
-<span class="sourceLineNo">378</span>   *<a name="line.378"></a>
-<span class="sourceLineNo">379</span>   * @return the verbatimEventDate<a name="line.379"></a>
-<span class="sourceLineNo">380</span>   */<a name="line.380"></a>
-<span class="sourceLineNo">381</span>  @Nullable<a name="line.381"></a>
-<span class="sourceLineNo">382</span>  @Deprecated<a name="line.382"></a>
-<span class="sourceLineNo">383</span>  public String getVerbatimEventDate() {<a name="line.383"></a>
-<span class="sourceLineNo">384</span>    return verbatimEventDate;<a name="line.384"></a>
-<span class="sourceLineNo">385</span>  }<a name="line.385"></a>
-<span class="sourceLineNo">386</span><a name="line.386"></a>
-<span class="sourceLineNo">387</span>  /**<a name="line.387"></a>
-<span class="sourceLineNo">388</span>   * @param verbatimEventDate the verbatimEventDate to set<a name="line.388"></a>
-<span class="sourceLineNo">389</span>   */<a name="line.389"></a>
-<span class="sourceLineNo">390</span>  @Deprecated<a name="line.390"></a>
-<span class="sourceLineNo">391</span>  public void setVerbatimEventDate(String verbatimEventDate) {<a name="line.391"></a>
-<span class="sourceLineNo">392</span>    this.verbatimEventDate = verbatimEventDate;<a name="line.392"></a>
-<span class="sourceLineNo">393</span>  }<a name="line.393"></a>
-<span class="sourceLineNo">394</span><a name="line.394"></a>
-<span class="sourceLineNo">395</span>  /**<a name="line.395"></a>
-<span class="sourceLineNo">396</span>   * The full, verbatim text from the specimen label.<a name="line.396"></a>
-<span class="sourceLineNo">397</span>   *<a name="line.397"></a>
-<span class="sourceLineNo">398</span>   * @return the verbatimLabel<a name="line.398"></a>
-<span class="sourceLineNo">399</span>   */<a name="line.399"></a>
-<span class="sourceLineNo">400</span>  @Nullable<a name="line.400"></a>
-<span class="sourceLineNo">401</span>  @Deprecated<a name="line.401"></a>
-<span class="sourceLineNo">402</span>  public String getVerbatimLabel() {<a name="line.402"></a>
-<span class="sourceLineNo">403</span>    return verbatimLabel;<a name="line.403"></a>
-<span class="sourceLineNo">404</span>  }<a name="line.404"></a>
-<span class="sourceLineNo">405</span><a name="line.405"></a>
-<span class="sourceLineNo">406</span>  /**<a name="line.406"></a>
-<span class="sourceLineNo">407</span>   * @param verbatimLabel the verbatimLabel to set<a name="line.407"></a>
-<span class="sourceLineNo">408</span>   */<a name="line.408"></a>
-<span class="sourceLineNo">409</span>  @Deprecated<a name="line.409"></a>
-<span class="sourceLineNo">410</span>  public void setVerbatimLabel(String verbatimLabel) {<a name="line.410"></a>
-<span class="sourceLineNo">411</span>    this.verbatimLabel = verbatimLabel;<a name="line.411"></a>
-<span class="sourceLineNo">412</span>  }<a name="line.412"></a>
-<span class="sourceLineNo">413</span><a name="line.413"></a>
-<span class="sourceLineNo">414</span>  /**<a name="line.414"></a>
-<span class="sourceLineNo">415</span>   * The geographic latitude.<a name="line.415"></a>
-<span class="sourceLineNo">416</span>   * &lt;blockquote&gt;<a name="line.416"></a>
-<span class="sourceLineNo">417</span>   * &lt;p&gt;<a name="line.417"></a>
-<span class="sourceLineNo">418</span>   * &lt;i&gt;Examples:&lt;/i&gt; 41 05 54.03 S.<a name="line.418"></a>
-<span class="sourceLineNo">419</span>   * &lt;/p&gt;<a name="line.419"></a>
-<span class="sourceLineNo">420</span>   * &lt;/blockquote&gt;<a name="line.420"></a>
-<span class="sourceLineNo">421</span>   *<a name="line.421"></a>
-<span class="sourceLineNo">422</span>   * @return the verbatimLatitude<a name="line.422"></a>
-<span class="sourceLineNo">423</span>   */<a name="line.423"></a>
-<span class="sourceLineNo">424</span>  @Nullable<a name="line.424"></a>
-<span class="sourceLineNo">425</span>  @Deprecated<a name="line.425"></a>
-<span class="sourceLineNo">426</span>  public String getVerbatimLatitude() {<a name="line.426"></a>
-<span class="sourceLineNo">427</span>    return verbatimLatitude;<a name="line.427"></a>
-<span class="sourceLineNo">428</span>  }<a name="line.428"></a>
-<span class="sourceLineNo">429</span><a name="line.429"></a>
-<span class="sourceLineNo">430</span>  /**<a name="line.430"></a>
-<span class="sourceLineNo">431</span>   * @param verbatimLatitude the verbatimLatitude to set<a name="line.431"></a>
-<span class="sourceLineNo">432</span>   */<a name="line.432"></a>
-<span class="sourceLineNo">433</span>  @Deprecated<a name="line.433"></a>
-<span class="sourceLineNo">434</span>  public void setVerbatimLatitude(String verbatimLatitude) {<a name="line.434"></a>
-<span class="sourceLineNo">435</span>    this.verbatimLatitude = verbatimLatitude;<a name="line.435"></a>
-<span class="sourceLineNo">436</span>  }<a name="line.436"></a>
-<span class="sourceLineNo">437</span><a name="line.437"></a>
-<span class="sourceLineNo">438</span>  /**<a name="line.438"></a>
-<span class="sourceLineNo">439</span>   * The geographic longitude.<a name="line.439"></a>
-<span class="sourceLineNo">440</span>   * &lt;blockquote&gt;<a name="line.440"></a>
-<span class="sourceLineNo">441</span>   * &lt;p&gt;<a name="line.441"></a>
-<span class="sourceLineNo">442</span>   * &lt;i&gt;Examples:&lt;/i&gt; 121d 10' 34 W.<a name="line.442"></a>
-<span class="sourceLineNo">443</span>   * &lt;/p&gt;<a name="line.443"></a>
-<span class="sourceLineNo">444</span>   * &lt;/blockquote&gt;<a name="line.444"></a>
-<span class="sourceLineNo">445</span>   *<a name="line.445"></a>
-<span class="sourceLineNo">446</span>   * @return the verbatimLongitude<a name="line.446"></a>
-<span class="sourceLineNo">447</span>   */<a name="line.447"></a>
-<span class="sourceLineNo">448</span>  @Nullable<a name="line.448"></a>
-<span class="sourceLineNo">449</span>  @Deprecated<a name="line.449"></a>
-<span class="sourceLineNo">450</span>  public String getVerbatimLongitude() {<a name="line.450"></a>
-<span class="sourceLineNo">451</span>    return verbatimLongitude;<a name="line.451"></a>
-<span class="sourceLineNo">452</span>  }<a name="line.452"></a>
-<span class="sourceLineNo">453</span><a name="line.453"></a>
-<span class="sourceLineNo">454</span>  /**<a name="line.454"></a>
-<span class="sourceLineNo">455</span>   * @param verbatimLongitude the verbatimLongitude to set<a name="line.455"></a>
-<span class="sourceLineNo">456</span>   */<a name="line.456"></a>
-<span class="sourceLineNo">457</span>  @Deprecated<a name="line.457"></a>
-<span class="sourceLineNo">458</span>  public void setVerbatimLongitude(String verbatimLongitude) {<a name="line.458"></a>
-<span class="sourceLineNo">459</span>    this.verbatimLongitude = verbatimLongitude;<a name="line.459"></a>
-<span class="sourceLineNo">460</span>  }<a name="line.460"></a>
-<span class="sourceLineNo">461</span><a name="line.461"></a>
-<span class="sourceLineNo">462</span>  @Override<a name="line.462"></a>
-<span class="sourceLineNo">463</span>  public boolean equals(Object object) {<a name="line.463"></a>
-<span class="sourceLineNo">464</span>    if (this == object) {<a name="line.464"></a>
-<span class="sourceLineNo">465</span>      return true;<a name="line.465"></a>
-<span class="sourceLineNo">466</span>    }<a name="line.466"></a>
-<span class="sourceLineNo">467</span>    if (!(object instanceof TypeSpecimen)) {<a name="line.467"></a>
-<span class="sourceLineNo">468</span>      return false;<a name="line.468"></a>
-<span class="sourceLineNo">469</span>    }<a name="line.469"></a>
-<span class="sourceLineNo">470</span><a name="line.470"></a>
-<span class="sourceLineNo">471</span>    TypeSpecimen that = (TypeSpecimen) object;<a name="line.471"></a>
-<span class="sourceLineNo">472</span>    return Objects.equal(this.source, that.source)<a name="line.472"></a>
-<span class="sourceLineNo">473</span>           &amp;&amp; Objects.equal(this.sourceTaxonKey, that.sourceTaxonKey)<a name="line.473"></a>
-<span class="sourceLineNo">474</span>           &amp;&amp; Objects.equal(this.typeDesignationType, that.typeDesignationType)<a name="line.474"></a>
-<span class="sourceLineNo">475</span>           &amp;&amp; Objects.equal(this.typeDesignatedBy, that.typeDesignatedBy)<a name="line.475"></a>
-<span class="sourceLineNo">476</span>           &amp;&amp; Objects.equal(this.scientificName, that.scientificName)<a name="line.476"></a>
-<span class="sourceLineNo">477</span>           &amp;&amp; Objects.equal(this.taxonRank, that.taxonRank)<a name="line.477"></a>
-<span class="sourceLineNo">478</span>           &amp;&amp; Objects.equal(this.citation, that.citation)<a name="line.478"></a>
-<span class="sourceLineNo">479</span>           &amp;&amp; Objects.equal(this.typeStatus, that.typeStatus)<a name="line.479"></a>
-<span class="sourceLineNo">480</span>           &amp;&amp; Objects.equal(this.verbatimLabel, that.verbatimLabel)<a name="line.480"></a>
-<span class="sourceLineNo">481</span>           &amp;&amp; Objects.equal(this.locality, that.locality)<a name="line.481"></a>
-<span class="sourceLineNo">482</span>           &amp;&amp; Objects.equal(this.recordedBy, that.recordedBy)<a name="line.482"></a>
-<span class="sourceLineNo">483</span>           &amp;&amp; Objects.equal(this.verbatimEventDate, that.verbatimEventDate)<a name="line.483"></a>
-<span class="sourceLineNo">484</span>           &amp;&amp; Objects.equal(this.verbatimLongitude, that.verbatimLongitude)<a name="line.484"></a>
-<span class="sourceLineNo">485</span>           &amp;&amp; Objects.equal(this.verbatimLatitude, that.verbatimLatitude)<a name="line.485"></a>
-<span class="sourceLineNo">486</span>           &amp;&amp; Objects.equal(this.occurrenceId, that.occurrenceId)<a name="line.486"></a>
-<span class="sourceLineNo">487</span>           &amp;&amp; Objects.equal(this.institutionCode, that.institutionCode)<a name="line.487"></a>
-<span class="sourceLineNo">488</span>           &amp;&amp; Objects.equal(this.collectionCode, that.collectionCode)<a name="line.488"></a>
-<span class="sourceLineNo">489</span>           &amp;&amp; Objects.equal(this.catalogNumber, that.catalogNumber);<a name="line.489"></a>
-<span class="sourceLineNo">490</span>  }<a name="line.490"></a>
-<span class="sourceLineNo">491</span><a name="line.491"></a>
-<span class="sourceLineNo">492</span>  @Override<a name="line.492"></a>
-<span class="sourceLineNo">493</span>  public int hashCode() {<a name="line.493"></a>
-<span class="sourceLineNo">494</span>    return Objects.hashCode(source,<a name="line.494"></a>
-<span class="sourceLineNo">495</span>                            sourceTaxonKey,<a name="line.495"></a>
-<span class="sourceLineNo">496</span>                            typeDesignationType,<a name="line.496"></a>
-<span class="sourceLineNo">497</span>                            typeDesignatedBy,<a name="line.497"></a>
-<span class="sourceLineNo">498</span>                            scientificName,<a name="line.498"></a>
-<span class="sourceLineNo">499</span>                            taxonRank,<a name="line.499"></a>
-<span class="sourceLineNo">500</span>                            citation,<a name="line.500"></a>
-<span class="sourceLineNo">501</span>                            typeStatus,<a name="line.501"></a>
-<span class="sourceLineNo">502</span>                            verbatimLabel,<a name="line.502"></a>
-<span class="sourceLineNo">503</span>                            locality,<a name="line.503"></a>
-<span class="sourceLineNo">504</span>                            recordedBy,<a name="line.504"></a>
-<span class="sourceLineNo">505</span>                            verbatimEventDate,<a name="line.505"></a>
-<span class="sourceLineNo">506</span>                            verbatimLongitude,<a name="line.506"></a>
-<span class="sourceLineNo">507</span>                            verbatimLatitude,<a name="line.507"></a>
-<span class="sourceLineNo">508</span>                            occurrenceId,<a name="line.508"></a>
-<span class="sourceLineNo">509</span>                            institutionCode,<a name="line.509"></a>
-<span class="sourceLineNo">510</span>                            collectionCode,<a name="line.510"></a>
-<span class="sourceLineNo">511</span>                            catalogNumber);<a name="line.511"></a>
-<span class="sourceLineNo">512</span>  }<a name="line.512"></a>
-<span class="sourceLineNo">513</span><a name="line.513"></a>
-<span class="sourceLineNo">514</span>  @Override<a name="line.514"></a>
-<span class="sourceLineNo">515</span>  public String toString() {<a name="line.515"></a>
-<span class="sourceLineNo">516</span>    return Objects.toStringHelper(this)<a name="line.516"></a>
-<span class="sourceLineNo">517</span>      .add("source", source)<a name="line.517"></a>
-<span class="sourceLineNo">518</span>      .add("sourceTaxonKey", sourceTaxonKey)<a name="line.518"></a>
-<span class="sourceLineNo">519</span>      .add("typeDesignationType", typeDesignationType)<a name="line.519"></a>
-<span class="sourceLineNo">520</span>      .add("typeDesignatedBy", typeDesignatedBy)<a name="line.520"></a>
-<span class="sourceLineNo">521</span>      .add("scientificName", scientificName)<a name="line.521"></a>
-<span class="sourceLineNo">522</span>      .add("taxonRank", taxonRank)<a name="line.522"></a>
-<span class="sourceLineNo">523</span>      .toString();<a name="line.523"></a>
-<span class="sourceLineNo">524</span>  }<a name="line.524"></a>
-<span class="sourceLineNo">525</span><a name="line.525"></a>
-<span class="sourceLineNo">526</span>}<a name="line.526"></a>
+<span class="sourceLineNo">266</span>  @Override<a name="line.266"></a>
+<span class="sourceLineNo">267</span>  public String getSource() {<a name="line.267"></a>
+<span class="sourceLineNo">268</span>    return source;<a name="line.268"></a>
+<span class="sourceLineNo">269</span>  }<a name="line.269"></a>
+<span class="sourceLineNo">270</span><a name="line.270"></a>
+<span class="sourceLineNo">271</span>  /**<a name="line.271"></a>
+<span class="sourceLineNo">272</span>   * @param source the source to set<a name="line.272"></a>
+<span class="sourceLineNo">273</span>   */<a name="line.273"></a>
+<span class="sourceLineNo">274</span>  @Override<a name="line.274"></a>
+<span class="sourceLineNo">275</span>  public void setSource(String source) {<a name="line.275"></a>
+<span class="sourceLineNo">276</span>    this.source = source;<a name="line.276"></a>
+<span class="sourceLineNo">277</span>  }<a name="line.277"></a>
+<span class="sourceLineNo">278</span><a name="line.278"></a>
+<span class="sourceLineNo">279</span>  @Nullable<a name="line.279"></a>
+<span class="sourceLineNo">280</span>  @Override<a name="line.280"></a>
+<span class="sourceLineNo">281</span>  public Integer getSourceTaxonKey() {<a name="line.281"></a>
+<span class="sourceLineNo">282</span>    return sourceTaxonKey;<a name="line.282"></a>
+<span class="sourceLineNo">283</span>  }<a name="line.283"></a>
+<span class="sourceLineNo">284</span><a name="line.284"></a>
+<span class="sourceLineNo">285</span>  @Override<a name="line.285"></a>
+<span class="sourceLineNo">286</span>  public void setSourceTaxonKey(Integer sourceTaxonKey) {<a name="line.286"></a>
+<span class="sourceLineNo">287</span>    this.sourceTaxonKey = sourceTaxonKey;<a name="line.287"></a>
+<span class="sourceLineNo">288</span>  }<a name="line.288"></a>
+<span class="sourceLineNo">289</span><a name="line.289"></a>
+<span class="sourceLineNo">290</span>  /**<a name="line.290"></a>
+<span class="sourceLineNo">291</span>   * The rank of the taxon bearing the scientific name.<a name="line.291"></a>
+<span class="sourceLineNo">292</span>   *<a name="line.292"></a>
+<span class="sourceLineNo">293</span>   * @return the taxonRank<a name="line.293"></a>
+<span class="sourceLineNo">294</span>   */<a name="line.294"></a>
+<span class="sourceLineNo">295</span>  public Rank getTaxonRank() {<a name="line.295"></a>
+<span class="sourceLineNo">296</span>    return taxonRank;<a name="line.296"></a>
+<span class="sourceLineNo">297</span>  }<a name="line.297"></a>
+<span class="sourceLineNo">298</span><a name="line.298"></a>
+<span class="sourceLineNo">299</span>  /**<a name="line.299"></a>
+<span class="sourceLineNo">300</span>   * @param taxonRank the taxonRank to set<a name="line.300"></a>
+<span class="sourceLineNo">301</span>   */<a name="line.301"></a>
+<span class="sourceLineNo">302</span>  public void setTaxonRank(Rank taxonRank) {<a name="line.302"></a>
+<span class="sourceLineNo">303</span>    this.taxonRank = taxonRank;<a name="line.303"></a>
+<span class="sourceLineNo">304</span>  }<a name="line.304"></a>
+<span class="sourceLineNo">305</span><a name="line.305"></a>
+<span class="sourceLineNo">306</span>  /**<a name="line.306"></a>
+<span class="sourceLineNo">307</span>   * The citation of the publication where the type designation is found.<a name="line.307"></a>
+<span class="sourceLineNo">308</span>   * &lt;blockquote&gt;<a name="line.308"></a>
+<span class="sourceLineNo">309</span>   * &lt;p&gt;<a name="line.309"></a>
+<span class="sourceLineNo">310</span>   * &lt;i&gt;Examples:&lt;/i&gt; Vachal, J. (1897) Éclaircissements sur de genre Scrapter et description d’une espéce nouvelle de<a name="line.310"></a>
+<span class="sourceLineNo">311</span>   * Dufourea. Bulletin de la Société Entomologique de France, 1897, 61–64.<a name="line.311"></a>
+<span class="sourceLineNo">312</span>   * &lt;/p&gt;<a name="line.312"></a>
+<span class="sourceLineNo">313</span>   * &lt;/blockquote&gt;<a name="line.313"></a>
+<span class="sourceLineNo">314</span>   *<a name="line.314"></a>
+<span class="sourceLineNo">315</span>   * @return the typeDesignatedBy<a name="line.315"></a>
+<span class="sourceLineNo">316</span>   */<a name="line.316"></a>
+<span class="sourceLineNo">317</span>  @Nullable<a name="line.317"></a>
+<span class="sourceLineNo">318</span>  public String getTypeDesignatedBy() {<a name="line.318"></a>
+<span class="sourceLineNo">319</span>    return typeDesignatedBy;<a name="line.319"></a>
+<span class="sourceLineNo">320</span>  }<a name="line.320"></a>
+<span class="sourceLineNo">321</span><a name="line.321"></a>
+<span class="sourceLineNo">322</span>  /**<a name="line.322"></a>
+<span class="sourceLineNo">323</span>   * @param typeDesignatedBy the typeDesignatedBy to set<a name="line.323"></a>
+<span class="sourceLineNo">324</span>   */<a name="line.324"></a>
+<span class="sourceLineNo">325</span>  public void setTypeDesignatedBy(String typeDesignatedBy) {<a name="line.325"></a>
+<span class="sourceLineNo">326</span>    this.typeDesignatedBy = typeDesignatedBy;<a name="line.326"></a>
+<span class="sourceLineNo">327</span>  }<a name="line.327"></a>
+<span class="sourceLineNo">328</span><a name="line.328"></a>
+<span class="sourceLineNo">329</span>  /**<a name="line.329"></a>
+<span class="sourceLineNo">330</span>   * The reason why this specimen or name is designated as a type.<a name="line.330"></a>
+<span class="sourceLineNo">331</span>   * &lt;blockquote&gt;<a name="line.331"></a>
+<span class="sourceLineNo">332</span>   * &lt;p&gt;<a name="line.332"></a>
+<span class="sourceLineNo">333</span>   * &lt;i&gt;Examples:&lt;/i&gt; monotypy, original designation, tautonomy.<a name="line.333"></a>
+<span class="sourceLineNo">334</span>   * &lt;/p&gt;<a name="line.334"></a>
+<span class="sourceLineNo">335</span>   * &lt;/blockquote&gt;<a name="line.335"></a>
+<span class="sourceLineNo">336</span>   *<a name="line.336"></a>
+<span class="sourceLineNo">337</span>   * @return the typeDesignationType<a name="line.337"></a>
+<span class="sourceLineNo">338</span>   */<a name="line.338"></a>
+<span class="sourceLineNo">339</span>  @Nullable<a name="line.339"></a>
+<span class="sourceLineNo">340</span>  public TypeDesignationType getTypeDesignationType() {<a name="line.340"></a>
+<span class="sourceLineNo">341</span>    return typeDesignationType;<a name="line.341"></a>
+<span class="sourceLineNo">342</span>  }<a name="line.342"></a>
+<span class="sourceLineNo">343</span><a name="line.343"></a>
+<span class="sourceLineNo">344</span>  /**<a name="line.344"></a>
+<span class="sourceLineNo">345</span>   * @param typeDesignationType the typeDesignationType to set<a name="line.345"></a>
+<span class="sourceLineNo">346</span>   */<a name="line.346"></a>
+<span class="sourceLineNo">347</span>  public void setTypeDesignationType(TypeDesignationType typeDesignationType) {<a name="line.347"></a>
+<span class="sourceLineNo">348</span>    this.typeDesignationType = typeDesignationType;<a name="line.348"></a>
+<span class="sourceLineNo">349</span>  }<a name="line.349"></a>
+<span class="sourceLineNo">350</span><a name="line.350"></a>
+<span class="sourceLineNo">351</span>  /**<a name="line.351"></a>
+<span class="sourceLineNo">352</span>   * The type status of the specimen, not used for type species or type genus.<a name="line.352"></a>
+<span class="sourceLineNo">353</span>   * &lt;blockquote&gt;<a name="line.353"></a>
+<span class="sourceLineNo">354</span>   * &lt;p&gt;<a name="line.354"></a>
+<span class="sourceLineNo">355</span>   * &lt;i&gt;Examples:&lt;/i&gt; holotype, syntype, lectotype, type species.<a name="line.355"></a>
+<span class="sourceLineNo">356</span>   * &lt;/p&gt;<a name="line.356"></a>
+<span class="sourceLineNo">357</span>   * &lt;/blockquote&gt;<a name="line.357"></a>
+<span class="sourceLineNo">358</span>   *<a name="line.358"></a>
+<span class="sourceLineNo">359</span>   * @return the typeStatus<a name="line.359"></a>
+<span class="sourceLineNo">360</span>   */<a name="line.360"></a>
+<span class="sourceLineNo">361</span>  @Nullable<a name="line.361"></a>
+<span class="sourceLineNo">362</span>  @Deprecated<a name="line.362"></a>
+<span class="sourceLineNo">363</span>  public TypeStatus getTypeStatus() {<a name="line.363"></a>
+<span class="sourceLineNo">364</span>    return typeStatus;<a name="line.364"></a>
+<span class="sourceLineNo">365</span>  }<a name="line.365"></a>
+<span class="sourceLineNo">366</span><a name="line.366"></a>
+<span class="sourceLineNo">367</span>  /**<a name="line.367"></a>
+<span class="sourceLineNo">368</span>   * @param typeStatus the typeStatus to set<a name="line.368"></a>
+<span class="sourceLineNo">369</span>   */<a name="line.369"></a>
+<span class="sourceLineNo">370</span>  @Deprecated<a name="line.370"></a>
+<span class="sourceLineNo">371</span>  public void setTypeStatus(TypeStatus typeStatus) {<a name="line.371"></a>
+<span class="sourceLineNo">372</span>    this.typeStatus = typeStatus;<a name="line.372"></a>
+<span class="sourceLineNo">373</span>  }<a name="line.373"></a>
+<span class="sourceLineNo">374</span><a name="line.374"></a>
+<span class="sourceLineNo">375</span>  /**<a name="line.375"></a>
+<span class="sourceLineNo">376</span>   * The date when the specimen was collected.<a name="line.376"></a>
+<span class="sourceLineNo">377</span>   * &lt;blockquote&gt;<a name="line.377"></a>
+<span class="sourceLineNo">378</span>   * &lt;p&gt;<a name="line.378"></a>
+<span class="sourceLineNo">379</span>   * &lt;i&gt;Examples:&lt;/i&gt; "spring 1910", "Marzo 2002", "1999-03-XX", "17IV1934".<a name="line.379"></a>
+<span class="sourceLineNo">380</span>   * &lt;/p&gt;<a name="line.380"></a>
+<span class="sourceLineNo">381</span>   * &lt;/blockquote&gt;<a name="line.381"></a>
+<span class="sourceLineNo">382</span>   *<a name="line.382"></a>
+<span class="sourceLineNo">383</span>   * @return the verbatimEventDate<a name="line.383"></a>
+<span class="sourceLineNo">384</span>   */<a name="line.384"></a>
+<span class="sourceLineNo">385</span>  @Nullable<a name="line.385"></a>
+<span class="sourceLineNo">386</span>  @Deprecated<a name="line.386"></a>
+<span class="sourceLineNo">387</span>  public String getVerbatimEventDate() {<a name="line.387"></a>
+<span class="sourceLineNo">388</span>    return verbatimEventDate;<a name="line.388"></a>
+<span class="sourceLineNo">389</span>  }<a name="line.389"></a>
+<span class="sourceLineNo">390</span><a name="line.390"></a>
+<span class="sourceLineNo">391</span>  /**<a name="line.391"></a>
+<span class="sourceLineNo">392</span>   * @param verbatimEventDate the verbatimEventDate to set<a name="line.392"></a>
+<span class="sourceLineNo">393</span>   */<a name="line.393"></a>
+<span class="sourceLineNo">394</span>  @Deprecated<a name="line.394"></a>
+<span class="sourceLineNo">395</span>  public void setVerbatimEventDate(String verbatimEventDate) {<a name="line.395"></a>
+<span class="sourceLineNo">396</span>    this.verbatimEventDate = verbatimEventDate;<a name="line.396"></a>
+<span class="sourceLineNo">397</span>  }<a name="line.397"></a>
+<span class="sourceLineNo">398</span><a name="line.398"></a>
+<span class="sourceLineNo">399</span>  /**<a name="line.399"></a>
+<span class="sourceLineNo">400</span>   * The full, verbatim text from the specimen label.<a name="line.400"></a>
+<span class="sourceLineNo">401</span>   *<a name="line.401"></a>
+<span class="sourceLineNo">402</span>   * @return the verbatimLabel<a name="line.402"></a>
+<span class="sourceLineNo">403</span>   */<a name="line.403"></a>
+<span class="sourceLineNo">404</span>  @Nullable<a name="line.404"></a>
+<span class="sourceLineNo">405</span>  @Deprecated<a name="line.405"></a>
+<span class="sourceLineNo">406</span>  public String getVerbatimLabel() {<a name="line.406"></a>
+<span class="sourceLineNo">407</span>    return verbatimLabel;<a name="line.407"></a>
+<span class="sourceLineNo">408</span>  }<a name="line.408"></a>
+<span class="sourceLineNo">409</span><a name="line.409"></a>
+<span class="sourceLineNo">410</span>  /**<a name="line.410"></a>
+<span class="sourceLineNo">411</span>   * @param verbatimLabel the verbatimLabel to set<a name="line.411"></a>
+<span class="sourceLineNo">412</span>   */<a name="line.412"></a>
+<span class="sourceLineNo">413</span>  @Deprecated<a name="line.413"></a>
+<span class="sourceLineNo">414</span>  public void setVerbatimLabel(String verbatimLabel) {<a name="line.414"></a>
+<span class="sourceLineNo">415</span>    this.verbatimLabel = verbatimLabel;<a name="line.415"></a>
+<span class="sourceLineNo">416</span>  }<a name="line.416"></a>
+<span class="sourceLineNo">417</span><a name="line.417"></a>
+<span class="sourceLineNo">418</span>  /**<a name="line.418"></a>
+<span class="sourceLineNo">419</span>   * The geographic latitude.<a name="line.419"></a>
+<span class="sourceLineNo">420</span>   * &lt;blockquote&gt;<a name="line.420"></a>
+<span class="sourceLineNo">421</span>   * &lt;p&gt;<a name="line.421"></a>
+<span class="sourceLineNo">422</span>   * &lt;i&gt;Examples:&lt;/i&gt; 41 05 54.03 S.<a name="line.422"></a>
+<span class="sourceLineNo">423</span>   * &lt;/p&gt;<a name="line.423"></a>
+<span class="sourceLineNo">424</span>   * &lt;/blockquote&gt;<a name="line.424"></a>
+<span class="sourceLineNo">425</span>   *<a name="line.425"></a>
+<span class="sourceLineNo">426</span>   * @return the verbatimLatitude<a name="line.426"></a>
+<span class="sourceLineNo">427</span>   */<a name="line.427"></a>
+<span class="sourceLineNo">428</span>  @Nullable<a name="line.428"></a>
+<span class="sourceLineNo">429</span>  @Deprecated<a name="line.429"></a>
+<span class="sourceLineNo">430</span>  public String getVerbatimLatitude() {<a name="line.430"></a>
+<span class="sourceLineNo">431</span>    return verbatimLatitude;<a name="line.431"></a>
+<span class="sourceLineNo">432</span>  }<a name="line.432"></a>
+<span class="sourceLineNo">433</span><a name="line.433"></a>
+<span class="sourceLineNo">434</span>  /**<a name="line.434"></a>
+<span class="sourceLineNo">435</span>   * @param verbatimLatitude the verbatimLatitude to set<a name="line.435"></a>
+<span class="sourceLineNo">436</span>   */<a name="line.436"></a>
+<span class="sourceLineNo">437</span>  @Deprecated<a name="line.437"></a>
+<span class="sourceLineNo">438</span>  public void setVerbatimLatitude(String verbatimLatitude) {<a name="line.438"></a>
+<span class="sourceLineNo">439</span>    this.verbatimLatitude = verbatimLatitude;<a name="line.439"></a>
+<span class="sourceLineNo">440</span>  }<a name="line.440"></a>
+<span class="sourceLineNo">441</span><a name="line.441"></a>
+<span class="sourceLineNo">442</span>  /**<a name="line.442"></a>
+<span class="sourceLineNo">443</span>   * The geographic longitude.<a name="line.443"></a>
+<span class="sourceLineNo">444</span>   * &lt;blockquote&gt;<a name="line.444"></a>
+<span class="sourceLineNo">445</span>   * &lt;p&gt;<a name="line.445"></a>
+<span class="sourceLineNo">446</span>   * &lt;i&gt;Examples:&lt;/i&gt; 121d 10' 34 W.<a name="line.446"></a>
+<span class="sourceLineNo">447</span>   * &lt;/p&gt;<a name="line.447"></a>
+<span class="sourceLineNo">448</span>   * &lt;/blockquote&gt;<a name="line.448"></a>
+<span class="sourceLineNo">449</span>   *<a name="line.449"></a>
+<span class="sourceLineNo">450</span>   * @return the verbatimLongitude<a name="line.450"></a>
+<span class="sourceLineNo">451</span>   */<a name="line.451"></a>
+<span class="sourceLineNo">452</span>  @Nullable<a name="line.452"></a>
+<span class="sourceLineNo">453</span>  @Deprecated<a name="line.453"></a>
+<span class="sourceLineNo">454</span>  public String getVerbatimLongitude() {<a name="line.454"></a>
+<span class="sourceLineNo">455</span>    return verbatimLongitude;<a name="line.455"></a>
+<span class="sourceLineNo">456</span>  }<a name="line.456"></a>
+<span class="sourceLineNo">457</span><a name="line.457"></a>
+<span class="sourceLineNo">458</span>  /**<a name="line.458"></a>
+<span class="sourceLineNo">459</span>   * @param verbatimLongitude the verbatimLongitude to set<a name="line.459"></a>
+<span class="sourceLineNo">460</span>   */<a name="line.460"></a>
+<span class="sourceLineNo">461</span>  @Deprecated<a name="line.461"></a>
+<span class="sourceLineNo">462</span>  public void setVerbatimLongitude(String verbatimLongitude) {<a name="line.462"></a>
+<span class="sourceLineNo">463</span>    this.verbatimLongitude = verbatimLongitude;<a name="line.463"></a>
+<span class="sourceLineNo">464</span>  }<a name="line.464"></a>
+<span class="sourceLineNo">465</span><a name="line.465"></a>
+<span class="sourceLineNo">466</span>  @Override<a name="line.466"></a>
+<span class="sourceLineNo">467</span>  public boolean equals(Object object) {<a name="line.467"></a>
+<span class="sourceLineNo">468</span>    if (this == object) {<a name="line.468"></a>
+<span class="sourceLineNo">469</span>      return true;<a name="line.469"></a>
+<span class="sourceLineNo">470</span>    }<a name="line.470"></a>
+<span class="sourceLineNo">471</span>    if (!(object instanceof TypeSpecimen)) {<a name="line.471"></a>
+<span class="sourceLineNo">472</span>      return false;<a name="line.472"></a>
+<span class="sourceLineNo">473</span>    }<a name="line.473"></a>
+<span class="sourceLineNo">474</span><a name="line.474"></a>
+<span class="sourceLineNo">475</span>    TypeSpecimen that = (TypeSpecimen) object;<a name="line.475"></a>
+<span class="sourceLineNo">476</span>    return Objects.equal(this.source, that.source)<a name="line.476"></a>
+<span class="sourceLineNo">477</span>           &amp;&amp; Objects.equal(this.sourceTaxonKey, that.sourceTaxonKey)<a name="line.477"></a>
+<span class="sourceLineNo">478</span>           &amp;&amp; Objects.equal(this.typeDesignationType, that.typeDesignationType)<a name="line.478"></a>
+<span class="sourceLineNo">479</span>           &amp;&amp; Objects.equal(this.typeDesignatedBy, that.typeDesignatedBy)<a name="line.479"></a>
+<span class="sourceLineNo">480</span>           &amp;&amp; Objects.equal(this.scientificName, that.scientificName)<a name="line.480"></a>
+<span class="sourceLineNo">481</span>           &amp;&amp; Objects.equal(this.taxonRank, that.taxonRank)<a name="line.481"></a>
+<span class="sourceLineNo">482</span>           &amp;&amp; Objects.equal(this.citation, that.citation)<a name="line.482"></a>
+<span class="sourceLineNo">483</span>           &amp;&amp; Objects.equal(this.typeStatus, that.typeStatus)<a name="line.483"></a>
+<span class="sourceLineNo">484</span>           &amp;&amp; Objects.equal(this.verbatimLabel, that.verbatimLabel)<a name="line.484"></a>
+<span class="sourceLineNo">485</span>           &amp;&amp; Objects.equal(this.locality, that.locality)<a name="line.485"></a>
+<span class="sourceLineNo">486</span>           &amp;&amp; Objects.equal(this.recordedBy, that.recordedBy)<a name="line.486"></a>
+<span class="sourceLineNo">487</span>           &amp;&amp; Objects.equal(this.verbatimEventDate, that.verbatimEventDate)<a name="line.487"></a>
+<span class="sourceLineNo">488</span>           &amp;&amp; Objects.equal(this.verbatimLongitude, that.verbatimLongitude)<a name="line.488"></a>
+<span class="sourceLineNo">489</span>           &amp;&amp; Objects.equal(this.verbatimLatitude, that.verbatimLatitude)<a name="line.489"></a>
+<span class="sourceLineNo">490</span>           &amp;&amp; Objects.equal(this.occurrenceId, that.occurrenceId)<a name="line.490"></a>
+<span class="sourceLineNo">491</span>           &amp;&amp; Objects.equal(this.institutionCode, that.institutionCode)<a name="line.491"></a>
+<span class="sourceLineNo">492</span>           &amp;&amp; Objects.equal(this.collectionCode, that.collectionCode)<a name="line.492"></a>
+<span class="sourceLineNo">493</span>           &amp;&amp; Objects.equal(this.catalogNumber, that.catalogNumber);<a name="line.493"></a>
+<span class="sourceLineNo">494</span>  }<a name="line.494"></a>
+<span class="sourceLineNo">495</span><a name="line.495"></a>
+<span class="sourceLineNo">496</span>  @Override<a name="line.496"></a>
+<span class="sourceLineNo">497</span>  public int hashCode() {<a name="line.497"></a>
+<span class="sourceLineNo">498</span>    return Objects.hashCode(source,<a name="line.498"></a>
+<span class="sourceLineNo">499</span>                            sourceTaxonKey,<a name="line.499"></a>
+<span class="sourceLineNo">500</span>                            typeDesignationType,<a name="line.500"></a>
+<span class="sourceLineNo">501</span>                            typeDesignatedBy,<a name="line.501"></a>
+<span class="sourceLineNo">502</span>                            scientificName,<a name="line.502"></a>
+<span class="sourceLineNo">503</span>                            taxonRank,<a name="line.503"></a>
+<span class="sourceLineNo">504</span>                            citation,<a name="line.504"></a>
+<span class="sourceLineNo">505</span>                            typeStatus,<a name="line.505"></a>
+<span class="sourceLineNo">506</span>                            verbatimLabel,<a name="line.506"></a>
+<span class="sourceLineNo">507</span>                            locality,<a name="line.507"></a>
+<span class="sourceLineNo">508</span>                            recordedBy,<a name="line.508"></a>
+<span class="sourceLineNo">509</span>                            verbatimEventDate,<a name="line.509"></a>
+<span class="sourceLineNo">510</span>                            verbatimLongitude,<a name="line.510"></a>
+<span class="sourceLineNo">511</span>                            verbatimLatitude,<a name="line.511"></a>
+<span class="sourceLineNo">512</span>                            occurrenceId,<a name="line.512"></a>
+<span class="sourceLineNo">513</span>                            institutionCode,<a name="line.513"></a>
+<span class="sourceLineNo">514</span>                            collectionCode,<a name="line.514"></a>
+<span class="sourceLineNo">515</span>                            catalogNumber);<a name="line.515"></a>
+<span class="sourceLineNo">516</span>  }<a name="line.516"></a>
+<span class="sourceLineNo">517</span><a name="line.517"></a>
+<span class="sourceLineNo">518</span>  @Override<a name="line.518"></a>
+<span class="sourceLineNo">519</span>  public String toString() {<a name="line.519"></a>
+<span class="sourceLineNo">520</span>    return Objects.toStringHelper(this)<a name="line.520"></a>
+<span class="sourceLineNo">521</span>      .add("source", source)<a name="line.521"></a>
+<span class="sourceLineNo">522</span>      .add("sourceTaxonKey", sourceTaxonKey)<a name="line.522"></a>
+<span class="sourceLineNo">523</span>      .add("typeDesignationType", typeDesignationType)<a name="line.523"></a>
+<span class="sourceLineNo">524</span>      .add("typeDesignatedBy", typeDesignatedBy)<a name="line.524"></a>
+<span class="sourceLineNo">525</span>      .add("scientificName", scientificName)<a name="line.525"></a>
+<span class="sourceLineNo">526</span>      .add("taxonRank", taxonRank)<a name="line.526"></a>
+<span class="sourceLineNo">527</span>      .toString();<a name="line.527"></a>
+<span class="sourceLineNo">528</span>  }<a name="line.528"></a>
+<span class="sourceLineNo">529</span><a name="line.529"></a>
+<span class="sourceLineNo">530</span>}<a name="line.530"></a>
 
 
 
