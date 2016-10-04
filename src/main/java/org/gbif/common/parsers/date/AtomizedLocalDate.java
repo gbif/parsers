@@ -16,6 +16,9 @@ import org.threeten.bp.temporal.TemporalAccessor;
  */
 public class AtomizedLocalDate {
 
+  // Maximum resolution for a complete Local Date
+  public static final int COMPLETE_LOCAL_DATE_RESOLUTION = 3;
+
   private final Integer year;
   private final Integer month;
   private final Integer day;
@@ -80,6 +83,14 @@ public class AtomizedLocalDate {
 
   public int getResolution(){
     return resolution;
+  }
+
+  /**
+   * Is the resolution of this local date matches the maximum.
+   * @return
+   */
+  public boolean isComplete() {
+    return COMPLETE_LOCAL_DATE_RESOLUTION == resolution;
   }
 
   @Override

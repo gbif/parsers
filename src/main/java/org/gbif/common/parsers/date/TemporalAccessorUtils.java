@@ -173,4 +173,32 @@ public class TemporalAccessorUtils {
     return ta2;
   }
 
+  /**
+   * Given two TemporalAccessor with possibly different resolutions, this method checks if they represent the
+   * same YMD.
+   * If a null is provided, false will be returned. If one of the 2 TemporalAccessor provides resolution
+   * less than YMD, false will be returned.
+   *
+   * @param ta1
+   * @param ta2
+   *
+   * @return
+   */
+  public static boolean representsSameYMD(@Nullable TemporalAccessor ta1, @Nullable TemporalAccessor ta2) {
+
+    //handle nulls combinations
+    if (ta1 == null || ta2 == null) {
+      return false;
+    }
+
+    AtomizedLocalDate ymd1 = AtomizedLocalDate.fromTemporalAccessor(ta1);
+    AtomizedLocalDate ymd2 = AtomizedLocalDate.fromTemporalAccessor(ta2);
+
+    // we only deal with complete Local Date
+    if (!ymd1.isComplete() || !ymd2.isComplete()) {
+      return false;
+    }
+    return ymd1.equals(ymd2);
+  }
+
 }

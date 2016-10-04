@@ -13,7 +13,9 @@ import org.threeten.bp.ZonedDateTime;
 import org.threeten.bp.temporal.TemporalAccessor;
 
 import static junit.framework.TestCase.assertEquals;
+import static junit.framework.TestCase.assertFalse;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Unit test for {@link TemporalAccessorUtils}.
@@ -96,6 +98,21 @@ public class TemporalAccessorUtilsTest {
     ta2 = YearMonth.of(2006, 1);
     result = TemporalAccessorUtils.getBestResolutionTemporalAccessor(ta1, ta2);
     assertNull(result);
+  }
+
+  @Test
+  public void testRepresentsSameYMD() {
+    TemporalAccessor ta1 = LocalDate.of(1996, 01, 26);
+
+    // Test nulls and wrong resolutions
+    assertFalse(TemporalAccessorUtils.representsSameYMD(null, null));
+    assertFalse(TemporalAccessorUtils.representsSameYMD(ta1, null));
+    assertFalse(TemporalAccessorUtils.representsSameYMD(null, ta1));
+    assertFalse(TemporalAccessorUtils.representsSameYMD(ta1, Year.of(1996)));
+
+    // Test 2 dates representing the same day in the year, at different resolution
+    TemporalAccessor ta2 = LocalDateTime.of(1996, 01, 26, 1, 2);
+    assertTrue(TemporalAccessorUtils.representsSameYMD(ta1, ta2));
   }
 
 }
