@@ -1,9 +1,10 @@
 package org.gbif.common.parsers.utils;
 
+import org.gbif.api.exception.UnparsableException;
 import org.gbif.api.model.checklistbank.ParsedName;
+import org.gbif.api.service.checklistbank.NameParser;
 import org.gbif.api.vocabulary.Rank;
-import org.gbif.nameparser.NameParser;
-import org.gbif.nameparser.UnparsableException;
+import org.gbif.nameparser.GBIFNameParser;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -25,7 +26,7 @@ public final class ClassificationUtils {
   public static final Set<String> NULL_STRINGS =
     new HashSet<String>(Arrays.asList("/N", "\\", "\\\\", "\\N", "\\\\N", "null", "NULL", "Null"));
 
-  private static final NameParser PARSER = new NameParser();
+  private static final NameParser PARSER = new GBIFNameParser();
 
   private ClassificationUtils() {
     throw new UnsupportedOperationException("Can't initialize class");

@@ -1,10 +1,11 @@
 package org.gbif.common.parsers;
 
+import org.gbif.api.exception.UnparsableException;
 import org.gbif.api.model.checklistbank.ParsedName;
+import org.gbif.api.service.checklistbank.NameParser;
 import org.gbif.common.parsers.core.Parsable;
 import org.gbif.common.parsers.core.ParseResult;
-import org.gbif.nameparser.NameParser;
-import org.gbif.nameparser.UnparsableException;
+import org.gbif.nameparser.GBIFNameParser;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -24,7 +25,7 @@ public class TypifiedNameParser implements Parsable<String> {
   private static TypifiedNameParser singletonObject = null;
 
   private static final Range<Integer> REASONABLE_NAME_SIZE_RANGE = Range.closed(4, 40);
-  private static final NameParser NAME_PARSER = new NameParser();
+  private static final NameParser NAME_PARSER = new GBIFNameParser();
   private static final Pattern NAME_SEPARATOR = Pattern.compile("\\sOF\\W*\\s+\\W*(.+)\\W*\\s*$", Pattern.CASE_INSENSITIVE);
   private static final Pattern CLEAN_WHITESPACE = Pattern.compile("\\s+");
 
