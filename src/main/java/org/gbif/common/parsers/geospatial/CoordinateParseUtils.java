@@ -41,7 +41,7 @@ public class CoordinateParseUtils {
    * When the {@link ParseResult.STATUS} is FAIL the payload will be null and one or more issues should be set
    * in {@link org.gbif.common.parsers.core.OccurrenceParseResult#getIssues()}.
    *
-   * Coordinate precision will be 5 decimals at most, any more precise values will be rounded.
+   * Coordinate precision will be 6 decimals at most, any more precise values will be rounded.
    *
    * Supported standard formats are the following, with dots or optionally a comma as the decimal marker:
    * <ul>
@@ -134,11 +134,11 @@ public class CoordinateParseUtils {
     // collecting issues for result
     Set<OccurrenceIssue> issues = EnumSet.noneOf(OccurrenceIssue.class);
 
-    // round to 5 decimals
+    // round to 6 decimals
     final double latOrig = lat;
     final double lngOrig = lon;
-    lat = roundTo5decimals(lat);
-    lon = roundTo5decimals(lon);
+    lat = roundTo6decimals(lat);
+    lon = roundTo6decimals(lon);
     if (Double.compare(lat, latOrig) != 0 || Double.compare(lon, lngOrig) != 0) {
       issues.add(OccurrenceIssue.COORDINATE_ROUNDED);
     }
@@ -177,7 +177,7 @@ public class CoordinateParseUtils {
    * Parses a single DMS coordinate
    * @param coord
    * @param lat
-   * @return the converted decimal up to 5 decimals accuracy
+   * @return the converted decimal up to 6 decimals accuracy
    */
   @VisibleForTesting
   protected static double parseDMS(String coord, boolean lat) {
@@ -204,7 +204,7 @@ public class CoordinateParseUtils {
   }
 
   private static double coordFromMatcher(Matcher m, int idx1, int idx2, int idx3, String sign) {
-    return roundTo5decimals(coordSign(sign) *
+    return roundTo6decimals(coordSign(sign) *
         dmsToDecimal( NumberParser.parseDouble(m.group(idx1)), NumberParser.parseDouble(m.group(idx2)), NumberParser.parseDouble(m.group(idx3)) ));
   }
   private static double dmsToDecimal(double degree, Double minutes, Double seconds) {
@@ -213,8 +213,8 @@ public class CoordinateParseUtils {
     return degree + (minutes / 60) + (seconds / 3600);
   }
 
-  // round to 5 decimals (~1m precision) since no way we're getting anything legitimately more precise
-  private static Double roundTo5decimals(Double x) {
-    return x == null ? null : Math.round(x * Math.pow(10, 5)) / Math.pow(10, 5);
+  // round to 6 decimals (~1m precision) since no way we're getting anything legitimately more precise
+  private static Double roundTo6decimals(Double x) {
+    return x == null ? null : Math.round(x * Math.pow(10, 6)) / Math.pow(10, 6);
   }
 }
