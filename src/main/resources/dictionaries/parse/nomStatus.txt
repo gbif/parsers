@@ -219,3 +219,4 @@ unnecessary replacement name
 utique rejected	REJECTEDOUTRIGHT
 utique rejected proposed	REJECTED_OUTRIGHT_PROPOSED
 valid	VALIDLY_PUBLISHED
+VARIANTE_ORTOGRAFICA	ORTHOGRAPHIC_VARIANT
