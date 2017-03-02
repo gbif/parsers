@@ -45,7 +45,7 @@ public class DatePartsNormalizer {
   static {
     Map<String, Set<String>> monthMap = Maps.newHashMapWithExpectedSize(Month.values().length);
     String keyName;
-    for(Month m : Month.values()){
+    for (Month m : Month.values()) {
       keyName = m.name().toLowerCase();
       monthMap.put(keyName, new HashSet<String>());
       //add the key itself
@@ -54,24 +54,21 @@ public class DatePartsNormalizer {
 
     InputStream monthFileStream = DatePartsNormalizer.class.getResourceAsStream(MONTH_FILEPATH);
 
-    if(monthFileStream == null){
+    if (monthFileStream == null) {
       LOG.error("Month file can not be loaded. File not found: {}", MONTH_FILEPATH);
-    }
-    else{
-      try{
-        CSVReader csv = CSVReaderFactory.build(monthFileStream, Charsets.UTF_8.name(), COLUMN_SEPARATOR, null, 0);
-        String monthKey;
-        for (String[] row : csv) {
+    } else {
+      try (CSVReader csv = CSVReaderFactory.build(monthFileStream, Charsets.UTF_8.name(), COLUMN_SEPARATOR, null, 0)) {
+        while (csv.hasNext()) {
+          String[] row = csv.next();
           if (row == null || row[0].startsWith(COMMENT_MARKER)) {
             continue;
           }
-          monthKey = row[0].toLowerCase();
-          if(monthMap.containsKey(monthKey)){
-            for(String monthAltName : ROW_ELEMENT_SPLITTER.split(row[1])){
+          String monthKey = row[0].toLowerCase();
+          if (monthMap.containsKey(monthKey)) {
+            for (String monthAltName : ROW_ELEMENT_SPLITTER.split(row[1])) {
               monthMap.get(monthKey).add(monthAltName.toLowerCase());
             }
-          }
-          else{
+          } else {
             LOG.error("Unknown month found in: {}", MONTH_FILEPATH);
           }
         }
@@ -81,7 +78,7 @@ public class DatePartsNormalizer {
 
       // keep it in an array
       int index = 0;
-      for(Month m : Month.values()){
+      for (Month m : Month.values()) {
         MONTHS[index] = monthMap.get(m.name().toLowerCase()).toArray(new String[0]);
         index++;
       }

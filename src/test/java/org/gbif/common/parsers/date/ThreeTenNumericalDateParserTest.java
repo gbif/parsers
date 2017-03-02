@@ -1,12 +1,7 @@
 package org.gbif.common.parsers.date;
 
 import org.gbif.common.parsers.core.ParseResult;
-import org.gbif.utils.file.FileUtils;
-import org.gbif.utils.file.csv.CSVReader;
-import org.gbif.utils.file.csv.CSVReaderFactory;
 
-import java.io.File;
-import java.io.IOException;
 import javax.annotation.Nullable;
 
 import com.google.common.base.Function;
@@ -20,6 +15,8 @@ import org.threeten.bp.ZoneId;
 import org.threeten.bp.ZoneOffset;
 import org.threeten.bp.ZonedDateTime;
 import org.threeten.bp.temporal.TemporalAccessor;
+
+import static org.gbif.common.parsers.utils.CSVBasedAssertions.assertTestFile;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -147,27 +144,6 @@ public class ThreeTenNumericalDateParserTest {
             });
   }
 
-  /**
-   * Utility function to run assertions received as Function on each rows of an input file.
-   *
-   * @param filepath
-   * @param assertRow
-   */
-  private void assertTestFile(String filepath, Function<String[], Void> assertRow) {
-    File testInputFile = FileUtils.getClasspathFile(filepath);
-    try{
-      CSVReader csv = CSVReaderFactory.build(testInputFile, COLUMN_SEPARATOR, true);
-      for (String[] row : csv) {
-        if (row == null || row[0].startsWith(COMMENT_MARKER)) {
-          continue;
-        }
-        assertRow.apply(row);
-      }
-    } catch (IOException e) {
-      fail("Problem reading testFile " + filepath + " " + e.getMessage());
-    }
-  }
-
   @Test
   public void testParseAsLocalDateTime(){
     ThreeTenNumericalDateParser parser = ThreeTenNumericalDateParser.newInstance(Year.of(1900));
@@ -202,6 +178,14 @@ public class ThreeTenNumericalDateParserTest {
     assertEquals(ParseResult.STATUS.FAIL, PARSER.parse("1978", "", "2").getStatus());
     assertEquals(ParseResult.STATUS.FAIL, PARSER.parse(1978, null, 2).getStatus());
   }
+
+//  @Ignore("not implemented yet")
+//  @Test
+//  public void testUnssuportedFormat() {
+//    ParseResult<TemporalAccessor> result = PARSER.parse("16/11/1996 0:00:00");
+//
+//    System.out.println(PARSER.parse("1996-11-16T00:00:00"));
+//  }
 
   @Test
   public void testParsePreserveZoneOffset(){

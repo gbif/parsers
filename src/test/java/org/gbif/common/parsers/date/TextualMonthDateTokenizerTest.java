@@ -1,21 +1,15 @@
 package org.gbif.common.parsers.date;
 
-import org.gbif.utils.file.FileUtils;
-import org.gbif.utils.file.csv.CSVReader;
-import org.gbif.utils.file.csv.CSVReaderFactory;
-
-import java.io.File;
-import java.io.IOException;
-
 import javax.annotation.Nullable;
 
 import com.google.common.base.Function;
 import org.junit.Test;
 
+import static org.gbif.common.parsers.utils.CSVBasedAssertions.assertTestFile;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
 
 /**
  * Test for {@link TextualMonthDateTokenizer }.
@@ -23,8 +17,6 @@ import static org.junit.Assert.fail;
 public class TextualMonthDateTokenizerTest {
 
   private static final String TEST_FILE = "parse/date/textual_month_date_tokenizer_tests.txt";
-  private static final String COLUMN_SEPARATOR = ";";
-  private static final String COMMENT_MARKER = "#";
 
   private static final int RAW_VAL_IDX = 0;
   private static final int INT_4_IDX = 1;
@@ -58,27 +50,6 @@ public class TextualMonthDateTokenizerTest {
         return null;
       }
     });
-  }
-
-  /**
-   * Utility function to run assertions received as Function on each rows of an input file.
-   *
-   * @param filepath
-   * @param assertRow
-   */
-  private void assertTestFile(String filepath, Function<String[], Void> assertRow) {
-    File testInputFile = FileUtils.getClasspathFile(filepath);
-    try{
-      CSVReader csv = CSVReaderFactory.build(testInputFile, COLUMN_SEPARATOR, true);
-      for (String[] row : csv) {
-        if (row == null || row[0].startsWith(COMMENT_MARKER)) {
-          continue;
-        }
-        assertRow.apply(row);
-      }
-    } catch (IOException e) {
-      fail("Problem reading testFile " + filepath + " " + e.getMessage());
-    }
   }
 
   @Test
