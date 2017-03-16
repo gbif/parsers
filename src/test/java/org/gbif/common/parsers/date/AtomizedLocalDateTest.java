@@ -1,10 +1,11 @@
 package org.gbif.common.parsers.date;
 
+import java.time.LocalDate;
+import java.time.Month;
+import java.time.Year;
+import java.time.YearMonth;
+
 import org.junit.Test;
-import org.threeten.bp.LocalDate;
-import org.threeten.bp.Month;
-import org.threeten.bp.Year;
-import org.threeten.bp.YearMonth;
 
 import static org.junit.Assert.assertEquals;
 

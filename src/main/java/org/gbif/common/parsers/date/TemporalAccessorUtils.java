@@ -1,19 +1,19 @@
 package org.gbif.common.parsers.date;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.Year;
+import java.time.YearMonth;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
+import java.time.temporal.ChronoField;
+import java.time.temporal.TemporalAccessor;
+import java.time.temporal.TemporalQueries;
 import java.util.Date;
 import javax.annotation.Nullable;
 
-import org.threeten.bp.DateTimeUtils;
-import org.threeten.bp.LocalDate;
-import org.threeten.bp.LocalDateTime;
-import org.threeten.bp.Year;
-import org.threeten.bp.YearMonth;
-import org.threeten.bp.ZoneId;
-import org.threeten.bp.ZoneOffset;
-import org.threeten.bp.ZonedDateTime;
-import org.threeten.bp.temporal.ChronoField;
-import org.threeten.bp.temporal.TemporalAccessor;
-import org.threeten.bp.temporal.TemporalQueries;
+
 
 /**
  * Utility methods to work with {@link TemporalAccessor}
@@ -54,11 +54,11 @@ public class TemporalAccessorUtils {
     }
 
     if(!ignoreOffset && temporalAccessor.isSupported(ChronoField.OFFSET_SECONDS)){
-      return DateTimeUtils.toDate(temporalAccessor.query(ZonedDateTime.FROM).toInstant());
+      return Date.from(temporalAccessor.query(ZonedDateTime::from).toInstant());
     }
 
     if(temporalAccessor.isSupported(ChronoField.SECOND_OF_DAY)){
-      return DateTimeUtils.toDate(temporalAccessor.query(LocalDateTime.FROM).atZone(UTC_ZONE_ID).toInstant());
+      return Date.from(temporalAccessor.query(LocalDateTime::from).atZone(UTC_ZONE_ID).toInstant());
     }
 
     // this may return null in case of partial dates
@@ -77,7 +77,7 @@ public class TemporalAccessorUtils {
     }
 
     if (localDate != null) {
-      return DateTimeUtils.toDate(localDate.atStartOfDay(UTC_ZONE_ID).toInstant());
+      return  Date.from(localDate.atStartOfDay(UTC_ZONE_ID).toInstant());
     }
 
     return null;

@@ -1,10 +1,11 @@
 package org.gbif.common.parsers.date;
 
-import org.threeten.bp.format.DateTimeFormatter;
-import org.threeten.bp.format.DateTimeFormatterBuilder;
-import org.threeten.bp.format.ResolverStyle;
-import org.threeten.bp.format.SignStyle;
-import org.threeten.bp.temporal.ChronoField;
+
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
+import java.time.format.ResolverStyle;
+import java.time.format.SignStyle;
+import java.time.temporal.ChronoField;
 
 /**
  * Factories for date parsing related instances.

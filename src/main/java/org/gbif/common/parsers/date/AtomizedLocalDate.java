@@ -1,15 +1,16 @@
 package org.gbif.common.parsers.date;
 
+import java.time.temporal.ChronoField;
+import java.time.temporal.TemporalAccessor;
+
 import com.google.common.base.Objects;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
-import org.threeten.bp.temporal.ChronoField;
-import org.threeten.bp.temporal.TemporalAccessor;
 
 /**
  * AtomizedLocalDate is a simple immutable class to hold local date data from a
- * {@link org.threeten.bp.temporal.TemporalAccessor}.
+ * {@link TemporalAccessor}.
  *
  * Thread-Safe, immutable class.
  *
@@ -44,7 +45,7 @@ public class AtomizedLocalDate {
   }
 
   /**
-   * Build a new instance of {@link AtomizedLocalDate} based on a {@link org.threeten.bp.temporal.TemporalAccessor}.
+   * Build a new instance of {@link AtomizedLocalDate} based on a {@link TemporalAccessor}.
    * This is done by extracting the {@link ChronoField}.
    * @param temporalAccessor
    * @return

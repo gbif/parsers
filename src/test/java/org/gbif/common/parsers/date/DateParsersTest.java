@@ -1,10 +1,10 @@
 package org.gbif.common.parsers.date;
 
+import java.time.DateTimeException;
+import java.time.YearMonth;
+import java.time.format.DateTimeParseException;
+
 import org.junit.Test;
-import org.threeten.bp.DateTimeException;
-import org.threeten.bp.YearMonth;
-import org.threeten.bp.format.DateTimeParseException;
-import org.threeten.bp.temporal.TemporalAccessor;
 
 import static org.junit.Assert.assertNotNull;
 
@@ -54,8 +54,7 @@ public class DateParsersTest {
   // see https://github.com/ThreeTen/threetenbp/issues/49#issuecomment-238017644
   @Test(expected = DateTimeException.class)
   public void testParsersISOYearMonthException3(){
-    TemporalAccessor ta = DateParsers.ISO_YEAR_MONTH.parse("2016-40");
-    System.out.println(YearMonth.from(ta));
+    DateParsers.ISO_YEAR_MONTH.parse("2016-40", YearMonth::from);
   }
 
   //  -- ISO_LOCAL_PARTIAL_DATE --

@@ -1,19 +1,20 @@
 package org.gbif.common.parsers.date;
 
+import java.time.Duration;
+import java.time.temporal.ChronoField;
+import java.time.temporal.TemporalAccessor;
+
 import com.google.common.base.Objects;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
-import org.threeten.bp.Duration;
-import org.threeten.bp.temporal.ChronoField;
-import org.threeten.bp.temporal.TemporalAccessor;
 
 /**
  * Still experimental, the class should probably require to have a LocalDate otherwise the output
  * of getResolution can not be comparable with {@link AtomizedLocalDate}
  *
  * AtomizedLocalDateTime is a simple immutable class to hold local date and time data from a
- * {@link org.threeten.bp.temporal.TemporalAccessor}.
+ * {@link TemporalAccessor}.
  *
  *
  * Thread-Safe, immutable class.
@@ -107,7 +108,7 @@ public class AtomizedLocalDateTime {
   }
 
   /**
-   * Build a new instance of {@link AtomizedLocalDateTime} based on a {@link org.threeten.bp.temporal.TemporalAccessor}.
+   * Build a new instance of {@link AtomizedLocalDateTime} based on a {@link TemporalAccessor}.
    * This is done by extracting the {@link ChronoField}.
    * Please note this expected behavior: if a least 1 time component is available on the TemporalAccessor, the other
    * time components will return 0 instead of null if they are not provided.

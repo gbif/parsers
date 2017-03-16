@@ -2,13 +2,14 @@ package org.gbif.common.parsers.date;
 
 import org.gbif.common.parsers.core.ParseResult;
 
-import org.junit.Test;
-import org.threeten.bp.LocalDate;
-import org.threeten.bp.Month;
-import org.threeten.bp.YearMonth;
-import org.threeten.bp.temporal.TemporalAccessor;
+import java.time.LocalDate;
+import java.time.Month;
+import java.time.YearMonth;
+import java.time.temporal.TemporalAccessor;
 
-import static org.junit.Assert.assertEquals;
+import org.junit.Test;
+
+import static junit.framework.TestCase.assertEquals;
 import static org.junit.Assert.assertFalse;
 
 /**

@@ -2,13 +2,14 @@ package org.gbif.common.parsers.date;
 
 import org.gbif.common.parsers.core.ParseResult;
 
+import java.time.DateTimeException;
+import java.time.LocalDate;
+import java.time.temporal.TemporalAccessor;
 import java.util.regex.Pattern;
 import javax.annotation.Nullable;
 
 import org.apache.commons.lang3.StringUtils;
-import org.threeten.bp.DateTimeException;
-import org.threeten.bp.LocalDate;
-import org.threeten.bp.temporal.TemporalAccessor;
+
 
 /**
  * Main class to parse a date represented as a single String or as date parts into a {@link TemporalAccessor}.
@@ -57,7 +58,7 @@ class TextDateParser implements TemporalParser {
               normalizedYearMonthDay.getDay() != null){
         try {
           return ParseResult.success(ParseResult.CONFIDENCE.DEFINITE,
-                  (TemporalAccessor)LocalDate.of(normalizedYearMonthDay.getYear(),
+                  (TemporalAccessor) LocalDate.of(normalizedYearMonthDay.getYear(),
                           normalizedYearMonthDay.getMonth(), normalizedYearMonthDay.getDay()));
         }
         catch (DateTimeException ignore){

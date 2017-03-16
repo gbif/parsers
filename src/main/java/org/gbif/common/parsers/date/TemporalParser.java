@@ -3,9 +3,9 @@ package org.gbif.common.parsers.date;
 import org.gbif.common.parsers.core.Parsable;
 import org.gbif.common.parsers.core.ParseResult;
 
+import java.time.temporal.TemporalAccessor;
 import javax.annotation.Nullable;
 
-import org.threeten.bp.temporal.TemporalAccessor;
 
 /**
  *

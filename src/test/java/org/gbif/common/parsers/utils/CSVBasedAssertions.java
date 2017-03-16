@@ -12,7 +12,7 @@ import com.google.common.base.Function;
 import static org.junit.Assert.fail;
 
 /**
- *
+ * Helper to help running assertions against data held in CSV files.
  */
 public class CSVBasedAssertions {
 

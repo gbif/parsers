@@ -1,5 +1,6 @@
 package org.gbif.common.parsers.date;
 
+import java.time.temporal.TemporalAccessor;
 import java.util.List;
 import javax.annotation.Nullable;
 import javax.validation.constraints.NotNull;
@@ -7,7 +8,6 @@ import javax.validation.constraints.NotNull;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
-import org.threeten.bp.temporal.TemporalAccessor;
 
 /**
  * Supports multiple {@link DateTimeParser} that are considered ambiguous. Two {@link DateTimeParser} are considered

@@ -1,5 +1,12 @@
 package org.gbif.common.parsers.date;
 
+import java.time.Year;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
+import java.time.format.ResolverStyle;
+import java.time.temporal.ChronoField;
+import java.time.temporal.TemporalQuery;
 import java.util.List;
 import java.util.Set;
 import javax.validation.constraints.NotNull;
@@ -10,13 +17,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import org.apache.commons.lang3.StringUtils;
-import org.threeten.bp.Year;
-import org.threeten.bp.ZoneId;
-import org.threeten.bp.format.DateTimeFormatter;
-import org.threeten.bp.format.DateTimeFormatterBuilder;
-import org.threeten.bp.format.ResolverStyle;
-import org.threeten.bp.temporal.ChronoField;
-import org.threeten.bp.temporal.TemporalQuery;
+
 
 /**
  * The DateTimeParserBuilder can build objects directly (build(..) methods) or return an instance

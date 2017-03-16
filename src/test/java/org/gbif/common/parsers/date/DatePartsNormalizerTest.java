@@ -1,7 +1,8 @@
 package org.gbif.common.parsers.date;
 
+import java.time.Month;
+
 import org.junit.Test;
-import org.threeten.bp.Month;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;

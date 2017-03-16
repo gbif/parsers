@@ -1,14 +1,15 @@
 package org.gbif.common.parsers.date;
 
 
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+import java.time.temporal.TemporalAccessor;
+import java.time.temporal.TemporalQuery;
 import javax.annotation.Nullable;
 import javax.validation.constraints.NotNull;
 
 import com.google.common.base.Preconditions;
-import org.threeten.bp.format.DateTimeFormatter;
-import org.threeten.bp.format.DateTimeParseException;
-import org.threeten.bp.temporal.TemporalAccessor;
-import org.threeten.bp.temporal.TemporalQuery;
+
 
 /**
  * Adds some flexibility around {@link DateTimeFormatter} with the {@link DateTimeSeparatorNormalizer} and

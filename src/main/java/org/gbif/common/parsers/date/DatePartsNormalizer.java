@@ -5,6 +5,7 @@ import org.gbif.utils.file.csv.CSVReaderFactory;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.time.Month;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -17,7 +18,6 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.threeten.bp.Month;
 
 /**
  * DatePartsNormalizer contract is to take String representing Year, Month and Day and return the corresponding
