@@ -73,7 +73,6 @@ espece	SPECIES
 especie	SPECIES
 especies	SPECIES
 f	FORM
-f sp	FORM
 fam	FAMILY
 familia	FAMILY
 family	FAMILY
@@ -213,8 +212,6 @@ sp	SPECIES
 spe	SPECIES
 spec	SPECIES
 special form	FORMA_SPECIALIS
-special form	FORMA_SPECIALIS
-species	SPECIES
 species	SPECIES
 species group	SPECIES_AGGREGATE
 species subgroup	SPECIES_AGGREGATE
