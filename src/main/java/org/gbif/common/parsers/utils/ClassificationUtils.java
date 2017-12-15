@@ -1,17 +1,16 @@
 package org.gbif.common.parsers.utils;
 
+import com.google.common.base.Strings;
 import org.gbif.api.exception.UnparsableException;
 import org.gbif.api.model.checklistbank.ParsedName;
-import org.gbif.api.service.checklistbank.NameParser;
 import org.gbif.api.vocabulary.Rank;
-import org.gbif.nameparser.GBIFNameParser;
 
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.regex.Pattern;
 
-import com.google.common.base.Strings;
+import static org.gbif.common.parsers.utils.NameParserUtils.PARSER;
 
 /**
  * Utilities to work on classifications.
@@ -25,8 +24,6 @@ public final class ClassificationUtils {
   // Less frequent ones are kept in the blacklisted names dictionary!
   public static final Set<String> NULL_STRINGS =
     new HashSet<String>(Arrays.asList("/N", "\\", "\\\\", "\\N", "\\\\N", "null", "NULL", "Null"));
-
-  private static final NameParser PARSER = new GBIFNameParser();
 
   private ClassificationUtils() {
     throw new UnsupportedOperationException("Can't initialize class");

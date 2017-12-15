@@ -5,6 +5,7 @@ acceptedgenusname	ACCEPTED
 acceptedname	ACCEPTED
 aceptado	ACCEPTED
 authority	ACCEPTED
+correct	ACCEPTED
 preferredname	ACCEPTED
 valid	ACCEPTED
 nomeaceito	ACCEPTED

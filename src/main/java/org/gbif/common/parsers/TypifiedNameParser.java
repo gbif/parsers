@@ -1,19 +1,18 @@
 package org.gbif.common.parsers;
 
+import com.google.common.base.Strings;
+import com.google.common.collect.Range;
 import org.gbif.api.exception.UnparsableException;
 import org.gbif.api.model.checklistbank.ParsedName;
-import org.gbif.api.service.checklistbank.NameParser;
 import org.gbif.common.parsers.core.Parsable;
 import org.gbif.common.parsers.core.ParseResult;
-import org.gbif.nameparser.GBIFNameParser;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import com.google.common.base.Strings;
-import com.google.common.collect.Range;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import static org.gbif.common.parsers.utils.NameParserUtils.PARSER;
 
 /**
  * Singleton implementation using regex to extract a scientific name after a typestatus from a string.
@@ -25,7 +24,6 @@ public class TypifiedNameParser implements Parsable<String> {
   private static TypifiedNameParser singletonObject = null;
 
   private static final Range<Integer> REASONABLE_NAME_SIZE_RANGE = Range.closed(4, 40);
-  private static final NameParser NAME_PARSER = new GBIFNameParser();
   private static final Pattern NAME_SEPARATOR = Pattern.compile("\\sOF\\W*\\s+\\W*(.+)\\W*\\s*$", Pattern.CASE_INSENSITIVE);
   private static final Pattern CLEAN_WHITESPACE = Pattern.compile("\\s+");
 
@@ -41,7 +39,7 @@ public class TypifiedNameParser implements Parsable<String> {
         // make sure the name does not end with "type", see http://dev.gbif.org/issues/browse/POR-2703
         if (!name.endsWith("type")) {
           try {
-            ParsedName pn = NAME_PARSER.parse(name,null);
+            ParsedName pn = PARSER.parse(name,null);
             return ParseResult.success(ParseResult.CONFIDENCE.PROBABLE, pn.canonicalNameComplete());
 
           } catch (UnparsableException e) {
