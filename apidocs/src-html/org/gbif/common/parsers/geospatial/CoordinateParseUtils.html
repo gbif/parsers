@@ -49,7 +49,7 @@
 <span class="sourceLineNo">041</span>   * When the {@link ParseResult.STATUS} is FAIL the payload will be null and one or more issues should be set<a name="line.41"></a>
 <span class="sourceLineNo">042</span>   * in {@link org.gbif.common.parsers.core.OccurrenceParseResult#getIssues()}.<a name="line.42"></a>
 <span class="sourceLineNo">043</span>   *<a name="line.43"></a>
-<span class="sourceLineNo">044</span>   * Coordinate precision will be 5 decimals at most, any more precise values will be rounded.<a name="line.44"></a>
+<span class="sourceLineNo">044</span>   * Coordinate precision will be 6 decimals at most, any more precise values will be rounded.<a name="line.44"></a>
 <span class="sourceLineNo">045</span>   *<a name="line.45"></a>
 <span class="sourceLineNo">046</span>   * Supported standard formats are the following, with dots or optionally a comma as the decimal marker:<a name="line.46"></a>
 <span class="sourceLineNo">047</span>   * &lt;ul&gt;<a name="line.47"></a>
@@ -142,11 +142,11 @@
 <span class="sourceLineNo">134</span>    // collecting issues for result<a name="line.134"></a>
 <span class="sourceLineNo">135</span>    Set&lt;OccurrenceIssue&gt; issues = EnumSet.noneOf(OccurrenceIssue.class);<a name="line.135"></a>
 <span class="sourceLineNo">136</span><a name="line.136"></a>
-<span class="sourceLineNo">137</span>    // round to 5 decimals<a name="line.137"></a>
+<span class="sourceLineNo">137</span>    // round to 6 decimals<a name="line.137"></a>
 <span class="sourceLineNo">138</span>    final double latOrig = lat;<a name="line.138"></a>
 <span class="sourceLineNo">139</span>    final double lngOrig = lon;<a name="line.139"></a>
-<span class="sourceLineNo">140</span>    lat = roundTo5decimals(lat);<a name="line.140"></a>
-<span class="sourceLineNo">141</span>    lon = roundTo5decimals(lon);<a name="line.141"></a>
+<span class="sourceLineNo">140</span>    lat = roundTo6decimals(lat);<a name="line.140"></a>
+<span class="sourceLineNo">141</span>    lon = roundTo6decimals(lon);<a name="line.141"></a>
 <span class="sourceLineNo">142</span>    if (Double.compare(lat, latOrig) != 0 || Double.compare(lon, lngOrig) != 0) {<a name="line.142"></a>
 <span class="sourceLineNo">143</span>      issues.add(OccurrenceIssue.COORDINATE_ROUNDED);<a name="line.143"></a>
 <span class="sourceLineNo">144</span>    }<a name="line.144"></a>
@@ -185,7 +185,7 @@
 <span class="sourceLineNo">177</span>   * Parses a single DMS coordinate<a name="line.177"></a>
 <span class="sourceLineNo">178</span>   * @param coord<a name="line.178"></a>
 <span class="sourceLineNo">179</span>   * @param lat<a name="line.179"></a>
-<span class="sourceLineNo">180</span>   * @return the converted decimal up to 5 decimals accuracy<a name="line.180"></a>
+<span class="sourceLineNo">180</span>   * @return the converted decimal up to 6 decimals accuracy<a name="line.180"></a>
 <span class="sourceLineNo">181</span>   */<a name="line.181"></a>
 <span class="sourceLineNo">182</span>  @VisibleForTesting<a name="line.182"></a>
 <span class="sourceLineNo">183</span>  protected static double parseDMS(String coord, boolean lat) {<a name="line.183"></a>
@@ -212,7 +212,7 @@
 <span class="sourceLineNo">204</span>  }<a name="line.204"></a>
 <span class="sourceLineNo">205</span><a name="line.205"></a>
 <span class="sourceLineNo">206</span>  private static double coordFromMatcher(Matcher m, int idx1, int idx2, int idx3, String sign) {<a name="line.206"></a>
-<span class="sourceLineNo">207</span>    return roundTo5decimals(coordSign(sign) *<a name="line.207"></a>
+<span class="sourceLineNo">207</span>    return roundTo6decimals(coordSign(sign) *<a name="line.207"></a>
 <span class="sourceLineNo">208</span>        dmsToDecimal( NumberParser.parseDouble(m.group(idx1)), NumberParser.parseDouble(m.group(idx2)), NumberParser.parseDouble(m.group(idx3)) ));<a name="line.208"></a>
 <span class="sourceLineNo">209</span>  }<a name="line.209"></a>
 <span class="sourceLineNo">210</span>  private static double dmsToDecimal(double degree, Double minutes, Double seconds) {<a name="line.210"></a>
@@ -221,9 +221,9 @@
 <span class="sourceLineNo">213</span>    return degree + (minutes / 60) + (seconds / 3600);<a name="line.213"></a>
 <span class="sourceLineNo">214</span>  }<a name="line.214"></a>
 <span class="sourceLineNo">215</span><a name="line.215"></a>
-<span class="sourceLineNo">216</span>  // round to 5 decimals (~1m precision) since no way we're getting anything legitimately more precise<a name="line.216"></a>
-<span class="sourceLineNo">217</span>  private static Double roundTo5decimals(Double x) {<a name="line.217"></a>
-<span class="sourceLineNo">218</span>    return x == null ? null : Math.round(x * Math.pow(10, 5)) / Math.pow(10, 5);<a name="line.218"></a>
+<span class="sourceLineNo">216</span>  // round to 6 decimals (~1m precision) since no way we're getting anything legitimately more precise<a name="line.216"></a>
+<span class="sourceLineNo">217</span>  private static Double roundTo6decimals(Double x) {<a name="line.217"></a>
+<span class="sourceLineNo">218</span>    return x == null ? null : Math.round(x * Math.pow(10, 6)) / Math.pow(10, 6);<a name="line.218"></a>
 <span class="sourceLineNo">219</span>  }<a name="line.219"></a>
 <span class="sourceLineNo">220</span>}<a name="line.220"></a>
 

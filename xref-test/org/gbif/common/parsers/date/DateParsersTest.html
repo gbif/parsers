@@ -8,11 +8,11 @@
 <div id="overview"><a href="../../../../../../testapidocs/org/gbif/common/parsers/date/DateParsersTest.html">View Javadoc</a></div><pre>
 <a class="jxr_linenumber" name="L1" href="#L1">1</a>   <strong class="jxr_keyword">package</strong> org.gbif.common.parsers.date;
 <a class="jxr_linenumber" name="L2" href="#L2">2</a>   
-<a class="jxr_linenumber" name="L3" href="#L3">3</a>   <strong class="jxr_keyword">import</strong> org.junit.Test;
-<a class="jxr_linenumber" name="L4" href="#L4">4</a>   <strong class="jxr_keyword">import</strong> org.threeten.bp.DateTimeException;
-<a class="jxr_linenumber" name="L5" href="#L5">5</a>   <strong class="jxr_keyword">import</strong> org.threeten.bp.YearMonth;
-<a class="jxr_linenumber" name="L6" href="#L6">6</a>   <strong class="jxr_keyword">import</strong> org.threeten.bp.format.DateTimeParseException;
-<a class="jxr_linenumber" name="L7" href="#L7">7</a>   <strong class="jxr_keyword">import</strong> org.threeten.bp.temporal.TemporalAccessor;
+<a class="jxr_linenumber" name="L3" href="#L3">3</a>   <strong class="jxr_keyword">import</strong> java.time.DateTimeException;
+<a class="jxr_linenumber" name="L4" href="#L4">4</a>   <strong class="jxr_keyword">import</strong> java.time.YearMonth;
+<a class="jxr_linenumber" name="L5" href="#L5">5</a>   <strong class="jxr_keyword">import</strong> java.time.format.DateTimeParseException;
+<a class="jxr_linenumber" name="L6" href="#L6">6</a>   
+<a class="jxr_linenumber" name="L7" href="#L7">7</a>   <strong class="jxr_keyword">import</strong> org.junit.Test;
 <a class="jxr_linenumber" name="L8" href="#L8">8</a>   
 <a class="jxr_linenumber" name="L9" href="#L9">9</a>   <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.junit.Assert.assertNotNull;
 <a class="jxr_linenumber" name="L10" href="#L10">10</a>  
@@ -62,18 +62,17 @@
 <a class="jxr_linenumber" name="L54" href="#L54">54</a>    <em class="jxr_comment">// see https://github.com/ThreeTen/threetenbp/issues/49#issuecomment-238017644</em>
 <a class="jxr_linenumber" name="L55" href="#L55">55</a>    @Test(expected = DateTimeException.<strong class="jxr_keyword">class</strong>)
 <a class="jxr_linenumber" name="L56" href="#L56">56</a>    <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testParsersISOYearMonthException3(){
-<a class="jxr_linenumber" name="L57" href="#L57">57</a>      TemporalAccessor ta = DateParsers.ISO_YEAR_MONTH.parse(<span class="jxr_string">"2016-40"</span>);
-<a class="jxr_linenumber" name="L58" href="#L58">58</a>      System.out.println(YearMonth.from(ta));
-<a class="jxr_linenumber" name="L59" href="#L59">59</a>    }
-<a class="jxr_linenumber" name="L60" href="#L60">60</a>  
-<a class="jxr_linenumber" name="L61" href="#L61">61</a>    <em class="jxr_comment">//  -- ISO_LOCAL_PARTIAL_DATE --</em>
-<a class="jxr_linenumber" name="L62" href="#L62">62</a>    <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testIsoLocalPartialDateParser(){
-<a class="jxr_linenumber" name="L63" href="#L63">63</a>      <em class="jxr_comment">// to be implemented</em>
-<a class="jxr_linenumber" name="L64" href="#L64">64</a>    }
-<a class="jxr_linenumber" name="L65" href="#L65">65</a>  
-<a class="jxr_linenumber" name="L66" href="#L66">66</a>  }
+<a class="jxr_linenumber" name="L57" href="#L57">57</a>      DateParsers.ISO_YEAR_MONTH.parse(<span class="jxr_string">"2016-40"</span>, YearMonth::from);
+<a class="jxr_linenumber" name="L58" href="#L58">58</a>    }
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>  
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>    <em class="jxr_comment">//  -- ISO_LOCAL_PARTIAL_DATE --</em>
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>    <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testIsoLocalPartialDateParser(){
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>      <em class="jxr_comment">// to be implemented</em>
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>    }
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>  
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>  }
 </pre>
 <hr/>
-<div id="footer">Copyright &#169; 2016 <a href="http://www.gbif.org">Global Biodiversity Information Facility</a>. All rights reserved.</div>
+<div id="footer">Copyright &#169; 2017 <a href="http://www.gbif.org">Global Biodiversity Information Facility</a>. All rights reserved.</div>
 </body>
 </html>
