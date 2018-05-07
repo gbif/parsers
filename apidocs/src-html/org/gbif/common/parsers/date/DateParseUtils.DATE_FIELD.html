@@ -50,303 +50,311 @@
 <span class="sourceLineNo">042</span>  // by abbreviations.  Be very careful not to add any ambiguous terms<a name="line.42"></a>
 <span class="sourceLineNo">043</span>  // such as "J" "A" etc.  Do not add a "." at the end of abbreviations<a name="line.43"></a>
 <span class="sourceLineNo">044</span>  // as normalization will automatically do this.<a name="line.44"></a>
-<span class="sourceLineNo">045</span>  protected static final String[][] MONTHS = {{"January", "Jan", "J", "Ene", "Ja"},  // Ene. is abbreviated Spanish<a name="line.45"></a>
-<span class="sourceLineNo">046</span>    {"February", "Feb", "F", "Fe"}, {"March", "Mar"}, {"April", "Apr", "Ap", "Abr"},  // Abr. is abbreviated Spanish<a name="line.46"></a>
-<span class="sourceLineNo">047</span>    {"May"}, {"June", "Jun"}, {"July", "Jul"}, {"August", "Aug", "Au", "Ago"},<a name="line.47"></a>
-<span class="sourceLineNo">048</span>    // Ago seen a lot in data<a name="line.48"></a>
-<span class="sourceLineNo">049</span>    {"September", "Sep", "Sept", "Set", "S"}, // Set is a common mispelling<a name="line.49"></a>
-<span class="sourceLineNo">050</span>    {"October", "Oct", "O", "Oc"}, {"Novermber", "Nov", "N", "No"}, {"December", "Dec", "D", "De"},};<a name="line.50"></a>
-<span class="sourceLineNo">051</span><a name="line.51"></a>
-<span class="sourceLineNo">052</span>  protected static final int CURRENT_YEAR = new GregorianCalendar().get(Calendar.YEAR);<a name="line.52"></a>
-<span class="sourceLineNo">053</span><a name="line.53"></a>
-<span class="sourceLineNo">054</span>  /**<a name="line.54"></a>
-<span class="sourceLineNo">055</span>   * Takes a String representation and attempts to construct a date<a name="line.55"></a>
-<span class="sourceLineNo">056</span>   *<a name="line.56"></a>
-<span class="sourceLineNo">057</span>   * @param input To convert to a Date()<a name="line.57"></a>
-<span class="sourceLineNo">058</span>   *<a name="line.58"></a>
-<span class="sourceLineNo">059</span>   * @return The result of the parsing<a name="line.59"></a>
-<span class="sourceLineNo">060</span>   */<a name="line.60"></a>
-<span class="sourceLineNo">061</span>  public static ParseResult&lt;Date&gt; parse(String input) {<a name="line.61"></a>
-<span class="sourceLineNo">062</span>    input = normalizeMonth(input);<a name="line.62"></a>
-<span class="sourceLineNo">063</span>    return STRING_TO_DATE_PARSER.parse(input);<a name="line.63"></a>
-<span class="sourceLineNo">064</span>  }<a name="line.64"></a>
-<span class="sourceLineNo">065</span><a name="line.65"></a>
-<span class="sourceLineNo">066</span>  /**<a name="line.66"></a>
-<span class="sourceLineNo">067</span>   * Takes a String representation that is in the format specified and attempts to construct a date.<a name="line.67"></a>
-<span class="sourceLineNo">068</span>   *<a name="line.68"></a>
-<span class="sourceLineNo">069</span>   * @param input  To convert to a Date()<a name="line.69"></a>
-<span class="sourceLineNo">070</span>   * @param format The format of the date, e.g. dd/mm/yyyy<a name="line.70"></a>
-<span class="sourceLineNo">071</span>   *<a name="line.71"></a>
-<span class="sourceLineNo">072</span>   * @return The result of the parsing<a name="line.72"></a>
-<span class="sourceLineNo">073</span>   */<a name="line.73"></a>
-<span class="sourceLineNo">074</span>  public static ParseResult&lt;Date&gt; parse(String input, String format) {<a name="line.74"></a>
-<span class="sourceLineNo">075</span>    try {<a name="line.75"></a>
-<span class="sourceLineNo">076</span>      Date d = DateUtils.parseDate(input, format);<a name="line.76"></a>
-<span class="sourceLineNo">077</span>      LOGGER.debug("Parsed input[{}] in format[{}] to date[{}]", new Object[] {input, format, d});<a name="line.77"></a>
-<span class="sourceLineNo">078</span>      return ParseResult.success(ParseResult.CONFIDENCE.DEFINITE, d);<a name="line.78"></a>
-<span class="sourceLineNo">079</span>    } catch (ParseException e) {<a name="line.79"></a>
-<span class="sourceLineNo">080</span>      LOGGER.debug("Exception caught trying to parse a date", e);<a name="line.80"></a>
-<span class="sourceLineNo">081</span>      return ParseResult.fail();<a name="line.81"></a>
-<span class="sourceLineNo">082</span>    }<a name="line.82"></a>
-<span class="sourceLineNo">083</span>  }<a name="line.83"></a>
-<span class="sourceLineNo">084</span><a name="line.84"></a>
-<span class="sourceLineNo">085</span>  /**<a name="line.85"></a>
-<span class="sourceLineNo">086</span>   * Utility to check that the field appears valid in it's status use. Day must fall within 1-31, month within 1-12 and<a name="line.86"></a>
-<span class="sourceLineNo">087</span>   * year within 1-&lt;currentyear&gt;, null will always be invalid.<a name="line.87"></a>
-<span class="sourceLineNo">088</span>   *<a name="line.88"></a>
-<span class="sourceLineNo">089</span>   * @param value To test<a name="line.89"></a>
-<span class="sourceLineNo">090</span>   * @param field The context that the value is being used<a name="line.90"></a>
-<span class="sourceLineNo">091</span>   *<a name="line.91"></a>
-<span class="sourceLineNo">092</span>   * @return true or false depending on the validity of the value in it's context<a name="line.92"></a>
-<span class="sourceLineNo">093</span>   */<a name="line.93"></a>
-<span class="sourceLineNo">094</span>  public static boolean isValidUse(String value, DATE_FIELD field) {<a name="line.94"></a>
-<span class="sourceLineNo">095</span>    if (value == null) return false;<a name="line.95"></a>
-<span class="sourceLineNo">096</span><a name="line.96"></a>
-<span class="sourceLineNo">097</span>    try {<a name="line.97"></a>
-<span class="sourceLineNo">098</span>      int valueAsInt = Integer.parseInt(value);<a name="line.98"></a>
-<span class="sourceLineNo">099</span>      switch (field) {<a name="line.99"></a>
-<span class="sourceLineNo">100</span>        case DAY:<a name="line.100"></a>
-<span class="sourceLineNo">101</span>          return valueAsInt &gt;= 1 &amp;&amp; valueAsInt &lt;= 31;<a name="line.101"></a>
-<span class="sourceLineNo">102</span>        case MONTH:<a name="line.102"></a>
-<span class="sourceLineNo">103</span>          return valueAsInt &gt;= 1 &amp;&amp; valueAsInt &lt;= 12;<a name="line.103"></a>
-<span class="sourceLineNo">104</span>        case YEAR:<a name="line.104"></a>
-<span class="sourceLineNo">105</span>          return valueAsInt &gt;= 1 &amp;&amp; valueAsInt &lt;= new GregorianCalendar().get(Calendar.YEAR);<a name="line.105"></a>
-<span class="sourceLineNo">106</span>      }<a name="line.106"></a>
-<span class="sourceLineNo">107</span>    } catch (NumberFormatException e) {<a name="line.107"></a>
-<span class="sourceLineNo">108</span>      LOGGER.debug("{} does not appear valid as a {}", value, field);<a name="line.108"></a>
-<span class="sourceLineNo">109</span>    }<a name="line.109"></a>
-<span class="sourceLineNo">110</span>    return false;<a name="line.110"></a>
-<span class="sourceLineNo">111</span>  }<a name="line.111"></a>
-<span class="sourceLineNo">112</span><a name="line.112"></a>
-<span class="sourceLineNo">113</span>  /**<a name="line.113"></a>
-<span class="sourceLineNo">114</span>   * Checks if a {@link YearMonthDay} object &lt;i&gt;maybe&lt;/i&gt; represents a valid date in the sense that the date really<a name="line.114"></a>
-<span class="sourceLineNo">115</span>   * exists (e.g. no February 31st)<a name="line.115"></a>
-<span class="sourceLineNo">116</span>   * As the components of a YearMonthDay may be null it only checks this validity if all components are not null.<a name="line.116"></a>
-<span class="sourceLineNo">117</span>   *<a name="line.117"></a>
-<span class="sourceLineNo">118</span>   * @param ymd to check<a name="line.118"></a>
-<span class="sourceLineNo">119</span>   *<a name="line.119"></a>
-<span class="sourceLineNo">120</span>   * @return true if it may be a valid partial date, false if it is sure that it is an invalid date.<a name="line.120"></a>
-<span class="sourceLineNo">121</span>   */<a name="line.121"></a>
-<span class="sourceLineNo">122</span>  public static boolean isDateCoercible(YearMonthDay ymd) {<a name="line.122"></a>
-<span class="sourceLineNo">123</span>    if (ymd.getYear() == null || ymd.getMonth() == null || ymd.getDay() == null) {<a name="line.123"></a>
-<span class="sourceLineNo">124</span>      return true;<a name="line.124"></a>
-<span class="sourceLineNo">125</span>    }<a name="line.125"></a>
-<span class="sourceLineNo">126</span><a name="line.126"></a>
-<span class="sourceLineNo">127</span>    // SimpleDateFormat is not thread-safe. Do not reuse or if you reuse use Thread locals or other synchronization<a name="line.127"></a>
-<span class="sourceLineNo">128</span>    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");<a name="line.128"></a>
-<span class="sourceLineNo">129</span>    sdf.setLenient(false);<a name="line.129"></a>
-<span class="sourceLineNo">130</span>    return sdf.parse(DATE_JOINER.join(ymd.getYear(), ymd.getMonth(), ymd.getDay()), new ParsePosition(0)) != null;<a name="line.130"></a>
-<span class="sourceLineNo">131</span>  }<a name="line.131"></a>
-<span class="sourceLineNo">132</span><a name="line.132"></a>
-<span class="sourceLineNo">133</span>  /**<a name="line.133"></a>
-<span class="sourceLineNo">134</span>   * Tries to create a valid date (complete or partial) out of three Strings for year, month and day.<a name="line.134"></a>
-<span class="sourceLineNo">135</span>   * If all three components are null the parse will fail.<a name="line.135"></a>
-<span class="sourceLineNo">136</span>   *<a name="line.136"></a>
-<span class="sourceLineNo">137</span>   * @param year  to parse. May be null.<a name="line.137"></a>
-<span class="sourceLineNo">138</span>   * @param month to parse. May be null.<a name="line.138"></a>
-<span class="sourceLineNo">139</span>   * @param day   to parse. May be null.<a name="line.139"></a>
-<span class="sourceLineNo">140</span>   *<a name="line.140"></a>
-<span class="sourceLineNo">141</span>   * @return result of the parsing<a name="line.141"></a>
-<span class="sourceLineNo">142</span>   */<a name="line.142"></a>
-<span class="sourceLineNo">143</span>  public static ParseResult&lt;Date&gt; parse(@Nullable String year, @Nullable String month, @Nullable String day) {<a name="line.143"></a>
-<span class="sourceLineNo">144</span>    if (year == null &amp;&amp; month == null &amp;&amp; day == null) {<a name="line.144"></a>
-<span class="sourceLineNo">145</span>      return ParseResult.fail();<a name="line.145"></a>
-<span class="sourceLineNo">146</span>    }<a name="line.146"></a>
-<span class="sourceLineNo">147</span><a name="line.147"></a>
-<span class="sourceLineNo">148</span>    month = normalizeMonth(month);<a name="line.148"></a>
-<span class="sourceLineNo">149</span>    Date d = STRING_TO_DATE_PARSER.strictParse(day + "/" + month + "/" + year, new String[]{"dd/MM/yyyy", "dd/mm/yyyy"});<a name="line.149"></a>
-<span class="sourceLineNo">150</span>    if (d != null) {<a name="line.150"></a>
-<span class="sourceLineNo">151</span>      return ParseResult.success(ParseResult.CONFIDENCE.DEFINITE, d);<a name="line.151"></a>
-<span class="sourceLineNo">152</span>    }<a name="line.152"></a>
-<span class="sourceLineNo">153</span>    return ParseResult.fail();<a name="line.153"></a>
-<span class="sourceLineNo">154</span>  }<a name="line.154"></a>
+<span class="sourceLineNo">045</span>  protected static final String[][] MONTHS = {<a name="line.45"></a>
+<span class="sourceLineNo">046</span>      {"January", "Jan", "J", "Ene", "Ja"}, // Ene. is abbreviated Spanish<a name="line.46"></a>
+<span class="sourceLineNo">047</span>      {"February", "Feb", "F", "Fe"},<a name="line.47"></a>
+<span class="sourceLineNo">048</span>      {"March", "Mar"},<a name="line.48"></a>
+<span class="sourceLineNo">049</span>      {"April", "Apr", "Ap", "Abr"}, // Abr. is abbreviated Spanish<a name="line.49"></a>
+<span class="sourceLineNo">050</span>      {"May"},<a name="line.50"></a>
+<span class="sourceLineNo">051</span>      {"June", "Jun"},<a name="line.51"></a>
+<span class="sourceLineNo">052</span>      {"July", "Jul"},<a name="line.52"></a>
+<span class="sourceLineNo">053</span>      {"August", "Aug", "Au", "Ago"}, // Ago seen a lot in data<a name="line.53"></a>
+<span class="sourceLineNo">054</span>      {"September", "Sep", "Sept", "Set", "S"}, // Set is a common mispelling<a name="line.54"></a>
+<span class="sourceLineNo">055</span>      {"October", "Oct", "O", "Oc"},<a name="line.55"></a>
+<span class="sourceLineNo">056</span>      {"November", "Nov", "N", "No"},<a name="line.56"></a>
+<span class="sourceLineNo">057</span>      {"December", "Dec", "D", "De"}<a name="line.57"></a>
+<span class="sourceLineNo">058</span>  };<a name="line.58"></a>
+<span class="sourceLineNo">059</span><a name="line.59"></a>
+<span class="sourceLineNo">060</span>  protected static final int CURRENT_YEAR = new GregorianCalendar().get(Calendar.YEAR);<a name="line.60"></a>
+<span class="sourceLineNo">061</span><a name="line.61"></a>
+<span class="sourceLineNo">062</span>  /**<a name="line.62"></a>
+<span class="sourceLineNo">063</span>   * Takes a String representation and attempts to construct a date<a name="line.63"></a>
+<span class="sourceLineNo">064</span>   *<a name="line.64"></a>
+<span class="sourceLineNo">065</span>   * @param input To convert to a Date()<a name="line.65"></a>
+<span class="sourceLineNo">066</span>   *<a name="line.66"></a>
+<span class="sourceLineNo">067</span>   * @return The result of the parsing<a name="line.67"></a>
+<span class="sourceLineNo">068</span>   */<a name="line.68"></a>
+<span class="sourceLineNo">069</span>  public static ParseResult&lt;Date&gt; parse(String input) {<a name="line.69"></a>
+<span class="sourceLineNo">070</span>    input = normalizeMonth(input);<a name="line.70"></a>
+<span class="sourceLineNo">071</span>    return STRING_TO_DATE_PARSER.parse(input);<a name="line.71"></a>
+<span class="sourceLineNo">072</span>  }<a name="line.72"></a>
+<span class="sourceLineNo">073</span><a name="line.73"></a>
+<span class="sourceLineNo">074</span>  /**<a name="line.74"></a>
+<span class="sourceLineNo">075</span>   * Takes a String representation that is in the format specified and attempts to construct a date.<a name="line.75"></a>
+<span class="sourceLineNo">076</span>   *<a name="line.76"></a>
+<span class="sourceLineNo">077</span>   * @param input  To convert to a Date()<a name="line.77"></a>
+<span class="sourceLineNo">078</span>   * @param format The format of the date, e.g. dd/mm/yyyy<a name="line.78"></a>
+<span class="sourceLineNo">079</span>   *<a name="line.79"></a>
+<span class="sourceLineNo">080</span>   * @return The result of the parsing<a name="line.80"></a>
+<span class="sourceLineNo">081</span>   */<a name="line.81"></a>
+<span class="sourceLineNo">082</span>  public static ParseResult&lt;Date&gt; parse(String input, String format) {<a name="line.82"></a>
+<span class="sourceLineNo">083</span>    try {<a name="line.83"></a>
+<span class="sourceLineNo">084</span>      Date d = DateUtils.parseDate(input, format);<a name="line.84"></a>
+<span class="sourceLineNo">085</span>      LOGGER.debug("Parsed input[{}] in format[{}] to date[{}]", new Object[] {input, format, d});<a name="line.85"></a>
+<span class="sourceLineNo">086</span>      return ParseResult.success(ParseResult.CONFIDENCE.DEFINITE, d);<a name="line.86"></a>
+<span class="sourceLineNo">087</span>    } catch (ParseException e) {<a name="line.87"></a>
+<span class="sourceLineNo">088</span>      LOGGER.debug("Exception caught trying to parse a date", e);<a name="line.88"></a>
+<span class="sourceLineNo">089</span>      return ParseResult.fail();<a name="line.89"></a>
+<span class="sourceLineNo">090</span>    }<a name="line.90"></a>
+<span class="sourceLineNo">091</span>  }<a name="line.91"></a>
+<span class="sourceLineNo">092</span><a name="line.92"></a>
+<span class="sourceLineNo">093</span>  /**<a name="line.93"></a>
+<span class="sourceLineNo">094</span>   * Utility to check that the field appears valid in it's status use. Day must fall within 1-31, month within 1-12 and<a name="line.94"></a>
+<span class="sourceLineNo">095</span>   * year within 1-&lt;currentyear&gt;, null will always be invalid.<a name="line.95"></a>
+<span class="sourceLineNo">096</span>   *<a name="line.96"></a>
+<span class="sourceLineNo">097</span>   * @param value To test<a name="line.97"></a>
+<span class="sourceLineNo">098</span>   * @param field The context that the value is being used<a name="line.98"></a>
+<span class="sourceLineNo">099</span>   *<a name="line.99"></a>
+<span class="sourceLineNo">100</span>   * @return true or false depending on the validity of the value in it's context<a name="line.100"></a>
+<span class="sourceLineNo">101</span>   */<a name="line.101"></a>
+<span class="sourceLineNo">102</span>  public static boolean isValidUse(String value, DATE_FIELD field) {<a name="line.102"></a>
+<span class="sourceLineNo">103</span>    if (value == null) return false;<a name="line.103"></a>
+<span class="sourceLineNo">104</span><a name="line.104"></a>
+<span class="sourceLineNo">105</span>    try {<a name="line.105"></a>
+<span class="sourceLineNo">106</span>      int valueAsInt = Integer.parseInt(value);<a name="line.106"></a>
+<span class="sourceLineNo">107</span>      switch (field) {<a name="line.107"></a>
+<span class="sourceLineNo">108</span>        case DAY:<a name="line.108"></a>
+<span class="sourceLineNo">109</span>          return valueAsInt &gt;= 1 &amp;&amp; valueAsInt &lt;= 31;<a name="line.109"></a>
+<span class="sourceLineNo">110</span>        case MONTH:<a name="line.110"></a>
+<span class="sourceLineNo">111</span>          return valueAsInt &gt;= 1 &amp;&amp; valueAsInt &lt;= 12;<a name="line.111"></a>
+<span class="sourceLineNo">112</span>        case YEAR:<a name="line.112"></a>
+<span class="sourceLineNo">113</span>          return valueAsInt &gt;= 1 &amp;&amp; valueAsInt &lt;= new GregorianCalendar().get(Calendar.YEAR);<a name="line.113"></a>
+<span class="sourceLineNo">114</span>      }<a name="line.114"></a>
+<span class="sourceLineNo">115</span>    } catch (NumberFormatException e) {<a name="line.115"></a>
+<span class="sourceLineNo">116</span>      LOGGER.debug("{} does not appear valid as a {}", value, field);<a name="line.116"></a>
+<span class="sourceLineNo">117</span>    }<a name="line.117"></a>
+<span class="sourceLineNo">118</span>    return false;<a name="line.118"></a>
+<span class="sourceLineNo">119</span>  }<a name="line.119"></a>
+<span class="sourceLineNo">120</span><a name="line.120"></a>
+<span class="sourceLineNo">121</span>  /**<a name="line.121"></a>
+<span class="sourceLineNo">122</span>   * Checks if a {@link YearMonthDay} object &lt;i&gt;maybe&lt;/i&gt; represents a valid date in the sense that the date really<a name="line.122"></a>
+<span class="sourceLineNo">123</span>   * exists (e.g. no February 31st)<a name="line.123"></a>
+<span class="sourceLineNo">124</span>   * As the components of a YearMonthDay may be null it only checks this validity if all components are not null.<a name="line.124"></a>
+<span class="sourceLineNo">125</span>   *<a name="line.125"></a>
+<span class="sourceLineNo">126</span>   * @param ymd to check<a name="line.126"></a>
+<span class="sourceLineNo">127</span>   *<a name="line.127"></a>
+<span class="sourceLineNo">128</span>   * @return true if it may be a valid partial date, false if it is sure that it is an invalid date.<a name="line.128"></a>
+<span class="sourceLineNo">129</span>   */<a name="line.129"></a>
+<span class="sourceLineNo">130</span>  public static boolean isDateCoercible(YearMonthDay ymd) {<a name="line.130"></a>
+<span class="sourceLineNo">131</span>    if (ymd.getYear() == null || ymd.getMonth() == null || ymd.getDay() == null) {<a name="line.131"></a>
+<span class="sourceLineNo">132</span>      return true;<a name="line.132"></a>
+<span class="sourceLineNo">133</span>    }<a name="line.133"></a>
+<span class="sourceLineNo">134</span><a name="line.134"></a>
+<span class="sourceLineNo">135</span>    // SimpleDateFormat is not thread-safe. Do not reuse or if you reuse use Thread locals or other synchronization<a name="line.135"></a>
+<span class="sourceLineNo">136</span>    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");<a name="line.136"></a>
+<span class="sourceLineNo">137</span>    sdf.setLenient(false);<a name="line.137"></a>
+<span class="sourceLineNo">138</span>    return sdf.parse(DATE_JOINER.join(ymd.getYear(), ymd.getMonth(), ymd.getDay()), new ParsePosition(0)) != null;<a name="line.138"></a>
+<span class="sourceLineNo">139</span>  }<a name="line.139"></a>
+<span class="sourceLineNo">140</span><a name="line.140"></a>
+<span class="sourceLineNo">141</span>  /**<a name="line.141"></a>
+<span class="sourceLineNo">142</span>   * Tries to create a valid date (complete or partial) out of three Strings for year, month and day.<a name="line.142"></a>
+<span class="sourceLineNo">143</span>   * If all three components are null the parse will fail.<a name="line.143"></a>
+<span class="sourceLineNo">144</span>   *<a name="line.144"></a>
+<span class="sourceLineNo">145</span>   * @param year  to parse. May be null.<a name="line.145"></a>
+<span class="sourceLineNo">146</span>   * @param month to parse. May be null.<a name="line.146"></a>
+<span class="sourceLineNo">147</span>   * @param day   to parse. May be null.<a name="line.147"></a>
+<span class="sourceLineNo">148</span>   *<a name="line.148"></a>
+<span class="sourceLineNo">149</span>   * @return result of the parsing<a name="line.149"></a>
+<span class="sourceLineNo">150</span>   */<a name="line.150"></a>
+<span class="sourceLineNo">151</span>  public static ParseResult&lt;Date&gt; parse(@Nullable String year, @Nullable String month, @Nullable String day) {<a name="line.151"></a>
+<span class="sourceLineNo">152</span>    if (year == null &amp;&amp; month == null &amp;&amp; day == null) {<a name="line.152"></a>
+<span class="sourceLineNo">153</span>      return ParseResult.fail();<a name="line.153"></a>
+<span class="sourceLineNo">154</span>    }<a name="line.154"></a>
 <span class="sourceLineNo">155</span><a name="line.155"></a>
-<span class="sourceLineNo">156</span>  /**<a name="line.156"></a>
-<span class="sourceLineNo">157</span>   * Note that YearMonthDay can be sparsely populated<a name="line.157"></a>
-<span class="sourceLineNo">158</span>   *<a name="line.158"></a>
-<span class="sourceLineNo">159</span>   * @param input To convert to a YearMonthDay()<a name="line.159"></a>
-<span class="sourceLineNo">160</span>   *<a name="line.160"></a>
-<span class="sourceLineNo">161</span>   * @return The result of the parsing<a name="line.161"></a>
-<span class="sourceLineNo">162</span>   */<a name="line.162"></a>
-<span class="sourceLineNo">163</span>  public static YearMonthDay atomize(Date input) {<a name="line.163"></a>
-<span class="sourceLineNo">164</span>    YearMonthDay ymd = new YearMonthDay();<a name="line.164"></a>
-<span class="sourceLineNo">165</span>    Calendar c = Calendar.getInstance();<a name="line.165"></a>
-<span class="sourceLineNo">166</span>    c.setTime(input);<a name="line.166"></a>
-<span class="sourceLineNo">167</span>    ymd.setDay(String.valueOf(c.get(Calendar.DAY_OF_MONTH)));<a name="line.167"></a>
-<span class="sourceLineNo">168</span>    ymd.setMonth(String.valueOf(c.get(Calendar.MONTH) + 1)); // months are zero indexed<a name="line.168"></a>
-<span class="sourceLineNo">169</span>    ymd.setYear(String.valueOf(c.get(Calendar.YEAR)));<a name="line.169"></a>
-<span class="sourceLineNo">170</span>    return ymd;<a name="line.170"></a>
-<span class="sourceLineNo">171</span>  }<a name="line.171"></a>
-<span class="sourceLineNo">172</span><a name="line.172"></a>
-<span class="sourceLineNo">173</span><a name="line.173"></a>
-<span class="sourceLineNo">174</span>  public static YearMonthDay normalize(String year, String month, String day) {<a name="line.174"></a>
-<span class="sourceLineNo">175</span>    YearMonthDay ymd = new YearMonthDay();<a name="line.175"></a>
-<span class="sourceLineNo">176</span>    // normalize float values<a name="line.176"></a>
-<span class="sourceLineNo">177</span>    year = normalizeFloat(year);<a name="line.177"></a>
-<span class="sourceLineNo">178</span>    month = normalizeFloat(month);<a name="line.178"></a>
-<span class="sourceLineNo">179</span>    day = normalizeFloat(day);<a name="line.179"></a>
+<span class="sourceLineNo">156</span>    month = normalizeMonth(month);<a name="line.156"></a>
+<span class="sourceLineNo">157</span>    Date d = STRING_TO_DATE_PARSER.strictParse(day + "/" + month + "/" + year, new String[]{"dd/MM/yyyy", "dd/mm/yyyy"});<a name="line.157"></a>
+<span class="sourceLineNo">158</span>    if (d != null) {<a name="line.158"></a>
+<span class="sourceLineNo">159</span>      return ParseResult.success(ParseResult.CONFIDENCE.DEFINITE, d);<a name="line.159"></a>
+<span class="sourceLineNo">160</span>    }<a name="line.160"></a>
+<span class="sourceLineNo">161</span>    return ParseResult.fail();<a name="line.161"></a>
+<span class="sourceLineNo">162</span>  }<a name="line.162"></a>
+<span class="sourceLineNo">163</span><a name="line.163"></a>
+<span class="sourceLineNo">164</span>  /**<a name="line.164"></a>
+<span class="sourceLineNo">165</span>   * Note that YearMonthDay can be sparsely populated<a name="line.165"></a>
+<span class="sourceLineNo">166</span>   *<a name="line.166"></a>
+<span class="sourceLineNo">167</span>   * @param input To convert to a YearMonthDay()<a name="line.167"></a>
+<span class="sourceLineNo">168</span>   *<a name="line.168"></a>
+<span class="sourceLineNo">169</span>   * @return The result of the parsing<a name="line.169"></a>
+<span class="sourceLineNo">170</span>   */<a name="line.170"></a>
+<span class="sourceLineNo">171</span>  public static YearMonthDay atomize(Date input) {<a name="line.171"></a>
+<span class="sourceLineNo">172</span>    YearMonthDay ymd = new YearMonthDay();<a name="line.172"></a>
+<span class="sourceLineNo">173</span>    Calendar c = Calendar.getInstance();<a name="line.173"></a>
+<span class="sourceLineNo">174</span>    c.setTime(input);<a name="line.174"></a>
+<span class="sourceLineNo">175</span>    ymd.setDay(String.valueOf(c.get(Calendar.DAY_OF_MONTH)));<a name="line.175"></a>
+<span class="sourceLineNo">176</span>    ymd.setMonth(String.valueOf(c.get(Calendar.MONTH) + 1)); // months are zero indexed<a name="line.176"></a>
+<span class="sourceLineNo">177</span>    ymd.setYear(String.valueOf(c.get(Calendar.YEAR)));<a name="line.177"></a>
+<span class="sourceLineNo">178</span>    return ymd;<a name="line.178"></a>
+<span class="sourceLineNo">179</span>  }<a name="line.179"></a>
 <span class="sourceLineNo">180</span><a name="line.180"></a>
-<span class="sourceLineNo">181</span>    // normalize string months<a name="line.181"></a>
-<span class="sourceLineNo">182</span>    month = normalizeMonth(month);<a name="line.182"></a>
-<span class="sourceLineNo">183</span><a name="line.183"></a>
-<span class="sourceLineNo">184</span>    // remove nulls<a name="line.184"></a>
-<span class="sourceLineNo">185</span>    day = "\\N".equalsIgnoreCase(day) ? null : day;<a name="line.185"></a>
-<span class="sourceLineNo">186</span>    month = "\\N".equalsIgnoreCase(month) ? null : month;<a name="line.186"></a>
-<span class="sourceLineNo">187</span>    year = "\\N".equalsIgnoreCase(year) ? null : year;<a name="line.187"></a>
-<span class="sourceLineNo">188</span>    year = inferCentury(year);<a name="line.188"></a>
-<span class="sourceLineNo">189</span>    if (isValidUse(year, DATE_FIELD.YEAR)) {<a name="line.189"></a>
-<span class="sourceLineNo">190</span>      ymd.setYear(year);<a name="line.190"></a>
-<span class="sourceLineNo">191</span>    }<a name="line.191"></a>
-<span class="sourceLineNo">192</span>    if (isValidUse(month, DATE_FIELD.MONTH)) {<a name="line.192"></a>
-<span class="sourceLineNo">193</span>      ymd.setMonth(month);<a name="line.193"></a>
-<span class="sourceLineNo">194</span>    }<a name="line.194"></a>
-<span class="sourceLineNo">195</span>    if (isValidUse(day, DATE_FIELD.DAY)) {<a name="line.195"></a>
-<span class="sourceLineNo">196</span>      ymd.setDay(day);<a name="line.196"></a>
-<span class="sourceLineNo">197</span>    }<a name="line.197"></a>
-<span class="sourceLineNo">198</span><a name="line.198"></a>
-<span class="sourceLineNo">199</span>    // if everything is null, it is possible that<a name="line.199"></a>
-<span class="sourceLineNo">200</span>    // the year contains a full date.  Attempt a parse of that<a name="line.200"></a>
-<span class="sourceLineNo">201</span>    if (ymd.representsNull() &amp;&amp; StringUtils.isNotBlank(year)) {<a name="line.201"></a>
-<span class="sourceLineNo">202</span>      LOGGER.debug("Attempting to infer day, month and year from year field: {}", year);<a name="line.202"></a>
-<span class="sourceLineNo">203</span>      ParseResult&lt;YearMonthDay&gt; result = atomize(year);<a name="line.203"></a>
-<span class="sourceLineNo">204</span>      if (ParseResult.STATUS.SUCCESS == result.getStatus()) {<a name="line.204"></a>
-<span class="sourceLineNo">205</span>        LOGGER.debug("Year[{}] resulted in: {}", year, result.getPayload());<a name="line.205"></a>
-<span class="sourceLineNo">206</span>        ymd = result.getPayload();<a name="line.206"></a>
-<span class="sourceLineNo">207</span>      } else {<a name="line.207"></a>
-<span class="sourceLineNo">208</span>        try {<a name="line.208"></a>
-<span class="sourceLineNo">209</span>          // last ditch attempt to get a date<a name="line.209"></a>
-<span class="sourceLineNo">210</span>          // bad days are converted by the gregorian calendar (31/06/2000 for example becomes 01/07/2000)<a name="line.210"></a>
-<span class="sourceLineNo">211</span>          Date p = DateUtils.parseDate(year, new String[] {"yyyy-MM-dd", "yyyy/MM/dd"});<a name="line.211"></a>
-<span class="sourceLineNo">212</span>          GregorianCalendar gc = new GregorianCalendar();<a name="line.212"></a>
-<span class="sourceLineNo">213</span>          gc.setTime(p);<a name="line.213"></a>
-<span class="sourceLineNo">214</span>          ymd.setYear(String.valueOf(gc.get(Calendar.YEAR)));<a name="line.214"></a>
-<span class="sourceLineNo">215</span>          ymd.setMonth(String.valueOf(1+gc.get(Calendar.MONTH)));<a name="line.215"></a>
-<span class="sourceLineNo">216</span>          ymd.setDay(String.valueOf(gc.get(Calendar.DAY_OF_MONTH)));<a name="line.216"></a>
-<span class="sourceLineNo">217</span><a name="line.217"></a>
-<span class="sourceLineNo">218</span>        } catch (ParseException e) {<a name="line.218"></a>
-<span class="sourceLineNo">219</span>        }<a name="line.219"></a>
-<span class="sourceLineNo">220</span>      }<a name="line.220"></a>
-<span class="sourceLineNo">221</span>    }<a name="line.221"></a>
-<span class="sourceLineNo">222</span><a name="line.222"></a>
-<span class="sourceLineNo">223</span>    if (!isDateCoercible(ymd)) {<a name="line.223"></a>
-<span class="sourceLineNo">224</span>      ymd.setYear(null);<a name="line.224"></a>
-<span class="sourceLineNo">225</span>      ymd.setMonth(null);<a name="line.225"></a>
-<span class="sourceLineNo">226</span>      ymd.setDay(null);<a name="line.226"></a>
-<span class="sourceLineNo">227</span>    }<a name="line.227"></a>
-<span class="sourceLineNo">228</span><a name="line.228"></a>
-<span class="sourceLineNo">229</span>    // Final check before returning<a name="line.229"></a>
-<span class="sourceLineNo">230</span>    if (!isValidUse(ymd.getYear(), DATE_FIELD.YEAR)) {<a name="line.230"></a>
-<span class="sourceLineNo">231</span>      ymd.setYear(null);<a name="line.231"></a>
-<span class="sourceLineNo">232</span>    }<a name="line.232"></a>
-<span class="sourceLineNo">233</span>    if (!isValidUse(ymd.getMonth(), DATE_FIELD.MONTH)) {<a name="line.233"></a>
-<span class="sourceLineNo">234</span>      ymd.setMonth(null);<a name="line.234"></a>
+<span class="sourceLineNo">181</span><a name="line.181"></a>
+<span class="sourceLineNo">182</span>  public static YearMonthDay normalize(String year, String month, String day) {<a name="line.182"></a>
+<span class="sourceLineNo">183</span>    YearMonthDay ymd = new YearMonthDay();<a name="line.183"></a>
+<span class="sourceLineNo">184</span>    // normalize float values<a name="line.184"></a>
+<span class="sourceLineNo">185</span>    year = normalizeFloat(year);<a name="line.185"></a>
+<span class="sourceLineNo">186</span>    month = normalizeFloat(month);<a name="line.186"></a>
+<span class="sourceLineNo">187</span>    day = normalizeFloat(day);<a name="line.187"></a>
+<span class="sourceLineNo">188</span><a name="line.188"></a>
+<span class="sourceLineNo">189</span>    // normalize string months<a name="line.189"></a>
+<span class="sourceLineNo">190</span>    month = normalizeMonth(month);<a name="line.190"></a>
+<span class="sourceLineNo">191</span><a name="line.191"></a>
+<span class="sourceLineNo">192</span>    // remove nulls<a name="line.192"></a>
+<span class="sourceLineNo">193</span>    day = "\\N".equalsIgnoreCase(day) ? null : day;<a name="line.193"></a>
+<span class="sourceLineNo">194</span>    month = "\\N".equalsIgnoreCase(month) ? null : month;<a name="line.194"></a>
+<span class="sourceLineNo">195</span>    year = "\\N".equalsIgnoreCase(year) ? null : year;<a name="line.195"></a>
+<span class="sourceLineNo">196</span>    year = inferCentury(year);<a name="line.196"></a>
+<span class="sourceLineNo">197</span>    if (isValidUse(year, DATE_FIELD.YEAR)) {<a name="line.197"></a>
+<span class="sourceLineNo">198</span>      ymd.setYear(year);<a name="line.198"></a>
+<span class="sourceLineNo">199</span>    }<a name="line.199"></a>
+<span class="sourceLineNo">200</span>    if (isValidUse(month, DATE_FIELD.MONTH)) {<a name="line.200"></a>
+<span class="sourceLineNo">201</span>      ymd.setMonth(month);<a name="line.201"></a>
+<span class="sourceLineNo">202</span>    }<a name="line.202"></a>
+<span class="sourceLineNo">203</span>    if (isValidUse(day, DATE_FIELD.DAY)) {<a name="line.203"></a>
+<span class="sourceLineNo">204</span>      ymd.setDay(day);<a name="line.204"></a>
+<span class="sourceLineNo">205</span>    }<a name="line.205"></a>
+<span class="sourceLineNo">206</span><a name="line.206"></a>
+<span class="sourceLineNo">207</span>    // if everything is null, it is possible that<a name="line.207"></a>
+<span class="sourceLineNo">208</span>    // the year contains a full date.  Attempt a parse of that<a name="line.208"></a>
+<span class="sourceLineNo">209</span>    if (ymd.representsNull() &amp;&amp; StringUtils.isNotBlank(year)) {<a name="line.209"></a>
+<span class="sourceLineNo">210</span>      LOGGER.debug("Attempting to infer day, month and year from year field: {}", year);<a name="line.210"></a>
+<span class="sourceLineNo">211</span>      ParseResult&lt;YearMonthDay&gt; result = atomize(year);<a name="line.211"></a>
+<span class="sourceLineNo">212</span>      if (ParseResult.STATUS.SUCCESS == result.getStatus()) {<a name="line.212"></a>
+<span class="sourceLineNo">213</span>        LOGGER.debug("Year[{}] resulted in: {}", year, result.getPayload());<a name="line.213"></a>
+<span class="sourceLineNo">214</span>        ymd = result.getPayload();<a name="line.214"></a>
+<span class="sourceLineNo">215</span>      } else {<a name="line.215"></a>
+<span class="sourceLineNo">216</span>        try {<a name="line.216"></a>
+<span class="sourceLineNo">217</span>          // last ditch attempt to get a date<a name="line.217"></a>
+<span class="sourceLineNo">218</span>          // bad days are converted by the gregorian calendar (31/06/2000 for example becomes 01/07/2000)<a name="line.218"></a>
+<span class="sourceLineNo">219</span>          Date p = DateUtils.parseDate(year, new String[] {"yyyy-MM-dd", "yyyy/MM/dd"});<a name="line.219"></a>
+<span class="sourceLineNo">220</span>          GregorianCalendar gc = new GregorianCalendar();<a name="line.220"></a>
+<span class="sourceLineNo">221</span>          gc.setTime(p);<a name="line.221"></a>
+<span class="sourceLineNo">222</span>          ymd.setYear(String.valueOf(gc.get(Calendar.YEAR)));<a name="line.222"></a>
+<span class="sourceLineNo">223</span>          ymd.setMonth(String.valueOf(1+gc.get(Calendar.MONTH)));<a name="line.223"></a>
+<span class="sourceLineNo">224</span>          ymd.setDay(String.valueOf(gc.get(Calendar.DAY_OF_MONTH)));<a name="line.224"></a>
+<span class="sourceLineNo">225</span><a name="line.225"></a>
+<span class="sourceLineNo">226</span>        } catch (ParseException e) {<a name="line.226"></a>
+<span class="sourceLineNo">227</span>        }<a name="line.227"></a>
+<span class="sourceLineNo">228</span>      }<a name="line.228"></a>
+<span class="sourceLineNo">229</span>    }<a name="line.229"></a>
+<span class="sourceLineNo">230</span><a name="line.230"></a>
+<span class="sourceLineNo">231</span>    if (!isDateCoercible(ymd)) {<a name="line.231"></a>
+<span class="sourceLineNo">232</span>      ymd.setYear(null);<a name="line.232"></a>
+<span class="sourceLineNo">233</span>      ymd.setMonth(null);<a name="line.233"></a>
+<span class="sourceLineNo">234</span>      ymd.setDay(null);<a name="line.234"></a>
 <span class="sourceLineNo">235</span>    }<a name="line.235"></a>
-<span class="sourceLineNo">236</span>    if (!isValidUse(ymd.getDay(), DATE_FIELD.DAY)) {<a name="line.236"></a>
-<span class="sourceLineNo">237</span>      ymd.setDay(null);<a name="line.237"></a>
-<span class="sourceLineNo">238</span>    }<a name="line.238"></a>
-<span class="sourceLineNo">239</span><a name="line.239"></a>
-<span class="sourceLineNo">240</span>    return ymd;<a name="line.240"></a>
-<span class="sourceLineNo">241</span>  }<a name="line.241"></a>
-<span class="sourceLineNo">242</span><a name="line.242"></a>
-<span class="sourceLineNo">243</span>  /**<a name="line.243"></a>
-<span class="sourceLineNo">244</span>   * Should the year be lower than 100, this will assume it is current century if makes sense, otherwise uses previous<a name="line.244"></a>
-<span class="sourceLineNo">245</span>   * century. At time of writing (2010) a value of 1-99 will be treated as 2010, whereas 11 will be considered 1911.<a name="line.245"></a>
-<span class="sourceLineNo">246</span>   * Next year, the same code would interpret 11 as 2011.  This is not foolproof, but much more likely than the year<a name="line.246"></a>
-<span class="sourceLineNo">247</span>   * 0011.<a name="line.247"></a>
-<span class="sourceLineNo">248</span>   */<a name="line.248"></a>
-<span class="sourceLineNo">249</span>  public static String inferCentury(String year) {<a name="line.249"></a>
-<span class="sourceLineNo">250</span>    try {<a name="line.250"></a>
-<span class="sourceLineNo">251</span>      int y = Integer.parseInt(year);<a name="line.251"></a>
-<span class="sourceLineNo">252</span>      if (y &gt;= 0 &amp;&amp; y &lt;= 99) {<a name="line.252"></a>
-<span class="sourceLineNo">253</span>        // if it is in the future, it can't be<a name="line.253"></a>
-<span class="sourceLineNo">254</span>        if ((CURRENT_YEAR - (CURRENT_YEAR % 100)) + y &gt; CURRENT_YEAR) {<a name="line.254"></a>
-<span class="sourceLineNo">255</span>          y = CURRENT_YEAR - (CURRENT_YEAR % 100) - 100 + y;<a name="line.255"></a>
-<span class="sourceLineNo">256</span>        } else {<a name="line.256"></a>
-<span class="sourceLineNo">257</span>          y = CURRENT_YEAR - (CURRENT_YEAR % 100) + y;<a name="line.257"></a>
-<span class="sourceLineNo">258</span>        }<a name="line.258"></a>
-<span class="sourceLineNo">259</span>        return String.valueOf(y);<a name="line.259"></a>
-<span class="sourceLineNo">260</span>      }<a name="line.260"></a>
-<span class="sourceLineNo">261</span>    } catch (NumberFormatException e) {<a name="line.261"></a>
-<span class="sourceLineNo">262</span>      // no problem, it does not look like a 2 digit year anyway<a name="line.262"></a>
-<span class="sourceLineNo">263</span>    }<a name="line.263"></a>
-<span class="sourceLineNo">264</span>    return year;<a name="line.264"></a>
-<span class="sourceLineNo">265</span>  }<a name="line.265"></a>
-<span class="sourceLineNo">266</span><a name="line.266"></a>
-<span class="sourceLineNo">267</span>  /**<a name="line.267"></a>
-<span class="sourceLineNo">268</span>   * Often values are seen as Float rather than int, due to a database export The year "1978" is actually seen as<a name="line.268"></a>
-<span class="sourceLineNo">269</span>   * "1978.0".  Where this is detected, the string is normalized to the INT representation<a name="line.269"></a>
-<span class="sourceLineNo">270</span>   *<a name="line.270"></a>
-<span class="sourceLineNo">271</span>   * @param value To check<a name="line.271"></a>
-<span class="sourceLineNo">272</span>   *<a name="line.272"></a>
-<span class="sourceLineNo">273</span>   * @return the integer value<a name="line.273"></a>
-<span class="sourceLineNo">274</span>   */<a name="line.274"></a>
-<span class="sourceLineNo">275</span>  public static String normalizeFloat(String value) {<a name="line.275"></a>
-<span class="sourceLineNo">276</span>    if (value != null &amp;&amp; value.contains(".0")) {<a name="line.276"></a>
-<span class="sourceLineNo">277</span>      try {<a name="line.277"></a>
-<span class="sourceLineNo">278</span>        Double d = new Double(value);<a name="line.278"></a>
-<span class="sourceLineNo">279</span>        if ((double) d.intValue() == d.doubleValue()) {<a name="line.279"></a>
-<span class="sourceLineNo">280</span>          return String.valueOf(d.intValue());<a name="line.280"></a>
-<span class="sourceLineNo">281</span>        }<a name="line.281"></a>
-<span class="sourceLineNo">282</span>      } catch (NumberFormatException e) {<a name="line.282"></a>
-<span class="sourceLineNo">283</span>      }<a name="line.283"></a>
-<span class="sourceLineNo">284</span>    }<a name="line.284"></a>
-<span class="sourceLineNo">285</span>    return value;<a name="line.285"></a>
-<span class="sourceLineNo">286</span>  }<a name="line.286"></a>
-<span class="sourceLineNo">287</span><a name="line.287"></a>
-<span class="sourceLineNo">288</span>  /**<a name="line.288"></a>
-<span class="sourceLineNo">289</span>   * Parses the date and then atomizes it to the year month and day<a name="line.289"></a>
-<span class="sourceLineNo">290</span>   *<a name="line.290"></a>
-<span class="sourceLineNo">291</span>   * @param input To convert to a YearMonthDay()<a name="line.291"></a>
-<span class="sourceLineNo">292</span>   *<a name="line.292"></a>
-<span class="sourceLineNo">293</span>   * @return The result of the parsing<a name="line.293"></a>
-<span class="sourceLineNo">294</span>   */<a name="line.294"></a>
-<span class="sourceLineNo">295</span>  public static ParseResult&lt;YearMonthDay&gt; atomize(String input) {<a name="line.295"></a>
-<span class="sourceLineNo">296</span>    input = normalizeMonth(input);<a name="line.296"></a>
-<span class="sourceLineNo">297</span>    ParseResult&lt;Date&gt; parsed = parse(input);<a name="line.297"></a>
-<span class="sourceLineNo">298</span>    if (ParseResult.STATUS.SUCCESS == parsed.getStatus()) {<a name="line.298"></a>
-<span class="sourceLineNo">299</span>      // atomize<a name="line.299"></a>
-<span class="sourceLineNo">300</span>      YearMonthDay atomized = atomize(parsed.getPayload());<a name="line.300"></a>
-<span class="sourceLineNo">301</span>      // construct a combined result of the 2 stages<a name="line.301"></a>
-<span class="sourceLineNo">302</span>      return ParseResult.success(parsed.getConfidence(), atomized);<a name="line.302"></a>
-<span class="sourceLineNo">303</span><a name="line.303"></a>
-<span class="sourceLineNo">304</span>    } else if (ParseResult.STATUS.ERROR == parsed.getStatus()) {<a name="line.304"></a>
-<span class="sourceLineNo">305</span>      return ParseResult.error(parsed.getError());<a name="line.305"></a>
-<span class="sourceLineNo">306</span>    }<a name="line.306"></a>
-<span class="sourceLineNo">307</span><a name="line.307"></a>
-<span class="sourceLineNo">308</span>    return ParseResult.fail();<a name="line.308"></a>
-<span class="sourceLineNo">309</span>  }<a name="line.309"></a>
-<span class="sourceLineNo">310</span><a name="line.310"></a>
-<span class="sourceLineNo">311</span>  /**<a name="line.311"></a>
-<span class="sourceLineNo">312</span>   * Often months come in the form Sept. September etc. This will convert many variations into the numerical version<a name="line.312"></a>
-<span class="sourceLineNo">313</span>   *<a name="line.313"></a>
-<span class="sourceLineNo">314</span>   * @param input To normalize<a name="line.314"></a>
-<span class="sourceLineNo">315</span>   *<a name="line.315"></a>
-<span class="sourceLineNo">316</span>   * @return the normalized month<a name="line.316"></a>
-<span class="sourceLineNo">317</span>   */<a name="line.317"></a>
-<span class="sourceLineNo">318</span>  public static String normalizeMonth(String input) {<a name="line.318"></a>
-<span class="sourceLineNo">319</span>    if (input != null) {<a name="line.319"></a>
-<span class="sourceLineNo">320</span>      int m = 1;<a name="line.320"></a>
-<span class="sourceLineNo">321</span>      for (String[] monthValues : MONTHS) {<a name="line.321"></a>
-<span class="sourceLineNo">322</span>        for (String month : monthValues) {<a name="line.322"></a>
-<span class="sourceLineNo">323</span>          if (StringUtils.equalsIgnoreCase(month, input) || StringUtils.equalsIgnoreCase(month + ".", input)) {<a name="line.323"></a>
-<span class="sourceLineNo">324</span>            return padTo2Chars(m);<a name="line.324"></a>
-<span class="sourceLineNo">325</span>          }<a name="line.325"></a>
-<span class="sourceLineNo">326</span>        }<a name="line.326"></a>
-<span class="sourceLineNo">327</span>        m++;<a name="line.327"></a>
-<span class="sourceLineNo">328</span>      }<a name="line.328"></a>
-<span class="sourceLineNo">329</span>    }<a name="line.329"></a>
-<span class="sourceLineNo">330</span>    return input;<a name="line.330"></a>
-<span class="sourceLineNo">331</span>  }<a name="line.331"></a>
-<span class="sourceLineNo">332</span><a name="line.332"></a>
-<span class="sourceLineNo">333</span>  /**<a name="line.333"></a>
-<span class="sourceLineNo">334</span>   * @param value To convert into a 2 char String.  Must be 1-12 inclusive or else strange results might occur<a name="line.334"></a>
-<span class="sourceLineNo">335</span>   *<a name="line.335"></a>
-<span class="sourceLineNo">336</span>   * @return 1 becomes "01", 5 becomes "05", 10 becomes "10" etc<a name="line.336"></a>
-<span class="sourceLineNo">337</span>   */<a name="line.337"></a>
-<span class="sourceLineNo">338</span>  protected static String padTo2Chars(int value) {<a name="line.338"></a>
-<span class="sourceLineNo">339</span>    return value &lt; 10 ? "0" + value : String.valueOf(value);<a name="line.339"></a>
-<span class="sourceLineNo">340</span>  }<a name="line.340"></a>
-<span class="sourceLineNo">341</span>}<a name="line.341"></a>
+<span class="sourceLineNo">236</span><a name="line.236"></a>
+<span class="sourceLineNo">237</span>    // Final check before returning<a name="line.237"></a>
+<span class="sourceLineNo">238</span>    if (!isValidUse(ymd.getYear(), DATE_FIELD.YEAR)) {<a name="line.238"></a>
+<span class="sourceLineNo">239</span>      ymd.setYear(null);<a name="line.239"></a>
+<span class="sourceLineNo">240</span>    }<a name="line.240"></a>
+<span class="sourceLineNo">241</span>    if (!isValidUse(ymd.getMonth(), DATE_FIELD.MONTH)) {<a name="line.241"></a>
+<span class="sourceLineNo">242</span>      ymd.setMonth(null);<a name="line.242"></a>
+<span class="sourceLineNo">243</span>    }<a name="line.243"></a>
+<span class="sourceLineNo">244</span>    if (!isValidUse(ymd.getDay(), DATE_FIELD.DAY)) {<a name="line.244"></a>
+<span class="sourceLineNo">245</span>      ymd.setDay(null);<a name="line.245"></a>
+<span class="sourceLineNo">246</span>    }<a name="line.246"></a>
+<span class="sourceLineNo">247</span><a name="line.247"></a>
+<span class="sourceLineNo">248</span>    return ymd;<a name="line.248"></a>
+<span class="sourceLineNo">249</span>  }<a name="line.249"></a>
+<span class="sourceLineNo">250</span><a name="line.250"></a>
+<span class="sourceLineNo">251</span>  /**<a name="line.251"></a>
+<span class="sourceLineNo">252</span>   * Should the year be lower than 100, this will assume it is current century if makes sense, otherwise uses previous<a name="line.252"></a>
+<span class="sourceLineNo">253</span>   * century. At time of writing (2010) a value of 1-99 will be treated as 2010, whereas 11 will be considered 1911.<a name="line.253"></a>
+<span class="sourceLineNo">254</span>   * Next year, the same code would interpret 11 as 2011.  This is not foolproof, but much more likely than the year<a name="line.254"></a>
+<span class="sourceLineNo">255</span>   * 0011.<a name="line.255"></a>
+<span class="sourceLineNo">256</span>   */<a name="line.256"></a>
+<span class="sourceLineNo">257</span>  public static String inferCentury(String year) {<a name="line.257"></a>
+<span class="sourceLineNo">258</span>    try {<a name="line.258"></a>
+<span class="sourceLineNo">259</span>      int y = Integer.parseInt(year);<a name="line.259"></a>
+<span class="sourceLineNo">260</span>      if (y &gt;= 0 &amp;&amp; y &lt;= 99) {<a name="line.260"></a>
+<span class="sourceLineNo">261</span>        // if it is in the future, it can't be<a name="line.261"></a>
+<span class="sourceLineNo">262</span>        if ((CURRENT_YEAR - (CURRENT_YEAR % 100)) + y &gt; CURRENT_YEAR) {<a name="line.262"></a>
+<span class="sourceLineNo">263</span>          y = CURRENT_YEAR - (CURRENT_YEAR % 100) - 100 + y;<a name="line.263"></a>
+<span class="sourceLineNo">264</span>        } else {<a name="line.264"></a>
+<span class="sourceLineNo">265</span>          y = CURRENT_YEAR - (CURRENT_YEAR % 100) + y;<a name="line.265"></a>
+<span class="sourceLineNo">266</span>        }<a name="line.266"></a>
+<span class="sourceLineNo">267</span>        return String.valueOf(y);<a name="line.267"></a>
+<span class="sourceLineNo">268</span>      }<a name="line.268"></a>
+<span class="sourceLineNo">269</span>    } catch (NumberFormatException e) {<a name="line.269"></a>
+<span class="sourceLineNo">270</span>      // no problem, it does not look like a 2 digit year anyway<a name="line.270"></a>
+<span class="sourceLineNo">271</span>    }<a name="line.271"></a>
+<span class="sourceLineNo">272</span>    return year;<a name="line.272"></a>
+<span class="sourceLineNo">273</span>  }<a name="line.273"></a>
+<span class="sourceLineNo">274</span><a name="line.274"></a>
+<span class="sourceLineNo">275</span>  /**<a name="line.275"></a>
+<span class="sourceLineNo">276</span>   * Often values are seen as Float rather than int, due to a database export The year "1978" is actually seen as<a name="line.276"></a>
+<span class="sourceLineNo">277</span>   * "1978.0".  Where this is detected, the string is normalized to the INT representation<a name="line.277"></a>
+<span class="sourceLineNo">278</span>   *<a name="line.278"></a>
+<span class="sourceLineNo">279</span>   * @param value To check<a name="line.279"></a>
+<span class="sourceLineNo">280</span>   *<a name="line.280"></a>
+<span class="sourceLineNo">281</span>   * @return the integer value<a name="line.281"></a>
+<span class="sourceLineNo">282</span>   */<a name="line.282"></a>
+<span class="sourceLineNo">283</span>  public static String normalizeFloat(String value) {<a name="line.283"></a>
+<span class="sourceLineNo">284</span>    if (value != null &amp;&amp; value.contains(".0")) {<a name="line.284"></a>
+<span class="sourceLineNo">285</span>      try {<a name="line.285"></a>
+<span class="sourceLineNo">286</span>        Double d = new Double(value);<a name="line.286"></a>
+<span class="sourceLineNo">287</span>        if ((double) d.intValue() == d.doubleValue()) {<a name="line.287"></a>
+<span class="sourceLineNo">288</span>          return String.valueOf(d.intValue());<a name="line.288"></a>
+<span class="sourceLineNo">289</span>        }<a name="line.289"></a>
+<span class="sourceLineNo">290</span>      } catch (NumberFormatException e) {<a name="line.290"></a>
+<span class="sourceLineNo">291</span>      }<a name="line.291"></a>
+<span class="sourceLineNo">292</span>    }<a name="line.292"></a>
+<span class="sourceLineNo">293</span>    return value;<a name="line.293"></a>
+<span class="sourceLineNo">294</span>  }<a name="line.294"></a>
+<span class="sourceLineNo">295</span><a name="line.295"></a>
+<span class="sourceLineNo">296</span>  /**<a name="line.296"></a>
+<span class="sourceLineNo">297</span>   * Parses the date and then atomizes it to the year month and day<a name="line.297"></a>
+<span class="sourceLineNo">298</span>   *<a name="line.298"></a>
+<span class="sourceLineNo">299</span>   * @param input To convert to a YearMonthDay()<a name="line.299"></a>
+<span class="sourceLineNo">300</span>   *<a name="line.300"></a>
+<span class="sourceLineNo">301</span>   * @return The result of the parsing<a name="line.301"></a>
+<span class="sourceLineNo">302</span>   */<a name="line.302"></a>
+<span class="sourceLineNo">303</span>  public static ParseResult&lt;YearMonthDay&gt; atomize(String input) {<a name="line.303"></a>
+<span class="sourceLineNo">304</span>    input = normalizeMonth(input);<a name="line.304"></a>
+<span class="sourceLineNo">305</span>    ParseResult&lt;Date&gt; parsed = parse(input);<a name="line.305"></a>
+<span class="sourceLineNo">306</span>    if (ParseResult.STATUS.SUCCESS == parsed.getStatus()) {<a name="line.306"></a>
+<span class="sourceLineNo">307</span>      // atomize<a name="line.307"></a>
+<span class="sourceLineNo">308</span>      YearMonthDay atomized = atomize(parsed.getPayload());<a name="line.308"></a>
+<span class="sourceLineNo">309</span>      // construct a combined result of the 2 stages<a name="line.309"></a>
+<span class="sourceLineNo">310</span>      return ParseResult.success(parsed.getConfidence(), atomized);<a name="line.310"></a>
+<span class="sourceLineNo">311</span><a name="line.311"></a>
+<span class="sourceLineNo">312</span>    } else if (ParseResult.STATUS.ERROR == parsed.getStatus()) {<a name="line.312"></a>
+<span class="sourceLineNo">313</span>      return ParseResult.error(parsed.getError());<a name="line.313"></a>
+<span class="sourceLineNo">314</span>    }<a name="line.314"></a>
+<span class="sourceLineNo">315</span><a name="line.315"></a>
+<span class="sourceLineNo">316</span>    return ParseResult.fail();<a name="line.316"></a>
+<span class="sourceLineNo">317</span>  }<a name="line.317"></a>
+<span class="sourceLineNo">318</span><a name="line.318"></a>
+<span class="sourceLineNo">319</span>  /**<a name="line.319"></a>
+<span class="sourceLineNo">320</span>   * Often months come in the form Sept. September etc. This will convert many variations into the numerical version<a name="line.320"></a>
+<span class="sourceLineNo">321</span>   *<a name="line.321"></a>
+<span class="sourceLineNo">322</span>   * @param input To normalize<a name="line.322"></a>
+<span class="sourceLineNo">323</span>   *<a name="line.323"></a>
+<span class="sourceLineNo">324</span>   * @return the normalized month<a name="line.324"></a>
+<span class="sourceLineNo">325</span>   */<a name="line.325"></a>
+<span class="sourceLineNo">326</span>  public static String normalizeMonth(String input) {<a name="line.326"></a>
+<span class="sourceLineNo">327</span>    if (input != null) {<a name="line.327"></a>
+<span class="sourceLineNo">328</span>      int m = 1;<a name="line.328"></a>
+<span class="sourceLineNo">329</span>      for (String[] monthValues : MONTHS) {<a name="line.329"></a>
+<span class="sourceLineNo">330</span>        for (String month : monthValues) {<a name="line.330"></a>
+<span class="sourceLineNo">331</span>          if (StringUtils.equalsIgnoreCase(month, input) || StringUtils.equalsIgnoreCase(month + ".", input)) {<a name="line.331"></a>
+<span class="sourceLineNo">332</span>            return padTo2Chars(m);<a name="line.332"></a>
+<span class="sourceLineNo">333</span>          }<a name="line.333"></a>
+<span class="sourceLineNo">334</span>        }<a name="line.334"></a>
+<span class="sourceLineNo">335</span>        m++;<a name="line.335"></a>
+<span class="sourceLineNo">336</span>      }<a name="line.336"></a>
+<span class="sourceLineNo">337</span>    }<a name="line.337"></a>
+<span class="sourceLineNo">338</span>    return input;<a name="line.338"></a>
+<span class="sourceLineNo">339</span>  }<a name="line.339"></a>
+<span class="sourceLineNo">340</span><a name="line.340"></a>
+<span class="sourceLineNo">341</span>  /**<a name="line.341"></a>
+<span class="sourceLineNo">342</span>   * @param value To convert into a 2 char String.  Must be 1-12 inclusive or else strange results might occur<a name="line.342"></a>
+<span class="sourceLineNo">343</span>   *<a name="line.343"></a>
+<span class="sourceLineNo">344</span>   * @return 1 becomes "01", 5 becomes "05", 10 becomes "10" etc<a name="line.344"></a>
+<span class="sourceLineNo">345</span>   */<a name="line.345"></a>
+<span class="sourceLineNo">346</span>  protected static String padTo2Chars(int value) {<a name="line.346"></a>
+<span class="sourceLineNo">347</span>    return value &lt; 10 ? "0" + value : String.valueOf(value);<a name="line.347"></a>
+<span class="sourceLineNo">348</span>  }<a name="line.348"></a>
+<span class="sourceLineNo">349</span>}<a name="line.349"></a>
 
 
 
