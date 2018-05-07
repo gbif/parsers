@@ -42,12 +42,20 @@ public class DateParseUtils {
   // by abbreviations.  Be very careful not to add any ambiguous terms
   // such as "J" "A" etc.  Do not add a "." at the end of abbreviations
   // as normalization will automatically do this.
-  protected static final String[][] MONTHS = {{"January", "Jan", "J", "Ene", "Ja"},  // Ene. is abbreviated Spanish
-    {"February", "Feb", "F", "Fe"}, {"March", "Mar"}, {"April", "Apr", "Ap", "Abr"},  // Abr. is abbreviated Spanish
-    {"May"}, {"June", "Jun"}, {"July", "Jul"}, {"August", "Aug", "Au", "Ago"},
-    // Ago seen a lot in data
-    {"September", "Sep", "Sept", "Set", "S"}, // Set is a common mispelling
-    {"October", "Oct", "O", "Oc"}, {"Novermber", "Nov", "N", "No"}, {"December", "Dec", "D", "De"},};
+  protected static final String[][] MONTHS = {
+      {"January", "Jan", "J", "Ene", "Ja"}, // Ene. is abbreviated Spanish
+      {"February", "Feb", "F", "Fe"},
+      {"March", "Mar"},
+      {"April", "Apr", "Ap", "Abr"}, // Abr. is abbreviated Spanish
+      {"May"},
+      {"June", "Jun"},
+      {"July", "Jul"},
+      {"August", "Aug", "Au", "Ago"}, // Ago seen a lot in data
+      {"September", "Sep", "Sept", "Set", "S"}, // Set is a common mispelling
+      {"October", "Oct", "O", "Oc"},
+      {"November", "Nov", "N", "No"},
+      {"December", "Dec", "D", "De"}
+  };
 
   protected static final int CURRENT_YEAR = new GregorianCalendar().get(Calendar.YEAR);
 

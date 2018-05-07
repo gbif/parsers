@@ -31,6 +31,7 @@ public class DateParseUtilsTest {
         assertEquivalent("21/12/1978", DateParseUtils.parse("21/12/78"), ParseResult.CONFIDENCE.DEFINITE);
         assertEquivalent("10/12/1978", DateParseUtils.parse("10/12/78"), ParseResult.CONFIDENCE.POSSIBLE);
         assertEquivalent("12/12/1978", DateParseUtils.parse("12/12/78"), ParseResult.CONFIDENCE.DEFINITE);
+        assertEquivalent("13/03/1986", DateParseUtils.parse("1986/03/13"), ParseResult.CONFIDENCE.DEFINITE);
 // TODO: really needed?
 //    assertEquivalent("01/01/2010", DateParseUtils.parse("00/00/2010"), ParseResult.CONFIDENCE.POSSIBLE);
 //    assertEquivalent("01/01/1804", DateParseUtils.parse("1804-00-00"), ParseResult.CONFIDENCE.POSSIBLE);
