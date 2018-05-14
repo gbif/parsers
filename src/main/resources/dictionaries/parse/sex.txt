@@ -1,3 +1,5 @@
+m	MALE
+f	FEMALE
 man	MALE
 woman	FEMALE
 women	FEMALE
