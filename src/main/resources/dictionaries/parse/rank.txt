@@ -6,17 +6,6 @@
 ?	UNRANKED
 ??	UNRANKED
 ???	UNRANKED
-[alpha]	INFRASPECIFIC_NAME
-[beta]	INFRASPECIFIC_NAME
-[epsilon]	INFRASPECIFIC_NAME
-[gamma]	INFRASPECIFIC_NAME
-[infrafam unranked]	INFRAFAMILY
-[infragen ]	INFRAGENUS
-[infragen grex]	GREX
-[infragen unranked]	INFRAGENUS
-[infragen]	INFRAGENUS
-[infrasp unranked]	INFRASPECIFIC_NAME
-[unranked]	UNRANKED
 a	UNRANKED
 abber	ABERRATION
 abberation	ABERRATION
@@ -34,7 +23,7 @@ alliance
 alpha	INFRASPECIFIC_NAME
 ap	INFRASUBSPECIFIC_NAME
 b	UNRANKED
-beta	UNRANKED
+beta	INFRASPECIFIC_NAME
 biotype	BIOVAR
 branch	UNRANKED
 bv	BIOVAR
@@ -68,6 +57,7 @@ divisio	PHYLUM
 division	PHYLUM
 domain	DOMAIN
 empire	DOMAIN
+epsilon	INFRASPECIFIC_NAME
 es	SPECIES
 espece	SPECIES
 especie	SPECIES
@@ -85,6 +75,7 @@ form	FORM
 form	FORM
 forma	FORM
 g	GENUS
+gamma	INFRASPECIFIC_NAME
 gat	GENUS
 gattung	GENUS
 gen	GENUS
@@ -105,7 +96,9 @@ hybrid formula	HYBRID FORMULA
 imperium	KINGDOM
 infraclass	INFRACLASS
 infraclassis	INFRACLASS
+infrafam unranked	INFRAFAMILY
 infragen	INFRAGENUS
+infragen grex	GREX
 infragen.unranked	INFRAGENERICNAME
 infrageneric	INFRAGENERICNAME
 infrageneric_name	INFRAGENERIC_NAME
@@ -119,6 +112,7 @@ infraordo	INFRAORDER
 infraphylum	INFRAPHYLUM
 infraregnum	INFRAKINGDOM
 infrasp	INFRASPECIFIC_NAME
+infrasp unranked	INFRASPECIFIC_NAME
 infrasp.unranked	INFRASPECIFIC_NAME
 infraspecies	INFRASPECIFIC_NAME
 infraspecific	INFRASPECIFIC_NAME
@@ -142,11 +136,11 @@ legio	LEGION
 lysotype	PHAGOVAR
 megaorder	MAGNORDER
 microgen	INFRAGENERICNAME
-monstr	
+monstr
 morphotype	MORPHOVAR
 nat	NATIO
 natio	NATIO
-nm	
+nm
 no rank	UNRANKED
 node	UNRANKED
 none	UNRANKED
@@ -174,7 +168,7 @@ order	ORDER
 orderclade	ORDER
 ordo	ORDER
 p	PHYLUM
-pars	
+pars
 pathotype	PATHOVAR
 ph	PHYLUM
 phagotype	PHAGOVAR
@@ -186,7 +180,7 @@ physiological type	BIOVAR
 prol	PROLES
 prolata	PROLES
 proles	PROLES
-pseudovar	
+pseudovar
 race	RACE
 reg	KINGDOM
 regn	KINGDOM
@@ -217,6 +211,7 @@ species group	SPECIES_AGGREGATE
 species subgroup	SPECIES_AGGREGATE
 speciesaggregate	SPECIES_AGGREGATE
 speciesgroup	SPECIES_AGGREGATE
+specieshypothesis	UNRANKED
 ss	SUBSPECIES
 sses	SUBSPECIES
 ssp	SUBSPECIES
@@ -237,11 +232,11 @@ subdiv	SUBPHYLUM
 subdivisio	SUBPHYLUM
 subdivision	SUBPHYLUM
 subespecie	SUBSPECIES
-subf	SUBFAMILY
 subfam	SUBFAMILY
 subfamilia	SUBFAMILY
 subfamily	SUBFAMILY
 subfamily	SUBFAMILY
+subf	SUBFORM
 subform	SUBFORM
 subform	SUBFORM
 subforma	SUBFORM
@@ -292,7 +287,6 @@ superclassis	SUPERCLASS
 superdivision	SUPERPHYLUM
 superfamily	SUPERFAMILY
 superfamily	SUPERFAMILY
-superkingdom	DOMAIN
 superorder	SUPERORDER
 superorder	SUPERORDER
 superordo	SUPERORDER
@@ -301,11 +295,11 @@ superphylum	SUPERPHYLUM
 superphylum	SUPERPHYLUM
 superphylum	SUPERPHYLUM
 superregnum	SUPERKINGDOM
-supersect	
+supersect
 superser	SUPERSERIES
 superseries	SUPERSERIES
-supersubtrib	
-supersubtribe	
+supersubtrib
+supersubtribe
 supertrib	SUPERTRIBE
 supertribe	SUPERTRIBE
 suprageneric_name	SUPRAGENERIC_NAME
@@ -325,6 +319,7 @@ ukl	SUBCLASS
 unknown	UNRANKED
 unranked	UNRANKED
 unranked	UNRANKED
+unranked	UNRANKED
 unranked clade	UNRANKED
 unterabteilung	SUBPHYLUM
 v	VARIETY
@@ -338,9 +333,9 @@ variete	VARIETY
 variety	VARIETY
 zoodivisio	SUBCLASS
 zoosectio	INFRAORDER
-µ	UNRANKED
-ß	UNRANKED
-ßß	UNRANKED
 α	UNRANKED
+β	UNRANKED
+ββ	UNRANKED
 γ	UNRANKED
 δ	UNRANKED
+µ	UNRANKED
