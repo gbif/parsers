@@ -68,7 +68,7 @@ public class CoordinateParseUtilsTest {
     assertDMS("N122°49'52.39\"", "E131°47'03.23\"", 122.83121944444444d, 131.78423055555555d);
     assertDMS("N 122° 49' 52.39\"", "E 131° 47' 03.23\"", 122.83121944444444d, 131.78423055555555d);
 
-    // truely failing
+    // truly failing
     assertIllegalArg("12344", true);
     assertIllegalArg("432", false);
     assertIllegalArg(" ", true);
@@ -103,8 +103,10 @@ public class CoordinateParseUtilsTest {
     assertExpected( CoordinateParseUtils.parseVerbatimCoordinates("37° 28' N, 122° 6' W"), new LatLng(37.466667d, -122.1d), ParseResult.CONFIDENCE.DEFINITE);
     assertExpected( CoordinateParseUtils.parseVerbatimCoordinates("2°49'52\"N, 131°47'03\""), new LatLng(2.831111d, 131.784167d), ParseResult.CONFIDENCE.DEFINITE);
     // failed
+    assertFailed(CoordinateParseUtils.parseVerbatimCoordinates(""));
     assertFailedWithIssues(CoordinateParseUtils.parseVerbatimCoordinates("12344"), OccurrenceIssue.COORDINATE_INVALID);
     assertFailedWithIssues(CoordinateParseUtils.parseVerbatimCoordinates(" "), OccurrenceIssue.COORDINATE_INVALID);
+    assertFailedWithIssues(CoordinateParseUtils.parseVerbatimCoordinates(",11.12"), OccurrenceIssue.COORDINATE_INVALID);
     assertFailedWithIssues(CoordinateParseUtils.parseVerbatimCoordinates("122°49'52\"N, 131°47'03\"E"), OccurrenceIssue.COORDINATE_OUT_OF_RANGE);
   }
 
