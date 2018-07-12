@@ -88,9 +88,9 @@ gn	GENUS
 gnero	GENUS
 grex	GREX
 grex sect	GREX
-group	CULTIVAR_GROUP
+group	SPECIES_AGGREGATE
 groupgenus	GENUS
-groupspecies	SPECIES
+groupspecies	SPECIES_AGGREGATE
 higher taxon	SUPRAGENERICNAME
 hybrid formula	HYBRID FORMULA
 imperium	KINGDOM
