@@ -10,7 +10,9 @@ import java.time.YearMonth;
 import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
+import java.time.temporal.ChronoField;
 import java.time.temporal.TemporalAccessor;
+import java.util.concurrent.TimeUnit;
 import javax.annotation.Nullable;
 
 import com.google.common.base.Function;
@@ -43,7 +45,8 @@ public class ThreeTenNumericalDateParserTest {
   private static final int HOUR_VAL_IDX = 4;
   private static final int MIN_VAL_IDX = 5;
   private static final int SEC_VAL_IDX = 6;
-  private static final int TZ_VAL_IDX = 7;
+  private static final int MILLISEC_VAL_IDX = 7;
+  private static final int TZ_VAL_IDX = 8;
 
   private static final TemporalParser PARSER = ThreeTenNumericalDateParser.newInstance();
 
@@ -116,13 +119,15 @@ public class ThreeTenNumericalDateParserTest {
                   int hour = Integer.parseInt(row[HOUR_VAL_IDX]);
                   int minute = Integer.parseInt(row[MIN_VAL_IDX]);
                   int second = Integer.parseInt(row[SEC_VAL_IDX]);
+                  int millisecond = Integer.parseInt(row[MILLISEC_VAL_IDX]);
                   String zoneId = row[TZ_VAL_IDX];
 
                   ParseResult<TemporalAccessor> result = PARSER.parse(raw);
                   assertNotNull(raw + " generated null payload", result.getPayload());
 
                   assertEquals("Test file rawValue: " + raw, ZonedDateTime.of(year, month, day, hour, minute, second,
-                                  0, ZoneId.of(zoneId)), ZonedDateTime.from(result.getPayload()));
+                          0, ZoneId.of(zoneId)).with(ChronoField.MILLI_OF_SECOND, millisecond),
+                          ZonedDateTime.from(result.getPayload()));
                 } catch (NumberFormatException nfEx) {
                   fail("Error while parsing the test input file content." + nfEx.getMessage());
                 }
@@ -189,7 +194,8 @@ public class ThreeTenNumericalDateParserTest {
 
   @Test
   public void testParsePreserveZoneOffset(){
-    ZonedDateTime offsetDateTime = ZonedDateTime.of(1978, 12, 21, 0, 0, 0, 0, ZoneOffset.of("+02:00"));
+    ZonedDateTime offsetDateTime = ZonedDateTime.of(1978, 12, 21, 0, 0, 0,
+            0, ZoneOffset.of("+02:00"));
     assertEquals(offsetDateTime, PARSER.parse("1978-12-21T00:00:00+02:00").getPayload());
   }
 
