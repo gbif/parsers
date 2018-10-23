@@ -91,6 +91,8 @@ class ThreeTenNumericalDateParser implements TemporalParser {
                   .appendDateTimeParser("uuuu/M/d", DateFormatHint.YMD, LocalDate::from)
                   .appendDateTimeParser("uuuu年MM月dd日", DateFormatHint.HAN, LocalDate::from)
                   .appendDateTimeParser("uuuu年M月d日", DateFormatHint.HAN, LocalDate::from)
+                  .appendDateTimeParser("YYYY-'W'ww", DateFormatHint.YW, LocalDate::from) // ISO "week years", 2018-W43.
+                  .appendDateTimeParser("uuuu-DDD", DateFormatHint.YD, LocalDate::from) // Week days, 2018-296.
                   .build()
   );
 

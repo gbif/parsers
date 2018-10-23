@@ -1,17 +1,17 @@
 package org.gbif.common.parsers.date;
 
+import javax.annotation.Nullable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.time.Year;
 import java.time.YearMonth;
 import java.time.ZoneId;
 import java.time.ZoneOffset;
-import java.time.ZonedDateTime;
 import java.time.temporal.ChronoField;
 import java.time.temporal.TemporalAccessor;
 import java.time.temporal.TemporalQueries;
 import java.util.Date;
-import javax.annotation.Nullable;
 import java.util.Optional;
 
 /**
@@ -35,7 +35,8 @@ public class TemporalAccessorUtils {
   }
 
   /**
-   * Transform a {@link TemporalAccessor} to a {@link java.util.Date}.
+   * Transform a {@link TemporalAccessor} to a {@link java.util.Date}, rounding a partial date/time to the start
+   * of the period.
    *
    * For {@link YearMonth}, the {@link java.util.Date} will represent the first day of the month.
    * For {@link Year}, the {@link java.util.Date} will represent the first day of January.
@@ -48,16 +49,30 @@ public class TemporalAccessorUtils {
    * @return the Date object or null if a Date object can not be created
    */
   public static Date toDate(TemporalAccessor temporalAccessor, boolean ignoreOffset) {
+    return Date.from(toEarliestLocalDateTime(temporalAccessor, ignoreOffset).toInstant(ZoneOffset.UTC));
+  }
+
+  /**
+   * Transform a {@link TemporalAccessor} to a {@link java.time.LocalDateTime}, rounding a partial date/time to the
+   * start of the period.
+   *
+   * @param temporalAccessor
+   * @param ignoreOffset in case offset information is available in the provided {@link TemporalAccessor}, should it
+   *                     be used ?
+   * @return the LocalDateTime object or null if a LocalDateTime object can not be created
+   */
+  public static LocalDateTime toEarliestLocalDateTime(TemporalAccessor temporalAccessor, boolean ignoreOffset) {
     if(temporalAccessor == null){
       return null;
     }
 
+    // Use offset if present
     if(!ignoreOffset && temporalAccessor.isSupported(ChronoField.OFFSET_SECONDS)){
-      return Date.from(temporalAccessor.query(ZonedDateTime::from).toInstant());
+      return temporalAccessor.query(OffsetDateTime::from).atZoneSameInstant(UTC_ZONE_ID).toLocalDateTime();
     }
 
     if(temporalAccessor.isSupported(ChronoField.SECOND_OF_DAY)){
-      return Date.from(temporalAccessor.query(LocalDateTime::from).atZone(UTC_ZONE_ID).toInstant());
+      return temporalAccessor.query(LocalDateTime::from);
     }
 
     // this may return null in case of partial dates
@@ -76,7 +91,7 @@ public class TemporalAccessorUtils {
     }
 
     if (localDate != null) {
-      return  Date.from(localDate.atStartOfDay(UTC_ZONE_ID).toInstant());
+      return LocalDateTime.from(localDate.atStartOfDay(UTC_ZONE_ID));
     }
 
     return null;

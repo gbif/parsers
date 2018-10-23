@@ -5,11 +5,11 @@ import org.gbif.common.parsers.core.ParseResult;
 import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.time.temporal.TemporalAccessor;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.annotation.Nullable;
 
 import org.apache.commons.lang3.StringUtils;
-
 
 /**
  * Main class to parse a date represented as a single String or as date parts into a {@link TemporalAccessor}.
@@ -19,11 +19,16 @@ import org.apache.commons.lang3.StringUtils;
  * This class is basically a decorator on top of default NumericalDateParser to handle months written in text.
  */
 class TextDateParser implements TemporalParser {
+  /*
+   * ISO format intervals, which are datetime/datetime or datetime/period.
+   * Match 2013/2014, 2013/P1Y, 2013-02/03.
+   * Fail 2013-12, 2013/02, 2018/10-23.
+   */
+  private static final Pattern ISO_YEAR_RANGE_PATTERN = Pattern.compile("^([12][0-9]{3})/([P12]\\d[^/]+)$");
+  private static final Pattern ISO_DATE_RANGE_PATTERN = Pattern.compile("^([12][0-9]{3}[^/]+)/([^/]{2,})$");
 
-  //private static final Pattern ISO_TIME_MARKER =  Pattern.compile("\\dT\\d");
-  //private static final Pattern AT_LEAST_ONE_LETTER =  Pattern.compile("[a-zA-Z]+");
-  //This regex is not complete and will NOT handle date when the time zone is provided as text GMT
-  private static final Pattern NUMERICAL_DATE_PATTERN =  Pattern.compile("[^a-zA-Z]+[\\dT\\d]?[^a-zA-Z]+[Z]?$");
+  // This regex is not complete and will NOT handle date when the time zone is provided as text GMT
+  private static final Pattern NUMERICAL_DATE_PATTERN =  Pattern.compile("[^a-zA-VX-Z]+[\\dT\\d]?[^a-zA-Z]+[Z]?$");
   private static final TextualMonthDateTokenizer TEXT_MONTH_TOKENIZER = TextualMonthDateTokenizer.newInstance();
 
   private static final TemporalParser NUMERICAL_DATE_PARSER = ThreeTenNumericalDateParser.newInstance();
@@ -32,14 +37,25 @@ class TextDateParser implements TemporalParser {
   @Override
   public ParseResult<TemporalAccessor> parse(String input) {
 
-    if(StringUtils.isBlank(input)){
+    if (StringUtils.isBlank(input)) {
       return ParseResult.fail();
+    }
+
+    Matcher matcher = ISO_YEAR_RANGE_PATTERN.matcher(input);
+    if (!matcher.matches()) {
+      matcher = ISO_DATE_RANGE_PATTERN.matcher(input);
+    }
+
+    if (matcher.matches()) {
+      String from = matcher.group(1);
+      // String to = matcher.group(2);
+      return NUMERICAL_DATE_PARSER.parse(from, DateFormatHint.NONE);
     }
 
     // Check if the input text contains only punctuations and numbers
     // Also accept the T marker (e.g. 1978-12-21T02:12) from the ISO format
+    // and the W week marker (e.g. 2018-W43).
     // We could also simply try to parse it but it is probably not optimal
-    //if(!AT_LEAST_ONE_LETTER.matcher(input).find() || ISO_TIME_MARKER.matcher(input).find()) {
     if(NUMERICAL_DATE_PATTERN.matcher(input).matches()) {
       return NUMERICAL_DATE_PARSER.parse(input, DateFormatHint.NONE);
     }
@@ -58,7 +74,7 @@ class TextDateParser implements TemporalParser {
               normalizedYearMonthDay.getDay() != null){
         try {
           return ParseResult.success(ParseResult.CONFIDENCE.DEFINITE,
-                  (TemporalAccessor) LocalDate.of(normalizedYearMonthDay.getYear(),
+                  LocalDate.of(normalizedYearMonthDay.getYear(),
                           normalizedYearMonthDay.getMonth(), normalizedYearMonthDay.getDay()));
         }
         catch (DateTimeException ignore){

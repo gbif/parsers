@@ -11,6 +11,8 @@ public enum DateFormatHint {
   DMY,
   MDY,
   YM,
+  YW,
+  YD,
   Y,
   /** date format used in Chinese */
   HAN,
