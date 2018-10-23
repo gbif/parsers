@@ -82,21 +82,21 @@ public class TemporalAccessorUtilsTest {
   }
 
   @Test
-  public void testGetBestResolutionTemporalAccessor(){
+  public void testBestResolution(){
     TemporalAccessor ta1 = Year.of(2005);
     TemporalAccessor ta2 = YearMonth.of(2005, 1);
-    TemporalAccessor result = TemporalAccessorUtils.getBestResolutionTemporalAccessor(ta1, ta2).get();
+    TemporalAccessor result = TemporalAccessorUtils.bestResolution(ta1, ta2).get();
     assertEquals(YearMonth.of(2005, 1), YearMonth.from(result));
 
     ta1 = LocalDate.of(2005, 1, 1);
     ta2 = Year.of(2005);
-    result = TemporalAccessorUtils.getBestResolutionTemporalAccessor(ta1, ta2).get();
+    result = TemporalAccessorUtils.bestResolution(ta1, ta2).get();
     assertEquals(LocalDate.of(2005, 1, 1), LocalDate.from(result));
 
     //this should not work
     ta1 = Year.of(2005);
     ta2 = YearMonth.of(2006, 1);
-    assertFalse(TemporalAccessorUtils.getBestResolutionTemporalAccessor(ta1, ta2).isPresent());
+    assertFalse(TemporalAccessorUtils.bestResolution(ta1, ta2).isPresent());
   }
 
   @Test

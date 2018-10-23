@@ -4,6 +4,7 @@ import org.gbif.api.vocabulary.OccurrenceIssue;
 
 import java.util.Collection;
 import java.util.EnumSet;
+import java.util.List;
 import java.util.Set;
 
 import com.google.common.base.Preconditions;
@@ -17,20 +18,20 @@ import com.google.common.collect.Lists;
 public class OccurrenceParseResult<T> extends ParseResult<T> {
   private final Set<OccurrenceIssue> issues = EnumSet.noneOf(OccurrenceIssue.class);
 
-  public OccurrenceParseResult(STATUS status, CONFIDENCE confidence, T payload, Throwable error, Collection<OccurrenceIssue> issues) {
-    super(status, confidence, payload, error);
+  public OccurrenceParseResult(STATUS status, CONFIDENCE confidence, T payload, List<T> alternativePayloads, Throwable error, Collection<OccurrenceIssue> issues) {
+    super(status, confidence, payload, alternativePayloads, error);
     if (issues != null) {
       // add non nulls only
       Iterables.addAll(this.issues, Iterables.filter(issues, Predicates.notNull()));
     }
   }
 
-  public OccurrenceParseResult(STATUS status, CONFIDENCE confidence, T payload, Throwable error) {
-    super(status, confidence, payload, error);
+  public OccurrenceParseResult(STATUS status, CONFIDENCE confidence, T payload, List<T> alternativePayloads, Throwable error) {
+    super(status, confidence, payload, alternativePayloads, error);
   }
 
   public OccurrenceParseResult(ParseResult<T> result) {
-    super(result.getStatus(), result.getConfidence(), result.getPayload(), result.getError());
+    super(result.getStatus(), result.getConfidence(), result.getPayload(), result.getAlternativePayloads(), result.getError());
   }
 
   /**
@@ -41,21 +42,21 @@ public class OccurrenceParseResult<T> extends ParseResult<T> {
    * @return The new ParseResult which has no error and status of SUCCESS
    */
   public static <T> OccurrenceParseResult<T> success(CONFIDENCE confidence, T payload) {
-    return new OccurrenceParseResult<T>(STATUS.SUCCESS, confidence, payload, null);
+    return new OccurrenceParseResult<T>(STATUS.SUCCESS, confidence, payload, null, null);
   }
 
   /**
    * @return A new parse response with only the status set to FAIL
    */
   public static <T> OccurrenceParseResult<T> fail() {
-    return new OccurrenceParseResult<T>(STATUS.FAIL, null, null, null);
+    return new OccurrenceParseResult<T>(STATUS.FAIL, null, null, null, null);
   }
 
   /**
    * @return A new parse response configured to indicate an error
    */
   public static <T> OccurrenceParseResult<T> error() {
-    return new OccurrenceParseResult<T>(STATUS.ERROR, null, null, null);
+    return new OccurrenceParseResult<T>(STATUS.ERROR, null, null, null, null);
   }
 
   /**
@@ -64,31 +65,31 @@ public class OccurrenceParseResult<T> extends ParseResult<T> {
    * @return A new parse response configured with error and the cause
    */
   public static <T> OccurrenceParseResult<T> error(Throwable cause) {
-    return new OccurrenceParseResult<T>(STATUS.ERROR, null, null, cause);
+    return new OccurrenceParseResult<T>(STATUS.ERROR, null, null, null, cause);
   }
 
   public static <T> OccurrenceParseResult<T> success(CONFIDENCE confidence, T payload, OccurrenceIssue issue) {
-    return new OccurrenceParseResult<T>(STATUS.SUCCESS, confidence, payload, null, Lists.newArrayList(issue));
+    return new OccurrenceParseResult<T>(STATUS.SUCCESS, confidence, payload, null, null, Lists.newArrayList(issue));
   }
 
   public static <T> OccurrenceParseResult<T> success(CONFIDENCE confidence, T payload, OccurrenceIssue ... issues) {
-    return new OccurrenceParseResult<T>(STATUS.SUCCESS, confidence, payload, null, Lists.newArrayList(issues));
+    return new OccurrenceParseResult<T>(STATUS.SUCCESS, confidence, payload, null, null, Lists.newArrayList(issues));
   }
 
   public static <T> OccurrenceParseResult<T> success(CONFIDENCE confidence, T payload, Collection<OccurrenceIssue> issues) {
-    return new OccurrenceParseResult<T>(STATUS.SUCCESS, confidence, payload, null, issues);
+    return new OccurrenceParseResult<T>(STATUS.SUCCESS, confidence, payload, null, null, issues);
   }
 
   public static <T> OccurrenceParseResult<T> fail(OccurrenceIssue issue) {
-    return new OccurrenceParseResult<T>(STATUS.FAIL, null, null, null, Lists.newArrayList(issue));
+    return new OccurrenceParseResult<T>(STATUS.FAIL, null, null, null, null, Lists.newArrayList(issue));
   }
 
   public static <T> OccurrenceParseResult<T> fail(OccurrenceIssue ... issues) {
-    return new OccurrenceParseResult<T>(STATUS.FAIL, null, null, null, Lists.newArrayList(issues));
+    return new OccurrenceParseResult<T>(STATUS.FAIL, null, null, null, null, Lists.newArrayList(issues));
   }
 
   public static <T> OccurrenceParseResult<T> fail(Collection<OccurrenceIssue> issues) {
-    return new OccurrenceParseResult<T>(STATUS.FAIL, null, null, null, issues);
+    return new OccurrenceParseResult<T>(STATUS.FAIL, null, null, null, null, issues);
   }
 
   /**
@@ -101,11 +102,11 @@ public class OccurrenceParseResult<T> extends ParseResult<T> {
    * @return the new parse response which has a status of FAIL and an additional payload.
    */
   public static <T> OccurrenceParseResult<T> fail(T payload, Collection<OccurrenceIssue> issues) {
-    return new OccurrenceParseResult<T>(STATUS.FAIL, null, payload, null, issues);
+    return new OccurrenceParseResult<T>(STATUS.FAIL, null, payload, null, null, issues);
   }
 
   public static <T> OccurrenceParseResult<T> fail(T payload, OccurrenceIssue ... issues) {
-    return new OccurrenceParseResult<T>(STATUS.FAIL, null, payload, null, Lists.newArrayList(issues));
+    return new OccurrenceParseResult<T>(STATUS.FAIL, null, payload, null, null, Lists.newArrayList(issues));
   }
 
   /**
@@ -118,7 +119,7 @@ public class OccurrenceParseResult<T> extends ParseResult<T> {
    * @return the new parse response which has a status of FAIL and an additional payload.
    */
   public static <T> OccurrenceParseResult<T> fail(T payload, OccurrenceIssue issue) {
-    return new OccurrenceParseResult<T>(STATUS.FAIL, null, payload, null, Lists.newArrayList(issue));
+    return new OccurrenceParseResult<T>(STATUS.FAIL, null, payload, null, null, Lists.newArrayList(issue));
   }
 
 

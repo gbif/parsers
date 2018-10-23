@@ -67,6 +67,7 @@ public class AtomizedLocalDate {
     if(temporalAccessor.isSupported(ChronoField.DAY_OF_MONTH)){
       d = temporalAccessor.get(ChronoField.DAY_OF_MONTH);
     }
+
     return new AtomizedLocalDate(y, m, d);
   }
 

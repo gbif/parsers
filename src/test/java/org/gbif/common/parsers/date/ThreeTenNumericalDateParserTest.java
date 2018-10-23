@@ -12,7 +12,6 @@ import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.time.temporal.ChronoField;
 import java.time.temporal.TemporalAccessor;
-import java.util.concurrent.TimeUnit;
 import javax.annotation.Nullable;
 
 import com.google.common.base.Function;
@@ -22,6 +21,8 @@ import static org.gbif.common.parsers.utils.CSVBasedAssertions.assertTestFile;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 /**
@@ -34,9 +35,6 @@ public class ThreeTenNumericalDateParserTest {
   private static final String LOCALDATE_TEST_FILE = "parse/date/threeten_localdate_tests.txt";
   private static final String LOCALDATETIME_TEST_FILE = "parse/date/threeten_localdatetime_tests.txt";
   private static final String LOCALDATETIME_TZ_TEST_FILE = "parse/date/local_datetime_tz_tests.txt";
-
-  private static final String COLUMN_SEPARATOR = ";";
-  private static final String COMMENT_MARKER = "#";
 
   private static final int RAW_VAL_IDX = 0;
   private static final int YEAR_VAL_IDX = 1;
@@ -187,7 +185,7 @@ public class ThreeTenNumericalDateParserTest {
 
 //  @Ignore("not implemented yet")
 //  @Test
-//  public void testUnssuportedFormat() {
+//  public void testUnsupportedFormat() {
 //    ParseResult<TemporalAccessor> result = PARSER.parse("16/11/1996 0:00:00");
 //
 //    System.out.println(PARSER.parse("1996-11-16T00:00:00"));
@@ -201,10 +199,35 @@ public class ThreeTenNumericalDateParserTest {
   }
 
   @Test
+  public void testAmbiguousDates() {
+    ParseResult<TemporalAccessor> result;
+
+    // Ambiguous
+    result = PARSER.parse("1/2/1996");
+    assertNull(result.getPayload());
+    assertEquals(2, result.getAlternativePayloads().size());
+    assertTrue(result.getAlternativePayloads().contains(LocalDate.of(1996, 2, 1)));
+    assertTrue(result.getAlternativePayloads().contains(LocalDate.of(1996, 1, 2)));
+
+    // Not ambiguous
+    result = PARSER.parse("1/1/1996");
+    assertEquals(LocalDate.of(1996, 1, 1), result.getPayload());
+    assertNull(result.getAlternativePayloads());
+
+    result = PARSER.parse("31/1/1996");
+    assertEquals(LocalDate.of(1996, 1, 31), result.getPayload());
+    assertNull(result.getAlternativePayloads());
+
+    // Dots aren't used in America.
+    result = PARSER.parse("4.5.1996");
+    assertEquals(LocalDate.of(1996, 5, 4), result.getPayload());
+    assertNull(result.getAlternativePayloads());
+  }
+
+  @Test
   public void testBlankDates(){
     assertEquals(ParseResult.STATUS.FAIL, PARSER.parse(" ").getStatus());
     assertEquals(ParseResult.STATUS.FAIL, PARSER.parse("").getStatus());
     assertEquals(ParseResult.STATUS.FAIL, PARSER.parse(null).getStatus());
   }
-
 }

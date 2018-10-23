@@ -108,8 +108,7 @@ public class TemporalAccessorUtils {
    * @param ta2
    * @return TemporalAccessor representing the best resolution
    */
-  public static Optional<? extends TemporalAccessor> getBestResolutionTemporalAccessor(@Nullable TemporalAccessor ta1,
-                                                                                       @Nullable TemporalAccessor ta2){
+  public static Optional<TemporalAccessor> bestResolution(@Nullable TemporalAccessor ta1, @Nullable TemporalAccessor ta2){
     //handle nulls combinations
     if(ta1 == null && ta2 == null){
       return Optional.empty();
@@ -121,8 +120,8 @@ public class TemporalAccessorUtils {
       return Optional.of(ta1);
     }
 
-    AtomizedLocalDate ymd1 = AtomizedLocalDate.fromTemporalAccessor(ta1);
-    AtomizedLocalDate ymd2 = AtomizedLocalDate.fromTemporalAccessor(ta2);
+    AtomizedLocalDateTime ymd1 = AtomizedLocalDateTime.fromTemporalAccessor(ta1);
+    AtomizedLocalDateTime ymd2 = AtomizedLocalDateTime.fromTemporalAccessor(ta2);
 
     // If they both provide the year, it must match
     if(ymd1.getYear() != null && ymd2.getYear() != null && !ymd1.getYear().equals(ymd2.getYear())){
@@ -134,6 +133,22 @@ public class TemporalAccessorUtils {
     }
     // If they both provide the day, it must match
     if(ymd1.getDay() != null && ymd2.getDay() != null && !ymd1.getDay().equals(ymd2.getDay())){
+      return Optional.empty();
+    }
+    // If they both provide the hour, it must match
+    if (ymd1.getHour() != null && ymd2.getHour() != null && !ymd1.getHour().equals(ymd2.getHour())) {
+      return Optional.empty();
+    }
+    // If they both provide the minute, it must match
+    if (ymd1.getMinute() != null && ymd2.getMinute() != null && !ymd1.getMinute().equals(ymd2.getMinute())) {
+      return Optional.empty();
+    }
+    // If they both provide the second, it must match
+    if (ymd1.getSecond() != null && ymd2.getSecond() != null && !ymd1.getSecond().equals(ymd2.getSecond())) {
+      return Optional.empty();
+    }
+    // If they both provide the millisecond, it must match
+    if (ymd1.getMillisecond() != null && ymd2.getMillisecond() != null && !ymd1.getMillisecond().equals(ymd2.getMillisecond())) {
       return Optional.empty();
     }
 
@@ -149,10 +164,6 @@ public class TemporalAccessorUtils {
    * date, or if one is contained within the other.  The comparison does not go beyond date resolution.
    *
    * If a null is provided, false will be returned.
-   *
-   * @param ta1
-   * @param ta2
-   * @return
    */
   public static boolean sameOrContained(@Nullable TemporalAccessor ta1, @Nullable TemporalAccessor ta2) {
     // handle nulls combinations

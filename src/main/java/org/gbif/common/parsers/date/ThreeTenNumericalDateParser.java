@@ -17,8 +17,10 @@ import java.time.temporal.ChronoField;
 import java.time.temporal.TemporalAccessor;
 import java.time.temporal.TemporalQuery;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.regex.Pattern;
 import javax.annotation.Nullable;
 
@@ -55,6 +57,8 @@ class ThreeTenNumericalDateParser implements TemporalParser {
   // ISO 8601 specifies a Unicode minus (CHAR_MINUS), with a hyphen (CHAR_HYPHEN) as an alternative.
   static final char CHAR_HYPHEN = '\u002d'; // Unicode hyphen, U+002d, char '-'
   static final char CHAR_MINUS = '\u2212'; // Unicode minus, U+2212, char '−'
+  static final String HYPHEN = String.valueOf(CHAR_HYPHEN);
+  static final String MINUS = String.valueOf(CHAR_MINUS);
 
   private static final Map<DateFormatHint, List<DateTimeParser>> FORMATTERS_BY_HINT = Maps.newHashMap();
 
@@ -247,13 +251,14 @@ class ThreeTenNumericalDateParser implements TemporalParser {
       return ParseResult.fail();
     }
 
-    // Second attempt: find one or multiple match(es) in the list of DateTimeMultiParser
+    // Second attempt: find one or multiple matches in the list of DateTimeMultiParser
     int numberOfPossiblyAmbiguousMatch = 0;
     TemporalAccessor lastParsedSuccess = null;
     TemporalAccessor lastParsedPreferred = null;
-    // Is that all results are equal (the represent the same TemporalAccessor) in case there is no preferred result defined
+    Set<TemporalAccessor> otherParsed = new HashSet();
+    // Are the results all equal (representing the same TemporalAccessor), used if there is no preferred result defined
     boolean lastParsedSuccessOtherResultsEqual = false;
-    DateTimeMultiParser.MultipleParseResult result;
+    DateTimeMultiParser.MultipleParseResult result = null;
 
     // here we do not stop when we find a match, we try them all to check for a possible ambiguity
     for(DateTimeMultiParser parserAmbiguity : activeMultiParserList){
@@ -263,10 +268,10 @@ class ThreeTenNumericalDateParser implements TemporalParser {
       if(result.getNumberParsed() > 0){
         lastParsedSuccess = result.getResult();
 
-        // make sure to log in case lastParsedSuccessEqual already equals true
+        // make sure to log in case lastParsedSuccessOtherResultsEqual already equals true
         if (lastParsedSuccessOtherResultsEqual) {
           LOGGER.warn("Issue with DateTimeMultiParser configuration: Input {} produces more results even " +
-                  "if lastParsedSuccessEqual is set to true.", input);
+                  "if lastParsedSuccessOtherResultsEqual is set to true.", input);
         }
         lastParsedSuccessOtherResultsEqual = false;
 
@@ -280,6 +285,7 @@ class ThreeTenNumericalDateParser implements TemporalParser {
           //if we have no PreferredResult but all results represent the same TemporalAccessor
           if(result.getOtherResults() != null && result.getOtherResults().size() > 1) {
             lastParsedSuccessOtherResultsEqual = allEquals(result.getOtherResults());
+            otherParsed.addAll(result.getOtherResults());
           }
         }
       }
@@ -303,8 +309,13 @@ class ThreeTenNumericalDateParser implements TemporalParser {
     }
 
     LOGGER.debug("Number of matches for {} : {}", input, numberOfPossiblyAmbiguousMatch);
-    return ParseResult.fail();
+    if (result == null) {
+      return ParseResult.fail();
+    } else {
+      return new ParseResult(ParseResult.STATUS.FAIL, ParseResult.CONFIDENCE.POSSIBLE, null, new ArrayList(otherParsed), null);
+    }
   }
+
 
   @Override
   public ParseResult<TemporalAccessor> parse(@Nullable String year, @Nullable String month, @Nullable String day) {
@@ -364,25 +375,20 @@ class ThreeTenNumericalDateParser implements TemporalParser {
 
   /**
    * Check if all the TemporalAccessor of the list are equal.
-   * If the list contains 0 element is will return false, if the list contains 1 element it will return true.
-   * @param taList
-   * @return
+   *
+   * Return false for an empty list; true for a list with a single element.
    */
   private static boolean allEquals(List<TemporalAccessor> taList){
-
-    if(taList == null || taList.isEmpty()){
+    if (taList == null || taList.isEmpty()) {
       return false;
     }
 
-    TemporalAccessor reference = null;
-    boolean allEqual = false;
-    for(TemporalAccessor ta: taList){
-      if(reference == null){
-        reference = ta;
+    TemporalAccessor reference = taList.get(1);
+    for (TemporalAccessor ta : taList) {
+      if (!ta.equals(reference)) {
+        return false;
       }
-      allEqual = reference.equals(ta);
     }
-    return allEqual;
+    return true;
   }
-
 }

@@ -28,12 +28,10 @@ public class AtomizedLocalDateTimeTest {
 
   @Test
   public void testAtomizedLocalDateTime(){
-    AtomizedLocalDateTime dateTime = AtomizedLocalDateTime.fromTemporalAccessor(LocalDateTime.of(YEAR, MONTH_ENUM, DAY, HOUR,
-            MINUTE, SECOND, NANOSECOND));
+    AtomizedLocalDateTime dateTime = AtomizedLocalDateTime.fromTemporalAccessor(LocalDateTime.of(YEAR, MONTH_ENUM, DAY, HOUR, MINUTE, SECOND, NANOSECOND));
     assertAtomizedLocalDateTime(dateTime, YEAR, MONTH, DAY, HOUR, MINUTE, SECOND, MILLISECOND);
 
-    dateTime = AtomizedLocalDateTime.fromTemporalAccessor(LocalDateTime.of(YEAR, MONTH_ENUM, DAY, HOUR,
-            MINUTE));
+    dateTime = AtomizedLocalDateTime.fromTemporalAccessor(LocalDateTime.of(YEAR, MONTH_ENUM, DAY, HOUR, MINUTE));
     assertAtomizedLocalDateTime(dateTime, YEAR, MONTH, DAY, HOUR, MINUTE, 0, 0);
     assertEquals(7, dateTime.getResolution());
 

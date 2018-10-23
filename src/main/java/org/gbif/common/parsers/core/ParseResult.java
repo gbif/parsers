@@ -3,6 +3,8 @@ package org.gbif.common.parsers.core;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import java.util.List;
+
 /**
  * This represents the response of a generic parse operation.
  */
@@ -19,10 +21,11 @@ public class ParseResult<T> {
   }
 
   // the details of the response
-  protected STATUS status;
-  protected CONFIDENCE confidence;
-  protected T payload;
-  protected Throwable error;
+  protected final STATUS status;
+  protected final CONFIDENCE confidence;
+  protected final T payload;
+  protected final List<T> alternativePayloads;
+  protected final Throwable error;
 
   /**
    * @param <T1>       The generic type of the payload
@@ -32,21 +35,21 @@ public class ParseResult<T> {
    * @return The new ParseResult which has no error and status of SUCCESS
    */
   public static <T1> ParseResult<T1> success(CONFIDENCE confidence, T1 payload) {
-    return new ParseResult<T1>(STATUS.SUCCESS, confidence, payload, null);
+    return new ParseResult<T1>(STATUS.SUCCESS, confidence, payload, null, null);
   }
 
   /**
    * @return A new parse response with only the status set to FAIL
    */
   public static <T1> ParseResult<T1> fail() {
-    return new ParseResult<T1>(STATUS.FAIL, null, null, null);
+    return new ParseResult<T1>(STATUS.FAIL, null, null, null, null);
   }
 
   /**
    * @return A new parse response configured to indicate an error
    */
   public static <T1> ParseResult<T1> error() {
-    return new ParseResult<T1>(STATUS.ERROR, null, null, null);
+    return new ParseResult<T1>(STATUS.ERROR, null, null, null, null);
   }
 
   /**
@@ -55,7 +58,7 @@ public class ParseResult<T> {
    * @return A new parse response configured with error and the cause
    */
   public static <T1> ParseResult<T1> error(Throwable cause) {
-    return new ParseResult<T1>(STATUS.ERROR, null, null, cause);
+    return new ParseResult<T1>(STATUS.ERROR, null, null, null, cause);
   }
 
   /**
@@ -66,9 +69,10 @@ public class ParseResult<T> {
    * @param payload    The payload of the response
    * @param error      The error in the response
    */
-  public ParseResult(STATUS status, CONFIDENCE confidence, T payload, Throwable error) {
+  public ParseResult(STATUS status, CONFIDENCE confidence, T payload, List<T> alternativePayloads, Throwable error) {
     this.status = status;
     this.confidence = confidence;
+    this.alternativePayloads = alternativePayloads;
     this.payload = payload;
     this.error = error;
   }
@@ -85,10 +89,13 @@ public class ParseResult<T> {
     return payload;
   }
 
+  public List<T> getAlternativePayloads() {
+    return alternativePayloads;
+  }
+
   public Throwable getError() {
     return error;
   }
-
 
   /**
    * Returns true if {@link #getStatus()} returns SUCCESS.
@@ -105,6 +112,7 @@ public class ParseResult<T> {
       .append("status", getStatus())
       .append("confidence", getConfidence())
       .append("payload", getPayload())
+      .append("alternativePayloads", getAlternativePayloads())
       .append("error", getError()).toString();
   }
 }
