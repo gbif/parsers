@@ -91,74 +91,6 @@ public class TextDateParserTest {
   }
 
   @Test
-  public void testFractionalSeconds() {
-    // decaseconds
-    testDateTime(2012, 4, 19, 5, 21, 43, 100_000_000, "2012-04-19T05:21:43.1");
-    // milliseconds
-    testDateTime(2012, 4, 19, 5, 21, 43, 123_000_000, "2012-04-19T05:21:43.123");
-    testDateTime(2012, 4, 19, 5, 21, 43, 123_000_000, "2012-04-19T05:21:43.123Z");
-    testDateTime(2012, 4, 19, 5, 21, 43, 123_000_000, "2012-04-19T05:21:43.123-07");
-    testDateTime(2012, 4, 19, 5, 21, 43, 123_000_000, "2012-04-19T05:21:43.123-0700");
-    testDateTime(2012, 4, 19, 5, 21, 43, 123_000_000, "2012-04-19T05:21:43.123-07:00");
-    // microseconds
-    testDateTime(2012, 4, 19, 5, 21, 43, 123_456_000, "2012-04-19T05:21:43.123456");
-    testDateTime(2012, 4, 19, 5, 21, 43, 123_456_000, "2012-04-19T05:21:43.123456Z");
-    testDateTime(2012, 4, 19, 5, 21, 43, 123_456_000, "2012-04-19T05:21:43.123456-07");
-    testDateTime(2012, 4, 19, 5, 21, 43, 123_456_000, "2012-04-19T05:21:43.123456-0700");
-    testDateTime(2012, 4, 19, 5, 21, 43, 123_456_000, "2012-04-19T05:21:43.123456-07:00");
-    // who-came-up-with-these-seconds (real data).
-    testDateTime(2012, 4, 19, 5, 21, 43, 123_456_700, "2012-04-19 05:21:43.1234567");
-
-    // No colons
-    testDateTime(2012, 4, 19, 5, 21, 43, 123_000_000, "2012-04-19T052143.123-07");
-    testDateTime(2012, 4, 19, 5, 21, 43, 123_000_000, "2012-04-19T052143.123-0700");
-    testDateTime(2012, 4, 19, 5, 21, 43, 123_000_000, "2012-04-19T052143.123-07:00");
-  }
-
-  @Test
-  public void testTimeZones() {
-    // Local times, we just ignore the zone. But we must still parse.
-
-    // With :, all forms off offset.
-    testDateTime(2012, 4, 19, 5, 21, 43, 0, "2012-04-19T05:21:43");
-    testDateTime(2012, 4, 19, 5, 21, 43, 0, "2012-04-19T05:21:43Z");
-    testDateTime(2012, 4, 19, 5, 21, 43, 0, "2012-04-19T05:21:43+00");
-    testDateTime(2012, 4, 19, 5, 21, 43, 0, "2012-04-19T05:21:43+0000");
-    testDateTime(2012, 4, 19, 5, 21, 43, 0, "2012-04-19T05:21:43+00:00");
-    testDateTime(2012, 4, 19, 5, 21, 43, 0, "2012-04-19T05:21:43+04");
-    testDateTime(2012, 4, 19, 5, 21, 43, 0, "2012-04-19T05:21:43+0430");
-    testDateTime(2012, 4, 19, 5, 21, 43, 0, "2012-04-19T05:21:43+04:30");
-    testDateTime(2012, 4, 19, 5, 21, 43, 0, "2012-04-19T05:21:43−07");
-    testDateTime(2012, 4, 19, 5, 21, 43, 0, "2012-04-19T05:21:43−0700");
-    testDateTime(2012, 4, 19, 5, 21, 43, 0, "2012-04-19T05:21:43−07:00");
-    testDateTime(2012, 4, 19, 5, 21, 43, 0, "2012-04-19T05:21:43-07");
-    testDateTime(2012, 4, 19, 5, 21, 43, 0, "2012-04-19T05:21:43-0700");
-    testDateTime(2012, 4, 19, 5, 21, 43, 0, "2012-04-19T05:21:43-07:00");
-    testDateTime(2012, 4, 19, 5, 21, 00, 0, "2012-04-19T05:21-07");
-    testDateTime(2012, 4, 19, 5, 21, 00, 0, "2012-04-19T05:21-0700");
-    testDateTime(2012, 4, 19, 5, 21, 00, 0, "2012-04-19T05:21-07:00");
-
-    // No colons
-    testDateTime(2012, 4, 19, 5, 21, 43, 0,"2012-04-19T052143");
-    testDateTime(2012, 4, 19, 5, 21, 43, 0, "2012-04-19T052143Z");
-    testDateTime(2012, 4, 19, 5, 21, 43, 0, "2012-04-19T052143+00");
-    testDateTime(2012, 4, 19, 5, 21, 43, 0, "2012-04-19T052143+0000");
-    testDateTime(2012, 4, 19, 5, 21, 43, 0, "2012-04-19T052143+00:00");
-    testDateTime(2012, 4, 19, 5, 21, 43, 0, "2012-04-19T052143+04");
-    testDateTime(2012, 4, 19, 5, 21, 43, 0, "2012-04-19T052143+0430");
-    testDateTime(2012, 4, 19, 5, 21, 43, 0, "2012-04-19T052143+04:30");
-    testDateTime(2012, 4, 19, 5, 21, 43, 0, "2012-04-19T052143−07");
-    testDateTime(2012, 4, 19, 5, 21, 43, 0, "2012-04-19T052143−0700");
-    testDateTime(2012, 4, 19, 5, 21, 43, 0, "2012-04-19T052143−07:00");
-    testDateTime(2012, 4, 19, 5, 21, 43, 0, "2012-04-19T052143-07");
-    testDateTime(2012, 4, 19, 5, 21, 43, 0, "2012-04-19T052143-0700");
-    testDateTime(2012, 4, 19, 5, 21, 43, 0, "2012-04-19T052143-07:00");
-    testDateTime(2012, 4, 19, 5, 21, 00, 0, "2012-04-19T0521-07");
-    testDateTime(2012, 4, 19, 5, 21, 00, 0, "2012-04-19T0521-0700");
-    testDateTime(2012, 4, 19, 5, 21, 00, 0, "2012-04-19T0521-07:00");
-  }
-
-  @Test
   public void testDateRanges() {
     // Some of the many ways of specifying a whole year.
     // So many cases aren't really needed, as we're only taking the start of the interval anyway.
@@ -240,18 +172,5 @@ public class TextDateParserTest {
     ParseResult<TemporalAccessor> parseResult = TEXTDATE_PARSER.parse(inDate);
     assertTrue(parseResult.isSuccessful());
     assertEquals(LocalDateTime.of(y, m, d, hh, mm, ss), TemporalAccessorUtils.toEarliestLocalDateTime(parseResult.getPayload(), true));
-  }
-
-  private void testDate(int y, int m, int d, String inDate) {
-    ParseResult<TemporalAccessor> parseResult = TEXTDATE_PARSER.parse(inDate);
-    assertTrue(parseResult.isSuccessful());
-    assertEquals(LocalDate.of(y, m, d), LocalDate.from(parseResult.getPayload()));
-  }
-
-  private void testDateTime(int y, int m, int d, int hh, int mm, int ss, int nn, String inDate) {
-    ParseResult<TemporalAccessor> parseResult = TEXTDATE_PARSER.parse(inDate);
-    System.out.println(inDate +" → "+ parseResult);
-    assertTrue(parseResult.isSuccessful());
-    assertEquals(LocalDateTime.of(y, m, d, hh, mm, ss, nn), LocalDateTime.from(parseResult.getPayload()));
   }
 }

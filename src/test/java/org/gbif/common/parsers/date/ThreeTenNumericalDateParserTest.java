@@ -45,7 +45,7 @@ public class ThreeTenNumericalDateParserTest {
   private static final int HOUR_VAL_IDX = 4;
   private static final int MIN_VAL_IDX = 5;
   private static final int SEC_VAL_IDX = 6;
-  private static final int MILLISEC_VAL_IDX = 7;
+  private static final int NS_VAL_IDX = 7;
   private static final int TZ_VAL_IDX = 8;
 
   private static final TemporalParser PARSER = ThreeTenNumericalDateParser.newInstance();
@@ -90,11 +90,12 @@ public class ThreeTenNumericalDateParserTest {
                   int hour = Integer.parseInt(row[HOUR_VAL_IDX]);
                   int minute = Integer.parseInt(row[MIN_VAL_IDX]);
                   int second = Integer.parseInt(row[SEC_VAL_IDX]);
+                  int nanosecond = Integer.parseInt(row[NS_VAL_IDX]);
 
                   ParseResult<TemporalAccessor> result = PARSER.parse(raw);
                   assertNotNull(raw + " generated null payload", result.getPayload());
 
-                  assertEquals("Test file rawValue: " + raw, LocalDateTime.of(year, month, day, hour, minute, second),
+                  assertEquals("Test file rawValue: " + raw, LocalDateTime.of(year, month, day, hour, minute, second, nanosecond),
                           LocalDateTime.from(result.getPayload()));
                 } catch (NumberFormatException nfEx) {
                   fail("Error while parsing the test input file content." + nfEx.getMessage());
@@ -119,7 +120,7 @@ public class ThreeTenNumericalDateParserTest {
                   int hour = Integer.parseInt(row[HOUR_VAL_IDX]);
                   int minute = Integer.parseInt(row[MIN_VAL_IDX]);
                   int second = Integer.parseInt(row[SEC_VAL_IDX]);
-                  int millisecond = Integer.parseInt(row[MILLISEC_VAL_IDX]);
+                  int millisecond = Integer.parseInt(row[NS_VAL_IDX]);
                   String zoneId = row[TZ_VAL_IDX];
 
                   ParseResult<TemporalAccessor> result = PARSER.parse(raw);
