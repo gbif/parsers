@@ -145,19 +145,17 @@ public class TemporalAccessorUtils {
   }
 
   /**
-   * Given two TemporalAccessor with possibly different resolutions, this method checks if they represent the
-   * same YMD.
-   * If a null is provided, false will be returned. If one of the 2 TemporalAccessor provides resolution
-   * less than YMD, false will be returned.
+   * Given two TemporalAccessor with possibly different resolutions, this method checks if they represent the same
+   * date, or if one is contained within the other.  The comparison does not go beyond date resolution.
+   *
+   * If a null is provided, false will be returned.
    *
    * @param ta1
    * @param ta2
-   *
    * @return
    */
-  public static boolean representsSameYMD(@Nullable TemporalAccessor ta1, @Nullable TemporalAccessor ta2) {
-
-    //handle nulls combinations
+  public static boolean sameOrContained(@Nullable TemporalAccessor ta1, @Nullable TemporalAccessor ta2) {
+    // handle nulls combinations
     if (ta1 == null || ta2 == null) {
       return false;
     }
@@ -166,10 +164,27 @@ public class TemporalAccessorUtils {
     AtomizedLocalDate ymd2 = AtomizedLocalDate.fromTemporalAccessor(ta2);
 
     // we only deal with complete Local Date
-    if (!ymd1.isComplete() || !ymd2.isComplete()) {
+    if (ymd1.isComplete() && ymd2.isComplete()) {
+      return ymd1.equals(ymd2);
+    }
+
+    // check for equal years
+    if (!ymd1.getYear().equals(ymd2.getYear())) {
       return false;
     }
-    return ymd1.equals(ymd2);
-  }
 
+    // compare months
+    if (ymd1.getMonth() == null || ymd2.getMonth() == null) {
+      return true;
+    }
+    if (!ymd1.getMonth().equals(ymd2.getMonth())) {
+      return false;
+    }
+
+    // compare days
+    if (ymd1.getDay() == null || ymd2.getDay() == null) {
+      return true;
+    }
+    return ymd1.getDay().equals(ymd2.getDay());
+  }
 }

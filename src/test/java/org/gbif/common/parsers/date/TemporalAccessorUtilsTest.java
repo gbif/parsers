@@ -100,18 +100,26 @@ public class TemporalAccessorUtilsTest {
   }
 
   @Test
-  public void testRepresentsSameYMD() {
-    TemporalAccessor ta1 = LocalDate.of(1996, 01, 26);
+  public void testSameOrContained() {
+    TemporalAccessor ymd = LocalDate.of(1996, 04, 26);
 
     // Test nulls and wrong resolutions
-    assertFalse(TemporalAccessorUtils.representsSameYMD(null, null));
-    assertFalse(TemporalAccessorUtils.representsSameYMD(ta1, null));
-    assertFalse(TemporalAccessorUtils.representsSameYMD(null, ta1));
-    assertFalse(TemporalAccessorUtils.representsSameYMD(ta1, Year.of(1996)));
+    assertFalse(TemporalAccessorUtils.sameOrContained(null, null));
+    assertFalse(TemporalAccessorUtils.sameOrContained(ymd, null));
+    assertFalse(TemporalAccessorUtils.sameOrContained(null, ymd));
 
-    // Test 2 dates representing the same day in the year, at different resolution
-    TemporalAccessor ta2 = LocalDateTime.of(1996, 01, 26, 1, 2);
-    assertTrue(TemporalAccessorUtils.representsSameYMD(ta1, ta2));
+    // Test against same year
+    assertTrue(TemporalAccessorUtils.sameOrContained(ymd, Year.of(1996)));
+    // Test against same month
+    assertTrue(TemporalAccessorUtils.sameOrContained(ymd, YearMonth.of(1996, 4)));
+    // Test against same date
+    assertTrue(TemporalAccessorUtils.sameOrContained(ymd, LocalDate.of(1996, 04, 26)));
+    // Test against time on that day
+    assertTrue(TemporalAccessorUtils.sameOrContained(ymd, LocalDateTime.of(1996, 04, 26, 1, 2, 3)));
+
+    // Then different year/month/date
+    assertFalse(TemporalAccessorUtils.sameOrContained(ymd, Year.of(1998)));
+    assertFalse(TemporalAccessorUtils.sameOrContained(ymd, YearMonth.of(1996, 5)));
+    assertFalse(TemporalAccessorUtils.sameOrContained(ymd, LocalDate.of(1996, 4, 27)));
   }
-
 }
