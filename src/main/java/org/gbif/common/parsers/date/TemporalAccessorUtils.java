@@ -12,8 +12,7 @@ import java.time.temporal.TemporalAccessor;
 import java.time.temporal.TemporalQueries;
 import java.util.Date;
 import javax.annotation.Nullable;
-
-
+import java.util.Optional;
 
 /**
  * Utility methods to work with {@link TemporalAccessor}
@@ -84,50 +83,6 @@ public class TemporalAccessorUtils {
   }
 
   /**
-   * Only enable this function when we move to Java 8, do NOT use Guava Optional<>, it introduced some
-   * incompatibility in shaded jars (e.g. occurrence)
-   *
-   * @param ta1
-   * @param ta2
-   * @return never null
-   */
-//  public static Optional<? extends TemporalAccessor> getBestResolutionTemporalAccessor(@Nullable TemporalAccessor ta1,
-//                                                                                       @Nullable TemporalAccessor ta2){
-//    //handle nulls combinations
-//    if(ta1 == null && ta2 == null){
-//      return Optional.absent();
-//    }
-//    if(ta1 == null){
-//      return Optional.of(ta2);
-//    }
-//    if(ta2 == null){
-//      return Optional.of(ta1);
-//    }
-//
-//    AtomizedLocalDate ymd1 = AtomizedLocalDate.fromTemporalAccessor(ta1);
-//    AtomizedLocalDate ymd2 = AtomizedLocalDate.fromTemporalAccessor(ta2);
-//
-//    // If they both provide the year, it must match
-//    if(ymd1.getYear() != null && ymd2.getYear() != null && !ymd1.getYear().equals(ymd2.getYear())){
-//      return Optional.absent();
-//    }
-//    // If they both provide the month, it must match
-//    if(ymd1.getMonth() != null && ymd2.getMonth() != null && !ymd1.getMonth().equals(ymd2.getMonth())){
-//      return Optional.absent();
-//    }
-//    // If they both provide the day, it must match
-//    if(ymd1.getDay() != null && ymd2.getDay() != null && !ymd1.getDay().equals(ymd2.getDay())){
-//      return Optional.absent();
-//    }
-//
-//    if(ymd1.getResolution() > ymd2.getResolution()){
-//      return Optional.of(ta1);
-//    }
-//
-//    return Optional.of(ta2);
-//  }
-
-  /**
    * The idea of "best resolution" TemporalAccessor is to get the TemporalAccessor that offers more resolution than
    * the other but they must NOT contradict.
    * e.g. 2005-01 and 2005-01-01 will return 2005-01-01.
@@ -136,19 +91,19 @@ public class TemporalAccessorUtils {
    *
    * @param ta1
    * @param ta2
-   * @return TemporalAccessor representing the best resolution or null
+   * @return TemporalAccessor representing the best resolution
    */
-  public static TemporalAccessor getBestResolutionTemporalAccessor(@Nullable TemporalAccessor ta1,
-                                                                    @Nullable TemporalAccessor ta2){
+  public static Optional<? extends TemporalAccessor> getBestResolutionTemporalAccessor(@Nullable TemporalAccessor ta1,
+                                                                                       @Nullable TemporalAccessor ta2){
     //handle nulls combinations
     if(ta1 == null && ta2 == null){
-      return null;
+      return Optional.empty();
     }
     if(ta1 == null){
-      return ta2;
+      return Optional.of(ta2);
     }
     if(ta2 == null){
-      return ta1;
+      return Optional.of(ta1);
     }
 
     AtomizedLocalDate ymd1 = AtomizedLocalDate.fromTemporalAccessor(ta1);
@@ -156,21 +111,22 @@ public class TemporalAccessorUtils {
 
     // If they both provide the year, it must match
     if(ymd1.getYear() != null && ymd2.getYear() != null && !ymd1.getYear().equals(ymd2.getYear())){
-      return null;
+      return Optional.empty();
     }
     // If they both provide the month, it must match
     if(ymd1.getMonth() != null && ymd2.getMonth() != null && !ymd1.getMonth().equals(ymd2.getMonth())){
-      return null;
+      return Optional.empty();
     }
     // If they both provide the day, it must match
     if(ymd1.getDay() != null && ymd2.getDay() != null && !ymd1.getDay().equals(ymd2.getDay())){
-      return null;
+      return Optional.empty();
     }
 
     if(ymd1.getResolution() > ymd2.getResolution()){
-      return ta1;
+      return Optional.of(ta1);
     }
-    return ta2;
+
+    return Optional.of(ta2);
   }
 
   /**

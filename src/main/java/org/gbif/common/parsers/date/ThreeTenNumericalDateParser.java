@@ -118,21 +118,13 @@ class ThreeTenNumericalDateParser implements TemporalParser {
 
   static{
     for(DateTimeParser parser : BASE_PARSER_LIST){
-      //TODO: when updated to Java 8 FORMATTERS_BY_HINT.putIfAbsent(parser.getHint(), new ArrayList<DateTimeParser>());
-      if(!FORMATTERS_BY_HINT.containsKey(parser.getHint())){
-        FORMATTERS_BY_HINT.put(parser.getHint(), new ArrayList<DateTimeParser>());
-      }
-      // end TODO
+      FORMATTERS_BY_HINT.putIfAbsent(parser.getHint(), new ArrayList<>());
       FORMATTERS_BY_HINT.get(parser.getHint()).add(parser);
     }
 
     for(DateTimeMultiParser parserAmbiguity : MULTIPARSER_PARSER_LIST){
       for(DateTimeParser parser : parserAmbiguity.getAllParsers()) {
-        //TODO: when updated to Java 8 FORMATTERS_BY_HINT.putIfAbsent(parser.getHint(), new ArrayList<DateTimeParser>());
-        if(!FORMATTERS_BY_HINT.containsKey(parser.getHint())){
-          FORMATTERS_BY_HINT.put(parser.getHint(), new ArrayList<DateTimeParser>());
-        }
-        // end TODO
+        FORMATTERS_BY_HINT.putIfAbsent(parser.getHint(), new ArrayList<>());
         FORMATTERS_BY_HINT.get(parser.getHint()).add(parser);
       }
     }
