@@ -255,9 +255,24 @@ public class DateTimeParserBuilder {
      * @param alternativeSeparators separator used in the pattern that should be used as replacement for alternativeSeparators
      * @return
      */
+    public ThreeTenDateParserListBuilder appendDateTimeParser(String pattern, DateFormatHint hint, TemporalQuery<?> type,
+                                                              String separator, String alternativeSeparators
+    ){
+      dateTimeParsers.add(DateTimeParserBuilder.build(pattern, hint, type, separator, alternativeSeparators));
+      return this;
+    }
+
+    /**
+     *
+     * @param pattern date pattern to use
+     * @param hint
+     * @param separator
+     * @param alternativeSeparators separator used in the pattern that should be used as replacement for alternativeSeparators
+     * @return
+     */
     public ThreeTenDateParserListBuilder appendDateTimeParser(String pattern, DateFormatHint hint, TemporalQuery<?>[] type,
-                                                                   String separator, String alternativeSeparators
-                                                              ){
+                                                              String separator, String alternativeSeparators
+    ){
       dateTimeParsers.add(DateTimeParserBuilder.build(pattern, hint, type, separator, alternativeSeparators));
       return this;
     }

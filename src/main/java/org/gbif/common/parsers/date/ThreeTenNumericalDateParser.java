@@ -33,7 +33,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
 /**
  * Numerical DateParser based on threetenbp (JSR310 backport) library which also means it is almost ready for Java 8.
  *
@@ -46,7 +45,6 @@ import org.slf4j.LoggerFactory;
  * to the TemporalAccessor you got back from that class.
  *
  * Thread-Safe after creation.
- *
  */
 class ThreeTenNumericalDateParser implements TemporalParser {
 
@@ -71,20 +69,30 @@ class ThreeTenNumericalDateParser implements TemporalParser {
           .optionalEnd()
           .toFormatter().withResolverStyle(ResolverStyle.STRICT);
 
-  //brackets [] represent optional section of the pattern
+  /*
+   * Brackets [] represent optional sections of the pattern. (And subsequent patters don't make parts optional, if an earlier pattern already matched that.)
+   * Unfortunately, it's not possible to specify an arbitrary decimal for seconds in one pattern.
+   */
   //separator is a CHAR_HYPHEN
   private static final List<DateTimeParser> BASE_PARSER_LIST = ImmutableList.copyOf(
           DateTimeParserBuilder.newParserListBuilder()
                   .appendDateTimeParser("uuuuMMdd", DateFormatHint.YMD, LocalDate::from)
-                  .appendDateTimeParser("uuuu-M-d[ HH:mm:ss]", DateFormatHint.YMDT,
-                          new TemporalQuery<?>[]{LocalDateTime::from, LocalDate::from},
-                          String.valueOf(CHAR_HYPHEN), String.valueOf(CHAR_MINUS) + ".")
-                  .appendDateTimeParser("uuuu-M-d'T'HH[:mm[:ss]]", DateFormatHint.YMDT, LocalDateTime::from)
-                  .appendDateTimeParser("uuuu-M-d' 'HH:mm:ss.n", DateFormatHint.YMDT, LocalDateTime::from) // covers 2004-08-09 12:00:00.0000000
-                  .appendDateTimeParser("uuuu-M-d'T'HHmm[ss]", DateFormatHint.YMDT, LocalDateTime::from)
-                  .appendDateTimeParser("uuuu-M-d'T'HH:mm:ss[.SSS]ZZZ", DateFormatHint.YMDT, ZonedDateTime::from) //covers 1978-12-21T02:12:43+0100
-                  .appendDateTimeParser("uuuu-M-d'T'HH:mm:ss[.SSS]xxx", DateFormatHint.YMDT, ZonedDateTime::from) //covers 1978-12-21T02:12:43+02:00
-                  .appendDateTimeParser("uuuu-M-d'T'HH:mm[:ss]'Z'", DateFormatHint.YMDT, ZonedDateTime::from, ZoneOffset.UTC)
+                  .appendDateTimeParser("uuuu-M-d[ HH[:]mm[:]ss]", DateFormatHint.YMDT, new TemporalQuery<?>[]{LocalDateTime::from, LocalDate::from}, String.valueOf(CHAR_HYPHEN), String.valueOf(CHAR_MINUS) + ".")
+                  // Either no fractional seconds, milliseconds or microseconds. T or space.
+                  .appendDateTimeParser("uuuu-M-d' 'HH[[:]mm[[:]ss[.S]]]", DateFormatHint.YMDT, LocalDateTime::from)
+                  .appendDateTimeParser("uuuu-M-d' 'HH[:]mm[[:]ss.SSS]", DateFormatHint.YMDT, LocalDateTime::from)
+                  .appendDateTimeParser("uuuu-M-d' 'HH[:]mm[[:]ss.SSSSSS]", DateFormatHint.YMDT, LocalDateTime::from)
+                  .appendDateTimeParser("uuuu-M-d' 'HH[:]mm[[:]ss.SSSSSSS]", DateFormatHint.YMDT, LocalDateTime::from)
+                  .appendDateTimeParser("uuuu-M-d'T'HH[[:]mm[[:]ss[.S]]]", DateFormatHint.YMDT, LocalDateTime::from)
+                  .appendDateTimeParser("uuuu-M-d'T'HH[:]mm[[:]ss.SSS]", DateFormatHint.YMDT, LocalDateTime::from)
+                  .appendDateTimeParser("uuuu-M-d'T'HH[:]mm[[:]ss.SSSSSS]", DateFormatHint.YMDT, LocalDateTime::from)
+                  .appendDateTimeParser("uuuu-M-d'T'HH[:]mm[[:]ss.SSSSSSS]", DateFormatHint.YMDT, LocalDateTime::from)
+                  // T, but with a time zone, accepting Z, +00, +0000 and +00:00 for UTC and - or − for negative offsets.
+                  .appendDateTimeParser("uuuu-M-d'T'HH[:]mm[[:]ss[.SSS]]X", DateFormatHint.YMDTZ, ZonedDateTime::from, String.valueOf(CHAR_HYPHEN), String.valueOf(CHAR_MINUS))
+                  .appendDateTimeParser("uuuu-M-d'T'HH[:]mm[:]ss.SSSSSSX", DateFormatHint.YMDTZ, ZonedDateTime::from, String.valueOf(CHAR_HYPHEN), String.valueOf(CHAR_MINUS))
+                  .appendDateTimeParser("uuuu-M-d'T'HH[:]mm[[:]ss[.SSS]]xxx", DateFormatHint.YMDTZ, ZonedDateTime::from, String.valueOf(CHAR_HYPHEN), String.valueOf(CHAR_MINUS))
+                  .appendDateTimeParser("uuuu-M-d'T'HH[:]mm[:]ss.SSSSSSxxx", DateFormatHint.YMDTZ, ZonedDateTime::from, String.valueOf(CHAR_HYPHEN), String.valueOf(CHAR_MINUS))
+
                   .appendDateTimeParser("uuuu-M", DateFormatHint.YM, YearMonth::from)
                   .appendDateTimeParser("uuuu", DateFormatHint.Y, Year::from)
                   .appendDateTimeParser("uuuu/MM/dd", DateFormatHint.YMD, LocalDate::from)
