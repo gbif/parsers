@@ -25,7 +25,7 @@ public class EnumParserTest {
     assertEquals("HALLO", parser.normalize("(Hällö"));
 
     assertEquals("H6", parser.normalize("(h6"));
-    assertEquals("HELLO_MR6", parser.normalize("hello_mr6"));
+    assertEquals("HELLOMR6", parser.normalize("hello_mr6"));
     assertEquals("HELLOBERTOCKO", parser.normalize("Hello Bértöçkø"));
   }
 

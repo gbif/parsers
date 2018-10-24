@@ -28,5 +28,4 @@ public class SexParser extends EnumParser<Sex> {
     }
     return singletonObject;
   }
-
 }

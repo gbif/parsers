@@ -21,7 +21,7 @@ import org.slf4j.LoggerFactory;
 public class DictionaryBackedParser<V> implements Parsable<V> {
   protected final Logger log = LoggerFactory.getLogger(getClass());
   private final Map<String, V> dictionary = new HashMap<String, V>();
-  private boolean caseSensitive = false;
+  private final boolean caseSensitive;
 
   /**
    * @param caseSensitive If the dictionary should be case sensitive (only applicable to String keys)

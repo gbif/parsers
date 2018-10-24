@@ -31,9 +31,9 @@ public class EnumParser<T extends Enum<T>> extends FileBasedDictionaryParser<T> 
     super(false);
 
     if (allowDigits) {
-      NORMALIZER = Pattern.compile("\\W+");
+      NORMALIZER = Pattern.compile("[^\\p{IsAlphabetic}♀♂\\p{N}]+");
     } else {
-      NORMALIZER = Pattern.compile("[^a-zA-Z]+");
+      NORMALIZER = Pattern.compile("[^\\p{IsAlphabetic}♀♂]+");
     }
     this.clazz = clazz;
     // init dicts

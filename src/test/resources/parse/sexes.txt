@@ -1,0 +1,454 @@
+♂
+♀
+"""1 macho, 1 hembra"""
+ad.
+ad.+juv.
+adult
+adult:1
+adult female
+adult female:1
+adult female - alate queen
+adult female - dealate queen
+adult female - worker
+adult male
+adult male:1
+adult male:1; adult female:1
+adult male:2
+adult male:3
+adulto
+adult unsexed
+araujo, j. s.
+arbeider
+b
+biesporofito
+bisexual
+both
+both se
+c
+canadian lichens i
+canadian lichens ii
+carposporofito
+couple
+cría
+c&s
+d
+decades of north american lichens
+desconegut
+desconhecido
+desconocido
+desconocido, hembra
+desconocido o no anotado
+dioico
+dos machos
+doubtful gender
+drone
+dronning
+dry skin
+editae a museo palatino vindobonensi
+eggs
+e museo nationali pragensi anno 1966 distributae
+erro:522
+ex
+f
+f;
+f?
+f*
+f1
+f2
+famale
+f by dissection
+f; c&s
+female
+"""female"""
+[female?]
+[female]
+female ?
+female (?)
+female;;
+female?
+female 1
+female: 1
+female, 1; male
+female: 1 | male: 1
+female: 1 | male: 2
+female, 1; males
+female: 2
+female: 2 | male: 1
+female: 2 | male: 2
+female: 3
+female (by gonads)
+female colored
+female coloured
+female-coloured
+female female
+female; female
+female; female;;
+female; female; female
+female; female; female; female
+female; female; female; female; female
+female; female; female; female; female; female
+female; female; female; female; female; female; female
+female; female; female; female; female; female; female; female
+female; female; female; female; female; female; female; female; female
+female; female; female; female; female; female; female; female; female; female; female
+female; female; male
+female | male
+female , male
+female & male
+female; male
+female; male;;
+female/male
+Female; male
+Female & Male
+Female; Male
+Female; Male;;
+female; male; female
+female; male; male
+Female; Male; Worker
+female (queen)
+Female Queen
+females
+# females: 1
+Females, 2; Male
+Females, 2; Males
+Females, 3; Males
+female-type
+Female, Undetermined
+female (worker)
+Female; Worker
+femella
+femella | mascle
+femelle
+Femelle ?
+femenina
+femenino
+Fertil
+F-gonads
+F+juv.
+Flores perfectas
+f + m
+f,m
+FM
+F + M
+fmale
+fêmea
+fˆmea
+FÊMEA
+Fêmeas
+F; skel
+F; Skel, skull, shell
+F-verified
+F+W
+G
+H
+han
+hane
+hembra
+, Hembra
+HEMBRA
+Hembra gestante
+, Hembra, Hembra
+Hembra lactante
+Hembra, Macho
+Hembra ovigera
+hembras
+hembras (1)
+hembra y macho
+hermafrodita
+hermafroditas
+Hermafroditas.
+hermaphrodite
+hona
+hun
+i
+IM
+Immature
+ind
+Indefinido
+Indeter.
+indeterminable
+indeterminado
+Indeterminados
+indeterminate
+Indetermine
+Indiferenciado
+Indéterminé
+Información NO disponible
+inmaduro
+in pair
+in question
+irreconhecível
+j
+juv
+juv.
+juvenil
+juvenile
+juv.F
+juv.M
+Kryptogamae Exsiccatae
+Kryptogammae Exsiccatae
+l
+larva
+larvae
+larva/juvenile
+Lichenes Americani Exsiccati
+Lichenes Austroamericani
+Lichenes Canadenses Exsiccati
+Lichenes Danici Exisiccati
+Lichenes Danici Exsiccati
+Lichenes de Portugal
+Lichenes Exsiccati
+Lichenes Exsiccati Arizona State University
+Lichenes Finniae Exsiccati
+Lichenes Groelandici Exsiccati
+Lichenes Groenlandici Exsiccati
+Lichenes in Lotharingia
+Lichenes Novæ Angliæ
+Lichenes Rariores et Critici Exsiccati
+Lichenotheca Fennica
+Lichenothica
+Lichens in Lotharingia
+Lichens of North America
+Lichens of North Americans
+Lichens of the West Indies
+Lichens of Western North America
+Lichens Slovakiae Exsiccati
+m
+[M]
+M ?
+M;
+M?
+M*
+M1/F1
+M1/F2
+M2/F1
+M2/F2
+macho
+, Macho
+MACHO
+Macho, Hembra
+, Macho, Macho
+machos
+machos y hembras
+Macho Test.Escrot.
+Macho y Hembra
+macroconch
+Macroconque
+male
+"""male"""
+[male?]
+[male]
+male ?
+male (?)
+male;;
+male?
+; Male
+Male;;
+Male?
+MALE
+male 1
+male: 1
+male: 10
+male: 2
+male: 20
+male: 3
+male: 4
+male: 5
+male and female
+male (by gonads)
+male (by plumage)
+male , female
+male & female
+male + female
+male, female
+male; female
+male; female;;
+male/female
+male; Female
+Male & female
+Male Female
+Male & Female
+Male, Female
+Male; Female
+Male; Female;;
+male; female; female
+male; female; female;;
+Male; Female; Female
+male; female; female; female
+male; female; female; female;;
+male; female; male
+male; female; male; female
+male male
+male , male
+male; male
+male; male; female
+male; male; female;;
+male; male; female; female
+male; male; female; female; female
+male; male; female; male
+male; male; female; male; female
+male; male; male
+male; male; male; female
+male; male; male; female; female
+male; male; male; female; female; female
+male; male; male; male
+male; male; male; male; male
+male; male; male; male; male; male
+male; male; male; male; male; male; male
+male; male; male; male; male; male; male; male
+male; male; male; male; male; male; male; male; male
+male; male; male; male; male; male; male; male; male; male
+male; male; male; male; male; male; male; male; male; male; male
+male; male; male; male; male; male; male; male; male; male; male; male; male
+males
+males: 0, females:0
+males: 0, females:1
+males: 0, females:2
+males: 0, females:3
+males: 0, females:4
+males: 0, females:5
+males: 0, females:6
+# males: 1
+males: 1, females:0
+# males: 1; # females: 1
+males: 1, females:1
+males: 1, females:2
+males: 1, females:3
+males: 2, females:0
+males: 2, females:1
+males: 2, females:2
+males: 3, females:0
+males: 3, females:1
+males: 4, females:0
+male(s) & female(s)
+Male, Undetermined
+Male; Worker
+man
+mascle
+mascle | no aplicable
+Masculina
+masculino
+M by dissection
+M; C&S
+meta-young
+mf
+m,f
+M; F
+M/F
+M+F
+M+F+juv.
+M+F+W
+M-gonads
+microconch
+Microconque
+minor worker
+mixed
+M+juv.
+mâle
+M�le
+Mâle ?
+Mâle/Femelle
+MM
+Monoico
+M; skel
+M; Skel, skull, shell
+multiple
+Multiple animals of mixed sex
+Museo Botanico Berolinensi Editi
+M-verified
+M+W
+N
+na
+N/A
+nest
+Ninfa
+No aplica
+no aplicable
+No Aplica, Hembra
+No Aplica, Macho
+No definido (juvenil)
+Não_determ
+No determinado
+no disponible
+No hay dato
+No identificado
+no presenta
+No record
+No se registro
+NOT
+not determined
+"""not identified"""
+not identified
+not record
+not recorded
+not recorded; female
+Not Searched
+Not stated
+nymph unsexed
+O
+O?
+onbepaald
+operária
+other
+p
+pinned
+Poligamo
+pupa
+Q
+queen
+recorded as unknown
+recorded as unknown; female
+recorded as unknown; male
+Reliquiae Tuckermanianae
+S
+Search but not found
+Sexe indéterminé
+Sexe indéterminé : noté mâle
+Sexe : mâle
+Sexo desconocido
+sex unknown
+shell
+skel
+Skel, skull, shell
+skin
+skull
++ skull
+spec.
+Steril
+subadult
+T
+teneral:1
+TETRAESPOROFITO
+Tetrasporofito
+u
+ukjent
+UN
+Unable to determine
+Una hembra
+Undefined
+underterminated
+# undet: 1
+undeterminate
+undeterminated
+undetermined
+Unio Itineraria Cryptogamica
+unknow
+unknown
+unknown; female
+unknown; male
+UNKOUWN
+Unkown
+Un macho
+Un macho y una hembra
+unsexed
+VEGETATIVO
+Vrouw
+W
+worker
+Worker; Female
+Worker; Male
+workers
+worker,worker
+worker,worker,worker
+x
+young

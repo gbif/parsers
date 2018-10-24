@@ -1,9 +1,55 @@
-m	MALE
+adult female alate queen	FEMALE
+adult female	FEMALE
+adult female - worker	FEMALE
+adult male	MALE
+dos machos	MALE
+dronning	FEMALE
+famale	FEMALE
+♀♀	FEMALE
+♀	FEMALE
+female by gonads	FEMALE
+female female	FEMALE
+female queen	FEMALE
+females	FEMALE
+female (worker)	FEMALE
+fêmea	FEMALE
+fêmeas	FEMALE
+femella	FEMALE
+femelle	FEMALE
+femenina	FEMALE
+femenino	FEMALE
 f	FEMALE
+f-gonads	FEMALE
+fˆmea	FEMALE
+frau	FEMALE
+hane	FEMALE
+hembra	FEMALE
+hembras	FEMALE
+hermafrodita	HERMAPHRODITE
+hermafroditas	HERMAPHRODITE
+♂♀	HERMAPHRODITE
+hona	FEMALE
+macho macho	MALE
+macho	MALE
+machos	MALE
+♂	MALE
+male by gonads	MALE
+mâle	MALE
+male male	MALE
+males	MALE
 man	MALE
+männlich	MALE
+mann	MALE
+mascle	MALE
+masculina	MALE
+masculino	MALE
+m-gonads	MALE
+m	MALE
+queen	FEMALE
+sexe mâle	MALE
+una hembra	FEMALE
+vrouw	FEMALE
+weiblich	FEMALE
 woman	FEMALE
 women	FEMALE
-männlich	MALE
-weiblich	FEMALE
-Mann	MALE
-Frau	FEMALE
+worker male	MALE
