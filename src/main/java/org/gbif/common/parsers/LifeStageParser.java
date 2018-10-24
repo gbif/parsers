@@ -17,7 +17,7 @@ public class LifeStageParser extends EnumParser<LifeStage> {
       add(c.name(), c);
     }
     // use dict file last
-    init(LifeStageParser.class.getResourceAsStream("/dictionaries/parse/life_stage.txt"));
+    init(LifeStageParser.class.getResourceAsStream("/dictionaries/parse/life_stage.tsv"));
   }
 
   public static LifeStageParser getInstance() {

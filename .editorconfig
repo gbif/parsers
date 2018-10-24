@@ -9,4 +9,6 @@ trim_trailing_whitespace = true
 indent_style = space
 indent_size = 2
 
-# [*.{html,java,js,sql,xml,yaml,yml}]
+# Exception for parsers
+[*.tsv]
+trim_trailing_whitespace = false
