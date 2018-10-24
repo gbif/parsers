@@ -18,7 +18,7 @@ public class EnumParser<T extends Enum<T>> extends FileBasedDictionaryParser<T> 
 
   private final Class<T> clazz;
   private final Pattern NORMALIZER;
-  private final ASCIIParser ascii = ASCIIParser.getInstance();
+  protected final ASCIIParser asciiParser = ASCIIParser.getInstance();
 
   // These become null, as after removing non-letters "N/A" might mean something like "Namibia".
   private final HashSet<String> notAvailable = Sets.newHashSet(
@@ -60,7 +60,7 @@ public class EnumParser<T extends Enum<T>> extends FileBasedDictionaryParser<T> 
     if (Strings.isNullOrEmpty(handleNotAvailable(value))) return null;
 
     // convert to ascii
-    ParseResult<String> asci = ascii.parse(value);
+    ParseResult<String> asci = asciiParser.parse(value);
     return NORMALIZER.matcher(asci.getPayload()).replaceAll("").toUpperCase();
   }
 

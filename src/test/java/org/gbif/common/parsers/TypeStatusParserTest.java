@@ -43,7 +43,9 @@ public class TypeStatusParserTest extends ParserTestBase<TypeStatus> {
     // run a few basic tests to check it bootstraps and appears to work
     assertParseSuccess(TypeStatus.ALLOTYPE, "allotype");
     assertParseSuccess(TypeStatus.HOLOTYPE, "Holotype of Abies alba");
+    assertParseSuccess(TypeStatus.HOLOTYPE, "Holotype for Abies alba");
     assertParseSuccess(TypeStatus.PARATYPE, "paratype(s)");
+    assertParseSuccess(TypeStatus.PARATYPE, "Parátipo");
   }
 
   @Test

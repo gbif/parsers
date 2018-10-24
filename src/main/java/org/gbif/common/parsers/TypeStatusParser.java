@@ -1,6 +1,7 @@
 package org.gbif.common.parsers;
 
 import org.gbif.api.vocabulary.TypeStatus;
+import org.gbif.common.parsers.core.ASCIIParser;
 import org.gbif.common.parsers.core.EnumParser;
 
 import java.util.regex.Matcher;
@@ -8,6 +9,7 @@ import java.util.regex.Pattern;
 
 import com.google.common.base.CharMatcher;
 import com.google.common.base.Strings;
+import org.gbif.common.parsers.core.ParseResult;
 
 /**
  * Singleton implementation of the dictionary that uses the file /dictionaries/parse/typeStatus.txt.
@@ -16,7 +18,7 @@ public class TypeStatusParser extends EnumParser<TypeStatus> {
 
   private static TypeStatusParser singletonObject = null;
   private static final CharMatcher NON_LETTERS = CharMatcher.JAVA_LETTER.negate();
-  private static final Pattern NAME_SEPARATOR = Pattern.compile("^(.+) OF ");
+  private static final Pattern NAME_SEPARATOR = Pattern.compile("^(.+) (OF|FOR) ");
 
   private TypeStatusParser() {
     super(TypeStatus.class, false);
@@ -37,7 +39,8 @@ public class TypeStatusParser extends EnumParser<TypeStatus> {
       value = m.group(1);
     }
     // remove whitespace and non letters
-    return NON_LETTERS.removeFrom(value);
+    ParseResult<String> ascii = asciiParser.parse(value);
+    return NON_LETTERS.removeFrom(ascii.getPayload());
   }
 
   public static TypeStatusParser getInstance()
@@ -49,6 +52,4 @@ public class TypeStatusParser extends EnumParser<TypeStatus> {
     }
     return singletonObject;
   }
-
-
 }
