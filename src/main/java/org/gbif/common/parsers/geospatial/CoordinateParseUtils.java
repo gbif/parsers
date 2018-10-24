@@ -156,16 +156,14 @@ public class CoordinateParseUtils {
       return OccurrenceParseResult.success(ParseResult.CONFIDENCE.DEFINITE, new LatLng(lat, lon), issues);
     }
 
-    // if lat is out of range, but in range of the lng,
-    // assume swapped coordinates.
+    // if lat is out of range, but in range of the lng, assume swapped coordinates.
     // note that should we desire to trust the following records, we would need to clear the flag for the records to
-    // appear in
-    // search results and maps etc. however, this is logic decision, that goes above the capabilities of this method
+    // appear in search results and maps etc. however, this is logic decision, that goes above the capabilities of this method
     if (Double.compare(lat, 90) > 0 || Double.compare(lat, -90) < 0) {
       // try and swap
       if (inRange(lon, lat)) {
         issues.add(OccurrenceIssue.PRESUMED_SWAPPED_COORDINATE);
-        return OccurrenceParseResult.fail(new LatLng(lat, lon), issues);
+        return OccurrenceParseResult.success(ParseResult.CONFIDENCE.PROBABLE, new LatLng(lon, lat), issues);
       }
     }
 
