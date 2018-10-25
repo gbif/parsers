@@ -94,6 +94,15 @@ public class MediaParser {
     if (uri != null) {
       String mime = TIKA.detect(uri.toString());
       if (mime != null && HTML_MIME_TYPES.contains(mime.toLowerCase())) {
+        // We may have something like http://example.org/imageServer?img=test.jpg, so re-run the detection on the last
+        // part of the URL query string.
+        if (uri.getQuery() != null) {
+          mime = TIKA.detect(uri.getQuery());
+          if (mime != null && !HTML_MIME_TYPES.contains(mime.toLowerCase())) {
+            return mime;
+          }
+        }
+
         // links without any suffix default to OCTET STREAM, see:
         // http://dev.gbif.org/issues/browse/POR-2066
         return HTML_TYPE;

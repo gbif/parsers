@@ -24,6 +24,7 @@ public class MediaParserTest {
     assertEquals(MediaType.StillImage, parser.detectType(buildMO(null, "abies_alba.JPG")).getType());
     assertEquals(MediaType.StillImage, parser.detectType(buildMO(null, "abies_alba.JPeg")).getType());
     assertEquals(MediaType.StillImage, parser.detectType(buildMO(null, "abies_alba.TIFF")).getType());
+    assertEquals(MediaType.StillImage, parser.detectType(buildMO(null, "http://imagens3.jbrj.gov.br/fsi/server?type=image&source=rb/1/37/81/25/01378125.jpg")).getType());
 
     assertEquals(MediaType.Sound, parser.detectType(buildMO(null, "abies_alba.mp3")).getType());
     assertEquals(MediaType.Sound, parser.detectType(buildMO(null, "abies_alba.flac")).getType());

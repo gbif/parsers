@@ -44,5 +44,7 @@ public class UrlParserTest {
     assertEquals(2, UrlParser.parseUriList("http://gbif.org/logo.png |#DELIMITER#| http://gbif.org/logo2.png").size());
 
     assertEquals(3, UrlParser.parseUriList("http://gbif.org/logo.png, http://gbif.org/logo2.png, http://gbif.org/logo3.png").size());
+
+    assertEquals(2, UrlParser.parseUriList("imagens3.jbrj.gov.br/fsi/server?type=image&source=rb/0/13/11/84/00131184.jpg|imagens3.jbrj.gov.br/fsi/server?type=image&source=rb/0/13/11/84/00131184-1.jpg").size());
   }
 }

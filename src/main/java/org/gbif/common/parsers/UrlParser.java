@@ -2,6 +2,7 @@ package org.gbif.common.parsers;
 
 import java.net.URI;
 import java.util.List;
+import java.util.regex.Pattern;
 
 import com.google.common.base.CharMatcher;
 import com.google.common.base.Splitter;
@@ -12,13 +13,17 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Greedy URL parser assuming http URIs in case no schema was given.
+ * Greedy URL parser assuming HTTP URIs in case no schema was given.
  * Modified version of the registry-metadata GreedyUriConverter.
  */
 public class UrlParser {
   private static final Logger LOG = LoggerFactory.getLogger(UrlParser.class);
   private static final String[] MULTI_VALUE_DELIMITERS = {"|#DELIMITER#|", "|", ",", ";"};
   private static final String HTTP_SCHEME = "http://";
+
+  // Pattern for things that are probably domains followed by a slash, without a protocol.
+  // Doesn't match IDNs etc, but this is just for people who forgot the http:// anyway.
+  private static final Pattern DOMAIN_ISH = Pattern.compile("^[A-Za-z0-9.-]{1,40}\\.[A-Za-z0-9-]{2,30}/.*");
 
   private UrlParser() {
   }
@@ -40,8 +45,8 @@ public class UrlParser {
     URI uri = null;
     try {
       uri = URI.create(value);
-      if (!uri.isAbsolute() && value.startsWith("www")) {
-        // make www an http address
+      if (!uri.isAbsolute() && DOMAIN_ISH.matcher(value).matches()) {
+        // make into an HTTP address
         try {
           uri = URI.create(HTTP_SCHEME + value);
         } catch (IllegalArgumentException e) {
