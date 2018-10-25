@@ -14,7 +14,7 @@ public class OccurrenceStatusParser extends EnumParser<OccurrenceStatus> {
       add(c.name(), c);
     }
     // use dict file last
-    init(OccurrenceStatusParser.class.getResourceAsStream("/dictionaries/parse/occurrence_status.txt"));
+    init(OccurrenceStatusParser.class.getResourceAsStream("/dictionaries/parse/occurrence_status.tsv"));
   }
 
   public static OccurrenceStatusParser getInstance() {

@@ -22,7 +22,7 @@ public class TypeStatusParser extends EnumParser<TypeStatus> {
 
   private TypeStatusParser() {
     super(TypeStatus.class, false);
-    init(TypeStatusParser.class.getResourceAsStream("/dictionaries/parse/typeStatus.txt"));
+    init(TypeStatusParser.class.getResourceAsStream("/dictionaries/parse/typeStatus.tsv"));
   }
 
   @Override

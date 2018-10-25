@@ -36,7 +36,7 @@ public class LanguageParser extends EnumParser<Language> {
 
 
   private LanguageParser() {
-    super(Language.class, false, LanguageParser.class.getResourceAsStream("/dictionaries/parse/language.txt"));
+    super(Language.class, false, LanguageParser.class.getResourceAsStream("/dictionaries/parse/language.tsv"));
 
     // make sure we have all enum values mapped
     for (Language r : Language.values()) {

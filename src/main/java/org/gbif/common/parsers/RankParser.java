@@ -25,7 +25,7 @@ public class RankParser extends EnumParser<Rank> {
     throws ClassCastException, AbstractMethodError, ArithmeticException, ArrayIndexOutOfBoundsException {
     synchronized (RankParser.class) {
       if (singletonObject == null) {
-        singletonObject = new RankParser(RankParser.class.getResourceAsStream("/dictionaries/parse/rank.txt"));
+        singletonObject = new RankParser(RankParser.class.getResourceAsStream("/dictionaries/parse/rank.tsv"));
       }
     }
     return singletonObject;

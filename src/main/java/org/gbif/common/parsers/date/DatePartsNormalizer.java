@@ -33,11 +33,11 @@ public class DatePartsNormalizer {
   private static final Logger LOG = LoggerFactory.getLogger(DatePartsNormalizer.class);
 
   private static final String STRING_NULL = "\\N";
-  private static final String COLUMN_SEPARATOR = ";";
+  private static final String COLUMN_SEPARATOR = "\t";
   private static final Splitter ROW_ELEMENT_SPLITTER = Splitter.on(',').trimResults().omitEmptyStrings();
 
   private static final String COMMENT_MARKER = "#";
-  private static final String MONTH_FILEPATH = "/dictionaries/parse/month.csv";
+  private static final String MONTH_FILEPATH = "/dictionaries/parse/month.tsv";
 
   private static final String[][] MONTHS = new String[Month.values().length][];
 

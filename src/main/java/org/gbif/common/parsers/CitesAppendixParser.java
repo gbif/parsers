@@ -14,7 +14,7 @@ public class CitesAppendixParser extends EnumParser<CitesAppendix> {
       add(c.name(), c);
     }
     // use dict file last
-    init(CitesAppendixParser.class.getResourceAsStream("/dictionaries/parse/cites.txt"));
+    init(CitesAppendixParser.class.getResourceAsStream("/dictionaries/parse/cites.tsv"));
   }
 
   public static CitesAppendixParser getInstance() {

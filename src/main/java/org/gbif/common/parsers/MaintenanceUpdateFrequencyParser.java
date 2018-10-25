@@ -18,7 +18,7 @@ public class MaintenanceUpdateFrequencyParser extends EnumParser<MaintenanceUpda
     }
     // use dict file last
     init(
-      MaintenanceUpdateFrequencyParser.class.getResourceAsStream("/dictionaries/parse/maintenanceUpdateFrequency.txt"));
+      MaintenanceUpdateFrequencyParser.class.getResourceAsStream("/dictionaries/parse/maintenanceUpdateFrequency.tsv"));
   }
 
   public static MaintenanceUpdateFrequencyParser getInstance() {

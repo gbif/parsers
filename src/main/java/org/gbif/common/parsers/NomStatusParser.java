@@ -56,7 +56,7 @@ public class NomStatusParser extends EnumParser<NomenclaturalStatus> {
     throws ClassCastException, AbstractMethodError, ArithmeticException, ArrayIndexOutOfBoundsException {
     synchronized (NomStatusParser.class) {
       if (singletonObject == null) {
-        singletonObject = new NomStatusParser(NomStatusParser.class.getResourceAsStream("/dictionaries/parse/nomStatus.txt"));
+        singletonObject = new NomStatusParser(NomStatusParser.class.getResourceAsStream("/dictionaries/parse/nomStatus.tsv"));
       }
     }
     return singletonObject;

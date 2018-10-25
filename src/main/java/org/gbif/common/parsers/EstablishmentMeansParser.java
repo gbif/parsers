@@ -14,7 +14,7 @@ public class EstablishmentMeansParser extends EnumParser<EstablishmentMeans> {
       add(c.name(), c);
     }
     // use dict file last
-    init(EstablishmentMeansParser.class.getResourceAsStream("/dictionaries/parse/establishment_means.txt"));
+    init(EstablishmentMeansParser.class.getResourceAsStream("/dictionaries/parse/establishment_means.tsv"));
   }
 
   public static EstablishmentMeansParser getInstance() {

@@ -32,7 +32,7 @@ public class CountryParser extends EnumParser<Country> {
       add(c.getIso3LetterCode(), c);
     }
     // use dict file last
-    init(CountryParser.class.getResourceAsStream("/dictionaries/parse/countryName.txt"));
+    init(CountryParser.class.getResourceAsStream("/dictionaries/parse/countryName.tsv"));
   }
 
   @Override

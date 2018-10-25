@@ -18,7 +18,7 @@ public class ContinentParser extends EnumParser<Continent> {
       add(c.getTitle(), c);
     }
     // use dict file last
-    init(ContinentParser.class.getResourceAsStream("/dictionaries/parse/continents.txt"));
+    init(ContinentParser.class.getResourceAsStream("/dictionaries/parse/continents.tsv"));
   }
 
   public static ContinentParser getInstance() {

@@ -20,7 +20,7 @@ public class BasisOfRecordParser extends EnumParser<BasisOfRecord> {
     throws ClassCastException, AbstractMethodError, ArithmeticException, ArrayIndexOutOfBoundsException {
     synchronized (BasisOfRecordParser.class) {
       if (singletonObject == null) {
-        singletonObject = new BasisOfRecordParser(BasisOfRecordParser.class.getResourceAsStream("/dictionaries/parse/basisOfRecord.txt"));
+        singletonObject = new BasisOfRecordParser(BasisOfRecordParser.class.getResourceAsStream("/dictionaries/parse/basisOfRecord.tsv"));
       }
     }
     return singletonObject;

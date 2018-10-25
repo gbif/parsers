@@ -20,7 +20,7 @@ public class MediaTypeParser extends EnumParser<MediaType> {
     for (MediaType c : MediaType.values()) {
     }
     // use dict file last
-    init(MediaTypeParser.class.getResourceAsStream("/dictionaries/parse/media_type.txt"));
+    init(MediaTypeParser.class.getResourceAsStream("/dictionaries/parse/media_type.tsv"));
   }
 
   public static MediaTypeParser getInstance() {

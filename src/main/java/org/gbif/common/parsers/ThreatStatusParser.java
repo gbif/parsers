@@ -15,7 +15,7 @@ public class ThreatStatusParser extends EnumParser<ThreatStatus> {
       add(c.getCode(), c);
     }
     // use dict file last
-    init(ThreatStatusParser.class.getResourceAsStream("/dictionaries/parse/threat_status.txt"));
+    init(ThreatStatusParser.class.getResourceAsStream("/dictionaries/parse/threat_status.tsv"));
   }
 
   public static ThreatStatusParser getInstance() {

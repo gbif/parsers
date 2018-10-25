@@ -20,7 +20,7 @@ public class TaxStatusParser extends EnumParser<TaxonomicStatus> {
     throws ClassCastException, AbstractMethodError, ArithmeticException, ArrayIndexOutOfBoundsException {
     synchronized (TaxStatusParser.class) {
       if (singletonObject == null) {
-        singletonObject = new TaxStatusParser(TaxStatusParser.class.getResourceAsStream("/dictionaries/parse/taxStatus.txt"));
+        singletonObject = new TaxStatusParser(TaxStatusParser.class.getResourceAsStream("/dictionaries/parse/taxStatus.tsv"));
       }
     }
     return singletonObject;

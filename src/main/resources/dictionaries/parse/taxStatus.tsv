@@ -9,7 +9,7 @@ correct	ACCEPTED
 preferredname	ACCEPTED
 valid	ACCEPTED
 nomeaceito	ACCEPTED
-
+	
 aceptadoprovisionalmente	DOUBTFUL
 d	DOUBTFUL
 doubtful	DOUBTFUL
@@ -20,7 +20,7 @@ temporaryname	DOUBTFUL
 todetermine	DOUBTFUL
 unresolved	DOUBTFUL
 provisional	DOUBTFUL
-
+	
 alternaterepresentation	SYNONYM
 equivalenname	SYNONYM
 equivalentname	SYNONYM
@@ -47,7 +47,7 @@ synonymsl	SYNONYM
 unaccepted	SYNONYM
 unavailable	SYNONYM
 unpublishedname	SYNONYM
-
+	
 ambiguoussynonym	HETEROTYPIC_SYNONYM
 heterotypicsynonym	HETEROTYPIC_SYNONYM
 heterotypicsynonym	HETEROTYPIC_SYNONYM
@@ -55,25 +55,25 @@ isheterotypicsynonymof	HETEROTYPIC_SYNONYM
 synonymsubjective	HETEROTYPIC_SYNONYM
 synonymsubjectiveheterotypic	HETEROTYPIC_SYNONYM
 sinônimo HETEROTIPICO	HETEROTYPIC_SYNONYM
-
+	
 ishomotypicsynonymof	HOMOTYPIC_SYNONYM
 synonymoriginalcombination	HOMOTYPIC_SYNONYM
 homotypicsynonym	HOMOTYPIC_SYNONYM
 homotypicsynonym	HOMOTYPIC_SYNONYM
 synonymobjectivehomotypic	HOMOTYPIC_SYNONYM
 sinônimo HOMOTIPICO	HOMOTYPIC_SYNONYM
-
+	
 pp	PROPARTE_SYNONYM
 pparte	PROPARTE_SYNONYM
 ppsyn	PROPARTE_SYNONYM
 ppsynonym	PROPARTE_SYNONYM
 proparte	PROPARTE_SYNONYM
 propartesynonym	PROPARTE_SYNONYM
-
+	
 ismisappliednamefor	MISAPPLIED
 misapplied	MISAPPLIED
 misappliedname	MISAPPLIED
-
+	
 determinationsynonym	DETERMINATION_SYNONYM
-
+	
 intermediateranksynonym	INTERMEDIATE_RANK_SYNONYM

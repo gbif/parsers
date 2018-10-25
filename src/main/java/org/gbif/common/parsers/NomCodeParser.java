@@ -25,7 +25,7 @@ public class NomCodeParser extends EnumParser<NomenclaturalCode> {
         throws ClassCastException, AbstractMethodError, ArithmeticException, ArrayIndexOutOfBoundsException {
         synchronized (NomCodeParser.class) {
             if (singletonObject == null) {
-                singletonObject = new NomCodeParser(NomCodeParser.class.getResourceAsStream("/dictionaries/parse/nomCode.txt"));
+                singletonObject = new NomCodeParser(NomCodeParser.class.getResourceAsStream("/dictionaries/parse/nomCode.tsv"));
             }
         }
         return singletonObject;

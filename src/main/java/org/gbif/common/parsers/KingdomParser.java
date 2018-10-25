@@ -13,7 +13,7 @@ public class KingdomParser extends EnumParser<Kingdom> {
             add(k.name(), k);
         }
         // use dict file last
-        init(KingdomParser.class.getResourceAsStream("/dictionaries/parse/kingdoms.txt"));
+        init(KingdomParser.class.getResourceAsStream("/dictionaries/parse/kingdoms.tsv"));
     }
 
     public static KingdomParser getInstance() {

@@ -8,7 +8,7 @@ wetlands	FRESHWATER
 marsh	FRESHWATER
 streams	FRESHWATER
 ponds	FRESHWATER
-
+	
 ocean	MARINE
 sea	MARINE
 seawater	MARINE
@@ -19,7 +19,7 @@ estuaries	MARINE
 reef	MARINE
 sea bed	MARINE
 rockpools	MARINE
-
+	
 forest	TERRESTRIAL
 desert	TERRESTRIAL
 grassland	TERRESTRIAL

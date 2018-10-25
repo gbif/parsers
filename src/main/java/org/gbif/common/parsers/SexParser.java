@@ -17,7 +17,7 @@ public class SexParser extends EnumParser<Sex> {
       add(c.name(), c);
     }
     // use dict file last
-    init(SexParser.class.getResourceAsStream("/dictionaries/parse/sex.txt"));
+    init(SexParser.class.getResourceAsStream("/dictionaries/parse/sex.tsv"));
   }
 
   public static SexParser getInstance() {

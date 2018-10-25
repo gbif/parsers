@@ -12,7 +12,7 @@ public class BooleanParser extends FileBasedDictionaryParser<Boolean> {
   private BooleanParser() {
     super(false);
     // use dict file last
-    init(BooleanParser.class.getResourceAsStream("/dictionaries/parse/boolean.txt"));
+    init(BooleanParser.class.getResourceAsStream("/dictionaries/parse/boolean.tsv"));
   }
 
   public static BooleanParser getInstance() {

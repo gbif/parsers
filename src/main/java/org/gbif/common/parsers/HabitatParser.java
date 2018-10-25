@@ -11,7 +11,7 @@ public class HabitatParser extends EnumParser<Habitat> {
   private static HabitatParser singletonObject = null;
 
   private HabitatParser() {
-    super(Habitat.class, false, HabitatParser.class.getResourceAsStream("/dictionaries/parse/habitat.txt"));
+    super(Habitat.class, false, HabitatParser.class.getResourceAsStream("/dictionaries/parse/habitat.tsv"));
   }
 
   public static HabitatParser getInstance() {

@@ -31,7 +31,7 @@ public class DatumParser extends FileBasedDictionaryParser<Integer> {
 
   private DatumParser() {
     super(false);
-    init(DatumParser.class.getResourceAsStream("/dictionaries/parse/datum.txt"));
+    init(DatumParser.class.getResourceAsStream("/dictionaries/parse/datum.tsv"));
   }
 
   public static DatumParser getInstance() {

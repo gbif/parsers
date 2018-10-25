@@ -19,7 +19,7 @@ agglom	SPECIES_AGGREGATE
 aggr	SPECIES_AGGREGATE
 aggregate	SPECIES_AGGREGATE
 agregate	SPECIES_AGGREGATE
-alliance
+alliance	
 alpha	INFRASPECIFIC_NAME
 ap	INFRASUBSPECIFIC_NAME
 b	UNRANKED
@@ -136,11 +136,11 @@ legio	LEGION
 lysotype	PHAGOVAR
 megaorder	MAGNORDER
 microgen	INFRAGENERICNAME
-monstr
+monstr	
 morphotype	MORPHOVAR
 nat	NATIO
 natio	NATIO
-nm
+nm	
 no rank	UNRANKED
 node	UNRANKED
 none	UNRANKED
@@ -168,7 +168,7 @@ order	ORDER
 orderclade	ORDER
 ordo	ORDER
 p	PHYLUM
-pars
+pars	
 pathotype	PATHOVAR
 ph	PHYLUM
 phagotype	PHAGOVAR
@@ -180,7 +180,7 @@ physiological type	BIOVAR
 prol	PROLES
 prolata	PROLES
 proles	PROLES
-pseudovar
+pseudovar	
 race	RACE
 reg	KINGDOM
 regn	KINGDOM
@@ -295,11 +295,11 @@ superphylum	SUPERPHYLUM
 superphylum	SUPERPHYLUM
 superphylum	SUPERPHYLUM
 superregnum	SUPERKINGDOM
-supersect
+supersect	
 superser	SUPERSERIES
 superseries	SUPERSERIES
-supersubtrib
-supersubtribe
+supersubtrib	
+supersubtribe	
 supertrib	SUPERTRIBE
 supertribe	SUPERTRIBE
 suprageneric_name	SUPRAGENERIC_NAME
