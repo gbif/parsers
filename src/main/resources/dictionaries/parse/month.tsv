@@ -1,5 +1,5 @@
 #Syntax: month name (as written in org.threeten.bp.Month.values())	comma separated list of alternate names
-#Be very careful not to add any ambiguous terms	Do not add a "." at the end of abbreviations
+#Be very careful not to add any ambiguous terms	Do not add a . at the end of abbreviations
 	
 #	Ene. is abbreviated Spanish
 January	Jan, Ene, Ja
