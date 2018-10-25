@@ -90,6 +90,8 @@ public class CountryParserTest extends ParserTestBase<Country> {
     assertParseSuccess(Country.UNKNOWN, "U S S R");
     assertParseSuccess(Country.UNKNOWN, "NETHERLANDS ANTILLES");
     assertParseSuccess(Country.UNKNOWN, "Borneo");
+    assertParseSuccess(Country.UNKNOWN, "french congo");
+    assertParseSuccess(Country.UNKNOWN, "CONGO AFRICA");
   }
 
   @Test
@@ -113,7 +115,6 @@ public class CountryParserTest extends ParserTestBase<Country> {
     assertParseSuccess(Country.GERMANY, "Germany");
     assertParseSuccess(Country.GERMANY, "deutschland");
     assertParseSuccess(Country.GERMANY, "De");
-    assertParseSuccess(Country.NORTHERN_MARIANA_ISLANDS, "[West Indian Ocean]");
 
     assertParseSuccess(Country.FAROE_ISLANDS, "Faroe");
     assertParseSuccess(Country.FAROE_ISLANDS, "Farœ");
@@ -124,14 +125,12 @@ public class CountryParserTest extends ParserTestBase<Country> {
     assertParseSuccess(Country.FRANCE, "CLIPPERTON IS");
     assertParseSuccess(Country.FRANCE, "CLIPPERTON ID");
     assertParseSuccess(Country.FRANCE, "CLIPPERTON I");
-    assertParseSuccess(Country.CONGO, "french congo");
     assertParseSuccess(Country.CONGO, "Republic of the Congo");
     assertParseSuccess(Country.CONGO, "République du Congo");
     assertParseSuccess(Country.CONGO, "People's Republic of the Congo");
     assertParseSuccess(Country.CONGO, "congo republic");
     assertParseSuccess(Country.CONGO, "Congo-Brazzaville");
     assertParseSuccess(Country.CONGO, "CONGO");
-    assertParseSuccess(Country.CONGO_DEMOCRATIC_REPUBLIC, "CONGO AFRICA");
     assertParseSuccess(Country.CONGO_DEMOCRATIC_REPUBLIC, "Léopoldville");
     assertParseSuccess(Country.CONGO_DEMOCRATIC_REPUBLIC, "Zaïre");
     assertParseSuccess(Country.CONGO_DEMOCRATIC_REPUBLIC, "belgium congo");
@@ -147,7 +146,10 @@ public class CountryParserTest extends ParserTestBase<Country> {
     assertParseSuccess(Country.BONAIRE_SINT_EUSTATIUS_SABA, "ST EUSTATIUS ISLAND");
     assertParseSuccess(Country.BONAIRE_SINT_EUSTATIUS_SABA, "ST EUSTATIUS");
     assertParseSuccess(Country.BONAIRE_SINT_EUSTATIUS_SABA, "BONAIRE THE NETHERLANDS ANTILLES");
+  }
 
+  @Test
+  public void testParseNa() {
     assertParseSuccess(Country.NAMIBIA, "NA");
     assertParseFailure("N/A");
     assertParseFailure("n/a");

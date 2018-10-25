@@ -53,7 +53,7 @@ public class CountryParser extends EnumParser<Country> {
     Country c = Country.fromIsoCode(value);
     if (c == null) {
       try {
-        c = (Country) VocabularyUtils.lookupEnum(value, Country.class);
+        c = VocabularyUtils.lookupEnum(value, Country.class);
       } catch (RuntimeException e) {
       }
     }
@@ -68,5 +68,4 @@ public class CountryParser extends EnumParser<Country> {
     }
     return singletonObject;
   }
-
 }
