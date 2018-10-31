@@ -60,13 +60,31 @@ public class CoordinateParseUtilsTest {
     assertDMS("002°49'52\"N", "131°47'03\"E", 2.831111d, 131.784167d);
     assertDMS("2°49'N", "131°47'E", 2.816667d, 131.783333d);
     assertDMS("002°49'52''N", "131°47'03''E", 2.831111d, 131.784167d);
-    // even if its out of range thats expected here - we validate elsewhere, this is an internal method only!
+    assertDMS("6º39'36\"S","35º59'59\"W", -6.66d, -35.999722);
+    assertDMS("17  02.877 N", "121  05.966 E", 17.04795, 121.099433);
+    assertDMS("08º37'S", "37º10'W", -8.616667, -37.166667);
+    assertDMS("39g30mS", "56g27mW", -39.5, -56.45);
+    assertDMS("42g24m50.00sS", "64g17m20.00sW", -42.413889, -64.288889);
+    assertDMS("42º30´S", "54º14´W", -42.5, -54.233333);
+    assertDMS("61o50'N", "30o45'E", 61.833333, 30.75);
+    assertDMS("07°35N", "38°44E", 7.583333, 38.733333);
+    assertDMS("29º32.3’N", "113º34.9’W", 29.538333, -113.581667);
+    assertDMS("5°45′30″N", "100º30′30″W", 5.758333, -100.508333);
+    assertDMS("125º52´2´´S", "39º28´47´´W", -125.867222, -39.479722);
+    assertDMS("13.1939 N", "59.5432 W", 13.1939, -59.5432);
+    assertDMS("24 06.363 N", "110 11.969 E", 24.10605d, 110.199483d);
+    // even if it's out of range that's expected here - we validate elsewhere, this is an internal method only!
     assertDMS("122°49'52\"N", "131°47'03\"E", 122.831111d, 131.784167d);
     assertDMS("122°49'52.39\"N", "131°47'03.23\"E", 122.83121944444444d, 131.78423055555555d);
     assertDMS("122d49m52.39sN", "131d47m03.23sE", 122.83121944444444d, 131.78423055555555d);
     assertDMS("122 49 52.39", "131 47 03.23", 122.83121944444444d, 131.78423055555555d);
     assertDMS("N122°49'52.39\"", "E131°47'03.23\"", 122.83121944444444d, 131.78423055555555d);
     assertDMS("N 122° 49' 52.39\"", "E 131° 47' 03.23\"", 122.83121944444444d, 131.78423055555555d);
+    assertDMS("N 122°49'52.39\"", "E 131°47'03.23\"", 122.83121944444444d, 131.78423055555555d);
+    assertDMS("N 122°49'52\"", "E 131°47'03.23\"", 122.831111d, 131.78423055555555d);
+    assertDMS("N122°49'52.39\"", "E131°47'03.23\"", 122.83121944444444d, 131.78423055555555d);
+    assertDMS("N36.93276", "W102.96361", 36.93276, -102.96361);
+    assertDMS("90°N", "180°", 90, 180);
 
     // truly failing
     assertIllegalArg("12344", true);
@@ -76,6 +94,10 @@ public class CoordinateParseUtilsTest {
     assertIllegalArg("131°47'132\"", false);
     assertIllegalArg("131 47 132", false);
     assertIllegalArg("131°47'132\"", false);
+    assertIllegalArg("043300S",true);
+    assertIllegalArg("0433S",true);
+    assertIllegalArg("043300 S",true);
+    assertIllegalArg("0433 S",true);
   }
 
   private void assertDMS(String lat, String lon, double eLat, double eLon){
@@ -102,18 +124,18 @@ public class CoordinateParseUtilsTest {
     assertExpected( CoordinateParseUtils.parseVerbatimCoordinates("63d 41m 39s N 170d 28m 44s W"), new LatLng(63.694167d, -170.478889d), ParseResult.CONFIDENCE.DEFINITE);
     assertExpected( CoordinateParseUtils.parseVerbatimCoordinates("37° 28' N, 122° 6' W"), new LatLng(37.466667d, -122.1d), ParseResult.CONFIDENCE.DEFINITE);
     assertExpected( CoordinateParseUtils.parseVerbatimCoordinates("2°49'52\"N, 131°47'03\""), new LatLng(2.831111d, 131.784167d), ParseResult.CONFIDENCE.DEFINITE);
+    assertExpected( CoordinateParseUtils.parseVerbatimCoordinates("10°07'06\"N 20°48'23\"W"), new LatLng(10.118333, -20.806389), ParseResult.CONFIDENCE.DEFINITE);
+    assertExpected( CoordinateParseUtils.parseVerbatimCoordinates("10º07'06\"N 20º48'23\"W"), new LatLng(10.118333, -20.806389), ParseResult.CONFIDENCE.DEFINITE);
+    assertExpected( CoordinateParseUtils.parseVerbatimCoordinates("10°07'N 20°48'W"), new LatLng(10.116667, -20.8), ParseResult.CONFIDENCE.DEFINITE);
+    assertExpected( CoordinateParseUtils.parseVerbatimCoordinates("10°07.55'N 20°48.55'W"), new LatLng(10.125833, -20.809167), ParseResult.CONFIDENCE.DEFINITE);
+    assertExpected( CoordinateParseUtils.parseVerbatimCoordinates("100º23'05\"N 20º35'25\"W"), new LatLng(-20.590278, 100.384722), ParseResult.CONFIDENCE.PROBABLE, OccurrenceIssue.PRESUMED_SWAPPED_COORDINATE);
+
     // failed
     assertFailed(CoordinateParseUtils.parseVerbatimCoordinates(""));
     assertFailedWithIssues(CoordinateParseUtils.parseVerbatimCoordinates("12344"), OccurrenceIssue.COORDINATE_INVALID);
     assertFailedWithIssues(CoordinateParseUtils.parseVerbatimCoordinates(" "), OccurrenceIssue.COORDINATE_INVALID);
     assertFailedWithIssues(CoordinateParseUtils.parseVerbatimCoordinates(",11.12"), OccurrenceIssue.COORDINATE_INVALID);
     assertFailedWithIssues(CoordinateParseUtils.parseVerbatimCoordinates("122°49'52\"N, 131°47'03\"E"), OccurrenceIssue.COORDINATE_OUT_OF_RANGE);
-  }
-
-  private void assertExpected(LatLng result, Double lat, Double lon) {
-    assertNotNull(result);
-    assertEquals("Latitudedifferent", lat, result.getLat());
-    assertEquals("Longitude different", lon, result.getLng());
   }
 
   private void assertExpected(OccurrenceParseResult<?> pr, Object expected, ParseResult.CONFIDENCE c, OccurrenceIssue ... issue) {

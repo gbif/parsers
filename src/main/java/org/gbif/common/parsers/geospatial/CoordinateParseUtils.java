@@ -20,14 +20,24 @@ import org.slf4j.LoggerFactory;
  * Utilities for assisting in the parsing of latitude and longitude strings into Decimals.
  */
 public class CoordinateParseUtils {
-  private final static String DMS = "\\s*(\\d{1,3})\\s*[°d ]"
-                                  + "\\s*([0-6]?\\d)\\s*['m ]"
-                                  + "\\s*(?:"
-                                    + "([0-6]?\\d(?:[,.]\\d+)?)"
-                                    + "\\s*(?:\"|''|s)?"
+  private final static String DMS = "\\s*(\\d{1,3})\\s*(?:°|d|º| |g|o)"  // The degrees
+                                  + "\\s*([0-6]?\\d)\\s*(?:'|m| |´|’|′)" // The minutes
+                                  + "\\s*(?:"                            // Non-capturing group
+                                  + "([0-6]?\\d(?:[,.]\\d+)?)"           // Seconds and optional decimal
+                                  + "\\s*(?:\"|''|s|´´|″)?"
                                   + ")?\\s*";
+  private final static String DM = "\\s*(\\d{1,3})\\s*(?:°|d|º| |g|o)" // The degrees
+                                 + "\\s*(?:"                           // Non-capturing group
+                                 + "([0-6]?\\d(?:[,.]\\d+)?)"          // Minutes and optional decimal
+                                 + "\\s*(?:'|m| |´|’|′)?"
+                                 + ")?\\s*";
+  private final static String D = "\\s*(\\d{1,3}(?:[,.]\\d+)?)\\s*(?:°|d|º| |g|o|)\\s*"; // The degrees and optional decimal
   private final static Pattern DMS_SINGLE = Pattern.compile("^" + DMS + "$", Pattern.CASE_INSENSITIVE);
+  private final static Pattern DM_SINGLE = Pattern.compile("^" + DM + "$", Pattern.CASE_INSENSITIVE);
+  private final static Pattern D_SINGLE = Pattern.compile("^" + D + "$", Pattern.CASE_INSENSITIVE);
   private final static Pattern DMS_COORD = Pattern.compile("^" + DMS + "([NSEOW])" + "[ ,;/]?" + DMS + "([NSEOW])$", Pattern.CASE_INSENSITIVE);
+  //private final static Pattern DM_COORD = Pattern.compile("^" + DM + "([NSEOW])" + "[ ,;/]?" + DM + "([NSEOW])$", Pattern.CASE_INSENSITIVE);
+  //private final static Pattern D_COORD = Pattern.compile("^" + D + "([NSEOW])" + "[ ,;/]?" + D + "([NSEOW])$", Pattern.CASE_INSENSITIVE);
   private final static String POSITIVE = "NEO";
   private CoordinateParseUtils() {
     throw new UnsupportedOperationException("Can't initialize class");
@@ -43,13 +53,16 @@ public class CoordinateParseUtils {
    *
    * Coordinate precision will be 6 decimals at most, any more precise values will be rounded.
    *
-   * Supported standard formats are the following, with dots or optionally a comma as the decimal marker:
+   * Supported standard formats are the following, with dots or optionally a comma as the decimal marker, and variations
+   * on the units also accepted e.g. °, d, º, g, o.
    * <ul>
    *   <li>43.63871944444445</li>
    *   <li>N43°38'19.39"</li>
    *   <li>43°38'19.39"N</li>
+   *   <li>43°38.3232'N</li>
    *   <li>43d 38m 19.39s N</li>
    *   <li>43 38 19.39</li>
+   *   <li>433819N</li>
    * </ul>
    *
    * @param latitude  The decimal latitude
@@ -198,6 +211,16 @@ public class CoordinateParseUtils {
       Matcher m = DMS_SINGLE.matcher(coord);
       if (m.find()) {
         return coordFromMatcher(m, 1,2,3, String.valueOf(dir));
+      } else {
+        m = DM_SINGLE.matcher(coord);
+        if (m.find()) {
+          return coordFromMatcher(m, 1, 2, String.valueOf(dir));
+        } else {
+          m = D_SINGLE.matcher(coord);
+          if (m.find()) {
+            return coordFromMatcher(m, 1, String.valueOf(dir));
+          }
+        }
       }
     }
     throw new IllegalArgumentException();
@@ -205,8 +228,19 @@ public class CoordinateParseUtils {
 
   private static double coordFromMatcher(Matcher m, int idx1, int idx2, int idx3, String sign) {
     return roundTo6decimals(coordSign(sign) *
-        dmsToDecimal( NumberParser.parseDouble(m.group(idx1)), NumberParser.parseDouble(m.group(idx2)), NumberParser.parseDouble(m.group(idx3)) ));
+      dmsToDecimal( NumberParser.parseDouble(m.group(idx1)), NumberParser.parseDouble(m.group(idx2)), NumberParser.parseDouble(m.group(idx3)) ));
   }
+
+  private static double coordFromMatcher(Matcher m, int idx1, int idx2, String sign) {
+    return roundTo6decimals(coordSign(sign) *
+      dmsToDecimal( NumberParser.parseDouble(m.group(idx1)), NumberParser.parseDouble(m.group(idx2)), 0.0));
+  }
+
+  private static double coordFromMatcher(Matcher m, int idx1, String sign) {
+    return roundTo6decimals(coordSign(sign) *
+      dmsToDecimal( NumberParser.parseDouble(m.group(idx1)), 0.0, 0.0));
+  }
+
   private static double dmsToDecimal(double degree, Double minutes, Double seconds) {
     minutes = minutes == null ? 0 : minutes;
     seconds = seconds == null ? 0 : seconds;
