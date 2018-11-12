@@ -1,30 +1,38 @@
 package org.gbif.common.parsers;
 
-import org.gbif.api.model.common.MediaObject;
-import org.gbif.api.vocabulary.MediaType;
-
-import java.net.URI;
-import java.util.Set;
-import javax.annotation.Nullable;
-
 import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableSet;
 import org.apache.tika.Tika;
+import org.apache.tika.mime.MediaTypeRegistry;
 import org.apache.tika.mime.MimeType;
 import org.apache.tika.mime.MimeTypeException;
 import org.apache.tika.mime.MimeTypes;
+import org.gbif.api.model.common.MediaObject;
+import org.gbif.api.vocabulary.MediaType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import javax.annotation.Nullable;
+import java.net.URI;
+import java.util.Set;
 
 public class MediaParser {
   private static final Logger LOG = LoggerFactory.getLogger(MediaParser.class);
   private static final Tika TIKA = new Tika();
   private static final MimeTypes MIME_TYPES = MimeTypes.getDefaultMimeTypes();
   private static final String HTML_TYPE = "text/html";
-  // mime types which we consider as html links instead of real media file uris
+  // MIME types which we consider as HTML links instead of real media file URIs
   private static final Set<String> HTML_MIME_TYPES = ImmutableSet
     .of("text/x-coldfusion", "text/x-php", "text/asp", "text/aspdotnet", "text/x-cgi", "text/x-jsp", "text/x-perl",
       HTML_TYPE, MIME_TYPES.OCTET_STREAM);
+
+  // Add missing alias types.
+  static {
+    MediaTypeRegistry mediaTypeRegistry = MIME_TYPES.getMediaTypeRegistry();
+    mediaTypeRegistry.addAlias(org.apache.tika.mime.MediaType.audio("mpeg"), org.apache.tika.mime.MediaType.audio("mp3"));
+    mediaTypeRegistry.addAlias(org.apache.tika.mime.MediaType.audio("mpeg"), org.apache.tika.mime.MediaType.audio("mpeg3"));
+  }
+
   private static MediaParser instance = null;
 
   public static MediaParser getInstance() {
@@ -65,12 +73,16 @@ public class MediaParser {
   }
 
   /**
-   * Parses a mime type using apache tika which can handle the following:
-   * http://svn.apache.org/repos/asf/tika/trunk/tika-core/src/main/resources/org/apache/tika/mime/tika-mimetypes.xml
+   * Parses a MIME type using Apache Tika which can handle the following:
+   * https://github.com/apache/tika/blob/master/tika-core/src/main/resources/org/apache/tika/mime/tika-mimetypes.xml
+   * https://tika.apache.org/1.19.1/formats.html#Full_list_of_Supported_Formats
    */
   public String parseMimeType(@Nullable String format) {
     if (format != null) {
       format = Strings.emptyToNull(format.trim().toLowerCase());
+    }
+    if (format == null) {
+      return null;
     }
 
     try {
@@ -82,13 +94,14 @@ public class MediaParser {
     } catch (MimeTypeException e) {
     }
 
-    // verify this is a reasonable mime type
-    return format == null || MimeType.isValid(format) ? format : null;
+    // Failed, but return the input if it's a reasonable MIME type
+    return MimeType.isValid(format) ? format : null;
   }
 
   /**
-   * Parses a mime type using apache tika which can handle the following:
-   * http://svn.apache.org/repos/asf/tika/trunk/tika-core/src/main/resources/org/apache/tika/mime/tika-mimetypes.xml
+   * Parses a MIME type using Apache Tika which can handle the following:
+   * https://github.com/apache/tika/blob/master/tika-core/src/main/resources/org/apache/tika/mime/tika-mimetypes.xml
+   * https://tika.apache.org/1.19.1/formats.html#Full_list_of_Supported_Formats
    */
   public String parseMimeType(@Nullable URI uri) {
     if (uri != null) {

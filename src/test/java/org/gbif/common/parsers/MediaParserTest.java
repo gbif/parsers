@@ -34,18 +34,13 @@ public class MediaParserTest {
   @Test
   public void testParseMimeType() throws Exception {
     assertNull(parser.parseMimeType((String) null));
-    assertEquals("image/jp2", parser.parseMimeType("image/jp2"));
+    assertEquals("image/jp2", parser.parseMimeType(" image/jp2\t"));
     assertEquals("image/jpg", parser.parseMimeType("image/jpg"));
     assertEquals("image/jpeg", parser.parseMimeType("image/jpeg"));
     assertEquals("image/jpg", parser.parseMimeType("image/JPG"));
     assertNull(parser.parseMimeType("JPG"));
     assertNull(parser.parseMimeType("gif"));
     assertNull(parser.parseMimeType("tiff"));
-    assertEquals("audio/mp3", parser.parseMimeType("audio/mp3"));
-    assertNull(parser.parseMimeType("mp3"));
-    assertEquals("audio/mp3", parser.parseMimeType(" audio/mp3"));
-    assertNull(parser.parseMimeType("mpg"));
-
 
     assertNull(parser.parseMimeType((URI) null));
     assertEquals("image/jp2", parser.parseMimeType(URI.create("abies_alba.jp2")));
@@ -63,6 +58,19 @@ public class MediaParserTest {
     assertEquals("text/html", parser.parseMimeType(URI.create("http://arctos.database.museum/MediaSearch.cfm?action=search")));
     assertEquals("text/html", parser.parseMimeType(URI.create("http://arctos.database.museum/MediaSearch.php?action=search")));
     assertEquals("text/html", parser.parseMimeType(URI.create("http://arctos.database.museum/MediaSearch.pl?action=search")));
+
+    // Audio.
+    assertNull(parser.parseMimeType("mp3"));
+    assertNull(parser.parseMimeType("mpg"));
+
+    assertEquals("audio/ogg", parser.parseMimeType("audio/ogg"));
+    assertEquals("application/ogg", parser.parseMimeType("application/ogg"));
+    assertEquals("audio/webm", parser.parseMimeType("audio/webm"));
+    assertEquals("audio/mp4", parser.parseMimeType("audio/mp4"));
+    assertEquals("audio/vnd.wave", parser.parseMimeType("audio/wav"));
+
+    assertEquals("audio/mpeg", parser.parseMimeType("audio/mp3"));
+    assertEquals("audio/mpeg", parser.parseMimeType("audio/mpeg3"));
   }
 
   @Test
