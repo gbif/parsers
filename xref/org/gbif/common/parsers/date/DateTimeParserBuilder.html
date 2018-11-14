@@ -263,102 +263,117 @@
 <a class="jxr_linenumber" name="L255" href="#L255">255</a> <em class="jxr_javadoccomment">     * @param alternativeSeparators separator used in the pattern that should be used as replacement for alternativeSeparators</em>
 <a class="jxr_linenumber" name="L256" href="#L256">256</a> <em class="jxr_javadoccomment">     * @return</em>
 <a class="jxr_linenumber" name="L257" href="#L257">257</a> <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L258" href="#L258">258</a>     <strong class="jxr_keyword">public</strong> <a href="../../../../../org/gbif/common/parsers/date/DateTimeParserBuilder.html">ThreeTenDateParserListBuilder</a> appendDateTimeParser(String pattern, <a href="../../../../../org/gbif/common/parsers/date/DateFormatHint.html">DateFormatHint</a> hint, TemporalQuery&lt;?&gt;[] type,
-<a class="jxr_linenumber" name="L259" href="#L259">259</a>                                                                    String separator, String alternativeSeparators
-<a class="jxr_linenumber" name="L260" href="#L260">260</a>                                                               ){
+<a class="jxr_linenumber" name="L258" href="#L258">258</a>     <strong class="jxr_keyword">public</strong> <a href="../../../../../org/gbif/common/parsers/date/DateTimeParserBuilder.html">ThreeTenDateParserListBuilder</a> appendDateTimeParser(String pattern, <a href="../../../../../org/gbif/common/parsers/date/DateFormatHint.html">DateFormatHint</a> hint, TemporalQuery&lt;?&gt; type,
+<a class="jxr_linenumber" name="L259" href="#L259">259</a>                                                               String separator, String alternativeSeparators
+<a class="jxr_linenumber" name="L260" href="#L260">260</a>     ){
 <a class="jxr_linenumber" name="L261" href="#L261">261</a>       dateTimeParsers.add(DateTimeParserBuilder.build(pattern, hint, type, separator, alternativeSeparators));
 <a class="jxr_linenumber" name="L262" href="#L262">262</a>       <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L263" href="#L263">263</a>     }
 <a class="jxr_linenumber" name="L264" href="#L264">264</a> 
-<a class="jxr_linenumber" name="L265" href="#L265">265</a>     <strong class="jxr_keyword">public</strong> <a href="../../../../../org/gbif/common/parsers/date/DateTimeParserBuilder.html">ThreeTenDateParserListBuilder</a> append2DigitsYearDateTimeParser(String pattern, <a href="../../../../../org/gbif/common/parsers/date/DateFormatHint.html">DateFormatHint</a> hint, TemporalQuery&lt;?&gt; type,
-<a class="jxr_linenumber" name="L266" href="#L266">266</a>                                                                               Year baseYear){
-<a class="jxr_linenumber" name="L267" href="#L267">267</a>       dateTimeParsers.add(DateTimeParserBuilder.build(pattern, hint, <strong class="jxr_keyword">new</strong> TemporalQuery[]{type}, baseYear));
-<a class="jxr_linenumber" name="L268" href="#L268">268</a>       <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
-<a class="jxr_linenumber" name="L269" href="#L269">269</a>     }
-<a class="jxr_linenumber" name="L270" href="#L270">270</a> 
-<a class="jxr_linenumber" name="L271" href="#L271">271</a>     <strong class="jxr_keyword">public</strong> <a href="../../../../../org/gbif/common/parsers/date/DateTimeParserBuilder.html">ThreeTenDateParserListBuilder</a> append2DigitsYearDateTimeParser(String pattern, <a href="../../../../../org/gbif/common/parsers/date/DateFormatHint.html">DateFormatHint</a> hint, TemporalQuery&lt;?&gt; type,
-<a class="jxr_linenumber" name="L272" href="#L272">272</a>                                                                               String separator, String alternativeSeparators,
-<a class="jxr_linenumber" name="L273" href="#L273">273</a>                                                                               Year baseYear){
-<a class="jxr_linenumber" name="L274" href="#L274">274</a>       dateTimeParsers.add(DateTimeParserBuilder.build(pattern, hint, <strong class="jxr_keyword">new</strong> TemporalQuery[]{type}, separator, alternativeSeparators, baseYear));
-<a class="jxr_linenumber" name="L275" href="#L275">275</a>       <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
-<a class="jxr_linenumber" name="L276" href="#L276">276</a>     }
-<a class="jxr_linenumber" name="L277" href="#L277">277</a> 
-<a class="jxr_linenumber" name="L278" href="#L278">278</a>     <strong class="jxr_keyword">public</strong> List&lt;DateTimeParser&gt; build(){
-<a class="jxr_linenumber" name="L279" href="#L279">279</a>       <strong class="jxr_keyword">return</strong> ImmutableList.copyOf(dateTimeParsers);
-<a class="jxr_linenumber" name="L280" href="#L280">280</a>     }
-<a class="jxr_linenumber" name="L281" href="#L281">281</a>   }
-<a class="jxr_linenumber" name="L282" href="#L282">282</a> 
-<a class="jxr_linenumber" name="L283" href="#L283">283</a>   <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L284" href="#L284">284</a> <em class="jxr_javadoccomment">   * More specific builder Builder used to build a {@link DateTimeMultiParser}.</em>
-<a class="jxr_linenumber" name="L285" href="#L285">285</a> <em class="jxr_javadoccomment">   */</em>
-<a class="jxr_linenumber" name="L286" href="#L286">286</a>   <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../../org/gbif/common/parsers/date/DateTimeParserBuilder.html">ThreeTenDateMultiParserListBuilder</a> {
-<a class="jxr_linenumber" name="L287" href="#L287">287</a>     <strong class="jxr_keyword">private</strong> <a href="../../../../../org/gbif/common/parsers/date/DateTimeParser.html">DateTimeParser</a> preferred;
-<a class="jxr_linenumber" name="L288" href="#L288">288</a>     <strong class="jxr_keyword">private</strong> List&lt;DateTimeParser&gt; otherParsers = Lists.newArrayList();
-<a class="jxr_linenumber" name="L289" href="#L289">289</a> 
-<a class="jxr_linenumber" name="L290" href="#L290">290</a>     <strong class="jxr_keyword">public</strong> <a href="../../../../../org/gbif/common/parsers/date/DateTimeParserBuilder.html">ThreeTenDateMultiParserListBuilder</a> preferredDateTimeParser(String pattern, <a href="../../../../../org/gbif/common/parsers/date/DateFormatHint.html">DateFormatHint</a> hint, TemporalQuery&lt;?&gt; type){
-<a class="jxr_linenumber" name="L291" href="#L291">291</a>       preferred = DateTimeParserBuilder.build(pattern, hint, type);
-<a class="jxr_linenumber" name="L292" href="#L292">292</a>       <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
-<a class="jxr_linenumber" name="L293" href="#L293">293</a>     }
-<a class="jxr_linenumber" name="L294" href="#L294">294</a> 
-<a class="jxr_linenumber" name="L295" href="#L295">295</a>     <strong class="jxr_keyword">public</strong> <a href="../../../../../org/gbif/common/parsers/date/DateTimeParserBuilder.html">ThreeTenDateMultiParserListBuilder</a> preferredDateTimeParser(String pattern, <a href="../../../../../org/gbif/common/parsers/date/DateFormatHint.html">DateFormatHint</a> hint, TemporalQuery&lt;?&gt; type,  Year year){
-<a class="jxr_linenumber" name="L296" href="#L296">296</a>       preferred = DateTimeParserBuilder.build(pattern, hint, <strong class="jxr_keyword">new</strong> TemporalQuery[]{type}, year);
-<a class="jxr_linenumber" name="L297" href="#L297">297</a>       <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
-<a class="jxr_linenumber" name="L298" href="#L298">298</a>     }
-<a class="jxr_linenumber" name="L299" href="#L299">299</a> 
-<a class="jxr_linenumber" name="L300" href="#L300">300</a>     <strong class="jxr_keyword">public</strong> <a href="../../../../../org/gbif/common/parsers/date/DateTimeParserBuilder.html">ThreeTenDateMultiParserListBuilder</a> appendDateTimeParser(String pattern, <a href="../../../../../org/gbif/common/parsers/date/DateFormatHint.html">DateFormatHint</a> hint, TemporalQuery&lt;?&gt; type){
-<a class="jxr_linenumber" name="L301" href="#L301">301</a>       otherParsers.add(DateTimeParserBuilder.build(pattern, hint, type));
-<a class="jxr_linenumber" name="L302" href="#L302">302</a>       <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
-<a class="jxr_linenumber" name="L303" href="#L303">303</a>     }
+<a class="jxr_linenumber" name="L265" href="#L265">265</a>     <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L266" href="#L266">266</a> <em class="jxr_javadoccomment">     *</em>
+<a class="jxr_linenumber" name="L267" href="#L267">267</a> <em class="jxr_javadoccomment">     * @param pattern date pattern to use</em>
+<a class="jxr_linenumber" name="L268" href="#L268">268</a> <em class="jxr_javadoccomment">     * @param hint</em>
+<a class="jxr_linenumber" name="L269" href="#L269">269</a> <em class="jxr_javadoccomment">     * @param separator</em>
+<a class="jxr_linenumber" name="L270" href="#L270">270</a> <em class="jxr_javadoccomment">     * @param alternativeSeparators separator used in the pattern that should be used as replacement for alternativeSeparators</em>
+<a class="jxr_linenumber" name="L271" href="#L271">271</a> <em class="jxr_javadoccomment">     * @return</em>
+<a class="jxr_linenumber" name="L272" href="#L272">272</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="L273" href="#L273">273</a>     <strong class="jxr_keyword">public</strong> <a href="../../../../../org/gbif/common/parsers/date/DateTimeParserBuilder.html">ThreeTenDateParserListBuilder</a> appendDateTimeParser(String pattern, <a href="../../../../../org/gbif/common/parsers/date/DateFormatHint.html">DateFormatHint</a> hint, TemporalQuery&lt;?&gt;[] type,
+<a class="jxr_linenumber" name="L274" href="#L274">274</a>                                                               String separator, String alternativeSeparators
+<a class="jxr_linenumber" name="L275" href="#L275">275</a>     ){
+<a class="jxr_linenumber" name="L276" href="#L276">276</a>       dateTimeParsers.add(DateTimeParserBuilder.build(pattern, hint, type, separator, alternativeSeparators));
+<a class="jxr_linenumber" name="L277" href="#L277">277</a>       <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
+<a class="jxr_linenumber" name="L278" href="#L278">278</a>     }
+<a class="jxr_linenumber" name="L279" href="#L279">279</a> 
+<a class="jxr_linenumber" name="L280" href="#L280">280</a>     <strong class="jxr_keyword">public</strong> <a href="../../../../../org/gbif/common/parsers/date/DateTimeParserBuilder.html">ThreeTenDateParserListBuilder</a> append2DigitsYearDateTimeParser(String pattern, <a href="../../../../../org/gbif/common/parsers/date/DateFormatHint.html">DateFormatHint</a> hint, TemporalQuery&lt;?&gt; type,
+<a class="jxr_linenumber" name="L281" href="#L281">281</a>                                                                               Year baseYear){
+<a class="jxr_linenumber" name="L282" href="#L282">282</a>       dateTimeParsers.add(DateTimeParserBuilder.build(pattern, hint, <strong class="jxr_keyword">new</strong> TemporalQuery[]{type}, baseYear));
+<a class="jxr_linenumber" name="L283" href="#L283">283</a>       <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
+<a class="jxr_linenumber" name="L284" href="#L284">284</a>     }
+<a class="jxr_linenumber" name="L285" href="#L285">285</a> 
+<a class="jxr_linenumber" name="L286" href="#L286">286</a>     <strong class="jxr_keyword">public</strong> <a href="../../../../../org/gbif/common/parsers/date/DateTimeParserBuilder.html">ThreeTenDateParserListBuilder</a> append2DigitsYearDateTimeParser(String pattern, <a href="../../../../../org/gbif/common/parsers/date/DateFormatHint.html">DateFormatHint</a> hint, TemporalQuery&lt;?&gt; type,
+<a class="jxr_linenumber" name="L287" href="#L287">287</a>                                                                               String separator, String alternativeSeparators,
+<a class="jxr_linenumber" name="L288" href="#L288">288</a>                                                                               Year baseYear){
+<a class="jxr_linenumber" name="L289" href="#L289">289</a>       dateTimeParsers.add(DateTimeParserBuilder.build(pattern, hint, <strong class="jxr_keyword">new</strong> TemporalQuery[]{type}, separator, alternativeSeparators, baseYear));
+<a class="jxr_linenumber" name="L290" href="#L290">290</a>       <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
+<a class="jxr_linenumber" name="L291" href="#L291">291</a>     }
+<a class="jxr_linenumber" name="L292" href="#L292">292</a> 
+<a class="jxr_linenumber" name="L293" href="#L293">293</a>     <strong class="jxr_keyword">public</strong> List&lt;DateTimeParser&gt; build(){
+<a class="jxr_linenumber" name="L294" href="#L294">294</a>       <strong class="jxr_keyword">return</strong> ImmutableList.copyOf(dateTimeParsers);
+<a class="jxr_linenumber" name="L295" href="#L295">295</a>     }
+<a class="jxr_linenumber" name="L296" href="#L296">296</a>   }
+<a class="jxr_linenumber" name="L297" href="#L297">297</a> 
+<a class="jxr_linenumber" name="L298" href="#L298">298</a>   <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L299" href="#L299">299</a> <em class="jxr_javadoccomment">   * More specific builder Builder used to build a {@link DateTimeMultiParser}.</em>
+<a class="jxr_linenumber" name="L300" href="#L300">300</a> <em class="jxr_javadoccomment">   */</em>
+<a class="jxr_linenumber" name="L301" href="#L301">301</a>   <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../../org/gbif/common/parsers/date/DateTimeParserBuilder.html">ThreeTenDateMultiParserListBuilder</a> {
+<a class="jxr_linenumber" name="L302" href="#L302">302</a>     <strong class="jxr_keyword">private</strong> <a href="../../../../../org/gbif/common/parsers/date/DateTimeParser.html">DateTimeParser</a> preferred;
+<a class="jxr_linenumber" name="L303" href="#L303">303</a>     <strong class="jxr_keyword">private</strong> List&lt;DateTimeParser&gt; otherParsers = Lists.newArrayList();
 <a class="jxr_linenumber" name="L304" href="#L304">304</a> 
-<a class="jxr_linenumber" name="L305" href="#L305">305</a>     <strong class="jxr_keyword">public</strong> <a href="../../../../../org/gbif/common/parsers/date/DateTimeParserBuilder.html">ThreeTenDateMultiParserListBuilder</a> appendDateTimeFormatter(DateTimeFormatter dateTimeFormatter, <a href="../../../../../org/gbif/common/parsers/date/DateFormatHint.html">DateFormatHint</a> hint, TemporalQuery&lt;?&gt; type, <strong class="jxr_keyword">int</strong> minLength){
-<a class="jxr_linenumber" name="L306" href="#L306">306</a>       otherParsers.add(<strong class="jxr_keyword">new</strong> <a href="../../../../../org/gbif/common/parsers/date/DateTimeParser.html">DateTimeParser</a>(dateTimeFormatter, <strong class="jxr_keyword">null</strong>, hint, <strong class="jxr_keyword">new</strong> TemporalQuery[]{type},  minLength));
+<a class="jxr_linenumber" name="L305" href="#L305">305</a>     <strong class="jxr_keyword">public</strong> <a href="../../../../../org/gbif/common/parsers/date/DateTimeParserBuilder.html">ThreeTenDateMultiParserListBuilder</a> preferredDateTimeParser(String pattern, <a href="../../../../../org/gbif/common/parsers/date/DateFormatHint.html">DateFormatHint</a> hint, TemporalQuery&lt;?&gt; type){
+<a class="jxr_linenumber" name="L306" href="#L306">306</a>       preferred = DateTimeParserBuilder.build(pattern, hint, type);
 <a class="jxr_linenumber" name="L307" href="#L307">307</a>       <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L308" href="#L308">308</a>     }
 <a class="jxr_linenumber" name="L309" href="#L309">309</a> 
-<a class="jxr_linenumber" name="L310" href="#L310">310</a>     <strong class="jxr_keyword">public</strong> <a href="../../../../../org/gbif/common/parsers/date/DateTimeParserBuilder.html">ThreeTenDateMultiParserListBuilder</a> appendDateTimeParser(String pattern, <a href="../../../../../org/gbif/common/parsers/date/DateFormatHint.html">DateFormatHint</a> hint, TemporalQuery&lt;?&gt; type, Year year){
-<a class="jxr_linenumber" name="L311" href="#L311">311</a>       otherParsers.add(DateTimeParserBuilder.build(pattern, hint, <strong class="jxr_keyword">new</strong> TemporalQuery[]{type}, year));
+<a class="jxr_linenumber" name="L310" href="#L310">310</a>     <strong class="jxr_keyword">public</strong> <a href="../../../../../org/gbif/common/parsers/date/DateTimeParserBuilder.html">ThreeTenDateMultiParserListBuilder</a> preferredDateTimeParser(String pattern, <a href="../../../../../org/gbif/common/parsers/date/DateFormatHint.html">DateFormatHint</a> hint, TemporalQuery&lt;?&gt; type,  Year year){
+<a class="jxr_linenumber" name="L311" href="#L311">311</a>       preferred = DateTimeParserBuilder.build(pattern, hint, <strong class="jxr_keyword">new</strong> TemporalQuery[]{type}, year);
 <a class="jxr_linenumber" name="L312" href="#L312">312</a>       <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L313" href="#L313">313</a>     }
 <a class="jxr_linenumber" name="L314" href="#L314">314</a> 
-<a class="jxr_linenumber" name="L315" href="#L315">315</a>     <strong class="jxr_keyword">public</strong> <a href="../../../../../org/gbif/common/parsers/date/DateTimeParserBuilder.html">ThreeTenDateMultiParserListBuilder</a> appendDateTimeParser(String pattern, <a href="../../../../../org/gbif/common/parsers/date/DateFormatHint.html">DateFormatHint</a> hint, TemporalQuery&lt;?&gt; type,
-<a class="jxr_linenumber" name="L316" href="#L316">316</a>                                                                String separator, String alternativeSeparators){
-<a class="jxr_linenumber" name="L317" href="#L317">317</a>       otherParsers.add(DateTimeParserBuilder.build(pattern, hint, <strong class="jxr_keyword">new</strong> TemporalQuery[]{type}, separator, alternativeSeparators));
-<a class="jxr_linenumber" name="L318" href="#L318">318</a>       <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
-<a class="jxr_linenumber" name="L319" href="#L319">319</a>     }
-<a class="jxr_linenumber" name="L320" href="#L320">320</a> 
-<a class="jxr_linenumber" name="L321" href="#L321">321</a>     <strong class="jxr_keyword">public</strong> <a href="../../../../../org/gbif/common/parsers/date/DateTimeParserBuilder.html">ThreeTenDateMultiParserListBuilder</a> appendDateTimeParser(String pattern, <a href="../../../../../org/gbif/common/parsers/date/DateFormatHint.html">DateFormatHint</a> hint, TemporalQuery&lt;?&gt; type,
-<a class="jxr_linenumber" name="L322" href="#L322">322</a>                                                                String separator, String alternativeSeparators, Year year){
-<a class="jxr_linenumber" name="L323" href="#L323">323</a>       otherParsers.add(DateTimeParserBuilder.build(pattern, hint, <strong class="jxr_keyword">new</strong> TemporalQuery[]{type}, separator, alternativeSeparators, year));
-<a class="jxr_linenumber" name="L324" href="#L324">324</a>       <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
-<a class="jxr_linenumber" name="L325" href="#L325">325</a>     }
-<a class="jxr_linenumber" name="L326" href="#L326">326</a> 
-<a class="jxr_linenumber" name="L327" href="#L327">327</a>     <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L328" href="#L328">328</a> <em class="jxr_javadoccomment">     * Ensure the builder is used with content we expect.</em>
-<a class="jxr_linenumber" name="L329" href="#L329">329</a> <em class="jxr_javadoccomment">     * Currently (this could change) we should only have one DateTimeParser per DateFormatHint.</em>
-<a class="jxr_linenumber" name="L330" href="#L330">330</a> <em class="jxr_javadoccomment">     *</em>
-<a class="jxr_linenumber" name="L331" href="#L331">331</a> <em class="jxr_javadoccomment">     * @throws IllegalStateException</em>
-<a class="jxr_linenumber" name="L332" href="#L332">332</a> <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L333" href="#L333">333</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> validate() <strong class="jxr_keyword">throws</strong> IllegalStateException {
-<a class="jxr_linenumber" name="L334" href="#L334">334</a>       Set&lt;DateFormatHint&gt; hints = Sets.newHashSet();
-<a class="jxr_linenumber" name="L335" href="#L335">335</a>       <strong class="jxr_keyword">if</strong>(preferred != <strong class="jxr_keyword">null</strong>){
-<a class="jxr_linenumber" name="L336" href="#L336">336</a>         hints.add(preferred.getHint());
-<a class="jxr_linenumber" name="L337" href="#L337">337</a>       }
-<a class="jxr_linenumber" name="L338" href="#L338">338</a> 
-<a class="jxr_linenumber" name="L339" href="#L339">339</a>       <strong class="jxr_keyword">for</strong>(<a href="../../../../../org/gbif/common/parsers/date/DateTimeParser.html">DateTimeParser</a> parser : otherParsers){
-<a class="jxr_linenumber" name="L340" href="#L340">340</a>         <strong class="jxr_keyword">if</strong>(!hints.add(parser.getHint())){
-<a class="jxr_linenumber" name="L341" href="#L341">341</a>           <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalStateException(<span class="jxr_string">"DateFormatHint can only be used once in a DateTimeMultiParser."</span> +
-<a class="jxr_linenumber" name="L342" href="#L342">342</a>                   <span class="jxr_string">"["</span> + parser.getHint() + <span class="jxr_string">"]"</span>);
-<a class="jxr_linenumber" name="L343" href="#L343">343</a>         }
-<a class="jxr_linenumber" name="L344" href="#L344">344</a>       }
-<a class="jxr_linenumber" name="L345" href="#L345">345</a>     }
-<a class="jxr_linenumber" name="L346" href="#L346">346</a> 
-<a class="jxr_linenumber" name="L347" href="#L347">347</a>     <strong class="jxr_keyword">public</strong> <a href="../../../../../org/gbif/common/parsers/date/DateTimeMultiParser.html">DateTimeMultiParser</a> build() <strong class="jxr_keyword">throws</strong> IllegalStateException {
-<a class="jxr_linenumber" name="L348" href="#L348">348</a>       validate();
-<a class="jxr_linenumber" name="L349" href="#L349">349</a>       <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../../org/gbif/common/parsers/date/DateTimeMultiParser.html">DateTimeMultiParser</a>(preferred, otherParsers);
-<a class="jxr_linenumber" name="L350" href="#L350">350</a>     }
-<a class="jxr_linenumber" name="L351" href="#L351">351</a>   }
-<a class="jxr_linenumber" name="L352" href="#L352">352</a> 
-<a class="jxr_linenumber" name="L353" href="#L353">353</a> }
+<a class="jxr_linenumber" name="L315" href="#L315">315</a>     <strong class="jxr_keyword">public</strong> <a href="../../../../../org/gbif/common/parsers/date/DateTimeParserBuilder.html">ThreeTenDateMultiParserListBuilder</a> appendDateTimeParser(String pattern, <a href="../../../../../org/gbif/common/parsers/date/DateFormatHint.html">DateFormatHint</a> hint, TemporalQuery&lt;?&gt; type){
+<a class="jxr_linenumber" name="L316" href="#L316">316</a>       otherParsers.add(DateTimeParserBuilder.build(pattern, hint, type));
+<a class="jxr_linenumber" name="L317" href="#L317">317</a>       <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
+<a class="jxr_linenumber" name="L318" href="#L318">318</a>     }
+<a class="jxr_linenumber" name="L319" href="#L319">319</a> 
+<a class="jxr_linenumber" name="L320" href="#L320">320</a>     <strong class="jxr_keyword">public</strong> <a href="../../../../../org/gbif/common/parsers/date/DateTimeParserBuilder.html">ThreeTenDateMultiParserListBuilder</a> appendDateTimeFormatter(DateTimeFormatter dateTimeFormatter, <a href="../../../../../org/gbif/common/parsers/date/DateFormatHint.html">DateFormatHint</a> hint, TemporalQuery&lt;?&gt; type, <strong class="jxr_keyword">int</strong> minLength){
+<a class="jxr_linenumber" name="L321" href="#L321">321</a>       otherParsers.add(<strong class="jxr_keyword">new</strong> <a href="../../../../../org/gbif/common/parsers/date/DateTimeParser.html">DateTimeParser</a>(dateTimeFormatter, <strong class="jxr_keyword">null</strong>, hint, <strong class="jxr_keyword">new</strong> TemporalQuery[]{type},  minLength));
+<a class="jxr_linenumber" name="L322" href="#L322">322</a>       <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
+<a class="jxr_linenumber" name="L323" href="#L323">323</a>     }
+<a class="jxr_linenumber" name="L324" href="#L324">324</a> 
+<a class="jxr_linenumber" name="L325" href="#L325">325</a>     <strong class="jxr_keyword">public</strong> <a href="../../../../../org/gbif/common/parsers/date/DateTimeParserBuilder.html">ThreeTenDateMultiParserListBuilder</a> appendDateTimeParser(String pattern, <a href="../../../../../org/gbif/common/parsers/date/DateFormatHint.html">DateFormatHint</a> hint, TemporalQuery&lt;?&gt; type, Year year){
+<a class="jxr_linenumber" name="L326" href="#L326">326</a>       otherParsers.add(DateTimeParserBuilder.build(pattern, hint, <strong class="jxr_keyword">new</strong> TemporalQuery[]{type}, year));
+<a class="jxr_linenumber" name="L327" href="#L327">327</a>       <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
+<a class="jxr_linenumber" name="L328" href="#L328">328</a>     }
+<a class="jxr_linenumber" name="L329" href="#L329">329</a> 
+<a class="jxr_linenumber" name="L330" href="#L330">330</a>     <strong class="jxr_keyword">public</strong> <a href="../../../../../org/gbif/common/parsers/date/DateTimeParserBuilder.html">ThreeTenDateMultiParserListBuilder</a> appendDateTimeParser(String pattern, <a href="../../../../../org/gbif/common/parsers/date/DateFormatHint.html">DateFormatHint</a> hint, TemporalQuery&lt;?&gt; type,
+<a class="jxr_linenumber" name="L331" href="#L331">331</a>                                                                String separator, String alternativeSeparators){
+<a class="jxr_linenumber" name="L332" href="#L332">332</a>       otherParsers.add(DateTimeParserBuilder.build(pattern, hint, <strong class="jxr_keyword">new</strong> TemporalQuery[]{type}, separator, alternativeSeparators));
+<a class="jxr_linenumber" name="L333" href="#L333">333</a>       <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
+<a class="jxr_linenumber" name="L334" href="#L334">334</a>     }
+<a class="jxr_linenumber" name="L335" href="#L335">335</a> 
+<a class="jxr_linenumber" name="L336" href="#L336">336</a>     <strong class="jxr_keyword">public</strong> <a href="../../../../../org/gbif/common/parsers/date/DateTimeParserBuilder.html">ThreeTenDateMultiParserListBuilder</a> appendDateTimeParser(String pattern, <a href="../../../../../org/gbif/common/parsers/date/DateFormatHint.html">DateFormatHint</a> hint, TemporalQuery&lt;?&gt; type,
+<a class="jxr_linenumber" name="L337" href="#L337">337</a>                                                                String separator, String alternativeSeparators, Year year){
+<a class="jxr_linenumber" name="L338" href="#L338">338</a>       otherParsers.add(DateTimeParserBuilder.build(pattern, hint, <strong class="jxr_keyword">new</strong> TemporalQuery[]{type}, separator, alternativeSeparators, year));
+<a class="jxr_linenumber" name="L339" href="#L339">339</a>       <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
+<a class="jxr_linenumber" name="L340" href="#L340">340</a>     }
+<a class="jxr_linenumber" name="L341" href="#L341">341</a> 
+<a class="jxr_linenumber" name="L342" href="#L342">342</a>     <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L343" href="#L343">343</a> <em class="jxr_javadoccomment">     * Ensure the builder is used with content we expect.</em>
+<a class="jxr_linenumber" name="L344" href="#L344">344</a> <em class="jxr_javadoccomment">     * Currently (this could change) we should only have one DateTimeParser per DateFormatHint.</em>
+<a class="jxr_linenumber" name="L345" href="#L345">345</a> <em class="jxr_javadoccomment">     *</em>
+<a class="jxr_linenumber" name="L346" href="#L346">346</a> <em class="jxr_javadoccomment">     * @throws IllegalStateException</em>
+<a class="jxr_linenumber" name="L347" href="#L347">347</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="L348" href="#L348">348</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> validate() <strong class="jxr_keyword">throws</strong> IllegalStateException {
+<a class="jxr_linenumber" name="L349" href="#L349">349</a>       Set&lt;DateFormatHint&gt; hints = Sets.newHashSet();
+<a class="jxr_linenumber" name="L350" href="#L350">350</a>       <strong class="jxr_keyword">if</strong>(preferred != <strong class="jxr_keyword">null</strong>){
+<a class="jxr_linenumber" name="L351" href="#L351">351</a>         hints.add(preferred.getHint());
+<a class="jxr_linenumber" name="L352" href="#L352">352</a>       }
+<a class="jxr_linenumber" name="L353" href="#L353">353</a> 
+<a class="jxr_linenumber" name="L354" href="#L354">354</a>       <strong class="jxr_keyword">for</strong>(<a href="../../../../../org/gbif/common/parsers/date/DateTimeParser.html">DateTimeParser</a> parser : otherParsers){
+<a class="jxr_linenumber" name="L355" href="#L355">355</a>         <strong class="jxr_keyword">if</strong>(!hints.add(parser.getHint())){
+<a class="jxr_linenumber" name="L356" href="#L356">356</a>           <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalStateException(<span class="jxr_string">"DateFormatHint can only be used once in a DateTimeMultiParser."</span> +
+<a class="jxr_linenumber" name="L357" href="#L357">357</a>                   <span class="jxr_string">"["</span> + parser.getHint() + <span class="jxr_string">"]"</span>);
+<a class="jxr_linenumber" name="L358" href="#L358">358</a>         }
+<a class="jxr_linenumber" name="L359" href="#L359">359</a>       }
+<a class="jxr_linenumber" name="L360" href="#L360">360</a>     }
+<a class="jxr_linenumber" name="L361" href="#L361">361</a> 
+<a class="jxr_linenumber" name="L362" href="#L362">362</a>     <strong class="jxr_keyword">public</strong> <a href="../../../../../org/gbif/common/parsers/date/DateTimeMultiParser.html">DateTimeMultiParser</a> build() <strong class="jxr_keyword">throws</strong> IllegalStateException {
+<a class="jxr_linenumber" name="L363" href="#L363">363</a>       validate();
+<a class="jxr_linenumber" name="L364" href="#L364">364</a>       <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../../org/gbif/common/parsers/date/DateTimeMultiParser.html">DateTimeMultiParser</a>(preferred, otherParsers);
+<a class="jxr_linenumber" name="L365" href="#L365">365</a>     }
+<a class="jxr_linenumber" name="L366" href="#L366">366</a>   }
+<a class="jxr_linenumber" name="L367" href="#L367">367</a> 
+<a class="jxr_linenumber" name="L368" href="#L368">368</a> }
 </pre>
 <hr/>
 <div id="footer">Copyright &#169; 2018 <a href="http://www.gbif.org">Global Biodiversity Information Facility</a>. All rights reserved.</div>

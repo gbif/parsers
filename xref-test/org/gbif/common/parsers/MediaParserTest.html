@@ -32,66 +32,75 @@
 <a class="jxr_linenumber" name="L24" href="#L24">24</a>      assertEquals(MediaType.StillImage, parser.detectType(buildMO(<strong class="jxr_keyword">null</strong>, <span class="jxr_string">"abies_alba.JPG"</span>)).getType());
 <a class="jxr_linenumber" name="L25" href="#L25">25</a>      assertEquals(MediaType.StillImage, parser.detectType(buildMO(<strong class="jxr_keyword">null</strong>, <span class="jxr_string">"abies_alba.JPeg"</span>)).getType());
 <a class="jxr_linenumber" name="L26" href="#L26">26</a>      assertEquals(MediaType.StillImage, parser.detectType(buildMO(<strong class="jxr_keyword">null</strong>, <span class="jxr_string">"abies_alba.TIFF"</span>)).getType());
-<a class="jxr_linenumber" name="L27" href="#L27">27</a>  
-<a class="jxr_linenumber" name="L28" href="#L28">28</a>      assertEquals(MediaType.Sound, parser.detectType(buildMO(<strong class="jxr_keyword">null</strong>, <span class="jxr_string">"abies_alba.mp3"</span>)).getType());
-<a class="jxr_linenumber" name="L29" href="#L29">29</a>      assertEquals(MediaType.Sound, parser.detectType(buildMO(<strong class="jxr_keyword">null</strong>, <span class="jxr_string">"abies_alba.flac"</span>)).getType());
-<a class="jxr_linenumber" name="L30" href="#L30">30</a>      assertEquals(MediaType.Sound, parser.detectType(buildMO(<strong class="jxr_keyword">null</strong>, <span class="jxr_string">"abies_alba.ogg"</span>)).getType());
-<a class="jxr_linenumber" name="L31" href="#L31">31</a>    }
-<a class="jxr_linenumber" name="L32" href="#L32">32</a>  
-<a class="jxr_linenumber" name="L33" href="#L33">33</a>    @Test
-<a class="jxr_linenumber" name="L34" href="#L34">34</a>    <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testParseMimeType() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L35" href="#L35">35</a>      assertNull(parser.parseMimeType((String) <strong class="jxr_keyword">null</strong>));
-<a class="jxr_linenumber" name="L36" href="#L36">36</a>      assertEquals(<span class="jxr_string">"image/jp2"</span>, parser.parseMimeType(<span class="jxr_string">"image/jp2"</span>));
-<a class="jxr_linenumber" name="L37" href="#L37">37</a>      assertEquals(<span class="jxr_string">"image/jpg"</span>, parser.parseMimeType(<span class="jxr_string">"image/jpg"</span>));
-<a class="jxr_linenumber" name="L38" href="#L38">38</a>      assertEquals(<span class="jxr_string">"image/jpeg"</span>, parser.parseMimeType(<span class="jxr_string">"image/jpeg"</span>));
-<a class="jxr_linenumber" name="L39" href="#L39">39</a>      assertEquals(<span class="jxr_string">"image/jpg"</span>, parser.parseMimeType(<span class="jxr_string">"image/JPG"</span>));
-<a class="jxr_linenumber" name="L40" href="#L40">40</a>      assertNull(parser.parseMimeType(<span class="jxr_string">"JPG"</span>));
-<a class="jxr_linenumber" name="L41" href="#L41">41</a>      assertNull(parser.parseMimeType(<span class="jxr_string">"gif"</span>));
-<a class="jxr_linenumber" name="L42" href="#L42">42</a>      assertNull(parser.parseMimeType(<span class="jxr_string">"tiff"</span>));
-<a class="jxr_linenumber" name="L43" href="#L43">43</a>      assertEquals(<span class="jxr_string">"audio/mp3"</span>, parser.parseMimeType(<span class="jxr_string">"audio/mp3"</span>));
-<a class="jxr_linenumber" name="L44" href="#L44">44</a>      assertNull(parser.parseMimeType(<span class="jxr_string">"mp3"</span>));
-<a class="jxr_linenumber" name="L45" href="#L45">45</a>      assertEquals(<span class="jxr_string">"audio/mp3"</span>, parser.parseMimeType(<span class="jxr_string">" audio/mp3"</span>));
-<a class="jxr_linenumber" name="L46" href="#L46">46</a>      assertNull(parser.parseMimeType(<span class="jxr_string">"mpg"</span>));
-<a class="jxr_linenumber" name="L47" href="#L47">47</a>  
-<a class="jxr_linenumber" name="L48" href="#L48">48</a>  
-<a class="jxr_linenumber" name="L49" href="#L49">49</a>      assertNull(parser.parseMimeType((URI) <strong class="jxr_keyword">null</strong>));
-<a class="jxr_linenumber" name="L50" href="#L50">50</a>      assertEquals(<span class="jxr_string">"image/jp2"</span>, parser.parseMimeType(URI.create(<span class="jxr_string">"abies_alba.jp2"</span>)));
-<a class="jxr_linenumber" name="L51" href="#L51">51</a>      assertEquals(<span class="jxr_string">"image/jpeg"</span>, parser.parseMimeType(URI.create(<span class="jxr_string">"abies_alba.jpg"</span>)));
-<a class="jxr_linenumber" name="L52" href="#L52">52</a>      assertEquals(<span class="jxr_string">"image/jpeg"</span>, parser.parseMimeType(URI.create(<span class="jxr_string">"abies_alba.jpeg"</span>)));
-<a class="jxr_linenumber" name="L53" href="#L53">53</a>      assertEquals(<span class="jxr_string">"image/jpeg"</span>, parser.parseMimeType(URI.create(<span class="jxr_string">"abies_alba.JPG"</span>)));
-<a class="jxr_linenumber" name="L54" href="#L54">54</a>      assertEquals(<span class="jxr_string">"image/jpeg"</span>, parser.parseMimeType(URI.create(<span class="jxr_string">"abies_alba.JPG"</span>)));
-<a class="jxr_linenumber" name="L55" href="#L55">55</a>      assertEquals(<span class="jxr_string">"image/gif"</span>, parser.parseMimeType(URI.create(<span class="jxr_string">"abies_alba.gif"</span>)));
-<a class="jxr_linenumber" name="L56" href="#L56">56</a>      assertEquals(<span class="jxr_string">"image/tiff"</span>, parser.parseMimeType(URI.create(<span class="jxr_string">"abies_alba.tiff"</span>)));
-<a class="jxr_linenumber" name="L57" href="#L57">57</a>      assertEquals(<span class="jxr_string">"audio/mpeg"</span>, parser.parseMimeType(URI.create(<span class="jxr_string">"abies_alba.mp3"</span>)));
-<a class="jxr_linenumber" name="L58" href="#L58">58</a>      assertEquals(<span class="jxr_string">"video/mpeg"</span>, parser.parseMimeType(URI.create(<span class="jxr_string">"abies_alba.mpg"</span>)));
-<a class="jxr_linenumber" name="L59" href="#L59">59</a>  
-<a class="jxr_linenumber" name="L60" href="#L60">60</a>      <em class="jxr_comment">// we default to an html link</em>
-<a class="jxr_linenumber" name="L61" href="#L61">61</a>      assertEquals(<span class="jxr_string">"text/html"</span>, parser.parseMimeType(URI.create(<span class="jxr_string">"http://www.gbif.org/image?id=12"</span>)));
-<a class="jxr_linenumber" name="L62" href="#L62">62</a>      assertEquals(<span class="jxr_string">"text/html"</span>, parser.parseMimeType(URI.create(<span class="jxr_string">"http://arctos.database.museum/MediaSearch.cfm?action=search"</span>)));
-<a class="jxr_linenumber" name="L63" href="#L63">63</a>      assertEquals(<span class="jxr_string">"text/html"</span>, parser.parseMimeType(URI.create(<span class="jxr_string">"http://arctos.database.museum/MediaSearch.php?action=search"</span>)));
-<a class="jxr_linenumber" name="L64" href="#L64">64</a>      assertEquals(<span class="jxr_string">"text/html"</span>, parser.parseMimeType(URI.create(<span class="jxr_string">"http://arctos.database.museum/MediaSearch.pl?action=search"</span>)));
-<a class="jxr_linenumber" name="L65" href="#L65">65</a>    }
-<a class="jxr_linenumber" name="L66" href="#L66">66</a>  
-<a class="jxr_linenumber" name="L67" href="#L67">67</a>    @Test
-<a class="jxr_linenumber" name="L68" href="#L68">68</a>    <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testParseHtmlMediaLink() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L69" href="#L69">69</a>      MediaObject mo = buildMO(<strong class="jxr_keyword">null</strong>, <span class="jxr_string">"http://www.gbif.org/image?id=12"</span>);
-<a class="jxr_linenumber" name="L70" href="#L70">70</a>      parser.detectType(mo);
-<a class="jxr_linenumber" name="L71" href="#L71">71</a>      assertNull(mo.getFormat());
-<a class="jxr_linenumber" name="L72" href="#L72">72</a>      assertNull(mo.getIdentifier());
-<a class="jxr_linenumber" name="L73" href="#L73">73</a>      assertEquals(<span class="jxr_string">"http://www.gbif.org/image?id=12"</span>, mo.getReferences().toString());
-<a class="jxr_linenumber" name="L74" href="#L74">74</a>      assertNull(mo.getType());
-<a class="jxr_linenumber" name="L75" href="#L75">75</a>    }
-<a class="jxr_linenumber" name="L76" href="#L76">76</a>  
-<a class="jxr_linenumber" name="L77" href="#L77">77</a>    <strong class="jxr_keyword">private</strong> MediaObject buildMO(String format, String uri) {
-<a class="jxr_linenumber" name="L78" href="#L78">78</a>      MediaObject mo = <strong class="jxr_keyword">new</strong> MediaObject();
-<a class="jxr_linenumber" name="L79" href="#L79">79</a>  
-<a class="jxr_linenumber" name="L80" href="#L80">80</a>      mo.setType(<strong class="jxr_keyword">null</strong>);
-<a class="jxr_linenumber" name="L81" href="#L81">81</a>      mo.setFormat(format);
-<a class="jxr_linenumber" name="L82" href="#L82">82</a>      mo.setIdentifier(uri == <strong class="jxr_keyword">null</strong> ? <strong class="jxr_keyword">null</strong> : URI.create(uri));
-<a class="jxr_linenumber" name="L83" href="#L83">83</a>  
-<a class="jxr_linenumber" name="L84" href="#L84">84</a>      <strong class="jxr_keyword">return</strong> mo;
-<a class="jxr_linenumber" name="L85" href="#L85">85</a>    }
-<a class="jxr_linenumber" name="L86" href="#L86">86</a>  }
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>      assertEquals(MediaType.StillImage, parser.detectType(buildMO(<strong class="jxr_keyword">null</strong>, <span class="jxr_string">"http://imagens3.jbrj.gov.br/fsi/server?type=image&amp;source=rb/1/37/81/25/01378125.jpg"</span>)).getType());
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>  
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>      assertEquals(MediaType.Sound, parser.detectType(buildMO(<strong class="jxr_keyword">null</strong>, <span class="jxr_string">"abies_alba.mp3"</span>)).getType());
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>      assertEquals(MediaType.Sound, parser.detectType(buildMO(<strong class="jxr_keyword">null</strong>, <span class="jxr_string">"abies_alba.flac"</span>)).getType());
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>      assertEquals(MediaType.Sound, parser.detectType(buildMO(<strong class="jxr_keyword">null</strong>, <span class="jxr_string">"abies_alba.ogg"</span>)).getType());
+<a class="jxr_linenumber" name="L32" href="#L32">32</a>    }
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>  
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>    @Test
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>    <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testParseMimeType() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L36" href="#L36">36</a>      assertNull(parser.parseMimeType((String) <strong class="jxr_keyword">null</strong>));
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>      assertEquals(<span class="jxr_string">"image/jp2"</span>, parser.parseMimeType(<span class="jxr_string">" image/jp2\t"</span>));
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>      assertEquals(<span class="jxr_string">"image/jpg"</span>, parser.parseMimeType(<span class="jxr_string">"image/jpg"</span>));
+<a class="jxr_linenumber" name="L39" href="#L39">39</a>      assertEquals(<span class="jxr_string">"image/jpeg"</span>, parser.parseMimeType(<span class="jxr_string">"image/jpeg"</span>));
+<a class="jxr_linenumber" name="L40" href="#L40">40</a>      assertEquals(<span class="jxr_string">"image/jpg"</span>, parser.parseMimeType(<span class="jxr_string">"image/JPG"</span>));
+<a class="jxr_linenumber" name="L41" href="#L41">41</a>      assertNull(parser.parseMimeType(<span class="jxr_string">"JPG"</span>));
+<a class="jxr_linenumber" name="L42" href="#L42">42</a>      assertNull(parser.parseMimeType(<span class="jxr_string">"gif"</span>));
+<a class="jxr_linenumber" name="L43" href="#L43">43</a>      assertNull(parser.parseMimeType(<span class="jxr_string">"tiff"</span>));
+<a class="jxr_linenumber" name="L44" href="#L44">44</a>  
+<a class="jxr_linenumber" name="L45" href="#L45">45</a>      assertNull(parser.parseMimeType((URI) <strong class="jxr_keyword">null</strong>));
+<a class="jxr_linenumber" name="L46" href="#L46">46</a>      assertEquals(<span class="jxr_string">"image/jp2"</span>, parser.parseMimeType(URI.create(<span class="jxr_string">"abies_alba.jp2"</span>)));
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>      assertEquals(<span class="jxr_string">"image/jpeg"</span>, parser.parseMimeType(URI.create(<span class="jxr_string">"abies_alba.jpg"</span>)));
+<a class="jxr_linenumber" name="L48" href="#L48">48</a>      assertEquals(<span class="jxr_string">"image/jpeg"</span>, parser.parseMimeType(URI.create(<span class="jxr_string">"abies_alba.jpeg"</span>)));
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>      assertEquals(<span class="jxr_string">"image/jpeg"</span>, parser.parseMimeType(URI.create(<span class="jxr_string">"abies_alba.JPG"</span>)));
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>      assertEquals(<span class="jxr_string">"image/jpeg"</span>, parser.parseMimeType(URI.create(<span class="jxr_string">"abies_alba.JPG"</span>)));
+<a class="jxr_linenumber" name="L51" href="#L51">51</a>      assertEquals(<span class="jxr_string">"image/gif"</span>, parser.parseMimeType(URI.create(<span class="jxr_string">"abies_alba.gif"</span>)));
+<a class="jxr_linenumber" name="L52" href="#L52">52</a>      assertEquals(<span class="jxr_string">"image/tiff"</span>, parser.parseMimeType(URI.create(<span class="jxr_string">"abies_alba.tiff"</span>)));
+<a class="jxr_linenumber" name="L53" href="#L53">53</a>      assertEquals(<span class="jxr_string">"audio/mpeg"</span>, parser.parseMimeType(URI.create(<span class="jxr_string">"abies_alba.mp3"</span>)));
+<a class="jxr_linenumber" name="L54" href="#L54">54</a>      assertEquals(<span class="jxr_string">"video/mpeg"</span>, parser.parseMimeType(URI.create(<span class="jxr_string">"abies_alba.mpg"</span>)));
+<a class="jxr_linenumber" name="L55" href="#L55">55</a>  
+<a class="jxr_linenumber" name="L56" href="#L56">56</a>      <em class="jxr_comment">// we default to an html link</em>
+<a class="jxr_linenumber" name="L57" href="#L57">57</a>      assertEquals(<span class="jxr_string">"text/html"</span>, parser.parseMimeType(URI.create(<span class="jxr_string">"http://www.gbif.org/image?id=12"</span>)));
+<a class="jxr_linenumber" name="L58" href="#L58">58</a>      assertEquals(<span class="jxr_string">"text/html"</span>, parser.parseMimeType(URI.create(<span class="jxr_string">"http://arctos.database.museum/MediaSearch.cfm?action=search"</span>)));
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>      assertEquals(<span class="jxr_string">"text/html"</span>, parser.parseMimeType(URI.create(<span class="jxr_string">"http://arctos.database.museum/MediaSearch.php?action=search"</span>)));
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>      assertEquals(<span class="jxr_string">"text/html"</span>, parser.parseMimeType(URI.create(<span class="jxr_string">"http://arctos.database.museum/MediaSearch.pl?action=search"</span>)));
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>  
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>      <em class="jxr_comment">// Audio.</em>
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>      assertNull(parser.parseMimeType(<span class="jxr_string">"mp3"</span>));
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>      assertNull(parser.parseMimeType(<span class="jxr_string">"mpg"</span>));
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>  
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>      assertEquals(<span class="jxr_string">"audio/ogg"</span>, parser.parseMimeType(<span class="jxr_string">"audio/ogg"</span>));
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>      assertEquals(<span class="jxr_string">"application/ogg"</span>, parser.parseMimeType(<span class="jxr_string">"application/ogg"</span>));
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>      assertEquals(<span class="jxr_string">"audio/webm"</span>, parser.parseMimeType(<span class="jxr_string">"audio/webm"</span>));
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>      assertEquals(<span class="jxr_string">"audio/mp4"</span>, parser.parseMimeType(<span class="jxr_string">"audio/mp4"</span>));
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>      assertEquals(<span class="jxr_string">"audio/vnd.wave"</span>, parser.parseMimeType(<span class="jxr_string">"audio/wav"</span>));
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>  
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>      assertEquals(<span class="jxr_string">"audio/mpeg"</span>, parser.parseMimeType(<span class="jxr_string">"audio/mp3"</span>));
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>      assertEquals(<span class="jxr_string">"audio/mpeg"</span>, parser.parseMimeType(<span class="jxr_string">"audio/mpeg3"</span>));
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>    }
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>  
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>    @Test
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>    <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testParseHtmlMediaLink() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>      MediaObject mo = buildMO(<strong class="jxr_keyword">null</strong>, <span class="jxr_string">"http://www.gbif.org/image?id=12"</span>);
+<a class="jxr_linenumber" name="L79" href="#L79">79</a>      parser.detectType(mo);
+<a class="jxr_linenumber" name="L80" href="#L80">80</a>      assertNull(mo.getFormat());
+<a class="jxr_linenumber" name="L81" href="#L81">81</a>      assertNull(mo.getIdentifier());
+<a class="jxr_linenumber" name="L82" href="#L82">82</a>      assertEquals(<span class="jxr_string">"http://www.gbif.org/image?id=12"</span>, mo.getReferences().toString());
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>      assertNull(mo.getType());
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>    }
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>  
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>    <strong class="jxr_keyword">private</strong> MediaObject buildMO(String format, String uri) {
+<a class="jxr_linenumber" name="L87" href="#L87">87</a>      MediaObject mo = <strong class="jxr_keyword">new</strong> MediaObject();
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>  
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>      mo.setType(<strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L90" href="#L90">90</a>      mo.setFormat(format);
+<a class="jxr_linenumber" name="L91" href="#L91">91</a>      mo.setIdentifier(uri == <strong class="jxr_keyword">null</strong> ? <strong class="jxr_keyword">null</strong> : URI.create(uri));
+<a class="jxr_linenumber" name="L92" href="#L92">92</a>  
+<a class="jxr_linenumber" name="L93" href="#L93">93</a>      <strong class="jxr_keyword">return</strong> mo;
+<a class="jxr_linenumber" name="L94" href="#L94">94</a>    }
+<a class="jxr_linenumber" name="L95" href="#L95">95</a>  }
 </pre>
 <hr/>
 <div id="footer">Copyright &#169; 2018 <a href="http://www.gbif.org">Global Biodiversity Information Facility</a>. All rights reserved.</div>

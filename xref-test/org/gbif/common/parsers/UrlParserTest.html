@@ -52,8 +52,10 @@
 <a class="jxr_linenumber" name="L44" href="#L44">44</a>      assertEquals(2, UrlParser.parseUriList(<span class="jxr_string">"http://gbif.org/logo.png |#DELIMITER#| http://gbif.org/logo2.png"</span>).size());
 <a class="jxr_linenumber" name="L45" href="#L45">45</a>  
 <a class="jxr_linenumber" name="L46" href="#L46">46</a>      assertEquals(3, UrlParser.parseUriList(<span class="jxr_string">"http://gbif.org/logo.png, http://gbif.org/logo2.png, http://gbif.org/logo3.png"</span>).size());
-<a class="jxr_linenumber" name="L47" href="#L47">47</a>    }
-<a class="jxr_linenumber" name="L48" href="#L48">48</a>  }
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>  
+<a class="jxr_linenumber" name="L48" href="#L48">48</a>      assertEquals(2, UrlParser.parseUriList(<span class="jxr_string">"imagens3.jbrj.gov.br/fsi/server?type=image&amp;source=rb/0/13/11/84/00131184.jpg|imagens3.jbrj.gov.br/fsi/server?type=image&amp;source=rb/0/13/11/84/00131184-1.jpg"</span>).size());
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>    }
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>  }
 </pre>
 <hr/>
 <div id="footer">Copyright &#169; 2018 <a href="http://www.gbif.org">Global Biodiversity Information Facility</a>. All rights reserved.</div>

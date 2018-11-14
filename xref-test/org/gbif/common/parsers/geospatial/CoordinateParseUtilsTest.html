@@ -43,9 +43,9 @@
 <a class="jxr_linenumber" name="L35" href="#L35">35</a>      <em class="jxr_comment">// degree minutes seconds</em>
 <a class="jxr_linenumber" name="L36" href="#L36">36</a>      assertExpected(CoordinateParseUtils.parseLatLng(<span class="jxr_string">"02° 49' 52\&quot; N"</span>, <span class="jxr_string">"131° 47' 03\&quot; E"</span>), <strong class="jxr_keyword">new</strong> LatLng(2.831111d, 131.784167d), ParseResult.CONFIDENCE.DEFINITE);
 <a class="jxr_linenumber" name="L37" href="#L37">37</a>  
-<a class="jxr_linenumber" name="L38" href="#L38">38</a>      <em class="jxr_comment">// check swapped coords</em>
-<a class="jxr_linenumber" name="L39" href="#L39">39</a>      assertFailedWithIssues(CoordinateParseUtils.parseLatLng(<span class="jxr_string">"100"</span>, <span class="jxr_string">"40"</span>), OccurrenceIssue.PRESUMED_SWAPPED_COORDINATE);
-<a class="jxr_linenumber" name="L40" href="#L40">40</a>      assertFailedWithIssues(CoordinateParseUtils.parseLatLng(<span class="jxr_string">"-100"</span>, <span class="jxr_string">"90"</span>), OccurrenceIssue.PRESUMED_SWAPPED_COORDINATE);
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>      <em class="jxr_comment">// check swapped coordinates</em>
+<a class="jxr_linenumber" name="L39" href="#L39">39</a>      assertExpected(CoordinateParseUtils.parseLatLng(<span class="jxr_string">"100"</span>, <span class="jxr_string">"40"</span>), <strong class="jxr_keyword">new</strong> LatLng(40, 100), ParseResult.CONFIDENCE.PROBABLE, OccurrenceIssue.PRESUMED_SWAPPED_COORDINATE);
+<a class="jxr_linenumber" name="L40" href="#L40">40</a>      assertExpected(CoordinateParseUtils.parseLatLng(<span class="jxr_string">"-100"</span>, <span class="jxr_string">"90"</span>), <strong class="jxr_keyword">new</strong> LatLng(90, -100), ParseResult.CONFIDENCE.PROBABLE, OccurrenceIssue.PRESUMED_SWAPPED_COORDINATE);
 <a class="jxr_linenumber" name="L41" href="#L41">41</a>  
 <a class="jxr_linenumber" name="L42" href="#L42">42</a>      <em class="jxr_comment">// check errors</em>
 <a class="jxr_linenumber" name="L43" href="#L43">43</a>      assertFailed(CoordinateParseUtils.parseLatLng(<span class="jxr_string">""</span>, <span class="jxr_string">"30"</span>));
@@ -68,92 +68,114 @@
 <a class="jxr_linenumber" name="L60" href="#L60">60</a>      assertDMS(<span class="jxr_string">"002°49'52\&quot;N"</span>, <span class="jxr_string">"131°47'03\&quot;E"</span>, 2.831111d, 131.784167d);
 <a class="jxr_linenumber" name="L61" href="#L61">61</a>      assertDMS(<span class="jxr_string">"2°49'N"</span>, <span class="jxr_string">"131°47'E"</span>, 2.816667d, 131.783333d);
 <a class="jxr_linenumber" name="L62" href="#L62">62</a>      assertDMS(<span class="jxr_string">"002°49'52''N"</span>, <span class="jxr_string">"131°47'03''E"</span>, 2.831111d, 131.784167d);
-<a class="jxr_linenumber" name="L63" href="#L63">63</a>      <em class="jxr_comment">// even if its out of range thats expected here - we validate elsewhere, this is an internal method only!</em>
-<a class="jxr_linenumber" name="L64" href="#L64">64</a>      assertDMS(<span class="jxr_string">"122°49'52\&quot;N"</span>, <span class="jxr_string">"131°47'03\&quot;E"</span>, 122.831111d, 131.784167d);
-<a class="jxr_linenumber" name="L65" href="#L65">65</a>      assertDMS(<span class="jxr_string">"122°49'52.39\&quot;N"</span>, <span class="jxr_string">"131°47'03.23\&quot;E"</span>, 122.83121944444444d, 131.78423055555555d);
-<a class="jxr_linenumber" name="L66" href="#L66">66</a>      assertDMS(<span class="jxr_string">"122d49m52.39sN"</span>, <span class="jxr_string">"131d47m03.23sE"</span>, 122.83121944444444d, 131.78423055555555d);
-<a class="jxr_linenumber" name="L67" href="#L67">67</a>      assertDMS(<span class="jxr_string">"122 49 52.39"</span>, <span class="jxr_string">"131 47 03.23"</span>, 122.83121944444444d, 131.78423055555555d);
-<a class="jxr_linenumber" name="L68" href="#L68">68</a>      assertDMS(<span class="jxr_string">"N122°49'52.39\&quot;"</span>, <span class="jxr_string">"E131°47'03.23\&quot;"</span>, 122.83121944444444d, 131.78423055555555d);
-<a class="jxr_linenumber" name="L69" href="#L69">69</a>      assertDMS(<span class="jxr_string">"N 122° 49' 52.39\&quot;"</span>, <span class="jxr_string">"E 131° 47' 03.23\&quot;"</span>, 122.83121944444444d, 131.78423055555555d);
-<a class="jxr_linenumber" name="L70" href="#L70">70</a>  
-<a class="jxr_linenumber" name="L71" href="#L71">71</a>      <em class="jxr_comment">// truly failing</em>
-<a class="jxr_linenumber" name="L72" href="#L72">72</a>      assertIllegalArg(<span class="jxr_string">"12344"</span>, <strong class="jxr_keyword">true</strong>);
-<a class="jxr_linenumber" name="L73" href="#L73">73</a>      assertIllegalArg(<span class="jxr_string">"432"</span>, false);
-<a class="jxr_linenumber" name="L74" href="#L74">74</a>      assertIllegalArg(<span class="jxr_string">" "</span>, <strong class="jxr_keyword">true</strong>);
-<a class="jxr_linenumber" name="L75" href="#L75">75</a>      assertIllegalArg(<span class="jxr_string">" "</span>, false);
-<a class="jxr_linenumber" name="L76" href="#L76">76</a>      assertIllegalArg(<span class="jxr_string">"131°47'132\&quot;"</span>, false);
-<a class="jxr_linenumber" name="L77" href="#L77">77</a>      assertIllegalArg(<span class="jxr_string">"131 47 132"</span>, false);
-<a class="jxr_linenumber" name="L78" href="#L78">78</a>      assertIllegalArg(<span class="jxr_string">"131°47'132\&quot;"</span>, false);
-<a class="jxr_linenumber" name="L79" href="#L79">79</a>    }
-<a class="jxr_linenumber" name="L80" href="#L80">80</a>  
-<a class="jxr_linenumber" name="L81" href="#L81">81</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> assertDMS(String lat, String lon, <strong class="jxr_keyword">double</strong> eLat, <strong class="jxr_keyword">double</strong> eLon){
-<a class="jxr_linenumber" name="L82" href="#L82">82</a>      assertEquals(eLat, CoordinateParseUtils.parseDMS(lat, <strong class="jxr_keyword">true</strong>), 0.000001);
-<a class="jxr_linenumber" name="L83" href="#L83">83</a>      assertEquals(eLon, CoordinateParseUtils.parseDMS(lon, false), 0.000001);
-<a class="jxr_linenumber" name="L84" href="#L84">84</a>    }
-<a class="jxr_linenumber" name="L85" href="#L85">85</a>  
-<a class="jxr_linenumber" name="L86" href="#L86">86</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> assertIllegalArg(String coord, <strong class="jxr_keyword">boolean</strong> lat){
-<a class="jxr_linenumber" name="L87" href="#L87">87</a>      <strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L88" href="#L88">88</a>        CoordinateParseUtils.parseDMS(coord, lat);
-<a class="jxr_linenumber" name="L89" href="#L89">89</a>        fail(<span class="jxr_string">"IllegalArgumentException expected"</span>);
-<a class="jxr_linenumber" name="L90" href="#L90">90</a>      } <strong class="jxr_keyword">catch</strong> (IllegalArgumentException e) {
-<a class="jxr_linenumber" name="L91" href="#L91">91</a>        <em class="jxr_comment">// expected!</em>
-<a class="jxr_linenumber" name="L92" href="#L92">92</a>      }
-<a class="jxr_linenumber" name="L93" href="#L93">93</a>    }
-<a class="jxr_linenumber" name="L94" href="#L94">94</a>  
-<a class="jxr_linenumber" name="L95" href="#L95">95</a>    @Test
-<a class="jxr_linenumber" name="L96" href="#L96">96</a>    <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testParseVerbatimCoordinates() {
-<a class="jxr_linenumber" name="L97" href="#L97">97</a>      assertExpected( CoordinateParseUtils.parseVerbatimCoordinates(<span class="jxr_string">"02° 49' 52\&quot; N 131° 47' 03\&quot; E"</span>), <strong class="jxr_keyword">new</strong> LatLng(2.831111d, 131.784167d), ParseResult.CONFIDENCE.DEFINITE);
-<a class="jxr_linenumber" name="L98" href="#L98">98</a>      assertExpected( CoordinateParseUtils.parseVerbatimCoordinates(<span class="jxr_string">"02° 49' 52\&quot; N, 131° 47' 03\&quot; E"</span>), <strong class="jxr_keyword">new</strong> LatLng(2.831111d, 131.784167d), ParseResult.CONFIDENCE.DEFINITE);
-<a class="jxr_linenumber" name="L99" href="#L99">99</a>      assertExpected( CoordinateParseUtils.parseVerbatimCoordinates(<span class="jxr_string">"02°49'52\&quot;N; 131°47'03\&quot;O"</span>), <strong class="jxr_keyword">new</strong> LatLng(2.831111d, 131.784167d), ParseResult.CONFIDENCE.DEFINITE);
-<a class="jxr_linenumber" name="L100" href="#L100">100</a>     assertExpected( CoordinateParseUtils.parseVerbatimCoordinates(<span class="jxr_string">"17d 33m 5s N/99d 30m 3s W"</span>), <strong class="jxr_keyword">new</strong> LatLng(17.551389d, -99.500833d), ParseResult.CONFIDENCE.DEFINITE);
-<a class="jxr_linenumber" name="L101" href="#L101">101</a>     assertExpected( CoordinateParseUtils.parseVerbatimCoordinates(<span class="jxr_string">"14.93333/-91.9"</span>), <strong class="jxr_keyword">new</strong> LatLng(14.93333d, -91.9d), ParseResult.CONFIDENCE.DEFINITE);
-<a class="jxr_linenumber" name="L102" href="#L102">102</a>     assertExpected( CoordinateParseUtils.parseVerbatimCoordinates(<span class="jxr_string">"63d 41m 39s N 170d 28m 44s W"</span>), <strong class="jxr_keyword">new</strong> LatLng(63.694167d, -170.478889d), ParseResult.CONFIDENCE.DEFINITE);
-<a class="jxr_linenumber" name="L103" href="#L103">103</a>     assertExpected( CoordinateParseUtils.parseVerbatimCoordinates(<span class="jxr_string">"37° 28' N, 122° 6' W"</span>), <strong class="jxr_keyword">new</strong> LatLng(37.466667d, -122.1d), ParseResult.CONFIDENCE.DEFINITE);
-<a class="jxr_linenumber" name="L104" href="#L104">104</a>     assertExpected( CoordinateParseUtils.parseVerbatimCoordinates(<span class="jxr_string">"2°49'52\&quot;N, 131°47'03\&quot;"</span>), <strong class="jxr_keyword">new</strong> LatLng(2.831111d, 131.784167d), ParseResult.CONFIDENCE.DEFINITE);
-<a class="jxr_linenumber" name="L105" href="#L105">105</a>     <em class="jxr_comment">// failed</em>
-<a class="jxr_linenumber" name="L106" href="#L106">106</a>     assertFailed(CoordinateParseUtils.parseVerbatimCoordinates(<span class="jxr_string">""</span>));
-<a class="jxr_linenumber" name="L107" href="#L107">107</a>     assertFailedWithIssues(CoordinateParseUtils.parseVerbatimCoordinates(<span class="jxr_string">"12344"</span>), OccurrenceIssue.COORDINATE_INVALID);
-<a class="jxr_linenumber" name="L108" href="#L108">108</a>     assertFailedWithIssues(CoordinateParseUtils.parseVerbatimCoordinates(<span class="jxr_string">" "</span>), OccurrenceIssue.COORDINATE_INVALID);
-<a class="jxr_linenumber" name="L109" href="#L109">109</a>     assertFailedWithIssues(CoordinateParseUtils.parseVerbatimCoordinates(<span class="jxr_string">",11.12"</span>), OccurrenceIssue.COORDINATE_INVALID);
-<a class="jxr_linenumber" name="L110" href="#L110">110</a>     assertFailedWithIssues(CoordinateParseUtils.parseVerbatimCoordinates(<span class="jxr_string">"122°49'52\&quot;N, 131°47'03\&quot;E"</span>), OccurrenceIssue.COORDINATE_OUT_OF_RANGE);
-<a class="jxr_linenumber" name="L111" href="#L111">111</a>   }
-<a class="jxr_linenumber" name="L112" href="#L112">112</a> 
-<a class="jxr_linenumber" name="L113" href="#L113">113</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> assertExpected(LatLng result, Double lat, Double lon) {
-<a class="jxr_linenumber" name="L114" href="#L114">114</a>     assertNotNull(result);
-<a class="jxr_linenumber" name="L115" href="#L115">115</a>     assertEquals(<span class="jxr_string">"Latitudedifferent"</span>, lat, result.getLat());
-<a class="jxr_linenumber" name="L116" href="#L116">116</a>     assertEquals(<span class="jxr_string">"Longitude different"</span>, lon, result.getLng());
-<a class="jxr_linenumber" name="L117" href="#L117">117</a>   }
-<a class="jxr_linenumber" name="L118" href="#L118">118</a> 
-<a class="jxr_linenumber" name="L119" href="#L119">119</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> assertExpected(OccurrenceParseResult&lt;?&gt; pr, Object expected, ParseResult.CONFIDENCE c, OccurrenceIssue ... issue) {
-<a class="jxr_linenumber" name="L120" href="#L120">120</a>     assertNotNull(pr);
-<a class="jxr_linenumber" name="L121" href="#L121">121</a>     assertEquals(ParseResult.STATUS.SUCCESS, pr.getStatus());
-<a class="jxr_linenumber" name="L122" href="#L122">122</a>     assertEquals(c, pr.getConfidence());
-<a class="jxr_linenumber" name="L123" href="#L123">123</a>     assertNotNull(pr.getPayload());
-<a class="jxr_linenumber" name="L124" href="#L124">124</a>     assertEquals(expected, pr.getPayload());
-<a class="jxr_linenumber" name="L125" href="#L125">125</a>     <em class="jxr_comment">//System.out.println(Lists.newArrayList(issue));</em>
-<a class="jxr_linenumber" name="L126" href="#L126">126</a>     <strong class="jxr_keyword">if</strong> (issue == <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L127" href="#L127">127</a>       assertTrue(pr.getIssues().isEmpty());
-<a class="jxr_linenumber" name="L128" href="#L128">128</a>     } <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="L129" href="#L129">129</a>       assertEquals(<span class="jxr_string">"Wrong number of issues. Found "</span> + pr.getIssues() + <span class="jxr_string">", expected "</span> + Lists.newArrayList(issue), issue.length, pr.getIssues().size());
-<a class="jxr_linenumber" name="L130" href="#L130">130</a>       <strong class="jxr_keyword">for</strong> (OccurrenceIssue iss : issue) {
-<a class="jxr_linenumber" name="L131" href="#L131">131</a>         assertTrue(pr.getIssues().contains(iss));
-<a class="jxr_linenumber" name="L132" href="#L132">132</a>       }
-<a class="jxr_linenumber" name="L133" href="#L133">133</a>     }
-<a class="jxr_linenumber" name="L134" href="#L134">134</a>   }
-<a class="jxr_linenumber" name="L135" href="#L135">135</a> 
-<a class="jxr_linenumber" name="L136" href="#L136">136</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> assertFailed(ParseResult&lt;?&gt; pr) {
-<a class="jxr_linenumber" name="L137" href="#L137">137</a>     assertNotNull(pr);
-<a class="jxr_linenumber" name="L138" href="#L138">138</a>     assertEquals(ParseResult.STATUS.FAIL, pr.getStatus());
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>      assertDMS(<span class="jxr_string">"6º39'36\&quot;S"</span>,<span class="jxr_string">"35º59'59\&quot;W"</span>, -6.66d, -35.999722);
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>      assertDMS(<span class="jxr_string">"17  02.877 N"</span>, <span class="jxr_string">"121  05.966 E"</span>, 17.04795, 121.099433);
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>      assertDMS(<span class="jxr_string">"08º37'S"</span>, <span class="jxr_string">"37º10'W"</span>, -8.616667, -37.166667);
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>      assertDMS(<span class="jxr_string">"39g30mS"</span>, <span class="jxr_string">"56g27mW"</span>, -39.5, -56.45);
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>      assertDMS(<span class="jxr_string">"42g24m50.00sS"</span>, <span class="jxr_string">"64g17m20.00sW"</span>, -42.413889, -64.288889);
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>      assertDMS(<span class="jxr_string">"42º30´S"</span>, <span class="jxr_string">"54º14´W"</span>, -42.5, -54.233333);
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>      assertDMS(<span class="jxr_string">"61o50'N"</span>, <span class="jxr_string">"30o45'E"</span>, 61.833333, 30.75);
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>      assertDMS(<span class="jxr_string">"07°35N"</span>, <span class="jxr_string">"38°44E"</span>, 7.583333, 38.733333);
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>      assertDMS(<span class="jxr_string">"29º32.3’N"</span>, <span class="jxr_string">"113º34.9’W"</span>, 29.538333, -113.581667);
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>      assertDMS(<span class="jxr_string">"5°45′30″N"</span>, <span class="jxr_string">"100º30′30″W"</span>, 5.758333, -100.508333);
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>      assertDMS(<span class="jxr_string">"125º52´2´´S"</span>, <span class="jxr_string">"39º28´47´´W"</span>, -125.867222, -39.479722);
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>      assertDMS(<span class="jxr_string">"13.1939 N"</span>, <span class="jxr_string">"59.5432 W"</span>, 13.1939, -59.5432);
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>      assertDMS(<span class="jxr_string">"24 06.363 N"</span>, <span class="jxr_string">"110 11.969 E"</span>, 24.10605d, 110.199483d);
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>      <em class="jxr_comment">// even if it's out of range that's expected here - we validate elsewhere, this is an internal method only!</em>
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>      assertDMS(<span class="jxr_string">"122°49'52\&quot;N"</span>, <span class="jxr_string">"131°47'03\&quot;E"</span>, 122.831111d, 131.784167d);
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>      assertDMS(<span class="jxr_string">"122°49'52.39\&quot;N"</span>, <span class="jxr_string">"131°47'03.23\&quot;E"</span>, 122.83121944444444d, 131.78423055555555d);
+<a class="jxr_linenumber" name="L79" href="#L79">79</a>      assertDMS(<span class="jxr_string">"122d49m52.39sN"</span>, <span class="jxr_string">"131d47m03.23sE"</span>, 122.83121944444444d, 131.78423055555555d);
+<a class="jxr_linenumber" name="L80" href="#L80">80</a>      assertDMS(<span class="jxr_string">"122 49 52.39"</span>, <span class="jxr_string">"131 47 03.23"</span>, 122.83121944444444d, 131.78423055555555d);
+<a class="jxr_linenumber" name="L81" href="#L81">81</a>      assertDMS(<span class="jxr_string">"N122°49'52.39\&quot;"</span>, <span class="jxr_string">"E131°47'03.23\&quot;"</span>, 122.83121944444444d, 131.78423055555555d);
+<a class="jxr_linenumber" name="L82" href="#L82">82</a>      assertDMS(<span class="jxr_string">"N 122° 49' 52.39\&quot;"</span>, <span class="jxr_string">"E 131° 47' 03.23\&quot;"</span>, 122.83121944444444d, 131.78423055555555d);
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>      assertDMS(<span class="jxr_string">"N 122°49'52.39\&quot;"</span>, <span class="jxr_string">"E 131°47'03.23\&quot;"</span>, 122.83121944444444d, 131.78423055555555d);
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>      assertDMS(<span class="jxr_string">"N 122°49'52\&quot;"</span>, <span class="jxr_string">"E 131°47'03.23\&quot;"</span>, 122.831111d, 131.78423055555555d);
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>      assertDMS(<span class="jxr_string">"N122°49'52.39\&quot;"</span>, <span class="jxr_string">"E131°47'03.23\&quot;"</span>, 122.83121944444444d, 131.78423055555555d);
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>      assertDMS(<span class="jxr_string">"N36.93276"</span>, <span class="jxr_string">"W102.96361"</span>, 36.93276, -102.96361);
+<a class="jxr_linenumber" name="L87" href="#L87">87</a>      assertDMS(<span class="jxr_string">"90°N"</span>, <span class="jxr_string">"180°"</span>, 90, 180);
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>  
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>      <em class="jxr_comment">// truly failing</em>
+<a class="jxr_linenumber" name="L90" href="#L90">90</a>      assertIllegalArg(<span class="jxr_string">"12344"</span>, <strong class="jxr_keyword">true</strong>);
+<a class="jxr_linenumber" name="L91" href="#L91">91</a>      assertIllegalArg(<span class="jxr_string">"432"</span>, false);
+<a class="jxr_linenumber" name="L92" href="#L92">92</a>      assertIllegalArg(<span class="jxr_string">" "</span>, <strong class="jxr_keyword">true</strong>);
+<a class="jxr_linenumber" name="L93" href="#L93">93</a>      assertIllegalArg(<span class="jxr_string">" "</span>, false);
+<a class="jxr_linenumber" name="L94" href="#L94">94</a>      assertIllegalArg(<span class="jxr_string">"131°47'132\&quot;"</span>, false);
+<a class="jxr_linenumber" name="L95" href="#L95">95</a>      assertIllegalArg(<span class="jxr_string">"131 47 132"</span>, false);
+<a class="jxr_linenumber" name="L96" href="#L96">96</a>      assertIllegalArg(<span class="jxr_string">"131°47'132\&quot;"</span>, false);
+<a class="jxr_linenumber" name="L97" href="#L97">97</a>      assertIllegalArg(<span class="jxr_string">"043300S"</span>,<strong class="jxr_keyword">true</strong>);
+<a class="jxr_linenumber" name="L98" href="#L98">98</a>      assertIllegalArg(<span class="jxr_string">"0433S"</span>,<strong class="jxr_keyword">true</strong>);
+<a class="jxr_linenumber" name="L99" href="#L99">99</a>      assertIllegalArg(<span class="jxr_string">"043300 S"</span>,<strong class="jxr_keyword">true</strong>);
+<a class="jxr_linenumber" name="L100" href="#L100">100</a>     assertIllegalArg(<span class="jxr_string">"0433 S"</span>,<strong class="jxr_keyword">true</strong>);
+<a class="jxr_linenumber" name="L101" href="#L101">101</a>   }
+<a class="jxr_linenumber" name="L102" href="#L102">102</a> 
+<a class="jxr_linenumber" name="L103" href="#L103">103</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> assertDMS(String lat, String lon, <strong class="jxr_keyword">double</strong> eLat, <strong class="jxr_keyword">double</strong> eLon){
+<a class="jxr_linenumber" name="L104" href="#L104">104</a>     assertEquals(eLat, CoordinateParseUtils.parseDMS(lat, <strong class="jxr_keyword">true</strong>), 0.000001);
+<a class="jxr_linenumber" name="L105" href="#L105">105</a>     assertEquals(eLon, CoordinateParseUtils.parseDMS(lon, false), 0.000001);
+<a class="jxr_linenumber" name="L106" href="#L106">106</a>   }
+<a class="jxr_linenumber" name="L107" href="#L107">107</a> 
+<a class="jxr_linenumber" name="L108" href="#L108">108</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> assertIllegalArg(String coord, <strong class="jxr_keyword">boolean</strong> lat){
+<a class="jxr_linenumber" name="L109" href="#L109">109</a>     <strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L110" href="#L110">110</a>       CoordinateParseUtils.parseDMS(coord, lat);
+<a class="jxr_linenumber" name="L111" href="#L111">111</a>       fail(<span class="jxr_string">"IllegalArgumentException expected"</span>);
+<a class="jxr_linenumber" name="L112" href="#L112">112</a>     } <strong class="jxr_keyword">catch</strong> (IllegalArgumentException e) {
+<a class="jxr_linenumber" name="L113" href="#L113">113</a>       <em class="jxr_comment">// expected!</em>
+<a class="jxr_linenumber" name="L114" href="#L114">114</a>     }
+<a class="jxr_linenumber" name="L115" href="#L115">115</a>   }
+<a class="jxr_linenumber" name="L116" href="#L116">116</a> 
+<a class="jxr_linenumber" name="L117" href="#L117">117</a>   @Test
+<a class="jxr_linenumber" name="L118" href="#L118">118</a>   <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testParseVerbatimCoordinates() {
+<a class="jxr_linenumber" name="L119" href="#L119">119</a>     assertExpected( CoordinateParseUtils.parseVerbatimCoordinates(<span class="jxr_string">"02° 49' 52\&quot; N 131° 47' 03\&quot; E"</span>), <strong class="jxr_keyword">new</strong> LatLng(2.831111d, 131.784167d), ParseResult.CONFIDENCE.DEFINITE);
+<a class="jxr_linenumber" name="L120" href="#L120">120</a>     assertExpected( CoordinateParseUtils.parseVerbatimCoordinates(<span class="jxr_string">"02° 49' 52\&quot; N, 131° 47' 03\&quot; E"</span>), <strong class="jxr_keyword">new</strong> LatLng(2.831111d, 131.784167d), ParseResult.CONFIDENCE.DEFINITE);
+<a class="jxr_linenumber" name="L121" href="#L121">121</a>     assertExpected( CoordinateParseUtils.parseVerbatimCoordinates(<span class="jxr_string">"02°49'52\&quot;N; 131°47'03\&quot;O"</span>), <strong class="jxr_keyword">new</strong> LatLng(2.831111d, 131.784167d), ParseResult.CONFIDENCE.DEFINITE);
+<a class="jxr_linenumber" name="L122" href="#L122">122</a>     assertExpected( CoordinateParseUtils.parseVerbatimCoordinates(<span class="jxr_string">"17d 33m 5s N/99d 30m 3s W"</span>), <strong class="jxr_keyword">new</strong> LatLng(17.551389d, -99.500833d), ParseResult.CONFIDENCE.DEFINITE);
+<a class="jxr_linenumber" name="L123" href="#L123">123</a>     assertExpected( CoordinateParseUtils.parseVerbatimCoordinates(<span class="jxr_string">"14.93333/-91.9"</span>), <strong class="jxr_keyword">new</strong> LatLng(14.93333d, -91.9d), ParseResult.CONFIDENCE.DEFINITE);
+<a class="jxr_linenumber" name="L124" href="#L124">124</a>     assertExpected( CoordinateParseUtils.parseVerbatimCoordinates(<span class="jxr_string">"63d 41m 39s N 170d 28m 44s W"</span>), <strong class="jxr_keyword">new</strong> LatLng(63.694167d, -170.478889d), ParseResult.CONFIDENCE.DEFINITE);
+<a class="jxr_linenumber" name="L125" href="#L125">125</a>     assertExpected( CoordinateParseUtils.parseVerbatimCoordinates(<span class="jxr_string">"37° 28' N, 122° 6' W"</span>), <strong class="jxr_keyword">new</strong> LatLng(37.466667d, -122.1d), ParseResult.CONFIDENCE.DEFINITE);
+<a class="jxr_linenumber" name="L126" href="#L126">126</a>     assertExpected( CoordinateParseUtils.parseVerbatimCoordinates(<span class="jxr_string">"2°49'52\&quot;N, 131°47'03\&quot;"</span>), <strong class="jxr_keyword">new</strong> LatLng(2.831111d, 131.784167d), ParseResult.CONFIDENCE.DEFINITE);
+<a class="jxr_linenumber" name="L127" href="#L127">127</a>     assertExpected( CoordinateParseUtils.parseVerbatimCoordinates(<span class="jxr_string">"10°07'06\&quot;N 20°48'23\&quot;W"</span>), <strong class="jxr_keyword">new</strong> LatLng(10.118333, -20.806389), ParseResult.CONFIDENCE.DEFINITE);
+<a class="jxr_linenumber" name="L128" href="#L128">128</a>     assertExpected( CoordinateParseUtils.parseVerbatimCoordinates(<span class="jxr_string">"10º07'06\&quot;N 20º48'23\&quot;W"</span>), <strong class="jxr_keyword">new</strong> LatLng(10.118333, -20.806389), ParseResult.CONFIDENCE.DEFINITE);
+<a class="jxr_linenumber" name="L129" href="#L129">129</a>     assertExpected( CoordinateParseUtils.parseVerbatimCoordinates(<span class="jxr_string">"10°07'N 20°48'W"</span>), <strong class="jxr_keyword">new</strong> LatLng(10.116667, -20.8), ParseResult.CONFIDENCE.DEFINITE);
+<a class="jxr_linenumber" name="L130" href="#L130">130</a>     assertExpected( CoordinateParseUtils.parseVerbatimCoordinates(<span class="jxr_string">"10°07.55'N 20°48.55'W"</span>), <strong class="jxr_keyword">new</strong> LatLng(10.125833, -20.809167), ParseResult.CONFIDENCE.DEFINITE);
+<a class="jxr_linenumber" name="L131" href="#L131">131</a>     assertExpected( CoordinateParseUtils.parseVerbatimCoordinates(<span class="jxr_string">"100º23'05\&quot;N 20º35'25\&quot;W"</span>), <strong class="jxr_keyword">new</strong> LatLng(-20.590278, 100.384722), ParseResult.CONFIDENCE.PROBABLE, OccurrenceIssue.PRESUMED_SWAPPED_COORDINATE);
+<a class="jxr_linenumber" name="L132" href="#L132">132</a> 
+<a class="jxr_linenumber" name="L133" href="#L133">133</a>     <em class="jxr_comment">// failed</em>
+<a class="jxr_linenumber" name="L134" href="#L134">134</a>     assertFailed(CoordinateParseUtils.parseVerbatimCoordinates(<span class="jxr_string">""</span>));
+<a class="jxr_linenumber" name="L135" href="#L135">135</a>     assertFailedWithIssues(CoordinateParseUtils.parseVerbatimCoordinates(<span class="jxr_string">"12344"</span>), OccurrenceIssue.COORDINATE_INVALID);
+<a class="jxr_linenumber" name="L136" href="#L136">136</a>     assertFailedWithIssues(CoordinateParseUtils.parseVerbatimCoordinates(<span class="jxr_string">" "</span>), OccurrenceIssue.COORDINATE_INVALID);
+<a class="jxr_linenumber" name="L137" href="#L137">137</a>     assertFailedWithIssues(CoordinateParseUtils.parseVerbatimCoordinates(<span class="jxr_string">",11.12"</span>), OccurrenceIssue.COORDINATE_INVALID);
+<a class="jxr_linenumber" name="L138" href="#L138">138</a>     assertFailedWithIssues(CoordinateParseUtils.parseVerbatimCoordinates(<span class="jxr_string">"122°49'52\&quot;N, 131°47'03\&quot;E"</span>), OccurrenceIssue.COORDINATE_OUT_OF_RANGE);
 <a class="jxr_linenumber" name="L139" href="#L139">139</a>   }
 <a class="jxr_linenumber" name="L140" href="#L140">140</a> 
-<a class="jxr_linenumber" name="L141" href="#L141">141</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> assertFailedWithIssues(OccurrenceParseResult&lt;LatLng&gt; pr, OccurrenceIssue ... issue) {
-<a class="jxr_linenumber" name="L142" href="#L142">142</a>     assertFailed(pr);
-<a class="jxr_linenumber" name="L143" href="#L143">143</a>     assertEquals(issue.length, pr.getIssues().size());
-<a class="jxr_linenumber" name="L144" href="#L144">144</a>     <strong class="jxr_keyword">for</strong> (OccurrenceIssue iss : issue){
-<a class="jxr_linenumber" name="L145" href="#L145">145</a>       assertTrue(pr.getIssues().contains(iss));
-<a class="jxr_linenumber" name="L146" href="#L146">146</a>     }
-<a class="jxr_linenumber" name="L147" href="#L147">147</a>   }
-<a class="jxr_linenumber" name="L148" href="#L148">148</a> }
+<a class="jxr_linenumber" name="L141" href="#L141">141</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> assertExpected(OccurrenceParseResult&lt;?&gt; pr, Object expected, ParseResult.CONFIDENCE c, OccurrenceIssue ... issue) {
+<a class="jxr_linenumber" name="L142" href="#L142">142</a>     assertNotNull(pr);
+<a class="jxr_linenumber" name="L143" href="#L143">143</a>     assertEquals(ParseResult.STATUS.SUCCESS, pr.getStatus());
+<a class="jxr_linenumber" name="L144" href="#L144">144</a>     assertEquals(c, pr.getConfidence());
+<a class="jxr_linenumber" name="L145" href="#L145">145</a>     assertNotNull(pr.getPayload());
+<a class="jxr_linenumber" name="L146" href="#L146">146</a>     assertEquals(expected, pr.getPayload());
+<a class="jxr_linenumber" name="L147" href="#L147">147</a>     <em class="jxr_comment">//System.out.println(Lists.newArrayList(issue));</em>
+<a class="jxr_linenumber" name="L148" href="#L148">148</a>     <strong class="jxr_keyword">if</strong> (issue == <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L149" href="#L149">149</a>       assertTrue(pr.getIssues().isEmpty());
+<a class="jxr_linenumber" name="L150" href="#L150">150</a>     } <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="L151" href="#L151">151</a>       assertEquals(<span class="jxr_string">"Wrong number of issues. Found "</span> + pr.getIssues() + <span class="jxr_string">", expected "</span> + Lists.newArrayList(issue), issue.length, pr.getIssues().size());
+<a class="jxr_linenumber" name="L152" href="#L152">152</a>       <strong class="jxr_keyword">for</strong> (OccurrenceIssue iss : issue) {
+<a class="jxr_linenumber" name="L153" href="#L153">153</a>         assertTrue(pr.getIssues().contains(iss));
+<a class="jxr_linenumber" name="L154" href="#L154">154</a>       }
+<a class="jxr_linenumber" name="L155" href="#L155">155</a>     }
+<a class="jxr_linenumber" name="L156" href="#L156">156</a>   }
+<a class="jxr_linenumber" name="L157" href="#L157">157</a> 
+<a class="jxr_linenumber" name="L158" href="#L158">158</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> assertFailed(ParseResult&lt;?&gt; pr) {
+<a class="jxr_linenumber" name="L159" href="#L159">159</a>     assertNotNull(pr);
+<a class="jxr_linenumber" name="L160" href="#L160">160</a>     assertEquals(ParseResult.STATUS.FAIL, pr.getStatus());
+<a class="jxr_linenumber" name="L161" href="#L161">161</a>   }
+<a class="jxr_linenumber" name="L162" href="#L162">162</a> 
+<a class="jxr_linenumber" name="L163" href="#L163">163</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> assertFailedWithIssues(OccurrenceParseResult&lt;LatLng&gt; pr, OccurrenceIssue ... issue) {
+<a class="jxr_linenumber" name="L164" href="#L164">164</a>     assertFailed(pr);
+<a class="jxr_linenumber" name="L165" href="#L165">165</a>     assertEquals(issue.length, pr.getIssues().size());
+<a class="jxr_linenumber" name="L166" href="#L166">166</a>     <strong class="jxr_keyword">for</strong> (OccurrenceIssue iss : issue){
+<a class="jxr_linenumber" name="L167" href="#L167">167</a>       assertTrue(pr.getIssues().contains(iss));
+<a class="jxr_linenumber" name="L168" href="#L168">168</a>     }
+<a class="jxr_linenumber" name="L169" href="#L169">169</a>   }
+<a class="jxr_linenumber" name="L170" href="#L170">170</a> }
 </pre>
 <hr/>
 <div id="footer">Copyright &#169; 2018 <a href="http://www.gbif.org">Global Biodiversity Information Facility</a>. All rights reserved.</div>
