@@ -40,7 +40,7 @@
     <junit.version>4.12</junit.version>
     <logback.version>1.1.7</logback.version>
     <slf4j.version>1.7.21</slf4j.version>
-    <gbif-api.version>0.72-SNAPSHOT</gbif-api.version>
+    <gbif-api.version>0.73</gbif-api.version>
     <gbif-common.version>0.34</gbif-common.version>
     <name-parser.version>3.1.6</name-parser.version>
     <tika.version>1.19.1</tika.version>
