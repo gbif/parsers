@@ -60,7 +60,7 @@ public class DatePartsNormalizer {
       try (CSVReader csv = CSVReaderFactory.build(monthFileStream, Charsets.UTF_8.name(), COLUMN_SEPARATOR, null, 0)) {
         while (csv.hasNext()) {
           String[] row = csv.next();
-          if (row == null || row[0].startsWith(COMMENT_MARKER)) {
+          if (row == null || StringUtils.isBlank(row[0]) || row[0].startsWith(COMMENT_MARKER)) {
             continue;
           }
           String monthKey = row[0].toLowerCase();
@@ -69,7 +69,7 @@ public class DatePartsNormalizer {
               monthMap.get(monthKey).add(monthAltName.toLowerCase());
             }
           } else {
-            LOG.error("Unknown month found in: {}", MONTH_FILEPATH);
+            LOG.error("Unknown month “{}” found in: {}", monthKey, MONTH_FILEPATH);
           }
         }
       } catch (IOException e) {
