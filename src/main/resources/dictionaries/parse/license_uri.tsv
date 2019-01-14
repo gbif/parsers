@@ -1,4 +1,4 @@
-# Dictionary to normalize a license to a URI.
+# Dictionary to normalize a license to a URI.	
 # http:// and https:// protocols are ignored by the comparison, they are provided in this file as reference only.	
 #	
 # License URIs chosen via https://creativecommons.org/ns	
