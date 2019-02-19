@@ -75,6 +75,9 @@ nom cons orth cons	CONSERVED
 nom cons prop	CONSERVED
 nom cons typ cons see art	CONSERVED
 nom cons, see art	CONSERVED
+nom. dub.   DOUBTFUL
+nomen dubium    DOUBTFUL
+nomina dubia   DOUBTFUL
 nom et orth c	CONSERVED
 nom illeg	ILLEGITIMATE
 nom illeg	ILLEGITIMATE
@@ -92,7 +95,9 @@ nom illegit nom nov	REPLACEMENT
 nom illegit nom nov nom superfl	SUPERFLUOUS
 nom ilval art	
 nom ined	
-nom ined nom inv	
+nom ined nom inv
+nomen inquirendum   DOUBTFUL
+nomena inquirenda   DOUBTFUL
 nom inv	INVALID
 nom inval	INVALID
 nom inval art	INVALID
@@ -214,6 +219,7 @@ unavailable, literature misspelling	INVALID
 unavailable, manuscript name	INVALID
 unavailable, nomen nudum	INVALID
 unavailable, other	INVALID
+uncertain   DOUBTFUL
 unjustified emendation	
 unnecessary replacement name	
 utique rejected	REJECTEDOUTRIGHT
