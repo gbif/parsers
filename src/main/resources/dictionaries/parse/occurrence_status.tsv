@@ -13,11 +13,16 @@ fairly common	COMMON
 frequent	COMMON
 misidentification	EXCLUDED
 native	PRESENT
+native endemic	PRESENT
+native non-endemic	PRESENT
+not specified	DOUBTFUL
 possibly extant	DOUBTFUL
 possibly extinct	DOUBTFUL
 presence uncertain	DOUBTFUL
 probably extant	DOUBTFUL
 rara	RARE
-reported	EXCLUDED
+reported	PRESENT
+reported in error	EXCLUDED
+uncertain	DOUBTFUL
 uncommon	RARE
 vagrant	IRREGULAR
