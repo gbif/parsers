@@ -23,7 +23,8 @@ public class UrlParser {
 
   // Pattern for things that are probably domains followed by a slash, without a protocol.
   // Doesn't match IDNs etc, but this is just for people who forgot the http:// anyway.
-  private static final Pattern DOMAIN_ISH = Pattern.compile("^[A-Za-z0-9.-]{1,40}\\.[A-Za-z0-9-]{2,30}/.*");
+  // The longest TLD currently in existence is 24 characters long, but can be up to 63 according to specs.
+  private static final Pattern DOMAIN_ISH = Pattern.compile("^[A-Za-z0-9.-]{1,60}\\.[A-Za-z]{2,10}(?:/.*)?");
 
   private UrlParser() {
   }

@@ -13,9 +13,11 @@ public class UrlParserTest {
     assertNull(UrlParser.parse(""));
     assertNull(UrlParser.parse(" "));
     assertNull(UrlParser.parse("-"));
-    assertNull(UrlParser.parse("tim.png"));
+    assertNull(UrlParser.parse("tim.1png"));
     assertNull(UrlParser.parse("images/logo.gif"));
-
+  
+    assertEquals("http://tim.png", UrlParser.parse("tim.png").toString());
+    assertEquals("http://www.gbif.org", UrlParser.parse("www.gbif.org").toString());
     assertEquals("http://www.gbif.org/logo.png", UrlParser.parse(" http://www.gbif.org/logo.png").toString());
     assertEquals("http://www.gbif.org/logo.png", UrlParser.parse("www.gbif.org/logo.png").toString());
     assertEquals("https://www.gbif.org/logo.png", UrlParser.parse(" https://www.gbif.org/logo.png").toString());
