@@ -84,11 +84,13 @@ class ThreeTenNumericalDateParser implements TemporalParser {
                   .appendDateTimeParser("uuuu-M-d[ HH[:]mm[:]ss]", DateFormatHint.YMDT, new TemporalQuery<?>[]{LocalDateTime::from, LocalDate::from}, HYPHEN, MINUS + ".")
                   // Either no fractional seconds, milliseconds or microseconds. T or space.
                   .appendDateTimeParser("uuuu-M-d' 'HH[[:]mm[[:]ss[.S]]]", DateFormatHint.YMDT, LocalDateTime::from)
+                  .appendDateTimeParser("uuuu-M-d' 'HH[:]mm[[:]ss.SS]", DateFormatHint.YMDT, LocalDateTime::from)
                   .appendDateTimeParser("uuuu-M-d' 'HH[:]mm[[:]ss.SSS]", DateFormatHint.YMDT, LocalDateTime::from)
                   .appendDateTimeParser("uuuu-M-d' 'HH[:]mm[[:]ss.SSSSSS]", DateFormatHint.YMDT, LocalDateTime::from)
                   .appendDateTimeParser("uuuu-M-d' 'HH[:]mm[[:]ss.SSSSSSS]", DateFormatHint.YMDT, LocalDateTime::from)
                   .appendDateTimeParser("uuuu-M-d' 'HH[:]mm[[:]ss[.SSS]]X", DateFormatHint.YMDTZ, ZonedDateTime::from, HYPHEN, MINUS)
                   .appendDateTimeParser("uuuu-M-d'T'HH[[:]mm[[:]ss[.S]]]", DateFormatHint.YMDT, LocalDateTime::from)
+                  .appendDateTimeParser("uuuu-M-d'T'HH[:]mm[[:]ss.SS]", DateFormatHint.YMDT, LocalDateTime::from)
                   .appendDateTimeParser("uuuu-M-d'T'HH[:]mm[[:]ss.SSS]", DateFormatHint.YMDT, LocalDateTime::from)
                   .appendDateTimeParser("uuuu-M-d'T'HH[:]mm[[:]ss.SSSSSS]", DateFormatHint.YMDT, LocalDateTime::from)
                   .appendDateTimeParser("uuuu-M-d'T'HH[:]mm[[:]ss.SSSSSSS]", DateFormatHint.YMDT, LocalDateTime::from)
