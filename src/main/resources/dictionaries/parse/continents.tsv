@@ -1,29 +1,65 @@
-Europa	EUROPE
-Indian	ASIA
-Mesoamerica	NORTH_AMERICA
-Neotropical	SOUTH_AMERICA
-Central America	NORTH_AMERICA
-Africa & Madagascar	AFRICA
-Australia	OCEANIA
-Pacific	OCEANIA
-West Indies	NORTH_AMERICA
-SA	SOUTH_AMERICA
-América del Sur	SOUTH_AMERICA
-Hawaiian Islands	OCEANIA
-North and Central America	NORTH_AMERICA
-Australasia	OCEANIA
-Southern America	SOUTH_AMERICA
-Caribbean	NORTH_AMERICA
-Asia-Tropical	ASIA
-EUROPA	EUROPE
-Antarctica	ANTARCTICA
-Baltic Sea	EUROPE
-Afrique	AFRICA
-Middle America	NORTH_AMERICA
-New Guinea	ASIA
-América do Sul	SOUTH_AMERICA
-Asia-Temperate	ASIA
-Caribbean Sea	NORTH_AMERICA
-Australian	OCEANIA
 AF	AFRICA
 África	AFRICA
+Africa & Madagascar	AFRICA
+Afrika	AFRICA
+Afrique	AFRICA
+Afrotropical	AFRICA
+Afrotropique	AFRICA
+Antarctica	ANTARCTICA
+Antártida	ANTARCTICA
+Asia-Temperate	ASIA
+Asia-Tropical	ASIA
+Asie	ASIA
+Asien	ASIA
+Indian	ASIA
+Japan	ASIA
+New Guinea	ASIA
+Oriental	ASIA
+Adriatic Sea	EUROPE
+Baltic Sea	EUROPE
+English Channel	EUROPE
+EU	EUROPE
+Europa	EUROPE
+América Central	NORTH_AMERICA
+América del Norte	NORTH_AMERICA
+América do Norte	NORTH_AMERICA
+AméricadoNorte	NORTH_AMERICA
+Amérique centrale	NORTH_AMERICA
+Amérique du Nord	NORTH_AMERICA
+C America	NORTH_AMERICA
+Caribbean Islands	NORTH_AMERICA
+Caribbean	NORTH_AMERICA
+Caribbean Sea	NORTH_AMERICA
+Central America & Caribbean	NORTH_AMERICA
+Central America	NORTH_AMERICA
+Mesoamerica	NORTH_AMERICA
+Middle America	NORTH_AMERICA
+N America	NORTH_AMERICA
+Nearctic	NORTH_AMERICA
+Nordamerika	NORTH_AMERICA
+North America - Neotropics	NORTH_AMERICA
+North and Central America	NORTH_AMERICA
+Northern America	NORTH_AMERICA
+United States	NORTH_AMERICA
+West Indies - Neotropics	NORTH_AMERICA
+West Indies	NORTH_AMERICA
+Australasia	OCEANIA
+Australia (Continent)	OCEANIA
+Australian	OCEANIA
+Australia	OCEANIA
+Australia & Oceania	OCEANIA
+Hawaiian Islands	OCEANIA
+Océanie	OCEANIA
+Pacific	OCEANIA
+América del Sur	SOUTH_AMERICA
+América do Sul	SOUTH_AMERICA
+Amérique du Sud	SOUTH_AMERICA
+Neotropical	SOUTH_AMERICA
+S America	SOUTH_AMERICA
+SA	SOUTH_AMERICA
+South America - Neotropics	SOUTH_AMERICA
+Southern America	SOUTH_AMERICA
+Sudamérica	SOUTH_AMERICA
+Sur America	SOUTH_AMERICA
+Sur América	SOUTH_AMERICA
+Sydamerika	SOUTH_AMERICA
