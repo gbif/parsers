@@ -31,6 +31,11 @@ public class CountryParser extends EnumParser<Country> {
       add(c.getIso2LetterCode(), c);
       add(c.getIso3LetterCode(), c);
     }
+    // and Kosovo (which is not an official code, but should be treated as such by GBIF)
+    add(Country.KOSOVO.name(), Country.KOSOVO);
+    add(Country.KOSOVO.getTitle(), Country.KOSOVO);
+    add(Country.KOSOVO.getIso2LetterCode(), Country.KOSOVO);
+    add(Country.KOSOVO.getIso3LetterCode(), Country.KOSOVO);
     // use dict file last
     init(CountryParser.class.getResourceAsStream("/dictionaries/parse/countryName.tsv"));
   }
