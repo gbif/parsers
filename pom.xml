@@ -43,7 +43,7 @@
     <gbif-api.version>0.84</gbif-api.version>
     <gbif-common.version>0.34</gbif-common.version>
     <name-parser.version>3.1.11</name-parser.version>
-    <tika.version>1.19.1</tika.version>
+    <tika.version>1.22</tika.version>
   </properties>
 
   <repositories>
