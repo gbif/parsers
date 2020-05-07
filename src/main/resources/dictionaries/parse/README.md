@@ -15,3 +15,6 @@ for i in *.tsv; do
 done
 ```
 and see that only one line is output from each file.
+
+Several of the dictionaries are sorted alphabetically.  You can use `sort | uniq`
+to re-sort if you make changes.

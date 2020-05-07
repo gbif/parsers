@@ -146,6 +146,12 @@ public class CountryParserTest extends ParserTestBase<Country> {
     assertParseSuccess(Country.BONAIRE_SINT_EUSTATIUS_SABA, "ST EUSTATIUS ISLAND");
     assertParseSuccess(Country.BONAIRE_SINT_EUSTATIUS_SABA, "ST EUSTATIUS");
     assertParseSuccess(Country.BONAIRE_SINT_EUSTATIUS_SABA, "BONAIRE THE NETHERLANDS ANTILLES");
+    assertParseSuccess(Country.BENIN, "B�nin");
+    assertParseSuccess(Country.FINLAND, "Suomi (FI)");
+    assertParseSuccess(Country.UNITED_KINGDOM, "United Kingdom");
+    assertParseSuccess(Country.UNITED_STATES, "United States of Ameirca");
+    assertParseSuccess(Country.KOREA_NORTH, "Korea, Democratic People's Republic");
+
     assertParseSuccess(Country.KOSOVO, "XK");
   }
 
