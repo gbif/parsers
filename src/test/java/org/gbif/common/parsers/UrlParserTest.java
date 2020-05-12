@@ -15,15 +15,28 @@ public class UrlParserTest {
     assertNull(UrlParser.parse("-"));
     assertNull(UrlParser.parse("tim.1png"));
     assertNull(UrlParser.parse("images/logo.gif"));
-  
+
     assertEquals("http://tim.png", UrlParser.parse("tim.png").toString());
     assertEquals("http://www.gbif.org", UrlParser.parse("www.gbif.org").toString());
     assertEquals("http://www.gbif.org/logo.png", UrlParser.parse(" http://www.gbif.org/logo.png").toString());
     assertEquals("http://www.gbif.org/logo.png", UrlParser.parse("www.gbif.org/logo.png").toString());
     assertEquals("https://www.gbif.org/logo.png", UrlParser.parse(" https://www.gbif.org/logo.png").toString());
     assertEquals("ftp://www.gbif.org/logo.png", UrlParser.parse(" ftp://www.gbif.org/logo.png").toString());
-    assertEquals("http://www.gbif.org/image?id=12&format=gif,jpg",
-      UrlParser.parse("http://www.gbif.org/image?id=12&format=gif,jpg").toString());
+    assertEquals("http://www.gbif.org/image?id=12&format=gif,jpg", UrlParser.parse("http://www.gbif.org/image?id=12&format=gif,jpg").toString());
+    assertEquals("https://xn----8sbahmlpvellw0ag7lzb.xn--p1ai", UrlParser.parse("https://xn----8sbahmlpvellw0ag7lzb.xn--p1ai").toString());
+
+    // Unicode characters in the path
+    assertEquals("https://ru.wikipedia.org/wiki/Биоразнообразие", UrlParser.parse("https://ru.wikipedia.org/wiki/Биоразнообразие").toString());
+
+    // IDNs (currently normalized)
+    assertEquals("http://xn--sknetrafiken-ucb.se/", UrlParser.parse("http://skånetrafiken.se/").toString());
+    assertEquals("https://xn----8sbahmlpvellw0ag7lzb.xn--p1ai/", UrlParser.parse("https://музей-мартьянова.рф/").toString());
+    assertEquals("https://xn----8sbahmlpvellw0ag7lzb.xn--p1ai/музей", UrlParser.parse("https://музей-мартьянова.рф/музей").toString());
+
+    // Although WHATWG says _ is allowed in domains, and the Galimatias library says it follows the spec, it still
+    // rejects them.  (Java also rejects them, following other specifications of URLs.)
+    // See https://github.com/gbif/parsers/issues/19
+    // assertEquals("http://dep_bio.pnzgu.ru/Gerbariy_im_I_I_Sprygina", UrlParser.parse("http://dep_bio.pnzgu.ru/Gerbariy_im_I_I_Sprygina").toString());
   }
 
   @Test

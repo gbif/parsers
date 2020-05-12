@@ -13,6 +13,33 @@ mvn clean install
 ```
 
 ## Usage
+### Maven artifact
+
+```
+<dependency>
+  <groupId>org.gbif</groupId>
+  <artifactId>gbif-parsers</artifactId>
+  <version>[version]</version>
+</dependency>
+```
+
+If you are not parsing URLs, you may want to exclude the large (10MB) ICU4J dependency, which is used to parse
+internationalized domain names.
+
+```
+<dependency>
+  <groupId>org.gbif</groupId>
+  <artifactId>gbif-parsers</artifactId>
+  <version>[version]</version>
+  <exclusions>
+    <exclusion>
+      <groupId>com.ibm.icu</groupId>
+      <artifactId>icu4j</artifactId>
+    </exclusion>
+  </exclusions>
+</dependency>
+```
+
 ### Country parsing
 ```java
 //get a Country by the defined enumeration

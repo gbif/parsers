@@ -1,6 +1,7 @@
 package org.gbif.common.parsers;
 
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.List;
 import java.util.regex.Pattern;
 
@@ -9,6 +10,8 @@ import com.google.common.base.Splitter;
 import com.google.common.base.Strings;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
+import io.mola.galimatias.GalimatiasParseException;
+import io.mola.galimatias.URL;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -57,9 +60,18 @@ public class UrlParser {
 
       // verify that we have a domain
       if (Strings.isNullOrEmpty(uri.getHost())) {
-        return null;
-      }
 
+        // If not, try the Galimatias parser.
+        try {
+          uri = URL.parse(value).toJavaURI();
+        } catch (GalimatiasParseException | URISyntaxException ex) {
+          // Non-recoverable parsing error
+        }
+
+        if (Strings.isNullOrEmpty(uri.getHost())) {
+          return null;
+        }
+      }
     } catch (IllegalArgumentException e) {
     }
 
