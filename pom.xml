@@ -40,7 +40,8 @@
     <junit.version>4.12</junit.version>
     <logback.version>1.1.7</logback.version>
     <slf4j.version>1.7.21</slf4j.version>
-    <gbif-api.version>0.84</gbif-api.version>
+    <galimatias.version>0.2.1</galimatias.version>
+    <gbif-api.version>0.110-SNAPSHOT</gbif-api.version>
     <gbif-common.version>0.34</gbif-common.version>
     <name-parser.version>3.1.11</name-parser.version>
     <tika.version>1.19.1</tika.version>
@@ -93,6 +94,11 @@
       <groupId>org.gbif</groupId>
       <artifactId>gbif-common</artifactId>
       <version>${gbif-common.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>io.mola.galimatias</groupId>
+      <artifactId>galimatias</artifactId>
+      <version>${galimatias.version}</version>
     </dependency>
     <dependency>
       <groupId>org.slf4j</groupId>
