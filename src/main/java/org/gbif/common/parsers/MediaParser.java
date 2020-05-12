@@ -1,6 +1,7 @@
 package org.gbif.common.parsers;
 
 import com.google.common.base.Strings;
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import org.apache.tika.Tika;
 import org.apache.tika.mime.MediaTypeRegistry;
@@ -14,7 +15,9 @@ import org.slf4j.LoggerFactory;
 
 import javax.annotation.Nullable;
 import java.net.URI;
+import java.util.Map;
 import java.util.Set;
+import java.util.regex.Pattern;
 
 public class MediaParser {
   private static final Logger LOG = LoggerFactory.getLogger(MediaParser.class);
@@ -25,6 +28,18 @@ public class MediaParser {
   private static final Set<String> HTML_MIME_TYPES = ImmutableSet
     .of("text/x-coldfusion", "text/x-php", "text/asp", "text/aspdotnet", "text/x-cgi", "text/x-jsp", "text/x-perl",
       HTML_TYPE, MIME_TYPES.OCTET_STREAM);
+
+  // List of exceptions, could be read from a file if it grows. URLs matching this return a media file.
+  private static final Map<Pattern, String> knownUrlPatterns = new ImmutableMap.Builder<Pattern, String>()
+    .put(Pattern.compile("http://www\\.unimus\\.no/felles/bilder/web_hent_bilde\\.php\\?id=\\d+&type=jpeg"), "image/jpeg")
+    .put(Pattern.compile("http://www\\.jacq\\.org/image\\.php\\?filename=\\d+&method=europeana"), "image/jpeg")
+    .put(Pattern.compile("https://images\\.ala\\.org\\.au/image/proxyImageThumbnailLarge\\?imageId=[0-9a-f-]{36}"), "image/jpeg")
+    .put(Pattern.compile("http://[a-zA-Z0-9-]+\\.wildlifemonitoring\\.ru/get_photo\\.php\\?id=\\d+"), "image/jpeg")
+    .put(Pattern.compile("http://procyon\\.acadiau\\.ca/ecsmith/cgi-bin/image\\.cgi\\?[0-9A-Z]+,jpeg"), "image/jpeg")
+
+    .put(Pattern.compile("http://www\\.biologie\\.uni-ulm\\.de/cgi-bin/perl/sound\\.pl\\?sid=T&objid=\\d+"), "audio/vnd.wave")
+    .put(Pattern.compile("https://dofbasen\\.dk/sound_proxy\\.php\\?referer=gbif&mode=o&snd=[0-9_]+.mp3&raw=1"), "audio/mpeg")
+    .build();
 
   // Add missing alias types.
   static {
@@ -105,7 +120,8 @@ public class MediaParser {
    */
   public String parseMimeType(@Nullable URI uri) {
     if (uri != null) {
-      String mime = TIKA.detect(uri.toString());
+      String uriString = uri.toString();
+      String mime = TIKA.detect(uriString);
       if (mime != null && HTML_MIME_TYPES.contains(mime.toLowerCase())) {
         // We may have something like http://example.org/imageServer?img=test.jpg, so re-run the detection on the last
         // part of the URL query string.
@@ -113,6 +129,13 @@ public class MediaParser {
           mime = TIKA.detect(uri.getQuery());
           if (mime != null && !HTML_MIME_TYPES.contains(mime.toLowerCase())) {
             return mime;
+          }
+        }
+
+        // First check the dictionary for known exceptions.
+        for (Map.Entry<Pattern, String> p : knownUrlPatterns.entrySet()) {
+          if (p.getKey().matcher(uriString).matches()) {
+            return p.getValue();
           }
         }
 
