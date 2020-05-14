@@ -52,6 +52,7 @@ public class BasisOfRecordParserTest extends ParserTestBase<BasisOfRecord> {
     assertParseSuccess(BasisOfRecord.OBSERVATION, "sound recording");
     assertParseSuccess(BasisOfRecord.OBSERVATION, "Observation");
     assertParseSuccess(BasisOfRecord.OBSERVATION, "O");
+    assertParseSuccess(BasisOfRecord.HUMAN_OBSERVATION, "HumanObservation");
     assertParseSuccess(BasisOfRecord.UNKNOWN, "unknown");
     assertParseSuccess(BasisOfRecord.OBSERVATION, "observation");
     assertParseSuccess(BasisOfRecord.PRESERVED_SPECIMEN, "specimen");

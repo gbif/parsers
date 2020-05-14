@@ -1,0 +1,36 @@
+# A command used to sort this file: 
+# LANG=C sort distribution_status.tsv -i -t $'\t' -k 2,2 -k1,1  
+extinct	ABSENT
+extirpated	ABSENT
+
+comun	COMMON
+fairly common	COMMON
+frequent	COMMON
+
+not specified	DOUBTFUL
+possibly extant	DOUBTFUL
+possibly extinct	DOUBTFUL
+presence uncertain	DOUBTFUL
+probably extant	DOUBTFUL
+uncertain	DOUBTFUL
+
+erroneous	EXCLUDED
+misidentification	EXCLUDED
+reported in error	EXCLUDED
+
+ephemeral	IRREGULAR
+episodic	IRREGULAR
+vagrant	IRREGULAR
+
+adventive	PRESENT
+alien	PRESENT
+endemic	PRESENT
+extant	PRESENT
+native	PRESENT
+native endemic	PRESENT
+native non-endemic	PRESENT
+reported	PRESENT
+
+casual	RARE
+rara	RARE
+uncommon	RARE

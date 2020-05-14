@@ -1,28 +1,108 @@
-adventive	PRESENT
-alien	PRESENT
-casual	RARE
-comun	COMMON
-endemic	PRESENT
-ephemeral	IRREGULAR
-episodic	IRREGULAR
-erroneous	EXCLUDED
-extant	PRESENT
+# A command used to sort this file: 
+# LANG=C sort occurrence_status.tsv -i -t $'\t' -k 2,2 -k1,1  
+abundant 20-99  
+damaged 
+defoliated  
+desconocido 
+doubtful  
+dudoso  
+e 
+en  
+erroneous	
+incomplet 
+misidentification	
+ne sait pas 
+not specified	
+nt 	
+possibly extant	
+possibly extinct	
+presence uncertain	
+probably extant	
+q 
+reported in error	
+sanitation fellings 
+uncertain	
+unknown 
+vu 	
+
+ausente	ABSENT
 extinct	ABSENT
 extirpated	ABSENT
-fairly common	COMMON
-frequent	COMMON
-misidentification	EXCLUDED
+non observé	ABSENT
+
+визуально	PRESENT
+летящие	PRESENT
+песня, голос 	PRESENT
+abundant 	PRESENT
+abundant (10% <= p < 20%)	PRESENT
+abundante	PRESENT
+adventive	PRESENT
+alien	PRESENT
+attacked 	PRESENT
+average cover: 1-5% maximum cover: 1-5%	PRESENT
+casual	PRESENT
+collected	PRESENT
+common 	PRESENT
+common (5% <= p < 10%) 	PRESENT
+común	PRESENT
+complet	PRESENT
+comun	PRESENT
+confirmed breeding 	PRESENT
+confirmed present	PRESENT
+dominant (20% <= p)	PRESENT
+endemic	PRESENT
+ephemeral	PRESENT
+episodic	PRESENT
+established	PRESENT
+extant	PRESENT
+fairly common	PRESENT
+fairly common	PRESENT
+frequent	PRESENT
+frequent 	PRESENT
+frequente	PRESENT
+infested 	PRESENT
+infrequent 	PRESENT
+irregular	PRESENT
+locally abundant 	PRESENT
+locally common 	PRESENT
+locally established	PRESENT
+muito abundante	PRESENT
+muy común	PRESENT
 native	PRESENT
 native endemic	PRESENT
 native non-endemic	PRESENT
-not specified	DOUBTFUL
-possibly extant	DOUBTFUL
-possibly extinct	DOUBTFUL
-presence uncertain	DOUBTFUL
-probably extant	DOUBTFUL
-rara	RARE
+observed in breeding season	PRESENT
+occasional 	PRESENT
+outbreak 	PRESENT
+p	PRESENT
+pair 	PRESENT
+plentiful	PRESENT
+poco común 	PRESENT
+possible breeding	PRESENT
+possibly breeding	PRESENT
+pouco abundante	PRESENT
+presence 	PRESENT
+present	PRESENT
+present (1% <= p < 5%) 	PRESENT
+presente 	PRESENT
+presente en el area	PRESENT
+probable breeding	PRESENT
+probably breeding	PRESENT
+présent	PRESENT
+rara	PRESENT
+rare 	PRESENT
+rare (p < 1%)	PRESENT
+rare 1-4 	PRESENT
+raro 	PRESENT
 reported	PRESENT
-reported in error	EXCLUDED
-uncertain	DOUBTFUL
-uncommon	RARE
-vagrant	IRREGULAR
+reported 	PRESENT
+stocked	PRESENT
+treated	PRESENT
+unclear breeding certaint	PRESENT
+uncommon	PRESENT
+uncommon 	PRESENT
+vagrant	PRESENT
+very abundant 100-499	PRESENT
+very common	PRESENT
+very plentiful 	PRESENT
+very very abundant > 500 	PRESENT
