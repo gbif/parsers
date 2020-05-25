@@ -60,59 +60,60 @@
 <span class="sourceLineNo">052</span>    assertParseSuccess(BasisOfRecord.OBSERVATION, "sound recording");<a name="line.52"></a>
 <span class="sourceLineNo">053</span>    assertParseSuccess(BasisOfRecord.OBSERVATION, "Observation");<a name="line.53"></a>
 <span class="sourceLineNo">054</span>    assertParseSuccess(BasisOfRecord.OBSERVATION, "O");<a name="line.54"></a>
-<span class="sourceLineNo">055</span>    assertParseSuccess(BasisOfRecord.UNKNOWN, "unknown");<a name="line.55"></a>
-<span class="sourceLineNo">056</span>    assertParseSuccess(BasisOfRecord.OBSERVATION, "observation");<a name="line.56"></a>
-<span class="sourceLineNo">057</span>    assertParseSuccess(BasisOfRecord.PRESERVED_SPECIMEN, "specimen");<a name="line.57"></a>
-<span class="sourceLineNo">058</span>    assertParseSuccess(BasisOfRecord.LIVING_SPECIMEN, "living");<a name="line.58"></a>
-<span class="sourceLineNo">059</span>    assertParseSuccess(BasisOfRecord.LIVING_SPECIMEN, "germplasm");<a name="line.59"></a>
-<span class="sourceLineNo">060</span>    assertParseSuccess(BasisOfRecord.FOSSIL_SPECIMEN, "fossil");<a name="line.60"></a>
-<span class="sourceLineNo">061</span>    assertParseSuccess(BasisOfRecord.LITERATURE, "literature");<a name="line.61"></a>
-<span class="sourceLineNo">062</span><a name="line.62"></a>
-<span class="sourceLineNo">063</span>    assertParseSuccess(BasisOfRecord.PRESERVED_SPECIMEN, "50 specimens");<a name="line.63"></a>
-<span class="sourceLineNo">064</span>    assertParseSuccess(BasisOfRecord.PRESERVED_SPECIMEN, "1250 specimens");<a name="line.64"></a>
-<span class="sourceLineNo">065</span>    assertParseSuccess(BasisOfRecord.PRESERVED_SPECIMEN, "72 specimens");<a name="line.65"></a>
-<span class="sourceLineNo">066</span>    assertParseSuccess(BasisOfRecord.PRESERVED_SPECIMEN, "Espèce");<a name="line.66"></a>
-<span class="sourceLineNo">067</span>    assertParseSuccess(BasisOfRecord.LIVING_SPECIMEN, "living, growing plant");<a name="line.67"></a>
-<span class="sourceLineNo">068</span>    assertParseSuccess(BasisOfRecord.LIVING_SPECIMEN, "germplasm");<a name="line.68"></a>
-<span class="sourceLineNo">069</span>    assertParseSuccess(BasisOfRecord.PRESERVED_SPECIMEN, "Alcohol / Microscope");<a name="line.69"></a>
-<span class="sourceLineNo">070</span>    assertParseSuccess(BasisOfRecord.PRESERVED_SPECIMEN, "preservé 179600");<a name="line.70"></a>
-<span class="sourceLineNo">071</span>  }<a name="line.71"></a>
-<span class="sourceLineNo">072</span><a name="line.72"></a>
+<span class="sourceLineNo">055</span>    assertParseSuccess(BasisOfRecord.HUMAN_OBSERVATION, "HumanObservation");<a name="line.55"></a>
+<span class="sourceLineNo">056</span>    assertParseSuccess(BasisOfRecord.UNKNOWN, "unknown");<a name="line.56"></a>
+<span class="sourceLineNo">057</span>    assertParseSuccess(BasisOfRecord.OBSERVATION, "observation");<a name="line.57"></a>
+<span class="sourceLineNo">058</span>    assertParseSuccess(BasisOfRecord.PRESERVED_SPECIMEN, "specimen");<a name="line.58"></a>
+<span class="sourceLineNo">059</span>    assertParseSuccess(BasisOfRecord.LIVING_SPECIMEN, "living");<a name="line.59"></a>
+<span class="sourceLineNo">060</span>    assertParseSuccess(BasisOfRecord.LIVING_SPECIMEN, "germplasm");<a name="line.60"></a>
+<span class="sourceLineNo">061</span>    assertParseSuccess(BasisOfRecord.FOSSIL_SPECIMEN, "fossil");<a name="line.61"></a>
+<span class="sourceLineNo">062</span>    assertParseSuccess(BasisOfRecord.LITERATURE, "literature");<a name="line.62"></a>
+<span class="sourceLineNo">063</span><a name="line.63"></a>
+<span class="sourceLineNo">064</span>    assertParseSuccess(BasisOfRecord.PRESERVED_SPECIMEN, "50 specimens");<a name="line.64"></a>
+<span class="sourceLineNo">065</span>    assertParseSuccess(BasisOfRecord.PRESERVED_SPECIMEN, "1250 specimens");<a name="line.65"></a>
+<span class="sourceLineNo">066</span>    assertParseSuccess(BasisOfRecord.PRESERVED_SPECIMEN, "72 specimens");<a name="line.66"></a>
+<span class="sourceLineNo">067</span>    assertParseSuccess(BasisOfRecord.PRESERVED_SPECIMEN, "Espèce");<a name="line.67"></a>
+<span class="sourceLineNo">068</span>    assertParseSuccess(BasisOfRecord.LIVING_SPECIMEN, "living, growing plant");<a name="line.68"></a>
+<span class="sourceLineNo">069</span>    assertParseSuccess(BasisOfRecord.LIVING_SPECIMEN, "germplasm");<a name="line.69"></a>
+<span class="sourceLineNo">070</span>    assertParseSuccess(BasisOfRecord.PRESERVED_SPECIMEN, "Alcohol / Microscope");<a name="line.70"></a>
+<span class="sourceLineNo">071</span>    assertParseSuccess(BasisOfRecord.PRESERVED_SPECIMEN, "preservé 179600");<a name="line.71"></a>
+<span class="sourceLineNo">072</span>  }<a name="line.72"></a>
 <span class="sourceLineNo">073</span><a name="line.73"></a>
-<span class="sourceLineNo">074</span>  /**<a name="line.74"></a>
-<span class="sourceLineNo">075</span>   * Parse all unique basis of record values found in our index and make sure parsing doesn't get worse.<a name="line.75"></a>
-<span class="sourceLineNo">076</span>   * If the test file is updated, values here need to be adjusted!<a name="line.76"></a>
-<span class="sourceLineNo">077</span>   */<a name="line.77"></a>
-<span class="sourceLineNo">078</span>  @Test<a name="line.78"></a>
-<span class="sourceLineNo">079</span>  public void testOccurrenceValues() throws IOException {<a name="line.79"></a>
-<span class="sourceLineNo">080</span>    final int CURRENT_TESTS_SUCCESSFUL = 248;<a name="line.80"></a>
-<span class="sourceLineNo">081</span>    final int CURRENT_DISTINCT = 9;<a name="line.81"></a>
-<span class="sourceLineNo">082</span><a name="line.82"></a>
-<span class="sourceLineNo">083</span>    int failed = 0;<a name="line.83"></a>
-<span class="sourceLineNo">084</span>    int success = 0;<a name="line.84"></a>
-<span class="sourceLineNo">085</span>    Set&lt;BasisOfRecord&gt; values = Sets.newHashSet();<a name="line.85"></a>
-<span class="sourceLineNo">086</span><a name="line.86"></a>
-<span class="sourceLineNo">087</span>    BufferedReader r = new BufferedReader(new InputStreamReader(<a name="line.87"></a>
-<span class="sourceLineNo">088</span>      getClass().getResourceAsStream("/parse/basisofrecord/test_bor.txt"), Charsets.UTF_8));<a name="line.88"></a>
-<span class="sourceLineNo">089</span>    String line;<a name="line.89"></a>
-<span class="sourceLineNo">090</span>    while ((line=r.readLine()) != null) {<a name="line.90"></a>
-<span class="sourceLineNo">091</span>      ParseResult&lt;BasisOfRecord&gt; parsed = parser.parse(line);<a name="line.91"></a>
-<span class="sourceLineNo">092</span>      if (parsed.isSuccessful()) {<a name="line.92"></a>
-<span class="sourceLineNo">093</span>        success++;<a name="line.93"></a>
-<span class="sourceLineNo">094</span>        values.add(parsed.getPayload());<a name="line.94"></a>
-<span class="sourceLineNo">095</span>      } else {<a name="line.95"></a>
-<span class="sourceLineNo">096</span>        System.out.println("Failed: " + line);<a name="line.96"></a>
-<span class="sourceLineNo">097</span>        failed++;<a name="line.97"></a>
-<span class="sourceLineNo">098</span>      }<a name="line.98"></a>
-<span class="sourceLineNo">099</span>    }<a name="line.99"></a>
-<span class="sourceLineNo">100</span><a name="line.100"></a>
-<span class="sourceLineNo">101</span>    System.out.println(failed + " failed parse results");<a name="line.101"></a>
-<span class="sourceLineNo">102</span>    System.out.println(success + " successful parse results");<a name="line.102"></a>
-<span class="sourceLineNo">103</span>    System.out.println(values.size() + " distinct basis of record values parsed");<a name="line.103"></a>
-<span class="sourceLineNo">104</span>    assertTrue(CURRENT_TESTS_SUCCESSFUL &lt;= success);<a name="line.104"></a>
-<span class="sourceLineNo">105</span>    assertTrue(CURRENT_DISTINCT &lt;= values.size());<a name="line.105"></a>
-<span class="sourceLineNo">106</span>  }<a name="line.106"></a>
-<span class="sourceLineNo">107</span>}<a name="line.107"></a>
+<span class="sourceLineNo">074</span><a name="line.74"></a>
+<span class="sourceLineNo">075</span>  /**<a name="line.75"></a>
+<span class="sourceLineNo">076</span>   * Parse all unique basis of record values found in our index and make sure parsing doesn't get worse.<a name="line.76"></a>
+<span class="sourceLineNo">077</span>   * If the test file is updated, values here need to be adjusted!<a name="line.77"></a>
+<span class="sourceLineNo">078</span>   */<a name="line.78"></a>
+<span class="sourceLineNo">079</span>  @Test<a name="line.79"></a>
+<span class="sourceLineNo">080</span>  public void testOccurrenceValues() throws IOException {<a name="line.80"></a>
+<span class="sourceLineNo">081</span>    final int CURRENT_TESTS_SUCCESSFUL = 248;<a name="line.81"></a>
+<span class="sourceLineNo">082</span>    final int CURRENT_DISTINCT = 9;<a name="line.82"></a>
+<span class="sourceLineNo">083</span><a name="line.83"></a>
+<span class="sourceLineNo">084</span>    int failed = 0;<a name="line.84"></a>
+<span class="sourceLineNo">085</span>    int success = 0;<a name="line.85"></a>
+<span class="sourceLineNo">086</span>    Set&lt;BasisOfRecord&gt; values = Sets.newHashSet();<a name="line.86"></a>
+<span class="sourceLineNo">087</span><a name="line.87"></a>
+<span class="sourceLineNo">088</span>    BufferedReader r = new BufferedReader(new InputStreamReader(<a name="line.88"></a>
+<span class="sourceLineNo">089</span>      getClass().getResourceAsStream("/parse/basisofrecord/test_bor.txt"), Charsets.UTF_8));<a name="line.89"></a>
+<span class="sourceLineNo">090</span>    String line;<a name="line.90"></a>
+<span class="sourceLineNo">091</span>    while ((line=r.readLine()) != null) {<a name="line.91"></a>
+<span class="sourceLineNo">092</span>      ParseResult&lt;BasisOfRecord&gt; parsed = parser.parse(line);<a name="line.92"></a>
+<span class="sourceLineNo">093</span>      if (parsed.isSuccessful()) {<a name="line.93"></a>
+<span class="sourceLineNo">094</span>        success++;<a name="line.94"></a>
+<span class="sourceLineNo">095</span>        values.add(parsed.getPayload());<a name="line.95"></a>
+<span class="sourceLineNo">096</span>      } else {<a name="line.96"></a>
+<span class="sourceLineNo">097</span>        System.out.println("Failed: " + line);<a name="line.97"></a>
+<span class="sourceLineNo">098</span>        failed++;<a name="line.98"></a>
+<span class="sourceLineNo">099</span>      }<a name="line.99"></a>
+<span class="sourceLineNo">100</span>    }<a name="line.100"></a>
+<span class="sourceLineNo">101</span><a name="line.101"></a>
+<span class="sourceLineNo">102</span>    System.out.println(failed + " failed parse results");<a name="line.102"></a>
+<span class="sourceLineNo">103</span>    System.out.println(success + " successful parse results");<a name="line.103"></a>
+<span class="sourceLineNo">104</span>    System.out.println(values.size() + " distinct basis of record values parsed");<a name="line.104"></a>
+<span class="sourceLineNo">105</span>    assertTrue(CURRENT_TESTS_SUCCESSFUL &lt;= success);<a name="line.105"></a>
+<span class="sourceLineNo">106</span>    assertTrue(CURRENT_DISTINCT &lt;= values.size());<a name="line.106"></a>
+<span class="sourceLineNo">107</span>  }<a name="line.107"></a>
+<span class="sourceLineNo">108</span>}<a name="line.108"></a>
 
 
 

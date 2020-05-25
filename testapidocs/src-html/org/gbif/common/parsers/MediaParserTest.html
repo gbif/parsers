@@ -23,16 +23,16 @@
 <span class="sourceLineNo">015</span><a name="line.15"></a>
 <span class="sourceLineNo">016</span>  @Test<a name="line.16"></a>
 <span class="sourceLineNo">017</span>  public void testDetectType() throws Exception {<a name="line.17"></a>
-<span class="sourceLineNo">018</span>    assertEquals(MediaType.StillImage, parser.detectType(buildMO("image/jp2", "abies_alba.jp2"))<a name="line.18"></a>
-<span class="sourceLineNo">019</span>      .getType());<a name="line.19"></a>
-<span class="sourceLineNo">020</span>    assertEquals(MediaType.StillImage, parser.detectType(buildMO("image/jpeg", null)).getType());<a name="line.20"></a>
-<span class="sourceLineNo">021</span>    assertEquals(MediaType.StillImage, parser.detectType(buildMO("image/jpg", null)).getType());<a name="line.21"></a>
-<span class="sourceLineNo">022</span>    assertEquals(MediaType.StillImage, parser.detectType(buildMO(null, "abies_alba.jp2")).getType());<a name="line.22"></a>
-<span class="sourceLineNo">023</span>    assertEquals(MediaType.StillImage, parser.detectType(buildMO(null, "abies_alba.jpg")).getType());<a name="line.23"></a>
-<span class="sourceLineNo">024</span>    assertEquals(MediaType.StillImage, parser.detectType(buildMO(null, "abies_alba.JPG")).getType());<a name="line.24"></a>
-<span class="sourceLineNo">025</span>    assertEquals(MediaType.StillImage, parser.detectType(buildMO(null, "abies_alba.JPeg")).getType());<a name="line.25"></a>
-<span class="sourceLineNo">026</span>    assertEquals(MediaType.StillImage, parser.detectType(buildMO(null, "abies_alba.TIFF")).getType());<a name="line.26"></a>
-<span class="sourceLineNo">027</span>    assertEquals(MediaType.StillImage, parser.detectType(buildMO(null, "http://imagens3.jbrj.gov.br/fsi/server?type=image&amp;source=rb/1/37/81/25/01378125.jpg")).getType());<a name="line.27"></a>
+<span class="sourceLineNo">018</span>    assertEquals(MediaType.StillImage, parser.detectType(buildMO("image/jp2", "abies_alba.jp2")).getType());<a name="line.18"></a>
+<span class="sourceLineNo">019</span>    assertEquals(MediaType.StillImage, parser.detectType(buildMO("image/jpeg", null)).getType());<a name="line.19"></a>
+<span class="sourceLineNo">020</span>    assertEquals(MediaType.StillImage, parser.detectType(buildMO("image/jpg", null)).getType());<a name="line.20"></a>
+<span class="sourceLineNo">021</span>    assertEquals(MediaType.StillImage, parser.detectType(buildMO(null, "abies_alba.jp2")).getType());<a name="line.21"></a>
+<span class="sourceLineNo">022</span>    assertEquals(MediaType.StillImage, parser.detectType(buildMO(null, "abies_alba.jpg")).getType());<a name="line.22"></a>
+<span class="sourceLineNo">023</span>    assertEquals(MediaType.StillImage, parser.detectType(buildMO(null, "abies_alba.JPG")).getType());<a name="line.23"></a>
+<span class="sourceLineNo">024</span>    assertEquals(MediaType.StillImage, parser.detectType(buildMO(null, "abies_alba.JPeg")).getType());<a name="line.24"></a>
+<span class="sourceLineNo">025</span>    assertEquals(MediaType.StillImage, parser.detectType(buildMO(null, "abies_alba.TIFF")).getType());<a name="line.25"></a>
+<span class="sourceLineNo">026</span>    assertEquals(MediaType.StillImage, parser.detectType(buildMO(null, "http://imagens3.jbrj.gov.br/fsi/server?type=image&amp;source=rb/1/37/81/25/01378125.jpg")).getType());<a name="line.26"></a>
+<span class="sourceLineNo">027</span>    assertEquals(MediaType.StillImage, parser.detectType(buildMO(null, "http://rrrcn.wildlifemonitoring.ru/get_photo.php?id=119797")).getType());<a name="line.27"></a>
 <span class="sourceLineNo">028</span><a name="line.28"></a>
 <span class="sourceLineNo">029</span>    assertEquals(MediaType.Sound, parser.detectType(buildMO(null, "abies_alba.mp3")).getType());<a name="line.29"></a>
 <span class="sourceLineNo">030</span>    assertEquals(MediaType.Sound, parser.detectType(buildMO(null, "abies_alba.flac")).getType());<a name="line.30"></a>
@@ -79,28 +79,48 @@
 <span class="sourceLineNo">071</span><a name="line.71"></a>
 <span class="sourceLineNo">072</span>    assertEquals("audio/mpeg", parser.parseMimeType("audio/mp3"));<a name="line.72"></a>
 <span class="sourceLineNo">073</span>    assertEquals("audio/mpeg", parser.parseMimeType("audio/mpeg3"));<a name="line.73"></a>
-<span class="sourceLineNo">074</span>  }<a name="line.74"></a>
-<span class="sourceLineNo">075</span><a name="line.75"></a>
-<span class="sourceLineNo">076</span>  @Test<a name="line.76"></a>
-<span class="sourceLineNo">077</span>  public void testParseHtmlMediaLink() throws Exception {<a name="line.77"></a>
-<span class="sourceLineNo">078</span>    MediaObject mo = buildMO(null, "http://www.gbif.org/image?id=12");<a name="line.78"></a>
-<span class="sourceLineNo">079</span>    parser.detectType(mo);<a name="line.79"></a>
-<span class="sourceLineNo">080</span>    assertNull(mo.getFormat());<a name="line.80"></a>
-<span class="sourceLineNo">081</span>    assertNull(mo.getIdentifier());<a name="line.81"></a>
-<span class="sourceLineNo">082</span>    assertEquals("http://www.gbif.org/image?id=12", mo.getReferences().toString());<a name="line.82"></a>
-<span class="sourceLineNo">083</span>    assertNull(mo.getType());<a name="line.83"></a>
+<span class="sourceLineNo">074</span><a name="line.74"></a>
+<span class="sourceLineNo">075</span>    // Known URL patterns<a name="line.75"></a>
+<span class="sourceLineNo">076</span>    assertEquals("image/jpeg", parser.parseMimeType(URI.create("http://www.unimus.no/felles/bilder/web_hent_bilde.php?id=13080366&amp;type=jpeg")));<a name="line.76"></a>
+<span class="sourceLineNo">077</span>    assertEquals("image/jpeg", parser.parseMimeType(URI.create("http://www.jacq.org/image.php?filename=99618&amp;method=europeana")));<a name="line.77"></a>
+<span class="sourceLineNo">078</span>    assertEquals("image/jpeg", parser.parseMimeType(URI.create("https://images.ala.org.au/image/proxyImageThumbnailLarge?imageId=ffff9990-c4a7-4431-803f-3c5f14bd94ba")));<a name="line.78"></a>
+<span class="sourceLineNo">079</span>    assertEquals("image/jpeg", parser.parseMimeType(URI.create("http://russiabirds.wildlifemonitoring.ru/get_photo.php?id=99981")));<a name="line.79"></a>
+<span class="sourceLineNo">080</span>    assertEquals("image/jpeg", parser.parseMimeType(URI.create("http://rrrcn.wildlifemonitoring.ru/get_photo.php?id=99999")));<a name="line.80"></a>
+<span class="sourceLineNo">081</span>    assertEquals("image/jpeg", parser.parseMimeType(URI.create("http://procyon.acadiau.ca/ecsmith/cgi-bin/image.cgi?NSPM044956P,jpeg")));<a name="line.81"></a>
+<span class="sourceLineNo">082</span>    assertEquals("audio/vnd.wave", parser.parseMimeType(URI.create("http://www.biologie.uni-ulm.de/cgi-bin/perl/sound.pl?sid=T&amp;objid=99999")));<a name="line.82"></a>
+<span class="sourceLineNo">083</span>    assertEquals("audio/mpeg", parser.parseMimeType(URI.create("https://dofbasen.dk/sound_proxy.php?referer=gbif&amp;mode=o&amp;snd=99881321.mp3&amp;raw=1")));<a name="line.83"></a>
 <span class="sourceLineNo">084</span>  }<a name="line.84"></a>
 <span class="sourceLineNo">085</span><a name="line.85"></a>
-<span class="sourceLineNo">086</span>  private MediaObject buildMO(String format, String uri) {<a name="line.86"></a>
-<span class="sourceLineNo">087</span>    MediaObject mo = new MediaObject();<a name="line.87"></a>
-<span class="sourceLineNo">088</span><a name="line.88"></a>
-<span class="sourceLineNo">089</span>    mo.setType(null);<a name="line.89"></a>
-<span class="sourceLineNo">090</span>    mo.setFormat(format);<a name="line.90"></a>
-<span class="sourceLineNo">091</span>    mo.setIdentifier(uri == null ? null : URI.create(uri));<a name="line.91"></a>
-<span class="sourceLineNo">092</span><a name="line.92"></a>
-<span class="sourceLineNo">093</span>    return mo;<a name="line.93"></a>
+<span class="sourceLineNo">086</span>  @Test<a name="line.86"></a>
+<span class="sourceLineNo">087</span>  public void testParseHtmlMediaLink() throws Exception {<a name="line.87"></a>
+<span class="sourceLineNo">088</span>    MediaObject mo = buildMO(null, "http://www.gbif.org/image?id=12");<a name="line.88"></a>
+<span class="sourceLineNo">089</span>    parser.detectType(mo);<a name="line.89"></a>
+<span class="sourceLineNo">090</span>    assertNull(mo.getFormat());<a name="line.90"></a>
+<span class="sourceLineNo">091</span>    assertNull(mo.getIdentifier());<a name="line.91"></a>
+<span class="sourceLineNo">092</span>    assertEquals("http://www.gbif.org/image?id=12", mo.getReferences().toString());<a name="line.92"></a>
+<span class="sourceLineNo">093</span>    assertNull(mo.getType());<a name="line.93"></a>
 <span class="sourceLineNo">094</span>  }<a name="line.94"></a>
-<span class="sourceLineNo">095</span>}<a name="line.95"></a>
+<span class="sourceLineNo">095</span><a name="line.95"></a>
+<span class="sourceLineNo">096</span>  @Test<a name="line.96"></a>
+<span class="sourceLineNo">097</span>  public void testParseKnownImageMediaLink() throws Exception {<a name="line.97"></a>
+<span class="sourceLineNo">098</span>    MediaObject mo = buildMO(null, "http://rrrcn.wildlifemonitoring.ru/get_photo.php?id=119797");<a name="line.98"></a>
+<span class="sourceLineNo">099</span>    parser.detectType(mo);<a name="line.99"></a>
+<span class="sourceLineNo">100</span>    assertEquals(MediaType.StillImage, mo.getType());<a name="line.100"></a>
+<span class="sourceLineNo">101</span>    assertEquals("http://rrrcn.wildlifemonitoring.ru/get_photo.php?id=119797", mo.getIdentifier().toString());<a name="line.101"></a>
+<span class="sourceLineNo">102</span>    assertNull(mo.getReferences());<a name="line.102"></a>
+<span class="sourceLineNo">103</span>    assertEquals("image/jpeg", mo.getFormat());<a name="line.103"></a>
+<span class="sourceLineNo">104</span>  }<a name="line.104"></a>
+<span class="sourceLineNo">105</span><a name="line.105"></a>
+<span class="sourceLineNo">106</span>  private MediaObject buildMO(String format, String uri) {<a name="line.106"></a>
+<span class="sourceLineNo">107</span>    MediaObject mo = new MediaObject();<a name="line.107"></a>
+<span class="sourceLineNo">108</span><a name="line.108"></a>
+<span class="sourceLineNo">109</span>    mo.setType(null);<a name="line.109"></a>
+<span class="sourceLineNo">110</span>    mo.setFormat(format);<a name="line.110"></a>
+<span class="sourceLineNo">111</span>    mo.setIdentifier(uri == null ? null : URI.create(uri));<a name="line.111"></a>
+<span class="sourceLineNo">112</span><a name="line.112"></a>
+<span class="sourceLineNo">113</span>    return mo;<a name="line.113"></a>
+<span class="sourceLineNo">114</span>  }<a name="line.114"></a>
+<span class="sourceLineNo">115</span>}<a name="line.115"></a>
 
 
 

@@ -1,3 +1,4 @@
+org.gbif.api.annotation
 org.gbif.api.exception
 org.gbif.api.jackson
 org.gbif.api.model
@@ -14,8 +15,8 @@ org.gbif.api.model.metrics.cube
 org.gbif.api.model.occurrence
 org.gbif.api.model.occurrence.predicate
 org.gbif.api.model.occurrence.search
-org.gbif.api.model.occurrence.sql
-org.gbif.api.model.occurrence.sql.serde
+org.gbif.api.model.pipelines
+org.gbif.api.model.pipelines.ws
 org.gbif.api.model.registry
 org.gbif.api.model.registry.eml
 org.gbif.api.model.registry.eml.curatorial
@@ -30,6 +31,7 @@ org.gbif.api.service.common
 org.gbif.api.service.crawler
 org.gbif.api.service.metrics
 org.gbif.api.service.occurrence
+org.gbif.api.service.pipelines
 org.gbif.api.service.registry
 org.gbif.api.util
 org.gbif.api.util.comparators
@@ -38,6 +40,7 @@ org.gbif.api.util.iterables
 org.gbif.api.v2
 org.gbif.api.vocabulary
 org.gbif.api.vocabulary.collections
+org.gbif.api.ws.mixin
 org.gbif.common.parsers
 org.gbif.common.parsers.core
 org.gbif.common.parsers.date
