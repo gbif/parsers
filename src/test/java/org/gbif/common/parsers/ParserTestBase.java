@@ -41,6 +41,7 @@ public abstract class ParserTestBase<T> implements LineProcessor<ParserTestBase.
   protected void assertParseSuccess(T expected, ParseResult.CONFIDENCE confidence, String input) {
     ParseResult<T> parsed = parser.parse(input);
     assertNotNull(parsed);
+//    System.out.println(parsed);
     assertEquals("BAD PARSING OF: "+input, ParseResult.STATUS.SUCCESS, parsed.getStatus());
     assertNotNull(parsed.getPayload());
     assertEquals("BAD PARSING OF: "+input, expected, parsed.getPayload());

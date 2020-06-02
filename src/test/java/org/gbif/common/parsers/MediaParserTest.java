@@ -5,6 +5,7 @@ import org.gbif.api.vocabulary.MediaType;
 
 import java.net.URI;
 
+import org.gbif.dwc.terms.TermFactory;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
