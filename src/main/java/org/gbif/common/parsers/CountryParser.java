@@ -21,6 +21,8 @@ public class CountryParser extends EnumParser<Country> {
   // "off Australia"
   private static final Pattern REMOVE_OFF_PATTERN = Pattern.compile("off ", Pattern.CASE_INSENSITIVE);
 
+  private static final String ISO_3166_2_FORMAT = "ISO_3166-2:";
+  private static final String ISO_3166_3_FORMAT = "ISO_3166-3:";
 
   private CountryParser() {
     super(Country.class, false);
@@ -30,6 +32,8 @@ public class CountryParser extends EnumParser<Country> {
       add(c.getTitle(), c);
       add(c.getIso2LetterCode(), c);
       add(c.getIso3LetterCode(), c);
+      add(ISO_3166_2_FORMAT+c.getIso2LetterCode(), c);
+      add(ISO_3166_3_FORMAT+c.getIso3LetterCode(), c);
     }
     // and Kosovo (which is not an official code, but should be treated as such by GBIF)
     add(Country.KOSOVO.name(), Country.KOSOVO);
