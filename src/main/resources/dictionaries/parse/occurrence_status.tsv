@@ -1,6 +1,5 @@
 # A command used to sort this file: 	
 # LANG=C sort occurrence_status.tsv -i -t $'\t' -k 2,2 -k1,1  	
-abundant 20-99  	
 damaged 	
 defoliated  	
 desconocido 	
@@ -34,6 +33,7 @@ non observé	ABSENT
 летящие	PRESENT
 песня, голос	PRESENT
 abundant	PRESENT
+abundant 20-99  	PRESENT
 abundant (10% <= p < 20%)	PRESENT
 abundante	PRESENT
 adventive	PRESENT
