@@ -1,5 +1,6 @@
 package org.gbif.common.parsers.geospatial;
 
+import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 
 /**
@@ -26,7 +27,7 @@ public class DoubleAccuracy {
 
   @Override
   public String toString() {
-    return Objects.toStringHelper(this)
+    return MoreObjects.toStringHelper(this)
       .add("value", value)
       .add("accuracy", accuracy)
       .toString();

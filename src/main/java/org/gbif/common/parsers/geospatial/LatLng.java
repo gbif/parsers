@@ -1,5 +1,6 @@
 package org.gbif.common.parsers.geospatial;
 
+import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 
 /**
@@ -30,7 +31,7 @@ public class LatLng {
 
   @Override
   public String toString() {
-    return Objects.toStringHelper(this)
+    return MoreObjects.toStringHelper(this)
       .add("lat", lat)
       .add("lng", lng)
       .toString();
