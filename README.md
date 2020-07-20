@@ -49,10 +49,9 @@ For more information and details about the date parsing see the [Date Parsing Do
 
 
 ## Policies
- * Built as Java 6 artifact until the [IPT](https://github.com/gbif/ipt) upgrades its minimal Java version (see https://github.com/gbif/ipt/issues/1222).
-
+ * Built as Java 8 artifact
+ 
 ## Documentation
- * [JavaDoc](http://gbif.github.io/parsers/apidocs/)
-
+ * [JavaDoc](https://gbif.github.io/parsers/apidocs/)
 
 [1] "Parser." Wikipedia: The Free Encyclopedia. Wikimedia Foundation, Inc. Retrieved June 28, 2016, from <https://en.wikipedia.org/wiki/Parsing#Parser>
