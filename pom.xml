@@ -9,7 +9,7 @@
   </parent>
 
   <artifactId>gbif-parsers</artifactId>
-  <version>0.51-SNAPSHOT</version>
+  <version>0.52-SNAPSHOT</version>
   <packaging>jar</packaging>
 
   <name>GBIF Parsers</name>

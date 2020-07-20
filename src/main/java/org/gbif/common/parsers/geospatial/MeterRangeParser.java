@@ -18,6 +18,8 @@ import org.slf4j.LoggerFactory;
  * Utilities for parsing min/max meter measurements in general plus specific additions and validations
  * for elevation, depth and distance above surface.
  *
+ * Support Km, Feet, Inch to meter
+ *
  * TODO: consider to use the JScience Library:
  *  http://jscience.org/api/javax/measure/unit/package-summary.html
  *  http://jscience.org/api/javax/measure/unit/Unit.html
@@ -38,12 +40,17 @@ public class MeterRangeParser {
   /**
    * Pattern for recognising measurements in feet
    */
-  private static final Pattern FEET_MARKER_PATTERN = Pattern.compile(".*ft.*|.*'.*", Pattern.CASE_INSENSITIVE);
+  private static final Pattern FEET_MARKER_PATTERN = Pattern.compile(".*ft.*|.*'.*|.*feet.*|.*f.*", Pattern.CASE_INSENSITIVE);
 
   /**
    * Pattern for recognising measurements in inches
    */
-  private static final Pattern INCHES_MARKER_PATTERN = Pattern.compile(".*in.*|.*\".*", Pattern.CASE_INSENSITIVE);
+  private static final Pattern INCHES_MARKER_PATTERN = Pattern.compile(".*in.*|.*\".*|.*inch.*|.*inches.*", Pattern.CASE_INSENSITIVE);
+
+  /**
+   * Pattern for recognising measurements in km
+   */
+  private static final Pattern KM_MARKER_PATTERN = Pattern.compile(".*km.*|.*kilometres.*|.*kilometers.*", Pattern.CASE_INSENSITIVE);
 
   /**
    * Pattern for recognising a range value
@@ -60,6 +67,10 @@ public class MeterRangeParser {
    */
   private static final float INCHES_TO_METRES = 0.0254f;
 
+  /**
+   * Constant factor to convert from km to metres.
+   */
+  private static final float KM_TO_METRES = 1000f;
 
   /**
    * The lowest elevation value recognised as valid:
@@ -99,6 +110,7 @@ public class MeterRangeParser {
     private T measurement;
     private boolean isInFeet;
     private boolean isInInches;
+    private boolean isInKm;
     private boolean containsNonNumeric;
     private boolean minMaxSwapped;
     private boolean tooLarge;
@@ -130,6 +142,7 @@ public class MeterRangeParser {
     public void addIssues(MeasurementWrapper<?> issues) {
       isInFeet = isInFeet || issues.isInFeet;
       isInInches = isInInches || issues.isInInches;
+      isInKm = isInKm || issues.isInKm;
       containsNonNumeric = containsNonNumeric || issues.containsNonNumeric;
       minMaxSwapped = minMaxSwapped || issues.minMaxSwapped;
       tooLarge = tooLarge || issues.tooLarge;
@@ -200,7 +213,7 @@ public class MeterRangeParser {
     if(elevation.containsNonNumeric) {
       issues.add(OccurrenceIssue.ELEVATION_NON_NUMERIC);
     }
-    if(elevation.isInFeet || elevation.isInInches) {
+    if(elevation.isInFeet || elevation.isInInches || elevation.isInKm) {
       issues.add(OccurrenceIssue.ELEVATION_NOT_METRIC);
     }
     if(elevation.minMaxSwapped) {
@@ -231,7 +244,7 @@ public class MeterRangeParser {
     if(depth.containsNonNumeric) {
       issues.add(OccurrenceIssue.DEPTH_NON_NUMERIC);
     }
-    if(depth.isInFeet || depth.isInInches) {
+    if(depth.isInFeet || depth.isInInches || depth.isInKm) {
       issues.add(OccurrenceIssue.DEPTH_NOT_METRIC);
     }
     if(depth.minMaxSwapped) {
@@ -290,6 +303,7 @@ public class MeterRangeParser {
       } else {
         iMeter.isInFeet = FEET_MARKER_PATTERN.matcher(meter).matches();
         iMeter.isInInches = INCHES_MARKER_PATTERN.matcher(meter).matches();
+        iMeter.isInKm = KM_MARKER_PATTERN.matcher(meter).matches();
 
         // handle 6-7m values
         if (SEP_MARKER_PATTERN.matcher(meter).matches()) {
@@ -323,6 +337,8 @@ public class MeterRangeParser {
             iMeter.measurement = convertFeetToMetres(iMeter.measurement);
           } else if (iMeter.isInInches) {
             iMeter.measurement = convertInchesToMetres(iMeter.measurement);
+          } else if (iMeter.isInKm){
+            iMeter.measurement = convertKmToMetres(iMeter.measurement);
           }
         }
       }
@@ -351,6 +367,10 @@ public class MeterRangeParser {
 
   private static double convertInchesToMetres(double inches) {
     return inches * INCHES_TO_METRES;
+  }
+
+  private static double convertKmToMetres(double km) {
+    return km * KM_TO_METRES;
   }
 
   private static double convertFeetToMetres(double feet) {
