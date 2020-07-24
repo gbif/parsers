@@ -25,7 +25,9 @@ public class MeterRangeParserTest {
     assertResult(MeterRangeParser.parseElevation("-100", "-50", null), true, -75d, 25d);
     assertResult(MeterRangeParser.parseElevation("110", "115", null), true, 112.5d, 2.5d);
     assertResult(MeterRangeParser.parseElevation("10", "10", "1"), true, 10d, 1d);
-    assertResult(MeterRangeParser.parseElevation("10", "10", "1"), true, 10d, 1d);
+    assertResult(MeterRangeParser.parseElevation("10.0", "12.5", "1"), true, 11.25d, 2.25d);
+    // European commas are ambiguous, see issue 23.
+    assertResult(MeterRangeParser.parseElevation("10,0", "12,5", "1"), true, 11.25d, 2.25d);
     assertResult(MeterRangeParser.parseElevation(null, "10000", "1"), true, 10000d, 1d);
     assertResult(
         MeterRangeParser.parseElevation("4061987", "4061987", null),
@@ -118,13 +120,6 @@ public class MeterRangeParserTest {
         OccurrenceIssue.DEPTH_NOT_METRIC,
         OccurrenceIssue.DEPTH_NON_NUMERIC);
     assertResult(
-        MeterRangeParser.parseDepth("3280f", null, "1"),
-        true,
-        999.74,
-        1d,
-        OccurrenceIssue.DEPTH_NOT_METRIC,
-        OccurrenceIssue.DEPTH_NON_NUMERIC);
-    assertResult(
         MeterRangeParser.parseDepth("30 In", null, "1"),
         true,
         0.76,
@@ -143,13 +138,18 @@ public class MeterRangeParserTest {
         true,
         3000d,
         1d,
-        OccurrenceIssue.DEPTH_NOT_METRIC,
         OccurrenceIssue.DEPTH_NON_NUMERIC);
     assertResult(
         MeterRangeParser.parseDepth("3kilometres", null, "1"),
         true,
         3000d,
         1d,
+        OccurrenceIssue.DEPTH_NON_NUMERIC);
+    assertResult(
+        MeterRangeParser.parseDepth("30 fm", null, "1 fm"),
+        true,
+        54.86,
+        1.83d,
         OccurrenceIssue.DEPTH_NOT_METRIC,
         OccurrenceIssue.DEPTH_NON_NUMERIC);
 
@@ -160,6 +160,22 @@ public class MeterRangeParserTest {
         null,
         1d,
         OccurrenceIssue.DEPTH_UNLIKELY);
+
+    // unknown unit assumed to be metres
+    assertResult(
+        MeterRangeParser.parseDepth("30 xyz", null, "1"),
+        true,
+        30.0,
+        1d,
+        OccurrenceIssue.DEPTH_NON_NUMERIC);
+
+    // ambiguous unit (feet or fathoms)
+    assertResult(
+      MeterRangeParser.parseDepth("3280f", null, "1"),
+      true,
+      3280.0,
+      1d,
+      OccurrenceIssue.DEPTH_NON_NUMERIC);
 
     // nonsense
     assertResult(

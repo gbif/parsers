@@ -15,10 +15,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Utilities for parsing min/max meter measurements in general plus specific additions and validations
- * for elevation, depth and distance above surface.
+ * Utilities for parsing min/max meter measurements in general plus specific additions and
+ * validations for elevation, depth and distance above surface.
  *
- * Support Km, Feet, Inch to meter
+ * Accepts metres and converts centimetres, kilometres, nautical miles, fathoms, feet and inches to
+ * metres.
  *
  * TODO: consider to use the JScience Library:
  *  http://jscience.org/api/javax/measure/unit/package-summary.html
@@ -30,17 +31,27 @@ public class MeterRangeParser {
   /**
    * Pattern for removing measurement denominations
    */
-  private static final Pattern MEASURE_MARKER_PATTERN = Pattern.compile(".*[a-zA-Z].*");
+  private static final Pattern MEASURE_MARKER_PATTERN = Pattern.compile(".*[a-zA-Zµ].*");
 
   /**
    * Pattern to remove measurement markers (like "m")
    */
-  private static final Pattern REMOVE_MEASURE_MARKER_PATTERN = Pattern.compile("[a-zA-Z\" \"\"]");
+  private static final Pattern REMOVE_MEASURE_MARKER_PATTERN = Pattern.compile("[a-zA-Zµ\" \"\"]");
+
+  /**
+   * Pattern for recognising measurements in nautical miles
+   */
+  private static final Pattern NAUTICAL_MILES_MARKER_PATTERN = Pattern.compile(".*nm.*|.*nmi.*", Pattern.CASE_INSENSITIVE);
+
+  /**
+   * Pattern for recognising measurements in fathoms
+   */
+  private static final Pattern FATHOMS_MARKER_PATTERN = Pattern.compile(".*fm.*|.*fathom.*|.*fathoms.*", Pattern.CASE_INSENSITIVE);
 
   /**
    * Pattern for recognising measurements in feet
    */
-  private static final Pattern FEET_MARKER_PATTERN = Pattern.compile(".*ft.*|.*'.*|.*feet.*|.*f.*", Pattern.CASE_INSENSITIVE);
+  private static final Pattern FEET_MARKER_PATTERN = Pattern.compile(".*ft.*|.*'.*|.*feet.*", Pattern.CASE_INSENSITIVE);
 
   /**
    * Pattern for recognising measurements in inches
@@ -53,9 +64,24 @@ public class MeterRangeParser {
   private static final Pattern KM_MARKER_PATTERN = Pattern.compile(".*km.*|.*kilometres.*|.*kilometers.*", Pattern.CASE_INSENSITIVE);
 
   /**
+   * Pattern for recognising measurements in cm
+   */
+  private static final Pattern CM_MARKER_PATTERN = Pattern.compile(".*cm.*|.*centimetres.*|.*centimeters.*", Pattern.CASE_INSENSITIVE);
+
+  /**
    * Pattern for recognising a range value
    */
   private static final Pattern SEP_MARKER_PATTERN = Pattern.compile("\\d-.*");
+
+  /**
+   * Constant factor to convert from nautical miles to metres.
+   */
+  private static final float NAUTICAL_MILES_TO_METRES = 1852f;
+
+  /**
+   * Constant factor to convert from fathoms to metres.
+   */
+  private static final float FATHOMS_TO_METRES = 6 * 0.3048f;
 
   /**
    * Constant factor to convert from feet to metres.
@@ -73,6 +99,11 @@ public class MeterRangeParser {
   private static final float KM_TO_METRES = 1000f;
 
   /**
+   * Constant factor to convert from cm to metres.
+   */
+  private static final float CM_TO_METRES = 0.1f;
+
+  /**
    * The lowest elevation value recognised as valid:
    * 10,971 m (35,994 ft) Challenger Deep, Mariana Trench[32]
    */
@@ -85,7 +116,6 @@ public class MeterRangeParser {
    * Max altitude of airline cruises: 13km
    * Max altitude of weather ballons: 34km
    *
-   *
    * @see <a href="http://en.wikipedia.org/wiki/Atmosphere_of_Earth">Atmosphere in wikipedia</a>
    */
   private static final int MAX_ELEVATION = 17000;
@@ -97,7 +127,7 @@ public class MeterRangeParser {
   private static final int MAX_DEPTH = Math.abs(MIN_ELEVATION);
 
   /**
-   * Largest holes digged into the earth are ~4km.
+   * Largest holes dug into the earth are ~4km.
    */
   private static final int MIN_DISTANCE = -5000;
 
@@ -108,8 +138,11 @@ public class MeterRangeParser {
 
   static class MeasurementWrapper<T> {
     private T measurement;
+    private boolean isInNauticalMiles;
+    private boolean isInFathoms;
     private boolean isInFeet;
     private boolean isInInches;
+    private boolean isInCm;
     private boolean isInKm;
     private boolean containsNonNumeric;
     private boolean minMaxSwapped;
@@ -119,12 +152,28 @@ public class MeterRangeParser {
       return measurement;
     }
 
+    public boolean isInNauticalMiles() {
+      return isInNauticalMiles;
+    }
+
+    public boolean isInFathoms() {
+      return isInFathoms;
+    }
+
     public boolean isInFeet() {
       return isInFeet;
     }
 
     public boolean isInInches() {
       return isInInches;
+    }
+
+    public boolean isInCm() {
+      return isInCm;
+    }
+
+    public boolean isInKm() {
+      return isInKm;
     }
 
     public boolean containsNonNumeric() {
@@ -140,8 +189,11 @@ public class MeterRangeParser {
     }
 
     public void addIssues(MeasurementWrapper<?> issues) {
+      isInNauticalMiles = isInNauticalMiles || issues.isInNauticalMiles;
+      isInFathoms = isInFathoms || issues.isInFathoms;
       isInFeet = isInFeet || issues.isInFeet;
       isInInches = isInInches || issues.isInInches;
+      isInCm = isInCm || issues.isInCm;
       isInKm = isInKm || issues.isInKm;
       containsNonNumeric = containsNonNumeric || issues.containsNonNumeric;
       minMaxSwapped = minMaxSwapped || issues.minMaxSwapped;
@@ -150,10 +202,12 @@ public class MeterRangeParser {
   }
 
   /**
-   * Takes min and max values in meters and a known precision and comes up woth a single mean value and its accuracy.
-   * This method tries also to parse common measurements given in feet or inches and converts them to meters.
+   * Takes min and max values in metres and a known precision and calculates a single mean value and
+   * its accuracy. This method tries also to parse common measurements given in fathoms, feet,
+   * inches, km or cm and converts them to metres.
    */
-  public static MeasurementWrapper<DoubleAccuracy> parseMeterRange(String minRaw, @Nullable String maxRaw, @Nullable String precisionRaw) {
+  public static MeasurementWrapper<DoubleAccuracy> parseMeterRange(
+      String minRaw, @Nullable String maxRaw, @Nullable String precisionRaw) {
     MeasurementWrapper<DoubleAccuracy> result = new MeasurementWrapper<DoubleAccuracy>();
 
     MeasurementWrapper<Double> min = parseInMeter(minRaw);
@@ -213,7 +267,8 @@ public class MeterRangeParser {
     if(elevation.containsNonNumeric) {
       issues.add(OccurrenceIssue.ELEVATION_NON_NUMERIC);
     }
-    if(elevation.isInFeet || elevation.isInInches || elevation.isInKm) {
+    if(elevation.isInNauticalMiles || elevation.isInFathoms
+      || elevation.isInFeet || elevation.isInInches) {
       issues.add(OccurrenceIssue.ELEVATION_NOT_METRIC);
     }
     if(elevation.minMaxSwapped) {
@@ -244,7 +299,7 @@ public class MeterRangeParser {
     if(depth.containsNonNumeric) {
       issues.add(OccurrenceIssue.DEPTH_NON_NUMERIC);
     }
-    if(depth.isInFeet || depth.isInInches || depth.isInKm) {
+    if(depth.isInNauticalMiles || depth.isInFathoms || depth.isInFeet || depth.isInInches) {
       issues.add(OccurrenceIssue.DEPTH_NOT_METRIC);
     }
     if(depth.minMaxSwapped) {
@@ -276,8 +331,8 @@ public class MeterRangeParser {
   }
 
   /**
-   * Parses a string supposed to be a value in meters.
-   * Accepts also feet if marked with a unit and converts them
+   * Parses a string supposed to be a value in metres.
+   * Accepts nautical miles, fathoms, feet, inches if marked with a unit and converts them
    */
   public static ParseResult<Double> parseMeters(String meter) {
     MeasurementWrapper<Double> result = parseInMeter(meter);
@@ -301,9 +356,12 @@ public class MeterRangeParser {
         iMeter.measurement = NumberParser.parseDouble(meter);
 
       } else {
+        iMeter.isInNauticalMiles = NAUTICAL_MILES_MARKER_PATTERN.matcher(meter).matches();
+        iMeter.isInFathoms = FATHOMS_MARKER_PATTERN.matcher(meter).matches();
         iMeter.isInFeet = FEET_MARKER_PATTERN.matcher(meter).matches();
         iMeter.isInInches = INCHES_MARKER_PATTERN.matcher(meter).matches();
         iMeter.isInKm = KM_MARKER_PATTERN.matcher(meter).matches();
+        iMeter.isInCm = CM_MARKER_PATTERN.matcher(meter).matches();
 
         // handle 6-7m values
         if (SEP_MARKER_PATTERN.matcher(meter).matches()) {
@@ -333,20 +391,26 @@ public class MeterRangeParser {
 
         if (iMeter.measurement != null) {
           // convert to metric
-          if (iMeter.isInFeet) {
+          if (iMeter.isInNauticalMiles) {
+            iMeter.measurement = convertNauticalMilesToMetres(iMeter.measurement);
+          } else if (iMeter.isInFathoms) {
+            iMeter.measurement = convertFathomsToMetres(iMeter.measurement);
+          } else if (iMeter.isInFeet) {
             iMeter.measurement = convertFeetToMetres(iMeter.measurement);
           } else if (iMeter.isInInches) {
             iMeter.measurement = convertInchesToMetres(iMeter.measurement);
           } else if (iMeter.isInKm){
             iMeter.measurement = convertKmToMetres(iMeter.measurement);
+          } else if (iMeter.isInCm){
+            iMeter.measurement = convertCmToMetres(iMeter.measurement);
           }
         }
       }
     } catch (NumberFormatException e) {
-      LOG.debug("Unparsable meter measurement: {}", meter, e.getMessage());
+      LOG.debug("Unparsable metre measurement: {}, {}", meter, e.getMessage());
     }
 
-    // round to centimeters
+    // round to centimetres
     if (iMeter.measurement != null) {
       iMeter.measurement = Math.round(iMeter.measurement * 100.0) / 100.0;
     }
@@ -365,6 +429,18 @@ public class MeterRangeParser {
     return REMOVE_MEASURE_MARKER_PATTERN.matcher(s).replaceAll("");
   }
 
+  private static double convertNauticalMilesToMetres(double nauticalMiles) {
+    return nauticalMiles * NAUTICAL_MILES_TO_METRES;
+  }
+
+  private static double convertFathomsToMetres(double fathoms) {
+    return fathoms * FATHOMS_TO_METRES;
+  }
+
+  private static double convertFeetToMetres(double feet) {
+    return feet * FEET_TO_METRES;
+  }
+
   private static double convertInchesToMetres(double inches) {
     return inches * INCHES_TO_METRES;
   }
@@ -373,8 +449,8 @@ public class MeterRangeParser {
     return km * KM_TO_METRES;
   }
 
-  private static double convertFeetToMetres(double feet) {
-    return feet * FEET_TO_METRES;
+  private static double convertCmToMetres(double cm) {
+    return cm * CM_TO_METRES;
   }
 
   /**
