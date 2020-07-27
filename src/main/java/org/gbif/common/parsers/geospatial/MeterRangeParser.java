@@ -31,47 +31,47 @@ public class MeterRangeParser {
   /**
    * Pattern for removing measurement denominations
    */
-  private static final Pattern MEASURE_MARKER_PATTERN = Pattern.compile(".*[a-zA-Zµ].*");
+  private static final Pattern MEASURE_MARKER_PATTERN = Pattern.compile("[a-zA-Zµ]");
 
   /**
-   * Pattern to remove measurement markers (like "m")
+   * Pattern to remove measurement markers (like "m", "FT.")
    */
-  private static final Pattern REMOVE_MEASURE_MARKER_PATTERN = Pattern.compile("[a-zA-Zµ\" \"\"]");
+  private static final Pattern REMOVE_MEASURE_MARKER_PATTERN = Pattern.compile("[a-zA-Zµ\" ]\\.?");
 
   /**
    * Pattern for recognising measurements in nautical miles
    */
-  private static final Pattern NAUTICAL_MILES_MARKER_PATTERN = Pattern.compile(".*nm.*|.*nmi.*", Pattern.CASE_INSENSITIVE);
+  private static final Pattern NAUTICAL_MILES_MARKER_PATTERN = Pattern.compile("nm|nmi", Pattern.CASE_INSENSITIVE);
 
   /**
    * Pattern for recognising measurements in fathoms
    */
-  private static final Pattern FATHOMS_MARKER_PATTERN = Pattern.compile(".*fm.*|.*fathom.*|.*fathoms.*", Pattern.CASE_INSENSITIVE);
+  private static final Pattern FATHOMS_MARKER_PATTERN = Pattern.compile("fm|fathom|fathoms", Pattern.CASE_INSENSITIVE);
 
   /**
    * Pattern for recognising measurements in feet
    */
-  private static final Pattern FEET_MARKER_PATTERN = Pattern.compile(".*ft.*|.*'.*|.*feet.*", Pattern.CASE_INSENSITIVE);
+  private static final Pattern FEET_MARKER_PATTERN = Pattern.compile("ft|'|feet", Pattern.CASE_INSENSITIVE);
 
   /**
    * Pattern for recognising measurements in inches
    */
-  private static final Pattern INCHES_MARKER_PATTERN = Pattern.compile(".*in.*|.*\".*|.*inch.*|.*inches.*", Pattern.CASE_INSENSITIVE);
+  private static final Pattern INCHES_MARKER_PATTERN = Pattern.compile("in|\"|inch|inches", Pattern.CASE_INSENSITIVE);
 
   /**
    * Pattern for recognising measurements in km
    */
-  private static final Pattern KM_MARKER_PATTERN = Pattern.compile(".*km.*|.*kilometres.*|.*kilometers.*", Pattern.CASE_INSENSITIVE);
+  private static final Pattern KM_MARKER_PATTERN = Pattern.compile("km|kilometres|kilometers", Pattern.CASE_INSENSITIVE);
 
   /**
    * Pattern for recognising measurements in cm
    */
-  private static final Pattern CM_MARKER_PATTERN = Pattern.compile(".*cm.*|.*centimetres.*|.*centimeters.*", Pattern.CASE_INSENSITIVE);
+  private static final Pattern CM_MARKER_PATTERN = Pattern.compile("cm|centimetres|centimeters", Pattern.CASE_INSENSITIVE);
 
   /**
    * Pattern for recognising a range value
    */
-  private static final Pattern SEP_MARKER_PATTERN = Pattern.compile("\\d-.*");
+  private static final Pattern SEP_MARKER_PATTERN = Pattern.compile("\\d\\s*-\\s*\\d");
 
   /**
    * Constant factor to convert from nautical miles to metres.
@@ -350,21 +350,21 @@ public class MeterRangeParser {
     }
 
     try {
-      iMeter.containsNonNumeric = MEASURE_MARKER_PATTERN.matcher(meter).matches();
+      iMeter.containsNonNumeric = MEASURE_MARKER_PATTERN.matcher(meter).find();
 
       if (!iMeter.containsNonNumeric()) {
         iMeter.measurement = NumberParser.parseDouble(meter);
 
       } else {
-        iMeter.isInNauticalMiles = NAUTICAL_MILES_MARKER_PATTERN.matcher(meter).matches();
-        iMeter.isInFathoms = FATHOMS_MARKER_PATTERN.matcher(meter).matches();
-        iMeter.isInFeet = FEET_MARKER_PATTERN.matcher(meter).matches();
-        iMeter.isInInches = INCHES_MARKER_PATTERN.matcher(meter).matches();
-        iMeter.isInKm = KM_MARKER_PATTERN.matcher(meter).matches();
-        iMeter.isInCm = CM_MARKER_PATTERN.matcher(meter).matches();
+        iMeter.isInNauticalMiles = NAUTICAL_MILES_MARKER_PATTERN.matcher(meter).find();
+        iMeter.isInFathoms = FATHOMS_MARKER_PATTERN.matcher(meter).find();
+        iMeter.isInFeet = FEET_MARKER_PATTERN.matcher(meter).find();
+        iMeter.isInInches = INCHES_MARKER_PATTERN.matcher(meter).find();
+        iMeter.isInKm = KM_MARKER_PATTERN.matcher(meter).find();
+        iMeter.isInCm = CM_MARKER_PATTERN.matcher(meter).find();
 
         // handle 6-7m values
-        if (SEP_MARKER_PATTERN.matcher(meter).matches()) {
+        if (SEP_MARKER_PATTERN.matcher(meter).find()) {
           // we have been given a range
           try {
             String min = meter.substring(0, meter.indexOf('-')).trim();
