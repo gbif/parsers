@@ -1,5 +1,6 @@
 package org.gbif.common.parsers.date;
 
+import java.util.List;
 import org.gbif.common.parsers.core.ParseResult;
 
 import java.time.DateTimeException;
@@ -10,6 +11,8 @@ import java.util.regex.Pattern;
 import javax.annotation.Nullable;
 
 import org.apache.commons.lang3.StringUtils;
+import org.gbif.common.parsers.core.ParseResult.CONFIDENCE;
+import org.gbif.common.parsers.core.ParseResult.STATUS;
 
 /**
  * Main class to parse a date represented as a single String or as date parts into a {@link TemporalAccessor}.
@@ -33,6 +36,26 @@ class TextDateParser implements TemporalParser {
 
   private static final TemporalParser NUMERICAL_DATE_PARSER = ThreeTenNumericalDateParser.newInstance();
   private static final DatePartsNormalizer DATE_PARTS_NORMALIZER = DatePartsNormalizer.newInstance();
+
+  /**
+   *
+   * When parsing process find an ambiguous date, like 2/3/2000, try @param ambiguous_hints to parse date
+   *
+   * NOTE, it is DIFFERENT with function parse(String input, DateFormatHint hint)
+   *
+   * @param input
+   * @param ambiguous_hints
+   * @return
+   */
+  public ParseResult<TemporalAccessor> parse(String input, DateFormatHint[] ambiguous_hints) {
+    ParseResult<TemporalAccessor> result = parse(input);
+    if(result.getStatus()== STATUS.FAIL && result.getConfidence()==CONFIDENCE.POSSIBLE){
+      for (DateFormatHint hint : ambiguous_hints ) {
+          return parse(input, hint);
+      }
+    }
+    return result;
+  }
 
   @Override
   public ParseResult<TemporalAccessor> parse(String input) {

@@ -6,6 +6,8 @@ package org.gbif.common.parsers.date;
 public enum DateFormatHint {
   YMDTZ,
   YMDT,
+  EU_DMYT,
+  US_MDYT,
   YMD,
   DMY,
   MDY,

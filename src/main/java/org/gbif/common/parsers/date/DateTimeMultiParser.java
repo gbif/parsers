@@ -1,6 +1,7 @@
 package org.gbif.common.parsers.date;
 
 import java.time.temporal.TemporalAccessor;
+import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.Nullable;
 import javax.validation.constraints.NotNull;
@@ -8,6 +9,7 @@ import javax.validation.constraints.NotNull;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
+import jdk.nashorn.internal.objects.annotations.Setter;
 
 /**
  * Supports multiple {@link DateTimeParser} that are considered ambiguous. Two {@link DateTimeParser} are considered
@@ -80,9 +82,11 @@ public class DateTimeMultiParser {
    * @return {@link MultipleParseResult} instance, never null.
    */
   public MultipleParseResult parse(String input){
+
     int numberParsed = 0;
     TemporalAccessor lastParsed = null;
     TemporalAccessor preferredResult = null;
+    List<String> usedFormats = new ArrayList<>();
 
     //lazy initialized assuming it should not be used most of the time
     List<TemporalAccessor> otherResults = null;
@@ -94,6 +98,7 @@ public class DateTimeMultiParser {
           otherResults = Lists.newArrayList();
         }
         otherResults.add(lastParsed);
+        usedFormats.add(currParser.getHint().name());
       }
     }
 
@@ -105,17 +110,22 @@ public class DateTimeMultiParser {
         preferredResult = lastParsed;
       }
     }
-    return new MultipleParseResult(numberParsed, preferredResult, otherResults);
+    //Todo rephase class
+    MultipleParseResult mpr = new MultipleParseResult(numberParsed, preferredResult, otherResults);
+    mpr.formats = usedFormats;
+    return mpr;
   }
 
   /**
    * Nested class representing the result of a multi-parse.
    *
    */
+
   public static class MultipleParseResult {
     private int numberParsed;
     private TemporalAccessor preferredResult;
     private List<TemporalAccessor> otherResults;
+    public List<String> formats;
 
     public MultipleParseResult(int numberParsed, TemporalAccessor preferredResult, List<TemporalAccessor> otherResults){
       this.numberParsed = numberParsed;

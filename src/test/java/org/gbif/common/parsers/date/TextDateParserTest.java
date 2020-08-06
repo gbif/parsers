@@ -1,5 +1,6 @@
 package org.gbif.common.parsers.date;
 
+import java.time.ZonedDateTime;
 import org.gbif.common.parsers.core.ParseResult;
 
 import java.time.LocalDate;
@@ -8,8 +9,10 @@ import java.time.Month;
 import java.time.YearMonth;
 import java.time.temporal.TemporalAccessor;
 
+import org.gbif.common.parsers.core.ParseResult.CONFIDENCE;
 import org.junit.Test;
 
+import static junit.framework.Assert.assertSame;
 import static junit.framework.TestCase.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -168,6 +171,39 @@ public class TextDateParserTest {
   public void testDateNotARange(){
     assertFalse(TEXTDATE_PARSER.parse("1986/03").isSuccessful());
     assertFalse(TEXTDATE_PARSER.parse("1986/03-13").isSuccessful());
+  }
+
+  @Test
+  public void testDMYDateParsing(){
+    ParseResult<TemporalAccessor> parseResult ;
+    parseResult = TEXTDATE_PARSER.parse("1/2/2018T11:20:30.128");
+    assertEquals(CONFIDENCE.POSSIBLE, parseResult.getConfidence());
+    assertEquals(2, parseResult.getAlternativePayloads().size());
+
+    parseResult = TEXTDATE_PARSER.parse("1/2/2018", new DateFormatHint[]{DateFormatHint.DMY});
+    assertEquals("2018-02-01",LocalDate.from(parseResult.getPayload()).toString());
+    parseResult = TEXTDATE_PARSER.parse("1/2/2018T11:20:30",new DateFormatHint[]{DateFormatHint.EU_DMYT});
+    assertEquals("2018-02-01T11:20:30",LocalDateTime.from(parseResult.getPayload()).toString());
+    parseResult = TEXTDATE_PARSER.parse("2018-02-01T11:20:30+0100");
+    assertEquals("2018-02-01T11:20:30+01:00", ZonedDateTime.from(parseResult.getPayload()).toString());
+    parseResult = TEXTDATE_PARSER.parse("1/2/2018T11:20:30.128",new DateFormatHint[]{DateFormatHint.EU_DMYT});
+    assertEquals("2018-02-01T11:20:30.128",LocalDateTime.from(parseResult.getPayload()).toString());
+    parseResult = TEXTDATE_PARSER.parse("1/2/2018 11:20:30+0100",new DateFormatHint[]{DateFormatHint.EU_DMYT});
+    assertEquals("2018-02-01T11:20:30",LocalDateTime.from(parseResult.getPayload()).toString());
+    parseResult = TEXTDATE_PARSER.parse("1/2/2018 11:20:30.128",new DateFormatHint[]{DateFormatHint.EU_DMYT});
+    assertEquals("2018-02-01T11:20:30.128",LocalDateTime.from(parseResult.getPayload()).toString());
+
+    parseResult = TEXTDATE_PARSER.parse("1/2/2018", new DateFormatHint[]{DateFormatHint.MDY});
+    assertEquals("2018-01-02",LocalDate.from(parseResult.getPayload()).toString());
+    parseResult = TEXTDATE_PARSER.parse("1/2/2018T11:20:30.128", new DateFormatHint[]{DateFormatHint.US_MDYT});
+    assertEquals("2018-01-02T11:20:30.128",LocalDateTime.from(parseResult.getPayload()).toString());
+    parseResult = TEXTDATE_PARSER.parse("1/2/2018 11:20:30.128", new DateFormatHint[]{DateFormatHint.US_MDYT});
+    assertEquals("2018-01-02T11:20:30.128",LocalDateTime.from(parseResult.getPayload()).toString());
+    parseResult = TEXTDATE_PARSER.parse("1/2/2018 11:20:30+0100",new DateFormatHint[]{DateFormatHint.US_MDYT});
+    assertEquals("2018-01-02T11:20:30+01:00",ZonedDateTime.from(parseResult.getPayload()).toString());
+
+
+
   }
 
   private void testDateRangeStart(int y, int m, int d, String inDate) {
