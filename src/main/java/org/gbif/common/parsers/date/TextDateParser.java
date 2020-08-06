@@ -39,18 +39,20 @@ class TextDateParser implements TemporalParser {
 
   /**
    *
-   * When parsing process find an ambiguous date, like 2/3/2000, try @param ambiguous_hints to parse date
+   * When the standard parsing process find an ambiguous date, like 2/3/2000, try @param prefResolvers to parse date,
+   * and return the first succeeded result
    *
    * NOTE, it is DIFFERENT with function parse(String input, DateFormatHint hint)
    *
    * @param input
-   * @param ambiguous_hints
-   * @return
+   * @param prefResolvers
+   * @return the first succeeded result
    */
-  public ParseResult<TemporalAccessor> parse(String input, DateFormatHint[] ambiguous_hints) {
+  public ParseResult<TemporalAccessor> parse(String input, DateFormatHint[] prefResolvers) {
     ParseResult<TemporalAccessor> result = parse(input);
-    if(result.getStatus()== STATUS.FAIL && result.getConfidence()==CONFIDENCE.POSSIBLE){
-      for (DateFormatHint hint : ambiguous_hints ) {
+    if(result.getStatus()== STATUS.FAIL && result.getConfidence()==CONFIDENCE.POSSIBLE
+        && result.getAlternativePayloads().size()>1){
+      for (DateFormatHint hint : prefResolvers ) {
           return parse(input, hint);
       }
     }
