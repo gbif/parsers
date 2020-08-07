@@ -291,6 +291,9 @@ class ThreeTenNumericalDateParser implements TemporalParser {
     TemporalAccessor lastParsedSuccess = null;
     TemporalAccessor lastParsedPreferred = null;
     Set<TemporalAccessor> otherParsed = new HashSet();
+    //Checking if result is same due to duplicated format in multiple hints
+    //like "d/M/uu" is defined in DateFormatHint.DMY and DateFormatHint.US_DMYT, it will generate same dates.
+    List<TemporalAccessor> verificationDuplication = new ArrayList<>();
     // Are the results all equal (representing the same TemporalAccessor), used if there is no
     // preferred result defined
     boolean lastParsedSuccessOtherResultsEqual = false;
@@ -299,10 +302,18 @@ class ThreeTenNumericalDateParser implements TemporalParser {
     // here we do not stop when we find a match, we try them all to check for a possible ambiguity
     for (DateTimeMultiParser parserAmbiguity : activeMultiParserList) {
       result = parserAmbiguity.parse(input);
-      numberOfPossiblyAmbiguousMatch += result.getNumberParsed();
 
       if(result.getNumberParsed() > 0){
         lastParsedSuccess = result.getResult();
+        //NOTE: if we define same formats into multiple hints,
+        // like "d/M/uu" is defined in DateFormatHint.DMY and DateFormatHint.US_DMYT, it will generate same dates.
+        // <code>otherResults</code> is a HashSet, value should be unique
+        // thus, it should not be counted into numberOfPossiblyAmbiguousMatch
+        if(!verificationDuplication.contains(lastParsedSuccess)) {
+          numberOfPossiblyAmbiguousMatch += result.getNumberParsed();
+          verificationDuplication.add(lastParsedSuccess);
+        }
+
 
         // make sure to log in case lastParsedSuccessOtherResultsEqual already equals true
         if (lastParsedSuccessOtherResultsEqual) {
