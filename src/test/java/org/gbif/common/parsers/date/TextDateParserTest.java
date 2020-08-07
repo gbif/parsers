@@ -174,13 +174,13 @@ public class TextDateParserTest {
   }
 
   @Test
-  public void testDMYDateParsing(){
+  public void testUS_EUDateParsing(){
     ParseResult<TemporalAccessor> parseResult ;
     parseResult = TEXTDATE_PARSER.parse("1/2/2018T11:20:30.128");
     assertEquals(CONFIDENCE.POSSIBLE, parseResult.getConfidence());
     assertEquals(2, parseResult.getAlternativePayloads().size());
-
-    parseResult = TEXTDATE_PARSER.parse("1/2/2018", new DateFormatHint[]{DateFormatHint.DMY});
+    //EU
+    parseResult = TEXTDATE_PARSER.parse("1/2/2018", new DateFormatHint[]{DateFormatHint.EU_DMYT});
     assertEquals("2018-02-01",LocalDate.from(parseResult.getPayload()).toString());
     parseResult = TEXTDATE_PARSER.parse("1/2/2018T11:20:30",new DateFormatHint[]{DateFormatHint.EU_DMYT});
     assertEquals("2018-02-01T11:20:30",LocalDateTime.from(parseResult.getPayload()).toString());
@@ -192,8 +192,8 @@ public class TextDateParserTest {
     assertEquals("2018-02-01T11:20:30",LocalDateTime.from(parseResult.getPayload()).toString());
     parseResult = TEXTDATE_PARSER.parse("1/2/2018 11:20:30.128",new DateFormatHint[]{DateFormatHint.EU_DMYT});
     assertEquals("2018-02-01T11:20:30.128",LocalDateTime.from(parseResult.getPayload()).toString());
-
-    parseResult = TEXTDATE_PARSER.parse("1/2/2018", new DateFormatHint[]{DateFormatHint.MDY});
+    //US
+    parseResult = TEXTDATE_PARSER.parse("1/2/2018", new DateFormatHint[]{DateFormatHint.US_MDYT});
     assertEquals("2018-01-02",LocalDate.from(parseResult.getPayload()).toString());
     parseResult = TEXTDATE_PARSER.parse("1/2/2018T11:20:30.128", new DateFormatHint[]{DateFormatHint.US_MDYT});
     assertEquals("2018-01-02T11:20:30.128",LocalDateTime.from(parseResult.getPayload()).toString());

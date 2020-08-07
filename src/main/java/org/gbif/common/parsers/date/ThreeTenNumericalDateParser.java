@@ -130,24 +130,29 @@ class ThreeTenNumericalDateParser implements TemporalParser {
               .appendDateTimeParser(
                   "M/d/uuuu'T'HH[[:]mm[[:]ss[.SSS]]]", DateFormatHint.US_MDYT, LocalDateTime::from)
               .build(),
-        DateTimeParserBuilder.newMultiParserListBuilder()
-          .appendDateTimeParser(
-            "d/M/uuuu'T'HH[[:]mm[[:]ss[.SSS]]][X]", DateFormatHint.EU_DMYT, ZonedDateTime::from)
-          .appendDateTimeParser(
-            "M/d/uuuu'T'HH[[:]mm[[:]ss[.SSS]]][X]", DateFormatHint.US_MDYT, ZonedDateTime::from)
+          DateTimeParserBuilder.newMultiParserListBuilder()
+            .appendDateTimeParser(
+              "d/M/uuuu'T'HH[[:]mm[[:]ss[.SSS]]][X]", DateFormatHint.EU_DMYT, ZonedDateTime::from)
+            .appendDateTimeParser(
+              "M/d/uuuu'T'HH[[:]mm[[:]ss[.SSS]]][X]", DateFormatHint.US_MDYT, ZonedDateTime::from)
+            .build(),
+          DateTimeParserBuilder.newMultiParserListBuilder()
+            .appendDateTimeParser(
+              "d/M/uuuu' 'HH[[:]mm[[:]ss[.SSS]]]", DateFormatHint.EU_DMYT, LocalDateTime::from)
+            .appendDateTimeParser(
+              "M/d/uuuu' 'HH[[:]mm[[:]ss[.SSS]]]", DateFormatHint.US_MDYT, LocalDateTime::from)
+            .build(),
+          DateTimeParserBuilder.newMultiParserListBuilder()
+            .appendDateTimeParser(
+              "d/M/uuuu' 'HH[[:]mm[[:]ss[.SSS]]][X]", DateFormatHint.EU_DMYT, ZonedDateTime::from)
+            .appendDateTimeParser(
+              "M/d/uuuu' 'HH[[:]mm[[:]ss[.SSS]]][X]", DateFormatHint.US_MDYT, ZonedDateTime::from)
           .build(),
-        DateTimeParserBuilder.newMultiParserListBuilder()
-          .appendDateTimeParser(
-            "d/M/uuuu' 'HH[[:]mm[[:]ss[.SSS]]]", DateFormatHint.EU_DMYT, LocalDateTime::from)
-          .appendDateTimeParser(
-            "M/d/uuuu' 'HH[[:]mm[[:]ss[.SSS]]]", DateFormatHint.US_MDYT, LocalDateTime::from)
-          .build(),
-        DateTimeParserBuilder.newMultiParserListBuilder()
-          .appendDateTimeParser(
-            "d/M/uuuu' 'HH[[:]mm[[:]ss[.SSS]]][X]", DateFormatHint.EU_DMYT, ZonedDateTime::from)
-          .appendDateTimeParser(
-            "M/d/uuuu' 'HH[[:]mm[[:]ss[.SSS]]][X]", DateFormatHint.US_MDYT, ZonedDateTime::from)
-          .build(),
+          DateTimeParserBuilder.newMultiParserListBuilder()//Copied from DateFormatHint.DMY
+           .appendDateTimeParser("d/M/uuuu", DateFormatHint.EU_DMYT, LocalDate::from)
+           .appendDateTimeParser("M/d/uuuu", DateFormatHint.US_MDYT, LocalDate::from)
+           .build(),
+          // US EU ends.
           DateTimeParserBuilder.newMultiParserListBuilder()
               .appendDateTimeParser("d/M/uuuu", DateFormatHint.DMY, LocalDate::from,"/", HYPHEN + MINUS)
               .appendDateTimeParser("M/d/uuuu", DateFormatHint.MDY, LocalDate::from,"/", HYPHEN + MINUS)

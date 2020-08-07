@@ -39,10 +39,10 @@ class TextDateParser implements TemporalParser {
 
   /**
    *
-   * When the standard parsing process find an ambiguous date, like 2/3/2000, try @param prefResolvers to parse date,
+   * When the standard parsing process failed due to an ambiguous date, like 2/3/2000, try {@code prefResolvers} to parse date,
    * and return the first succeeded result
    *
-   * NOTE, it is DIFFERENT with function parse(String input, DateFormatHint hint)
+   * NOTE, it is DIFFERENT with <code>parse(String input, DateFormatHint hint)</code>
    *
    * @param input
    * @param prefResolvers
