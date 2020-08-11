@@ -210,9 +210,9 @@ public class ThreeTenNumericalDateParserTest {
 //    assertTrue(result.getAlternativePayloads().contains(LocalDate.of(1996, 1, 2)));
 //
 //    // Not ambiguous
-//    result = PARSER.parse("1/1/1996");
-//    assertEquals(LocalDate.of(1996, 1, 1), result.getPayload());
-//    assertNull(result.getAlternativePayloads());
+    result = PARSER.parse("1/1/1996");
+    assertEquals(LocalDate.of(1996, 1, 1), result.getPayload());
+    assertNull(result.getAlternativePayloads());
 
     result = PARSER.parse("31/1/1996");
     assertEquals(LocalDate.of(1996, 1, 31), result.getPayload());
