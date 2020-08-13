@@ -268,6 +268,7 @@ class ThreeTenNumericalDateParser implements TemporalParser {
       hint = DateFormatHint.NONE;
     }
 
+    //If hint is given, BASE_PARSER_LIST is ignored.
     List<DateTimeParser> parserList =
         activeFormattersByHint.containsKey(hint)
             ? activeFormattersByHint.get(hint)

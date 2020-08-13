@@ -10,6 +10,7 @@ import java.time.YearMonth;
 import java.time.temporal.TemporalAccessor;
 
 import org.gbif.common.parsers.core.ParseResult.CONFIDENCE;
+import org.gbif.common.parsers.core.ParseResult.STATUS;
 import org.junit.Test;
 
 import static junit.framework.Assert.assertSame;
@@ -176,6 +177,21 @@ public class TextDateParserTest {
   @Test
   public void testUS_EUDateParsing(){
     ParseResult<TemporalAccessor> parseResult ;
+    //GBIF way
+    //Test why GBIF hints failed on ISO date
+    //This function only use the provided format to parse, return failure if failed.
+    //Also, it excludes 'basic ISO formats'
+    parseResult = TEXTDATE_PARSER.parse("2018-02-01T11:20:30+0100", DateFormatHint.EU_DMYT);
+    assertEquals(STATUS.FAIL,parseResult.getStatus());
+
+    parseResult = TEXTDATE_PARSER.parse("1/2/2018", DateFormatHint.EU_DMYT);
+    assertEquals("2018-02-01",LocalDate.from(parseResult.getPayload()).toString());
+    parseResult = TEXTDATE_PARSER.parse("1/2/2018 11:20:30+0100",DateFormatHint.EU_DMYT);
+    assertEquals("2018-02-01T11:20:30",LocalDateTime.from(parseResult.getPayload()).toString());
+
+    parseResult = TEXTDATE_PARSER.parse("2018-02-01T11:20:30+0100");
+    assertEquals("2018-02-01T11:20:30+01:00", ZonedDateTime.from(parseResult.getPayload()).toString());
+
     parseResult = TEXTDATE_PARSER.parse("1/2/2018T11:20:30.128");
     assertEquals(CONFIDENCE.POSSIBLE, parseResult.getConfidence());
     assertEquals(2, parseResult.getAlternativePayloads().size());
@@ -201,6 +217,8 @@ public class TextDateParserTest {
     assertEquals("2018-01-02T11:20:30.128",LocalDateTime.from(parseResult.getPayload()).toString());
     parseResult = TEXTDATE_PARSER.parse("1/2/2018 11:20:30+0100",new DateFormatHint[]{DateFormatHint.US_MDYT});
     assertEquals("2018-01-02T11:20:30+01:00",ZonedDateTime.from(parseResult.getPayload()).toString());
+
+
 
 
 

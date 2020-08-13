@@ -47,6 +47,15 @@ localDate = LocalDate.from(ta.getPayload());
 ```
 For more information and details about the date parsing see the [Date Parsing Documentation](/assets/DateParsingDocumentation.md).
 
+//or ONLY use the provided hint to parse date.
+//If the provided date format failed, then stop and return failure
+ta = dateParser.parse("1980-1-0", DateFormatHint.YMD);
+
+//This function will try all date formats to parse date, 
+//If failed with ambiguous warning, then FORCE using the provided date formats.
+ta = dateParser.parse("1980-1-0", new DateFormatHint[]{DateFormatHint.US_MDYZ});
+
+
 
 ## Policies
  * Built as Java 8 artifact
