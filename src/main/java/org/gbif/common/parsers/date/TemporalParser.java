@@ -6,16 +6,23 @@ import org.gbif.common.parsers.core.ParseResult;
 import java.time.temporal.TemporalAccessor;
 import javax.annotation.Nullable;
 
-
 /**
- *
  * Main interface for date/time parsing based.
- *
  */
 public interface TemporalParser extends Parsable<TemporalAccessor> {
 
   /**
    * Parse a date represented as a single String into a TemporalAccessor.
+   *
+   * @param input
+   * @return result, never null
+   */
+  ParseResult<TemporalAccessor> parse(String input);
+
+  /**
+   * Parse a date represented as a single String into a TemporalAccessor.
+   *
+   * Set a specific date format (hint) for the parsing.
    *
    * @param input
    * @param hint help to speed up the parsing and possibly return a better confidence
@@ -43,5 +50,4 @@ public interface TemporalParser extends Parsable<TemporalAccessor> {
    * @return result, never null
    */
   ParseResult<TemporalAccessor> parse(@Nullable Integer year, @Nullable Integer month, @Nullable Integer day);
-
 }

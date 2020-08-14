@@ -9,17 +9,15 @@ import javax.validation.constraints.NotNull;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
-import jdk.nashorn.internal.objects.annotations.Setter;
 
 /**
  * Supports multiple {@link DateTimeParser} that are considered ambiguous. Two {@link DateTimeParser} are considered
- * ambiguous when they can possibly produce 2 different {@link TemporalAccessor}.
+ * ambiguous when they can potentially produce 2 different {@link TemporalAccessor}.
  * e.g. "dd/MM/yyyy" and "MM/dd/yyyy"
  *
+ * <p>This class will try all the parsers and keep the all the successful results.
  *
- * This class will try all the parsers and keep the all the successful results.
- *
- * This class is thread-safe once an instance is created.
+ * <p>This class is thread-safe once an instance is created.
  */
 public class DateTimeMultiParser {
 
@@ -44,12 +42,12 @@ public class DateTimeMultiParser {
    * @param otherParsers list of {@link DateTimeParser} containing more than 1 element if no
    *                     preferred {@link DateTimeParser} is provided. Otherwise, the list must contain at least 1 element.
    */
-  DateTimeMultiParser(@Nullable DateTimeParser preferred, @NotNull List<DateTimeParser> otherParsers){
+  DateTimeMultiParser(@Nullable DateTimeParser preferred, @NotNull List<DateTimeParser> otherParsers) {
 
     Preconditions.checkNotNull(otherParsers, "otherParsers list can not be null");
     Preconditions.checkArgument(otherParsers.size() > 0, "otherParsers must contain at least 1 element");
 
-    if(preferred == null) {
+    if (preferred == null) {
       Preconditions.checkArgument(otherParsers.size() > 1, "If no preferred DateTimeParser is provided, " +
               "the otherParsers list must contain more than 1 element");
     }
@@ -58,7 +56,7 @@ public class DateTimeMultiParser {
     this.otherParsers = Lists.newArrayList(otherParsers);
 
     ImmutableList.Builder immutableListBuilder = new ImmutableList.Builder<DateTimeParser>();
-    if(preferred != null){
+    if (preferred != null) {
       immutableListBuilder.add(preferred);
     }
     immutableListBuilder.addAll(otherParsers);
@@ -81,20 +79,20 @@ public class DateTimeMultiParser {
    * @param input
    * @return {@link MultipleParseResult} instance, never null.
    */
-  public MultipleParseResult parse(String input){
+  public MultipleParseResult parse(String input) {
 
     int numberParsed = 0;
     TemporalAccessor lastParsed = null;
     TemporalAccessor preferredResult = null;
     List<String> usedFormats = new ArrayList<>();
 
-    //lazy initialized assuming it should not be used most of the time
+    // lazily initialized assuming it should not be used most of the time
     List<TemporalAccessor> otherResults = null;
-    for(DateTimeParser currParser : otherParsers){
+    for (DateTimeParser currParser : otherParsers) {
       lastParsed = currParser.parse(input);
-      if(lastParsed != null){
+      if (lastParsed != null) {
         numberParsed++;
-        if(otherResults == null){
+        if (otherResults == null) {
           otherResults = Lists.newArrayList();
         }
         otherResults.add(lastParsed);
@@ -102,39 +100,40 @@ public class DateTimeMultiParser {
       }
     }
 
-    //try the preferred DateTimeParser
-    if(this.preferred != null){
+    // try the preferred DateTimeParser
+    if (this.preferred != null) {
       lastParsed = this.preferred.parse(input);
-      if(lastParsed != null){
+      if (lastParsed != null) {
         numberParsed++;
         preferredResult = lastParsed;
       }
     }
-    //Todo rephase class
-    MultipleParseResult mpr = new MultipleParseResult(numberParsed, preferredResult, otherResults);
-    mpr.formats = usedFormats;
-    return mpr;
+
+    return new MultipleParseResult(numberParsed, usedFormats, preferredResult, otherResults);
   }
 
   /**
    * Nested class representing the result of a multi-parse.
-   *
    */
-
   public static class MultipleParseResult {
     private int numberParsed;
     private TemporalAccessor preferredResult;
     private List<TemporalAccessor> otherResults;
     public List<String> formats;
 
-    public MultipleParseResult(int numberParsed, TemporalAccessor preferredResult, List<TemporalAccessor> otherResults){
+    public MultipleParseResult(int numberParsed, List<String> formats, TemporalAccessor preferredResult, List<TemporalAccessor> otherResults) {
       this.numberParsed = numberParsed;
+      this.formats = formats;
       this.preferredResult = preferredResult;
       this.otherResults = otherResults;
     }
 
     public int getNumberParsed() {
       return numberParsed;
+    }
+
+    public List<String> getFormats() {
+      return formats;
     }
 
     public TemporalAccessor getPreferredResult() {
@@ -148,14 +147,13 @@ public class DateTimeMultiParser {
     /**
      * Return the preferredResult if available otherwise the first element of otherResults.
      * If otherResults is empty, null is returned.
-     * @return
      */
     public TemporalAccessor getResult() {
-      if(preferredResult != null) {
+      if (preferredResult != null) {
         return preferredResult;
       }
 
-      if(otherResults != null && otherResults.size() > 0){
+      if (otherResults != null && otherResults.size() > 0) {
         return otherResults.get(0);
       }
       return null;

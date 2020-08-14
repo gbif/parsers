@@ -1,6 +1,5 @@
 package org.gbif.common.parsers.date;
 
-import java.util.List;
 import org.gbif.common.parsers.core.ParseResult;
 
 import java.time.DateTimeException;
@@ -38,31 +37,10 @@ class TextDateParser implements TemporalParser {
   private static final DatePartsNormalizer DATE_PARTS_NORMALIZER = DatePartsNormalizer.newInstance();
 
   /**
-   *
-   * When the standard parsing process failed due to an ambiguous date, like 2/3/2000, try {@code prefResolvers} to parse date,
-   * and return the first succeeded result
-   *
-   * NOTE, it is DIFFERENT with <code>parse(String input, DateFormatHint hint)</code>
-   *
-   *
-   * @param input
-   * @param prefResolvers
-   * @return the first succeeded result
+   * Parse a date using the default (ISO) formats, or other unambiguous parsing.
    */
-  public ParseResult<TemporalAccessor> parse(String input, DateFormatHint[] prefResolvers) {
-    ParseResult<TemporalAccessor> result = parse(input);
-    if(result.getStatus()== STATUS.FAIL && result.getConfidence()==CONFIDENCE.POSSIBLE
-        && result.getAlternativePayloads().size()>1){
-      for (DateFormatHint hint : prefResolvers ) {
-          return parse(input, hint);
-      }
-    }
-    return result;
-  }
-
   @Override
   public ParseResult<TemporalAccessor> parse(String input) {
-
     if (StringUtils.isBlank(input)) {
       return ParseResult.fail();
     }
@@ -82,29 +60,28 @@ class TextDateParser implements TemporalParser {
     // Also accept the T marker (e.g. 1978-12-21T02:12) from the ISO format
     // and the W week marker (e.g. 2018-W43).
     // We could also simply try to parse it but it is probably not optimal
-    if(NUMERICAL_DATE_PATTERN.matcher(input).matches()) {
+    if (NUMERICAL_DATE_PATTERN.matcher(input).matches()) {
       return NUMERICAL_DATE_PARSER.parse(input, DateFormatHint.NONE);
     }
 
     TextualMonthDateTokenizer.DateTokens dt = TEXT_MONTH_TOKENIZER.tokenize(input);
     // for now we only handle cases where we can find year, month, day with confidence.
-    if(!dt.containsDiscardedTokens() && dt.size() == 3){
+    if (!dt.containsDiscardedTokens() && dt.size() == 3) {
       DatePartsNormalizer.NormalizedYearMonthDay normalizedYearMonthDay = DATE_PARTS_NORMALIZER.normalize(
-              dt.getToken(TextualMonthDateTokenizer.TokenType.INT_4).getToken(),
-              dt.getToken(TextualMonthDateTokenizer.TokenType.TEXT).getToken(),
-              dt.getToken(TextualMonthDateTokenizer.TokenType.INT_2).getToken());
+        dt.getToken(TextualMonthDateTokenizer.TokenType.INT_4).getToken(),
+        dt.getToken(TextualMonthDateTokenizer.TokenType.TEXT).getToken(),
+        dt.getToken(TextualMonthDateTokenizer.TokenType.INT_2).getToken());
 
-      //no handling for partial dates with textual month for now
-      if(normalizedYearMonthDay.getYear() != null &&
-              normalizedYearMonthDay.getMonth() != null &&
-              normalizedYearMonthDay.getDay() != null){
+      // no handling for partial dates with textual month for now
+      if (normalizedYearMonthDay.getYear() != null &&
+        normalizedYearMonthDay.getMonth() != null &&
+        normalizedYearMonthDay.getDay() != null) {
         try {
           return ParseResult.success(ParseResult.CONFIDENCE.DEFINITE,
-                  LocalDate.of(normalizedYearMonthDay.getYear(),
-                          normalizedYearMonthDay.getMonth(), normalizedYearMonthDay.getDay()));
-        }
-        catch (DateTimeException ignore){
-          //simply ignore bad dates
+            LocalDate.of(normalizedYearMonthDay.getYear(),
+              normalizedYearMonthDay.getMonth(), normalizedYearMonthDay.getDay()));
+        } catch (DateTimeException ignore) {
+          // simply ignore bad dates
         }
       }
     }
@@ -112,11 +89,9 @@ class TextDateParser implements TemporalParser {
   }
 
   /**
-   * For now this is directly delegated the NumericalDateParser.
+   * Parse a date restricted to the provided format (hint).
    *
-   * @param input
-   * @param hint help to speed up the parsing and possibly return a better confidence
-   * @return
+   * For now this is directly delegated the NumericalDateParser.
    */
   @Override
   public ParseResult<TemporalAccessor> parse(String input, @Nullable DateFormatHint hint) {
@@ -124,13 +99,28 @@ class TextDateParser implements TemporalParser {
   }
 
   /**
+   * Parse a date, and if given an ambiguous date, like 2/3/2000, try {@code prefResolvers} to parse date,
+   * and return the first successful result.
+   * <p>
+   * NOTE, this behaviour <strong>differs</strong> from <code>parse(String input, DateFormatHint hint)</code>
+   */
+  public ParseResult<TemporalAccessor> parse(String input, DateFormatHint[] prefResolvers) {
+    ParseResult<TemporalAccessor> result = parse(input);
+    if (result.getStatus() == STATUS.FAIL && result.getConfidence() == CONFIDENCE.POSSIBLE
+      && result.getAlternativePayloads().size() > 1) {
+      for (DateFormatHint hint : prefResolvers) {
+        result = parse(input, hint);
+        if (result.isSuccessful()) {
+          return result;
+        }
+      }
+    }
+    return result;
+  }
+
+  /**
    * Parse date parts into a TemporalAccessor.
    * The {@link DatePartsNormalizer} will be applied on raw data.
-   *
-   * @param year
-   * @param month
-   * @param day
-   * @return
    */
   public ParseResult<TemporalAccessor> parse(String year, String month, String day) {
     DatePartsNormalizer.NormalizedYearMonthDay normalizedYearMonthDay = DATE_PARTS_NORMALIZER.normalize(
@@ -155,5 +145,4 @@ class TextDateParser implements TemporalParser {
   public ParseResult<TemporalAccessor> parse(@Nullable Integer year, @Nullable Integer month, @Nullable Integer day) {
     return NUMERICAL_DATE_PARSER.parse(year, month, day);
   }
-
 }

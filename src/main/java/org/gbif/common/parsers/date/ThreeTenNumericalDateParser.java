@@ -31,8 +31,6 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import org.apache.commons.lang3.StringUtils;
-import org.gbif.common.parsers.core.ParseResult.CONFIDENCE;
-import org.gbif.common.parsers.core.ParseResult.STATUS;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -66,14 +64,14 @@ class ThreeTenNumericalDateParser implements TemporalParser {
 
   // DateTimeFormatter includes some ISO parsers but just to make it explicit we define our own
   private static final DateTimeFormatter ISO_PARSER = (new DateTimeFormatterBuilder()
-          .appendValue(ChronoField.YEAR, 2, 4, SignStyle.NEVER)
-          .optionalStart().appendLiteral('-')
-          .appendValue(ChronoField.MONTH_OF_YEAR, 1, 2, SignStyle.NEVER)
-          .optionalStart().appendLiteral('-')
-          .appendValue(ChronoField.DAY_OF_MONTH, 1, 2, SignStyle.NEVER))
-          .optionalEnd()
-          .optionalEnd()
-          .toFormatter().withResolverStyle(ResolverStyle.STRICT);
+    .appendValue(ChronoField.YEAR, 2, 4, SignStyle.NEVER)
+    .optionalStart().appendLiteral('-')
+    .appendValue(ChronoField.MONTH_OF_YEAR, 1, 2, SignStyle.NEVER)
+    .optionalStart().appendLiteral('-')
+    .appendValue(ChronoField.DAY_OF_MONTH, 1, 2, SignStyle.NEVER))
+    .optionalEnd()
+    .optionalEnd()
+    .toFormatter().withResolverStyle(ResolverStyle.STRICT);
 
   /*
    * Brackets [] represent optional sections of the pattern. (And subsequent patters don't make parts optional, if an earlier pattern already matched that.)
@@ -81,92 +79,80 @@ class ThreeTenNumericalDateParser implements TemporalParser {
    */
   // separator is a CHAR_HYPHEN
   private static final List<DateTimeParser> BASE_PARSER_LIST =
-      ImmutableList.copyOf(
-          DateTimeParserBuilder.newParserListBuilder()
-                  .appendDateTimeParser("uuuuMMdd", DateFormatHint.YMD, LocalDate::from)
-                  .appendDateTimeParser("uuuu-M-d[ HH[:]mm[:]ss]", DateFormatHint.YMDT, new TemporalQuery<?>[]{LocalDateTime::from, LocalDate::from}, HYPHEN, MINUS + ".")
-                  // Either no fractional seconds, milliseconds or microseconds. T or space.
-                  .appendDateTimeParser("uuuu-M-d' 'HH[[:]mm[[:]ss[.S]]]", DateFormatHint.YMDT, LocalDateTime::from)
-                  .appendDateTimeParser("uuuu-M-d' 'HH[:]mm[[:]ss.SS]", DateFormatHint.YMDT, LocalDateTime::from)
-                  .appendDateTimeParser("uuuu-M-d' 'HH[:]mm[[:]ss.SSS]", DateFormatHint.YMDT, LocalDateTime::from)
-                  .appendDateTimeParser("uuuu-M-d' 'HH[:]mm[[:]ss.SSSSSS]", DateFormatHint.YMDT, LocalDateTime::from)
-                  .appendDateTimeParser("uuuu-M-d' 'HH[:]mm[[:]ss.SSSSSSS]", DateFormatHint.YMDT, LocalDateTime::from)
-                  .appendDateTimeParser("uuuu-M-d' 'HH[:]mm[[:]ss[.SSS]]X", DateFormatHint.YMDTZ, ZonedDateTime::from, HYPHEN, MINUS)
-                  .appendDateTimeParser("uuuu-M-d'T'HH[[:]mm[[:]ss[.S]]]", DateFormatHint.YMDT, LocalDateTime::from)
-                  .appendDateTimeParser("uuuu-M-d'T'HH[:]mm[[:]ss.SS]", DateFormatHint.YMDT, LocalDateTime::from)
-                  .appendDateTimeParser("uuuu-M-d'T'HH[:]mm[[:]ss.SSS]", DateFormatHint.YMDT, LocalDateTime::from)
-                  .appendDateTimeParser("uuuu-M-d'T'HH[:]mm[[:]ss.SSSSSS]", DateFormatHint.YMDT, LocalDateTime::from)
-                  .appendDateTimeParser("uuuu-M-d'T'HH[:]mm[[:]ss.SSSSSSS]", DateFormatHint.YMDT, LocalDateTime::from)
-                  // T, but with a time zone, accepting Z, +00, +0000 and +00:00 for UTC and - or − for negative offsets.
-                  .appendDateTimeParser("uuuu-M-d'T'HH[:]mm[[:]ss[.SSS]]X", DateFormatHint.YMDTZ, ZonedDateTime::from, HYPHEN, MINUS)
-                  .appendDateTimeParser("uuuu-M-d'T'HH[:]mm[:]ss.SSSSSSX", DateFormatHint.YMDTZ, ZonedDateTime::from, HYPHEN, MINUS)
-                  .appendDateTimeParser("uuuu-M-d'T'HH[:]mm[[:]ss[.SSS]]xxx", DateFormatHint.YMDTZ, ZonedDateTime::from, HYPHEN, MINUS)
-                  .appendDateTimeParser("uuuu-M-d'T'HH[:]mm[:]ss.SSSSSSxxx", DateFormatHint.YMDTZ, ZonedDateTime::from, HYPHEN, MINUS)
+    ImmutableList.copyOf(
+      DateTimeParserBuilder.newParserListBuilder()
+        .appendDateTimeParser("uuuuMMdd", DateFormatHint.YMD, LocalDate::from)
+        .appendDateTimeParser("uuuu-M-d", DateFormatHint.YMD, LocalDate::from, HYPHEN, MINUS + ".")
 
-                  .appendDateTimeParser("uuuu-M", DateFormatHint.YM, YearMonth::from)
-                  .appendDateTimeParser("uuuu", DateFormatHint.Y, Year::from)
-                  .appendDateTimeParser("uuuu/MM/dd", DateFormatHint.YMD, LocalDate::from)
-                  .appendDateTimeParser("uuuu/M/d", DateFormatHint.YMD, LocalDate::from)
-                  .appendDateTimeParser("uuuu年MM月dd日", DateFormatHint.HAN, LocalDate::from)
-                  .appendDateTimeParser("uuuu年M月d日", DateFormatHint.HAN, LocalDate::from)
-                  .appendDateTimeParser("YYYY-'W'ww", DateFormatHint.YW, LocalDate::from) // ISO "week years", 2018-W43.
-                  .appendDateTimeParser("uuuu-DDD", DateFormatHint.YD, LocalDate::from) // Week days, 2018-296.
-                  .build()
-  );
+        // Either no fractional seconds, milliseconds or microseconds. T or space.
+        .appendDateTimeParser("uuuu-M-d' 'HH[[:]mm[[:]ss[.S]]]", DateFormatHint.YMDT, LocalDateTime::from, HYPHEN, MINUS + ".")
+        .appendDateTimeParser("uuuu-M-d' 'HH[:]mm[[:]ss.SS]", DateFormatHint.YMDT, LocalDateTime::from)
+        .appendDateTimeParser("uuuu-M-d' 'HH[:]mm[[:]ss.SSS]", DateFormatHint.YMDT, LocalDateTime::from)
+        .appendDateTimeParser("uuuu-M-d' 'HH[:]mm[[:]ss.SSSSSS]", DateFormatHint.YMDT, LocalDateTime::from)
+        .appendDateTimeParser("uuuu-M-d' 'HH[:]mm[[:]ss.SSSSSSS]", DateFormatHint.YMDT, LocalDateTime::from)
+        .appendDateTimeParser("uuuu-M-d' 'HH[:]mm[[:]ss[.SSS]]X", DateFormatHint.YMDTZ, ZonedDateTime::from, HYPHEN, MINUS)
+        .appendDateTimeParser("uuuu-M-d'T'HH[[:]mm[[:]ss[.S]]]", DateFormatHint.YMDT, LocalDateTime::from)
+        .appendDateTimeParser("uuuu-M-d'T'HH[:]mm[[:]ss.SS]", DateFormatHint.YMDT, LocalDateTime::from)
+        .appendDateTimeParser("uuuu-M-d'T'HH[:]mm[[:]ss.SSS]", DateFormatHint.YMDT, LocalDateTime::from)
+        .appendDateTimeParser("uuuu-M-d'T'HH[:]mm[[:]ss.SSSSSS]", DateFormatHint.YMDT, LocalDateTime::from)
+        .appendDateTimeParser("uuuu-M-d'T'HH[:]mm[[:]ss.SSSSSSS]", DateFormatHint.YMDT, LocalDateTime::from)
+        // T, but with a time zone, accepting Z, +00, +0000 and +00:00 for UTC and - or − for negative offsets.
+        .appendDateTimeParser("uuuu-M-d'T'HH[:]mm[[:]ss[.SSS]]X", DateFormatHint.YMDTZ, ZonedDateTime::from, HYPHEN, MINUS)
+        .appendDateTimeParser("uuuu-M-d'T'HH[:]mm[:]ss.SSSSSSX", DateFormatHint.YMDTZ, ZonedDateTime::from, HYPHEN, MINUS)
+        .appendDateTimeParser("uuuu-M-d'T'HH[:]mm[[:]ss[.SSS]]xxx", DateFormatHint.YMDTZ, ZonedDateTime::from, HYPHEN, MINUS)
+        .appendDateTimeParser("uuuu-M-d'T'HH[:]mm[:]ss.SSSSSSxxx", DateFormatHint.YMDTZ, ZonedDateTime::from, HYPHEN, MINUS)
+
+        .appendDateTimeParser("uuuu-M", DateFormatHint.YM, YearMonth::from)
+        .appendDateTimeParser("uuuu", DateFormatHint.Y, Year::from)
+        .appendDateTimeParser("uuuu/MM/dd", DateFormatHint.YMD, LocalDate::from)
+        .appendDateTimeParser("uuuu/M/d", DateFormatHint.YMD, LocalDate::from)
+        .appendDateTimeParser("uuuu年MM月dd日", DateFormatHint.HAN, LocalDate::from)
+        .appendDateTimeParser("uuuu年M月d日", DateFormatHint.HAN, LocalDate::from)
+        .appendDateTimeParser("YYYY-'W'ww", DateFormatHint.YW, LocalDate::from) // ISO "week years", 2018-W43.
+        .appendDateTimeParser("uuuu-DDD", DateFormatHint.YD, LocalDate::from) // Week days, 2018-296.
+        .build()
+    );
 
   // Possibly ambiguous dates will record an error in case more than one pattern can be applied
   private static final List<DateTimeMultiParser> MULTIPARSER_PARSER_LIST =
-      ImmutableList.of(
-          DateTimeParserBuilder.newMultiParserListBuilder()
-              .preferredDateTimeParser(
-                  "d.M.uuuu", DateFormatHint.DMY, LocalDate::from) // DE, DK, NO
-              .appendDateTimeParser("M.d.uuuu", DateFormatHint.MDY, LocalDate::from)
-              .build(),
-          // the followings are mostly derived of the difference between FR,GB,ES (DMY) format and
-          // US format (MDY)
-          DateTimeParserBuilder.newMultiParserListBuilder()
-              .appendDateTimeParser(
-                  "d/M/uuuu'T'HH[[:]mm[[:]ss[.SSS]]]", DateFormatHint.EU_DMYT, LocalDateTime::from)
-              .appendDateTimeParser(
-                  "M/d/uuuu'T'HH[[:]mm[[:]ss[.SSS]]]", DateFormatHint.US_MDYT, LocalDateTime::from)
-              .build(),
-          DateTimeParserBuilder.newMultiParserListBuilder()
-            .appendDateTimeParser(
-              "d/M/uuuu'T'HH[[:]mm[[:]ss[.SSS]]][X]", DateFormatHint.EU_DMYT, ZonedDateTime::from)
-            .appendDateTimeParser(
-              "M/d/uuuu'T'HH[[:]mm[[:]ss[.SSS]]][X]", DateFormatHint.US_MDYT, ZonedDateTime::from)
-            .build(),
-          DateTimeParserBuilder.newMultiParserListBuilder()
-            .appendDateTimeParser(
-              "d/M/uuuu' 'HH[[:]mm[[:]ss[.SSS]]]", DateFormatHint.EU_DMYT, LocalDateTime::from)
-            .appendDateTimeParser(
-              "M/d/uuuu' 'HH[[:]mm[[:]ss[.SSS]]]", DateFormatHint.US_MDYT, LocalDateTime::from)
-            .build(),
-          DateTimeParserBuilder.newMultiParserListBuilder()
-            .appendDateTimeParser(
-              "d/M/uuuu' 'HH[[:]mm[[:]ss[.SSS]]][X]", DateFormatHint.EU_DMYT, ZonedDateTime::from)
-            .appendDateTimeParser(
-              "M/d/uuuu' 'HH[[:]mm[[:]ss[.SSS]]][X]", DateFormatHint.US_MDYT, ZonedDateTime::from)
-          .build(),
-         //Copied from DateFormatHint.DMY
-          DateTimeParserBuilder.newMultiParserListBuilder()
-           .appendDateTimeParser("d/M/uuuu", DateFormatHint.EU_DMYT, LocalDate::from)
-           .appendDateTimeParser("M/d/uuuu", DateFormatHint.US_MDYT, LocalDate::from)
-           .build(),
-          // US EU ends.
-          DateTimeParserBuilder.newMultiParserListBuilder()
-              .appendDateTimeParser("d/M/uuuu", DateFormatHint.DMY, LocalDate::from,"/", HYPHEN + MINUS)
-              .appendDateTimeParser("M/d/uuuu", DateFormatHint.MDY, LocalDate::from,"/", HYPHEN + MINUS)
-              .build(),
-          DateTimeParserBuilder.newMultiParserListBuilder()
-              .appendDateTimeParser("ddMMuuuu", DateFormatHint.DMY, LocalDate::from)
-              .appendDateTimeParser("MMdduuuu", DateFormatHint.MDY, LocalDate::from)
-              .build(),
-          // the followings are not officially supported by any countries but are sometimes used
-          DateTimeParserBuilder.newMultiParserListBuilder()
-              .appendDateTimeParser("d\\M\\uuuu", DateFormatHint.DMY, LocalDate::from, "\\", "_")
-              .appendDateTimeParser("M\\d\\uuuu", DateFormatHint.MDY, LocalDate::from, "\\", "_")
-              .build());
+    ImmutableList.of(
+      DateTimeParserBuilder.newMultiParserListBuilder()
+        // Dot-formats are used by some European languages (German, Danish, Swedish etc), but not by
+        // the USA, so we can prefer the d.M.uuuu pattern.
+        .preferredDateTimeParser("d.M.uuuu", DateFormatHint.DMY, LocalDate::from)
+        .appendDateTimeParser("M.d.uuuu", DateFormatHint.MDY, LocalDate::from)
+        .build(),
+      // These are mostly derived of the difference between the common DMY format with slashes and US MDY format
+      DateTimeParserBuilder.newMultiParserListBuilder()
+        .appendDateTimeParser("d/M/uuuu'T'HH[[:]mm[[:]ss[.SSS]]]", DateFormatHint.DMYT, LocalDateTime::from, "/", HYPHEN + MINUS)
+        .appendDateTimeParser("M/d/uuuu'T'HH[[:]mm[[:]ss[.SSS]]]", DateFormatHint.MDYT, LocalDateTime::from, "/", HYPHEN + MINUS)
+        .build(),
+      DateTimeParserBuilder.newMultiParserListBuilder()
+        .appendDateTimeParser("d/M/uuuu'T'HH[[:]mm[[:]ss[.SSS]]][X]", DateFormatHint.DMYT, ZonedDateTime::from, "/", HYPHEN + MINUS)
+        .appendDateTimeParser("M/d/uuuu'T'HH[[:]mm[[:]ss[.SSS]]][X]", DateFormatHint.MDYT, ZonedDateTime::from, "/", HYPHEN + MINUS)
+        .build(),
+      DateTimeParserBuilder.newMultiParserListBuilder()
+        .appendDateTimeParser("d/M/uuuu' 'HH[[:]mm[[:]ss[.SSS]]]", DateFormatHint.DMYT, LocalDateTime::from, "/", HYPHEN + MINUS)
+        .appendDateTimeParser("M/d/uuuu' 'HH[[:]mm[[:]ss[.SSS]]]", DateFormatHint.MDYT, LocalDateTime::from, "/", HYPHEN + MINUS)
+        .build(),
+      DateTimeParserBuilder.newMultiParserListBuilder()
+        .appendDateTimeParser("d/M/uuuu' 'HH[[:]mm[[:]ss[.SSS]]][X]", DateFormatHint.DMYT, ZonedDateTime::from, "/", HYPHEN + MINUS)
+        .appendDateTimeParser("M/d/uuuu' 'HH[[:]mm[[:]ss[.SSS]]][X]", DateFormatHint.MDYT, ZonedDateTime::from, "/", HYPHEN + MINUS)
+        .build(),
+      DateTimeParserBuilder.newMultiParserListBuilder()
+        .appendDateTimeParser("d/M/uuuu", DateFormatHint.DMY, LocalDate::from, "/", HYPHEN + MINUS)
+        .appendDateTimeParser("M/d/uuuu", DateFormatHint.MDY, LocalDate::from, "/", HYPHEN + MINUS)
+        .build(),
+      // Dates with no separator.
+      DateTimeParserBuilder.newMultiParserListBuilder()
+        .appendDateTimeParser("ddMMuuuu", DateFormatHint.DMY, LocalDate::from)
+        .appendDateTimeParser("MMdduuuu", DateFormatHint.MDY, LocalDate::from)
+        .build(),
+      // Backslashes and underscores are not officially recommended by any country, but are sometimes used
+      DateTimeParserBuilder.newMultiParserListBuilder()
+        .appendDateTimeParser("d\\M\\uuuu", DateFormatHint.DMY, LocalDate::from, "\\", "_")
+        .appendDateTimeParser("M\\d\\uuuu", DateFormatHint.MDY, LocalDate::from, "\\", "_")
+        .build());
 
   static {
     for (DateTimeParser parser : BASE_PARSER_LIST) {
@@ -188,8 +174,6 @@ class ThreeTenNumericalDateParser implements TemporalParser {
 
   /**
    * Get an instance of a default ThreeTenNumericalDateParser.
-   *
-   * @return
    */
   public static ThreeTenNumericalDateParser newInstance() {
     return new ThreeTenNumericalDateParser();
@@ -200,7 +184,6 @@ class ThreeTenNumericalDateParser implements TemporalParser {
    * year represented by 2 digits.
    *
    * @param baseYear
-   * @return
    */
   public static ThreeTenNumericalDateParser newInstance(Year baseYear) {
     return new ThreeTenNumericalDateParser(baseYear);
@@ -216,33 +199,33 @@ class ThreeTenNumericalDateParser implements TemporalParser {
 
   private ThreeTenNumericalDateParser(Year baseYear) {
 
-    Preconditions.checkState(baseYear.getValue() <= LocalDate.now().getYear(), "Base year is less or equals to" +
-              " the current year");
+    Preconditions.checkState(baseYear.getValue() <= LocalDate.now().getYear(),
+      "Base year is less or equals to the current year");
 
     Map<DateFormatHint, List<DateTimeParser>> formattersByHint = Maps.newHashMap(FORMATTERS_BY_HINT);
 
     List<DateTimeMultiParser> multiParserList = Lists.newArrayList(MULTIPARSER_PARSER_LIST);
     multiParserList.addAll(Lists.newArrayList(
-            DateTimeParserBuilder.newMultiParserListBuilder()
-                    .preferredDateTimeParser("d.M.uu", DateFormatHint.DMY, LocalDate::from, baseYear) //DE, DK, NO
-                    .appendDateTimeParser("M.d.uu", DateFormatHint.MDY, LocalDate::from, baseYear)
-                    .build(),
-            DateTimeParserBuilder.newMultiParserListBuilder()
-                    .appendDateTimeParser("d/M/uu", DateFormatHint.DMY, LocalDate::from, "/",HYPHEN + MINUS, baseYear)
-                    .appendDateTimeParser("M/d/uu", DateFormatHint.MDY, LocalDate::from, "/",HYPHEN + MINUS, baseYear)
-                    .build(),
-            DateTimeParserBuilder.newMultiParserListBuilder()
-                    .appendDateTimeParser("ddMMuu", DateFormatHint.DMY, LocalDate::from, baseYear)
-                    .appendDateTimeParser("MMdduu", DateFormatHint.MDY, LocalDate::from, baseYear)
-                    .build(),
-            DateTimeParserBuilder.newMultiParserListBuilder()
-                    .appendDateTimeParser("d\\M\\uu", DateFormatHint.DMY, LocalDate::from, "\\", "_", baseYear)
-                    .appendDateTimeParser("M\\d\\uu", DateFormatHint.MDY, LocalDate::from, "\\", "_", baseYear)
-                    .build()
+      DateTimeParserBuilder.newMultiParserListBuilder()
+        .preferredDateTimeParser("d.M.uu", DateFormatHint.DMY, LocalDate::from, baseYear)
+        .appendDateTimeParser("M.d.uu", DateFormatHint.MDY, LocalDate::from, baseYear)
+        .build(),
+      DateTimeParserBuilder.newMultiParserListBuilder()
+        .appendDateTimeParser("d/M/uu", DateFormatHint.DMY, LocalDate::from, "/", HYPHEN + MINUS, baseYear)
+        .appendDateTimeParser("M/d/uu", DateFormatHint.MDY, LocalDate::from, "/", HYPHEN + MINUS, baseYear)
+        .build(),
+      DateTimeParserBuilder.newMultiParserListBuilder()
+        .appendDateTimeParser("ddMMuu", DateFormatHint.DMY, LocalDate::from, baseYear)
+        .appendDateTimeParser("MMdduu", DateFormatHint.MDY, LocalDate::from, baseYear)
+        .build(),
+      DateTimeParserBuilder.newMultiParserListBuilder()
+        .appendDateTimeParser("d\\M\\uu", DateFormatHint.DMY, LocalDate::from, "\\", "_", baseYear)
+        .appendDateTimeParser("M\\d\\uu", DateFormatHint.MDY, LocalDate::from, "\\", "_", baseYear)
+        .build()
     ));
 
-    for(DateTimeMultiParser multiParser : multiParserList){
-      for(DateTimeParser parser : multiParser.getAllParsers()) {
+    for (DateTimeMultiParser multiParser : multiParserList) {
+      for (DateTimeParser parser : multiParser.getAllParsers()) {
         formattersByHint.putIfAbsent(parser.getHint(), new ArrayList<DateTimeParser>());
         formattersByHint.get(parser.getHint()).add(parser);
       }
@@ -260,7 +243,7 @@ class ThreeTenNumericalDateParser implements TemporalParser {
   @Override
   public ParseResult<TemporalAccessor> parse(String input, @Nullable DateFormatHint hint) {
 
-    if(StringUtils.isBlank(input)){
+    if (StringUtils.isBlank(input)) {
       return ParseResult.fail();
     }
     // make sure hint is never null
@@ -270,9 +253,9 @@ class ThreeTenNumericalDateParser implements TemporalParser {
 
     //If hint is given, BASE_PARSER_LIST is ignored.
     List<DateTimeParser> parserList =
-        activeFormattersByHint.containsKey(hint)
-            ? activeFormattersByHint.get(hint)
-            : BASE_PARSER_LIST;
+      activeFormattersByHint.containsKey(hint)
+        ? activeFormattersByHint.get(hint)
+        : BASE_PARSER_LIST;
 
     // First attempt: find a match with definite confidence
     TemporalAccessor parsedTemporalAccessor;
@@ -305,34 +288,28 @@ class ThreeTenNumericalDateParser implements TemporalParser {
     for (DateTimeMultiParser parserAmbiguity : activeMultiParserList) {
       result = parserAmbiguity.parse(input);
 
-      if(result.getNumberParsed() > 0){
+      if (result.getNumberParsed() > 0) {
         lastParsedSuccess = result.getResult();
-        //NOTE: if we define same formats into multiple hints,
-        // like "d/M/uu" is defined in DateFormatHint.DMY and DateFormatHint.US_DMYT, it will generate same dates.
-        // <code>otherResults</code> is a HashSet, value should be unique
-        // thus, it should not be counted into numberOfPossiblyAmbiguousMatch
-        if(!verificationDuplication.contains(lastParsedSuccess)) {
+        if (!verificationDuplication.contains(lastParsedSuccess)) {
           numberOfPossiblyAmbiguousMatch += result.getNumberParsed();
           verificationDuplication.add(lastParsedSuccess);
         }
 
-
-        // make sure to log in case lastParsedSuccessOtherResultsEqual already equals true
+        // make sure to log in case lastParsedSuccessOtherResultsEqual already true
         if (lastParsedSuccessOtherResultsEqual) {
           LOGGER.warn("Issue with DateTimeMultiParser configuration: Input {} produces more results even " +
-                  "if lastParsedSuccessOtherResultsEqual is set to true.", input);
+            "if lastParsedSuccessOtherResultsEqual is set to true.", input);
         }
         lastParsedSuccessOtherResultsEqual = false;
 
-        if(result.getPreferredResult() != null){
-          if(lastParsedPreferred != null){
+        if (result.getPreferredResult() != null) {
+          if (lastParsedPreferred != null) {
             LOGGER.warn("Issue with DateTimeMultiParser configuration: Input {} produces 2 preferred results", input);
           }
           lastParsedPreferred = result.getPreferredResult();
-        }
-        else{
+        } else {
           //if we have no PreferredResult but all results represent the same TemporalAccessor
-          if(result.getOtherResults() != null && result.getOtherResults().size() > 1) {
+          if (result.getOtherResults() != null && result.getOtherResults().size() > 1) {
             lastParsedSuccessOtherResultsEqual = allEquals(result.getOtherResults());
             otherParsed.addAll(result.getOtherResults());
           }
@@ -341,10 +318,9 @@ class ThreeTenNumericalDateParser implements TemporalParser {
     }
 
     //if there is only one pattern that can be applied it is not ambiguous
-    if(numberOfPossiblyAmbiguousMatch == 1){
+    if (numberOfPossiblyAmbiguousMatch == 1) {
       return ParseResult.success(ParseResult.CONFIDENCE.DEFINITE, lastParsedSuccess);
-    }
-    else if ( numberOfPossiblyAmbiguousMatch > 1 ){
+    } else if (numberOfPossiblyAmbiguousMatch > 1) {
       // if all the possible ambiguities are equal, there is no ambiguity
       if (lastParsedSuccessOtherResultsEqual) {
         return ParseResult.success(ParseResult.CONFIDENCE.DEFINITE, lastParsedSuccess);
@@ -366,7 +342,7 @@ class ThreeTenNumericalDateParser implements TemporalParser {
 
   @Override
   public ParseResult<TemporalAccessor> parse(
-      @Nullable String year, @Nullable String month, @Nullable String day) {
+    @Nullable String year, @Nullable String month, @Nullable String day) {
 
     // avoid possible misinterpretation when month is not provided (but day is)
     if (StringUtils.isBlank(month) && StringUtils.isNotBlank(day)) {
@@ -374,7 +350,7 @@ class ThreeTenNumericalDateParser implements TemporalParser {
     }
 
     String date = Joiner.on(CHAR_HYPHEN).skipNulls().join(Strings.emptyToNull(year), Strings.emptyToNull(month),
-            Strings.emptyToNull(day));
+      Strings.emptyToNull(day));
     TemporalAccessor tp = tryParse(date, ISO_PARSER, null);
 
     if (tp != null) {
@@ -387,14 +363,14 @@ class ThreeTenNumericalDateParser implements TemporalParser {
   public ParseResult<TemporalAccessor> parse(@Nullable Integer year, @Nullable Integer month, @Nullable Integer day) {
 
     // avoid possible misinterpretation when month is not provided (but day is)
-    if(month == null && day != null){
+    if (month == null && day != null) {
       return ParseResult.fail();
     }
 
     String date = Joiner.on(CHAR_HYPHEN).skipNulls().join(year, month, day);
     TemporalAccessor tp = tryParse(date, ISO_PARSER, null);
 
-    if(tp != null){
+    if (tp != null) {
       return ParseResult.success(ParseResult.CONFIDENCE.DEFINITE, tp);
     }
     return ParseResult.fail();
@@ -403,30 +379,31 @@ class ThreeTenNumericalDateParser implements TemporalParser {
   /**
    * Utility private method to avoid throwing a runtime exception when the formatter can not parse the String.
    * TODO normalizer is call too often maybe this class should not take it and only try to parse
+   *
    * @param input
    * @param formatter
    * @param normalizer
    * @return
    */
-  private static TemporalAccessor tryParse(String input, DateTimeFormatter formatter, DateTimeSeparatorNormalizer normalizer){
+  private static TemporalAccessor tryParse(String input, DateTimeFormatter formatter, DateTimeSeparatorNormalizer normalizer) {
 
-    if(normalizer != null){
+    if (normalizer != null) {
       input = normalizer.normalize(input);
     }
     try {
       return formatter.parseBest(input, ZonedDateTime::from, LocalDateTime::from, LocalDate::from,
-              YearMonth::from, Year::from);
+        YearMonth::from, Year::from);
+    } catch (DateTimeParseException dpe) {
     }
-    catch (DateTimeParseException dpe){}
     return null;
   }
 
   /**
    * Check if all the TemporalAccessor of the list are equal.
-   *
+   * <p>
    * Return false for an empty list; true for a list with a single element.
    */
-  private static boolean allEquals(List<TemporalAccessor> taList){
+  private static boolean allEquals(List<TemporalAccessor> taList) {
     if (taList == null || taList.isEmpty()) {
       return false;
     }

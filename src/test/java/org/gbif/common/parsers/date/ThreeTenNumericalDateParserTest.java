@@ -27,7 +27,6 @@ import static org.junit.Assert.fail;
 
 /**
  * Unit testing for ThreeTenNumericalDateParser.
- *
  */
 public class ThreeTenNumericalDateParserTest {
 
@@ -64,8 +63,7 @@ public class ThreeTenNumericalDateParserTest {
                   assertNotNull(raw + " generated null payload", result.getPayload());
                   assertEquals("Test file rawValue: " + raw, LocalDate.of(year, month, day),
                           LocalDate.from(result.getPayload()));
-                }
-                catch (NumberFormatException nfEx){
+                } catch (NumberFormatException nfEx){
                   fail("Error while parsing the test input file content." + nfEx.getMessage());
                 }
                 return null;
@@ -149,10 +147,10 @@ public class ThreeTenNumericalDateParserTest {
   }
 
   @Test
-  public void testParseAsLocalDateTime(){
+  public void testParseAsLocalDateTime() {
     ThreeTenNumericalDateParser parser = ThreeTenNumericalDateParser.newInstance(Year.of(1900));
 
-    //month first with 2 digits years >_<
+    // month first with 2 digits years >_<
     assertEquals(LocalDate.of(1978, Month.DECEMBER, 21), LocalDate.from(parser.parse("122178").getPayload()));
     assertEquals(LocalDate.of(1978, Month.DECEMBER, 21), LocalDate.from(parser.parse("12/21/78").getPayload()));
     assertEquals(LocalDate.of(1978, Month.DECEMBER, 21), LocalDate.from(parser.parse("12\\21\\78").getPayload()));
@@ -160,23 +158,23 @@ public class ThreeTenNumericalDateParserTest {
     assertEquals(LocalDate.of(1978, Month.DECEMBER, 21), LocalDate.from(parser.parse("12-21-78").getPayload()));
     assertEquals(LocalDate.of(1978, Month.DECEMBER, 21), LocalDate.from(parser.parse("12_21_78").getPayload()));
 
-    //month/year alone
-    assertEquals(YearMonth.of(1978,12), YearMonth.from(parser.parse("1978-12").getPayload()));
+    // month/year alone
+    assertEquals(YearMonth.of(1978, 12), YearMonth.from(parser.parse("1978-12").getPayload()));
 
-    //year alone
+    // year alone
     assertEquals(Year.of(1978), Year.from(parser.parse("1978").getPayload()));
-   // assertEquals(Year.of(1978), Year.from(parser.parse("78").getPayload()));
+    // assertEquals(Year.of(1978), Year.from(parser.parse("78").getPayload()));
   }
 
   @Test
-  public void testParseAsLocalDateByDateParts(){
+  public void testParseAsLocalDateByDateParts() {
     assertEquals(LocalDate.of(1978, Month.DECEMBER, 21), LocalDate.from(PARSER.parse("1978", "12", "21").getPayload()));
     assertEquals(LocalDate.of(1978, Month.DECEMBER, 21), LocalDate.from(PARSER.parse(1978, 12, 21).getPayload()));
 
     assertEquals(LocalDate.of(1978, Month.DECEMBER, 1), LocalDate.from(PARSER.parse("1978", "12", "1").getPayload()));
-    assertEquals(YearMonth.of(1978,12), YearMonth.from(PARSER.parse("1978", "12", null).getPayload()));
-    assertEquals(YearMonth.of(1978,12), YearMonth.from(PARSER.parse(1978, 12, null).getPayload()));
-    assertEquals(Year.of(1978), Year.from(PARSER.parse("1978","",null).getPayload()));
+    assertEquals(YearMonth.of(1978, 12), YearMonth.from(PARSER.parse("1978", "12", null).getPayload()));
+    assertEquals(YearMonth.of(1978, 12), YearMonth.from(PARSER.parse(1978, 12, null).getPayload()));
+    assertEquals(Year.of(1978), Year.from(PARSER.parse("1978", "", null).getPayload()));
 
     // providing the day without the month should result in an error
     assertEquals(ParseResult.STATUS.FAIL, PARSER.parse("1978", "", "2").getStatus());
@@ -192,7 +190,7 @@ public class ThreeTenNumericalDateParserTest {
 //  }
 
   @Test
-  public void testParsePreserveZoneOffset(){
+  public void testParsePreserveZoneOffset() {
     ZonedDateTime offsetDateTime = ZonedDateTime.of(1978, 12, 21, 0, 0, 0,
             0, ZoneOffset.of("+02:00"));
     assertEquals(offsetDateTime, PARSER.parse("1978-12-21T00:00:00+02:00").getPayload());
@@ -203,13 +201,13 @@ public class ThreeTenNumericalDateParserTest {
     ParseResult<TemporalAccessor> result;
 
     // Ambiguous
-//    result = PARSER.parse("1/2/1996");
-//    assertNull(result.getPayload());
-//    assertEquals(2, result.getAlternativePayloads().size());
-//    assertTrue(result.getAlternativePayloads().contains(LocalDate.of(1996, 2, 1)));
-//    assertTrue(result.getAlternativePayloads().contains(LocalDate.of(1996, 1, 2)));
-//
-//    // Not ambiguous
+    result = PARSER.parse("1/2/1996");
+    assertNull(result.getPayload());
+    assertEquals(2, result.getAlternativePayloads().size());
+    assertTrue(result.getAlternativePayloads().contains(LocalDate.of(1996, 2, 1)));
+    assertTrue(result.getAlternativePayloads().contains(LocalDate.of(1996, 1, 2)));
+
+    // Not ambiguous
     result = PARSER.parse("1/1/1996");
     assertEquals(LocalDate.of(1996, 1, 1), result.getPayload());
     assertNull(result.getAlternativePayloads());
@@ -225,7 +223,7 @@ public class ThreeTenNumericalDateParserTest {
   }
 
   @Test
-  public void testBlankDates(){
+  public void testBlankDates() {
     assertEquals(ParseResult.STATUS.FAIL, PARSER.parse(" ").getStatus());
     assertEquals(ParseResult.STATUS.FAIL, PARSER.parse("").getStatus());
     assertEquals(ParseResult.STATUS.FAIL, PARSER.parse(null).getStatus());
