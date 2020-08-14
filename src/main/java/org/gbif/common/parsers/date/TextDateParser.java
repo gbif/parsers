@@ -10,8 +10,6 @@ import java.util.regex.Pattern;
 import javax.annotation.Nullable;
 
 import org.apache.commons.lang3.StringUtils;
-import org.gbif.common.parsers.core.ParseResult.CONFIDENCE;
-import org.gbif.common.parsers.core.ParseResult.STATUS;
 
 /**
  * Main class to parse a date represented as a single String or as date parts into a {@link TemporalAccessor}.
@@ -53,7 +51,7 @@ class TextDateParser implements TemporalParser {
     if (matcher.matches()) {
       String from = matcher.group(1);
       // String to = matcher.group(2);
-      return NUMERICAL_DATE_PARSER.parse(from, DateFormatHint.NONE);
+      return NUMERICAL_DATE_PARSER.parse(from, DateComponentOrdering.NONE);
     }
 
     // Check if the input text contains only punctuations and numbers
@@ -61,7 +59,7 @@ class TextDateParser implements TemporalParser {
     // and the W week marker (e.g. 2018-W43).
     // We could also simply try to parse it but it is probably not optimal
     if (NUMERICAL_DATE_PATTERN.matcher(input).matches()) {
-      return NUMERICAL_DATE_PARSER.parse(input, DateFormatHint.NONE);
+      return NUMERICAL_DATE_PARSER.parse(input, DateComponentOrdering.NONE);
     }
 
     TextualMonthDateTokenizer.DateTokens dt = TEXT_MONTH_TOKENIZER.tokenize(input);
@@ -89,33 +87,23 @@ class TextDateParser implements TemporalParser {
   }
 
   /**
-   * Parse a date restricted to the provided format (hint).
+   * Parse a date restricted to the provided date component ordering.
    *
    * For now this is directly delegated the NumericalDateParser.
    */
   @Override
-  public ParseResult<TemporalAccessor> parse(String input, @Nullable DateFormatHint hint) {
-    return NUMERICAL_DATE_PARSER.parse(input, hint);
+  public ParseResult<TemporalAccessor> parse(String input, @Nullable DateComponentOrdering ordering) {
+    return NUMERICAL_DATE_PARSER.parse(input, ordering);
   }
 
   /**
-   * Parse a date, and if given an ambiguous date, like 2/3/2000, try {@code prefResolvers} to parse date,
-   * and return the first successful result.
+   * Parse a date, and if given an ambiguous date, like 2/3/2000, use the orderings in turn to try
+   * and parse the date.
    * <p>
-   * NOTE, this behaviour <strong>differs</strong> from <code>parse(String input, DateFormatHint hint)</code>
+   * NOTE, this behaviour <strong>differs</strong> from <code>parse(String input, DateComponentOrdering ordering)</code>
    */
-  public ParseResult<TemporalAccessor> parse(String input, DateFormatHint[] prefResolvers) {
-    ParseResult<TemporalAccessor> result = parse(input);
-    if (result.getStatus() == STATUS.FAIL && result.getConfidence() == CONFIDENCE.POSSIBLE
-      && result.getAlternativePayloads().size() > 1) {
-      for (DateFormatHint hint : prefResolvers) {
-        result = parse(input, hint);
-        if (result.isSuccessful()) {
-          return result;
-        }
-      }
-    }
-    return result;
+  public ParseResult<TemporalAccessor> parse(String input, DateComponentOrdering[] orderings) {
+    return NUMERICAL_DATE_PARSER.parse(input, orderings);
   }
 
   /**

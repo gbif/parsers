@@ -96,7 +96,7 @@ public class DateTimeMultiParser {
           otherResults = Lists.newArrayList();
         }
         otherResults.add(lastParsed);
-        usedFormats.add(currParser.getHint().name());
+        usedFormats.add(currParser.getOrdering().name());
       }
     }
 

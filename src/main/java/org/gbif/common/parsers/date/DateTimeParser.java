@@ -1,6 +1,5 @@
 package org.gbif.common.parsers.date;
 
-
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.time.temporal.TemporalAccessor;
@@ -10,20 +9,17 @@ import javax.validation.constraints.NotNull;
 
 import com.google.common.base.Preconditions;
 
-
 /**
  * Adds some flexibility around {@link DateTimeFormatter} with the {@link DateTimeSeparatorNormalizer} and
- * simple optimization the support of DateFormatHint.
- *
- *
+ * simple optimization the support of DateComponentOrdering.
+ * <p>
  * This class is thread-safe once an instance is created.
- *
  */
 public class DateTimeParser {
 
   private final DateTimeFormatter formatter;
   private final DateTimeSeparatorNormalizer normalizer;
-  private final DateFormatHint hint;
+  private final DateComponentOrdering ordering;
 
   private final TemporalQuery<?>[] types;
   private final int minLength;
@@ -31,62 +27,55 @@ public class DateTimeParser {
   /**
    * Package protected constructor.
    * Use {@link DateTimeParserBuilder}
-   *
-   * @param formatter
-   * @param normalizer optional, can be null
-   * @param hint
-   * @param type
-   * @param minLength
    */
   DateTimeParser(@NotNull DateTimeFormatter formatter, @Nullable DateTimeSeparatorNormalizer normalizer,
-                 @NotNull DateFormatHint hint, TemporalQuery<?>[] type, int minLength){
+                 @NotNull DateComponentOrdering ordering, TemporalQuery<?>[] type, int minLength) {
 
     Preconditions.checkNotNull(formatter, "DateTimeFormatter can not be null");
-    Preconditions.checkNotNull(hint, "DateFormatHint can not be null");
+    Preconditions.checkNotNull(ordering, "DateComponentOrdering can not be null");
     Preconditions.checkNotNull(type, "TemporalQuery can not be null");
     Preconditions.checkArgument(minLength > 0, "minLength must be greater than 0");
 
     this.formatter = formatter;
-    this.hint = hint;
+    this.ordering = ordering;
     this.normalizer = normalizer;
     this.minLength = minLength;
     this.types = type;
   }
 
-  public DateFormatHint getHint() {
-    return hint;
+  public DateComponentOrdering getOrdering() {
+    return ordering;
   }
 
   /**
    * Parses the provided String as a TemporalAccessor if possible, otherwise returns null.
-   *
+   * <p>
    * This function fully support partial dates and will return the best possible date resolution based
-   * on the {@link DateFormatHint} provided.
-   *
+   * on the {@link DateComponentOrdering} provided.
+   * <p>
    * This function will not throw DateTimeParseException but returns null in case the input
    * can not be parsed.
    *
-   * @param input
    * @return TemporalAccessor or null in case the input can not be parsed.
    */
-  public TemporalAccessor parse(String input){
+  public TemporalAccessor parse(String input) {
 
     // return fast if minimum length is not meet
-    if(input.length() < minLength){
+    if (input.length() < minLength) {
       return null;
     }
 
-    if(normalizer != null){
+    if (normalizer != null) {
       input = normalizer.normalize(input);
     }
 
     try {
-      if(types.length > 1) {
+      if (types.length > 1) {
         return formatter.parseBest(input, types);
       }
-      return (TemporalAccessor)formatter.parse(input, types[0]);
+      return (TemporalAccessor) formatter.parse(input, types[0]);
+    } catch (DateTimeParseException dpe) {
     }
-    catch (DateTimeParseException dpe){}
     return null;
   }
 

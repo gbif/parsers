@@ -25,8 +25,8 @@ to parse dates.
 They all return a `ParseResult<TemporalAccessor>` object.
 ```
 - parse(String input)
-- parse(String input), DateFormatHint hint)
-- parse(String input), DateFormatHint[] hints)
+- parse(String input), DateComponentOrdering ordering)
+- parse(String input), DateComponentOrdering[] orderings)
 - parse(String year, String month, String day)
 - parse(Integer year, Integer month, Integer day)
 ```
@@ -42,10 +42,10 @@ numerical characters and separators or if it also includes some letters. The pre
 is written in text as opposed to its numerical value.
 
 ### ThreeTenNumericalDateParser
-The `ThreeTenNumericalDateParser` contains a predefined set of date formats built on top of the [Threeten Backport](http://www.threeten.org/threetenbp/) project.
+The `ThreeTenNumericalDateParser` contains a predefined set of date formats originally based on the [Threeten Backport](http://www.threeten.org/threetenbp/) project.
 The set of predefined date formats can be seen as a set of 3 different types of format:
 
- * Nom ambiguous formats e.g. ISO based date formats
+ * Unambiguous formats e.g. ISO based date formats
  * Possibly ambiguous formats with preference e.g. 2.6.2016 as used Germany
  * Possibly ambiguous formats e.g. 6/2/2016
 
@@ -57,8 +57,8 @@ unless the matches represent the exact same date e.g. 2/2/2016.
 By default, this parser will not parse dates containing the year expressed as 2 digits. This feature can be enabled by using
 the static method `newInstance(Year baseYear)`.
 
-It is also possible to give a hint to the parser when the order or the granularity of the date components is known.
-The enumeration [DateFormatHint](https://gbif.github.io/parsers/apidocs/org/gbif/common/parsers/date/DateFormatHint.html)
+It is also possible to give a date component ordering to the parser when the order or the granularity of the date components is known.
+The enumeration [DateComponentOrdering](https://gbif.github.io/parsers/apidocs/org/gbif/common/parsers/date/DateComponentOrdering.html)
 contains the possible values.
 
 ```java
@@ -67,10 +67,10 @@ NumericalDateParser NUMERICAL_PARSER = DateParsers.defaultNumericalDateParser();
 // this ParseResult will not be successful since this date is ambiguous
 ParseResult<TemporalAccessor> ta = NUMERICAL_PARSER.parse("02/01/1999");
 
-// but if we provide a DateFormatHint, we can get the expected result
-ta = NUMERICAL_PARSER.parse("02/01/1999", DateFormatHint.MDY);
+// but if we provide a DateComponentOrdering, we can get the expected result
+ta = NUMERICAL_PARSER.parse("02/01/1999", DateComponentOrdering.MDY);
 // or
-ta = NUMERICAL_PARSER.parse("02/01/1999", DateFormatHint.DMY);
+ta = NUMERICAL_PARSER.parse("02/01/1999", DateComponentOrdering.DMY);
 ```
 
 ### TextualMonthDateTokenizer

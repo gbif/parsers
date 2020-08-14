@@ -13,15 +13,15 @@ import java.time.ZonedDateTime;
 import java.time.temporal.TemporalAccessor;
 
 import static junit.framework.TestCase.assertEquals;
-import static org.gbif.common.parsers.date.DateFormatHint.DMY;
-import static org.gbif.common.parsers.date.DateFormatHint.DMYT;
-import static org.gbif.common.parsers.date.DateFormatHint.DMY_FORMATS;
-import static org.gbif.common.parsers.date.DateFormatHint.MDY;
-import static org.gbif.common.parsers.date.DateFormatHint.MDYT;
-import static org.gbif.common.parsers.date.DateFormatHint.MDY_FORMATS;
-import static org.gbif.common.parsers.date.DateFormatHint.YMD;
-import static org.gbif.common.parsers.date.DateFormatHint.YMDT;
-import static org.gbif.common.parsers.date.DateFormatHint.YMDTZ;
+import static org.gbif.common.parsers.date.DateComponentOrdering.DMY;
+import static org.gbif.common.parsers.date.DateComponentOrdering.DMYT;
+import static org.gbif.common.parsers.date.DateComponentOrdering.DMY_FORMATS;
+import static org.gbif.common.parsers.date.DateComponentOrdering.MDY;
+import static org.gbif.common.parsers.date.DateComponentOrdering.MDYT;
+import static org.gbif.common.parsers.date.DateComponentOrdering.MDY_FORMATS;
+import static org.gbif.common.parsers.date.DateComponentOrdering.YMD;
+import static org.gbif.common.parsers.date.DateComponentOrdering.YMDT;
+import static org.gbif.common.parsers.date.DateComponentOrdering.YMDTZ;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
@@ -185,12 +185,12 @@ public class TextDateParserTest {
   public void testPreferredFormatDateParsing() {
     ParseResult<TemporalAccessor> parseResult;
 
-    // Without any hints, all possibilities are returned.
+    // Without any orderings, all possibilities are returned.
     parseResult = TEXTDATE_PARSER.parse("1/2/2018T11:20:30.128");
     assertEquals(CONFIDENCE.POSSIBLE, parseResult.getConfidence());
     assertEquals(2, parseResult.getAlternativePayloads().size());
 
-    // If a single DateFormatHint is provided, the date *must* be in that format to be parsed.
+    // If a single DateComponentOrdering is provided, the date *must* be in that format to be parsed.
     parseResult = TEXTDATE_PARSER.parse("2018-02-01T11:20:30+0100", YMDTZ);
     assertEquals(STATUS.SUCCESS, parseResult.getStatus());
 
@@ -238,8 +238,8 @@ public class TextDateParserTest {
     parseResult = TEXTDATE_PARSER.parse("1/2/2018 11:20:30+0100", DMYT);
     assertLocalDateTimeResultEquals("2018-02-01T11:20:30", parseResult);
 
-    // If an array of DateFormatHints is provided, then ISO dates are matched, unambiguous dates
-    // parsed, and ambiguous dates are parsed according to the hint.
+    // If an array of DateComponentOrderings is provided, then ISO dates are matched, unambiguous dates
+    // parsed, and ambiguous dates are parsed according to the ordering.
 
     // Typical Australian, British, etc format:
     parseResult = TEXTDATE_PARSER.parse("2018-02-01", DMY_FORMATS);

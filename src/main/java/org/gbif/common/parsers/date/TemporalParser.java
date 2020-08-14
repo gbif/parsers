@@ -22,13 +22,24 @@ public interface TemporalParser extends Parsable<TemporalAccessor> {
   /**
    * Parse a date represented as a single String into a TemporalAccessor.
    *
-   * Set a specific date format (hint) for the parsing.
+   * Set a general date ordering for the parsing.  For example, DMY will support both 14.08.2020 and
+   * 14/08/2020, but not 2020-08-14 or 08/14/2020.
    *
-   * @param input
-   * @param hint help to speed up the parsing and possibly return a better confidence
+   * @param ordering required date ordering.
    * @return result, never null
    */
-  ParseResult<TemporalAccessor> parse(String input, @Nullable DateFormatHint hint);
+  ParseResult<TemporalAccessor> parse(String input, @Nullable DateComponentOrdering ordering);
+
+  /**
+   * Parse a date represented as a single String into a TemporalAccessor.
+   *
+   * Set general date orderings for the parsing.  For example, DMY_FORMATS will support 14.08.2020,
+   * 14/08/2020 and 14/08/2020 14:11:00, but not 2020-08-14 or 08/14/2020.
+   *
+   * @param orderings required general date orderings
+   * @return result, never null
+   */
+  ParseResult<TemporalAccessor> parse(String input, @Nullable DateComponentOrdering[] orderings);
 
   /**
    * Parse year, month, day strings as a TemporalAccessor.
