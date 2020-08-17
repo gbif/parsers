@@ -290,7 +290,7 @@ class ThreeTenNumericalDateParser implements TemporalParser {
     TemporalAccessor lastParsedPreferred = null;
     Set<TemporalAccessor> otherParsed = new HashSet();
     //Checking if result is same due to duplicated format in multiple orderings
-    //like "d/M/uu" is defined in DMY and US_DMYT, it will generate same dates.
+    //like "d/M/uu" is defined in DMY and DMYT(US_D/M/Y format), it will generate same dates.
     List<TemporalAccessor> verificationDuplication = new ArrayList<>();
     // Are the results all equal (representing the same TemporalAccessor), used if there is no
     // preferred result defined
@@ -354,7 +354,7 @@ class ThreeTenNumericalDateParser implements TemporalParser {
   }
 
   /**
-   * Parse a date, and if given an ambiguous date, like 2/3/2000, try {@code prefResolvers} to parse date,
+   * Parse a date, and if given an ambiguous date, like 2/3/2000, try {@code orderings} to parse date,
    * and return the first successful result.
    * <p>
    * NOTE, this behaviour <strong>differs</strong> from <code>parse(String input, DateComponentOrdering ordering)</code>
