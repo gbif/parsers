@@ -38,7 +38,7 @@ import static org.gbif.common.parsers.date.DateComponentOrdering.DMYT;
 import static org.gbif.common.parsers.date.DateComponentOrdering.HAN;
 import static org.gbif.common.parsers.date.DateComponentOrdering.MDY;
 import static org.gbif.common.parsers.date.DateComponentOrdering.MDYT;
-import static org.gbif.common.parsers.date.DateComponentOrdering.NONE;
+import static org.gbif.common.parsers.date.DateComponentOrdering.ISO_ETC;
 import static org.gbif.common.parsers.date.DateComponentOrdering.Y;
 import static org.gbif.common.parsers.date.DateComponentOrdering.YD;
 import static org.gbif.common.parsers.date.DateComponentOrdering.YM;
@@ -250,7 +250,7 @@ class ThreeTenNumericalDateParser implements TemporalParser {
 
   @Override
   public ParseResult<TemporalAccessor> parse(String input) {
-    return parse(input, NONE);
+    return parse(input, ISO_ETC);
   }
 
   @Override
@@ -261,7 +261,7 @@ class ThreeTenNumericalDateParser implements TemporalParser {
     }
     // make sure ordering is never null
     if (ordering == null) {
-      ordering = NONE;
+      ordering = ISO_ETC;
     }
 
     // If ordering is given, BASE_PARSER_LIST is ignored.
@@ -280,7 +280,7 @@ class ThreeTenNumericalDateParser implements TemporalParser {
     }
 
     // if a format ordering was provided we already tried all possible format
-    if (ordering != NONE) {
+    if (ordering != ISO_ETC) {
       return ParseResult.fail();
     }
 
@@ -289,8 +289,8 @@ class ThreeTenNumericalDateParser implements TemporalParser {
     TemporalAccessor lastParsedSuccess = null;
     TemporalAccessor lastParsedPreferred = null;
     Set<TemporalAccessor> otherParsed = new HashSet();
-    //Checking if result is same due to duplicated format in multiple orderings
-    //like "d/M/uu" is defined in DMY and DMYT(US_D/M/Y format), it will generate same dates.
+    // Checking if result is the same due to duplicated format in multiple orderings
+    // like "d/M/uu" is defined in DMY and DMYT, it will generate same dates.
     List<TemporalAccessor> verificationDuplication = new ArrayList<>();
     // Are the results all equal (representing the same TemporalAccessor), used if there is no
     // preferred result defined

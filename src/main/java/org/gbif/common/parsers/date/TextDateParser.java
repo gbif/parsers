@@ -51,7 +51,7 @@ class TextDateParser implements TemporalParser {
     if (matcher.matches()) {
       String from = matcher.group(1);
       // String to = matcher.group(2);
-      return NUMERICAL_DATE_PARSER.parse(from, DateComponentOrdering.NONE);
+      return NUMERICAL_DATE_PARSER.parse(from, DateComponentOrdering.ISO_ETC);
     }
 
     // Check if the input text contains only punctuations and numbers
@@ -59,7 +59,7 @@ class TextDateParser implements TemporalParser {
     // and the W week marker (e.g. 2018-W43).
     // We could also simply try to parse it but it is probably not optimal
     if (NUMERICAL_DATE_PATTERN.matcher(input).matches()) {
-      return NUMERICAL_DATE_PARSER.parse(input, DateComponentOrdering.NONE);
+      return NUMERICAL_DATE_PARSER.parse(input, DateComponentOrdering.ISO_ETC);
     }
 
     TextualMonthDateTokenizer.DateTokens dt = TEXT_MONTH_TOKENIZER.tokenize(input);
