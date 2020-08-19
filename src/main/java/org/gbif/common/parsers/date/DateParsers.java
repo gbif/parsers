@@ -45,9 +45,9 @@ public class DateParsers {
 
 
 //  public static final DateTimeMultiParser ISO_PARSER = DateTimeParserBuilder.newMultiParserListBuilder()
-//          .appendDateTimeFormatter(ISO_LOCAL_DATE, DateFormatHint.YMD, 8)
-//          .appendDateTimeFormatter(ISO_YEAR_MONTH, DateFormatHint.YM, 6)
-//          .appendDateTimeFormatter(ISO_YEAR, DateFormatHint.Y, 4)
+//          .appendDateTimeFormatter(ISO_LOCAL_DATE, DateComponentOrdering.YMD, 8)
+//          .appendDateTimeFormatter(ISO_YEAR_MONTH, DateComponentOrdering.YM, 6)
+//          .appendDateTimeFormatter(ISO_YEAR, DateComponentOrdering.Y, 4)
 //          .build();
 
   /**

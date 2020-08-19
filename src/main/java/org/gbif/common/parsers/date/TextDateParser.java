@@ -34,9 +34,11 @@ class TextDateParser implements TemporalParser {
   private static final TemporalParser NUMERICAL_DATE_PARSER = ThreeTenNumericalDateParser.newInstance();
   private static final DatePartsNormalizer DATE_PARTS_NORMALIZER = DatePartsNormalizer.newInstance();
 
+  /**
+   * Parse a date using the default (ISO) formats, or other unambiguous parsing.
+   */
   @Override
   public ParseResult<TemporalAccessor> parse(String input) {
-
     if (StringUtils.isBlank(input)) {
       return ParseResult.fail();
     }
@@ -49,36 +51,35 @@ class TextDateParser implements TemporalParser {
     if (matcher.matches()) {
       String from = matcher.group(1);
       // String to = matcher.group(2);
-      return NUMERICAL_DATE_PARSER.parse(from, DateFormatHint.NONE);
+      return NUMERICAL_DATE_PARSER.parse(from, DateComponentOrdering.ISO_ETC);
     }
 
     // Check if the input text contains only punctuations and numbers
     // Also accept the T marker (e.g. 1978-12-21T02:12) from the ISO format
     // and the W week marker (e.g. 2018-W43).
     // We could also simply try to parse it but it is probably not optimal
-    if(NUMERICAL_DATE_PATTERN.matcher(input).matches()) {
-      return NUMERICAL_DATE_PARSER.parse(input, DateFormatHint.NONE);
+    if (NUMERICAL_DATE_PATTERN.matcher(input).matches()) {
+      return NUMERICAL_DATE_PARSER.parse(input, DateComponentOrdering.ISO_ETC);
     }
 
     TextualMonthDateTokenizer.DateTokens dt = TEXT_MONTH_TOKENIZER.tokenize(input);
     // for now we only handle cases where we can find year, month, day with confidence.
-    if(!dt.containsDiscardedTokens() && dt.size() == 3){
+    if (!dt.containsDiscardedTokens() && dt.size() == 3) {
       DatePartsNormalizer.NormalizedYearMonthDay normalizedYearMonthDay = DATE_PARTS_NORMALIZER.normalize(
-              dt.getToken(TextualMonthDateTokenizer.TokenType.INT_4).getToken(),
-              dt.getToken(TextualMonthDateTokenizer.TokenType.TEXT).getToken(),
-              dt.getToken(TextualMonthDateTokenizer.TokenType.INT_2).getToken());
+        dt.getToken(TextualMonthDateTokenizer.TokenType.INT_4).getToken(),
+        dt.getToken(TextualMonthDateTokenizer.TokenType.TEXT).getToken(),
+        dt.getToken(TextualMonthDateTokenizer.TokenType.INT_2).getToken());
 
-      //no handling for partial dates with textual month for now
-      if(normalizedYearMonthDay.getYear() != null &&
-              normalizedYearMonthDay.getMonth() != null &&
-              normalizedYearMonthDay.getDay() != null){
+      // no handling for partial dates with textual month for now
+      if (normalizedYearMonthDay.getYear() != null &&
+        normalizedYearMonthDay.getMonth() != null &&
+        normalizedYearMonthDay.getDay() != null) {
         try {
           return ParseResult.success(ParseResult.CONFIDENCE.DEFINITE,
-                  LocalDate.of(normalizedYearMonthDay.getYear(),
-                          normalizedYearMonthDay.getMonth(), normalizedYearMonthDay.getDay()));
-        }
-        catch (DateTimeException ignore){
-          //simply ignore bad dates
+            LocalDate.of(normalizedYearMonthDay.getYear(),
+              normalizedYearMonthDay.getMonth(), normalizedYearMonthDay.getDay()));
+        } catch (DateTimeException ignore) {
+          // simply ignore bad dates
         }
       }
     }
@@ -86,25 +87,28 @@ class TextDateParser implements TemporalParser {
   }
 
   /**
-   * For now this is directly delegated the NumericalDateParser.
+   * Parse a date restricted to the provided date component ordering.
    *
-   * @param input
-   * @param hint help to speed up the parsing and possibly return a better confidence
-   * @return
+   * For now this is directly delegated the NumericalDateParser.
    */
   @Override
-  public ParseResult<TemporalAccessor> parse(String input, @Nullable DateFormatHint hint) {
-    return NUMERICAL_DATE_PARSER.parse(input, hint);
+  public ParseResult<TemporalAccessor> parse(String input, @Nullable DateComponentOrdering ordering) {
+    return NUMERICAL_DATE_PARSER.parse(input, ordering);
+  }
+
+  /**
+   * Parse a date, and if given an ambiguous date, like 2/3/2000, use the orderings in turn to try
+   * and parse the date.
+   * <p>
+   * NOTE, this behaviour <strong>differs</strong> from <code>parse(String input, DateComponentOrdering ordering)</code>
+   */
+  public ParseResult<TemporalAccessor> parse(String input, DateComponentOrdering[] orderings) {
+    return NUMERICAL_DATE_PARSER.parse(input, orderings);
   }
 
   /**
    * Parse date parts into a TemporalAccessor.
    * The {@link DatePartsNormalizer} will be applied on raw data.
-   *
-   * @param year
-   * @param month
-   * @param day
-   * @return
    */
   public ParseResult<TemporalAccessor> parse(String year, String month, String day) {
     DatePartsNormalizer.NormalizedYearMonthDay normalizedYearMonthDay = DATE_PARTS_NORMALIZER.normalize(
@@ -129,5 +133,4 @@ class TextDateParser implements TemporalParser {
   public ParseResult<TemporalAccessor> parse(@Nullable Integer year, @Nullable Integer month, @Nullable Integer day) {
     return NUMERICAL_DATE_PARSER.parse(year, month, day);
   }
-
 }
