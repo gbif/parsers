@@ -33,8 +33,9 @@ public interface TemporalParser extends Parsable<TemporalAccessor> {
   /**
    * Parse a date represented as a single String into a TemporalAccessor.
    *
-   * Set general date orderings for the parsing.  For example, DMY_FORMATS will support 14.08.2020,
-   * 14/08/2020 and 14/08/2020 14:11:00, but not 2020-08-14 or 08/14/2020.
+   * It tries general date orderings for the parsing, then go through normal parsing process if failed.
+   *
+   * It differs with <code>parse(String input, @Nullable DateComponentOrdering ordering)</code>
    *
    * @param orderings required general date orderings
    * @return result, never null
