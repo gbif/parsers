@@ -19,6 +19,9 @@ import static org.gbif.common.parsers.date.DateComponentOrdering.DMY_FORMATS;
 import static org.gbif.common.parsers.date.DateComponentOrdering.MDY;
 import static org.gbif.common.parsers.date.DateComponentOrdering.MDYT;
 import static org.gbif.common.parsers.date.DateComponentOrdering.MDY_FORMATS;
+import static org.gbif.common.parsers.date.DateComponentOrdering.ISO_ETC;
+import static org.gbif.common.parsers.date.DateComponentOrdering.Y;
+import static org.gbif.common.parsers.date.DateComponentOrdering.YM;
 import static org.gbif.common.parsers.date.DateComponentOrdering.YMD;
 import static org.gbif.common.parsers.date.DateComponentOrdering.YMDT;
 import static org.gbif.common.parsers.date.DateComponentOrdering.YMDTZ;
@@ -274,6 +277,23 @@ public class TextDateParserTest {
     assertLocalDateTimeResultEquals("2018-01-02T11:20:30.128", parseResult);
     parseResult = TEXTDATE_PARSER.parse("1/2/2018 11:20:30+0100", MDY_FORMATS);
     assertZonedDateTimeResultEquals("2018-01-02T11:20:30+01:00", parseResult);
+
+    // Supporting a local format plus ISO in a single query
+    DateComponentOrdering[] dmy_and_iso = new DateComponentOrdering[] {DMYT, DMY, ISO_ETC};
+    parseResult = TEXTDATE_PARSER.parse("2018-01-02 11:20:30+0100", dmy_and_iso);
+    assertZonedDateTimeResultEquals("2018-01-02T11:20:30+01:00", parseResult);
+    parseResult = TEXTDATE_PARSER.parse("2018-01-02", dmy_and_iso);
+    assertLocalDateResultEquals("2018-01-02", parseResult);
+    parseResult = TEXTDATE_PARSER.parse("2018-01", dmy_and_iso);
+    assertYearMonthResultEquals("2018-01", parseResult);
+    parseResult = TEXTDATE_PARSER.parse("2018年1月2日", dmy_and_iso);
+    assertLocalDateResultEquals("2018-01-02", parseResult);
+    parseResult = TEXTDATE_PARSER.parse("2/1/2018 11:20:30+0100", dmy_and_iso);
+    assertZonedDateTimeResultEquals("2018-01-02T11:20:30+01:00", parseResult);
+    parseResult = TEXTDATE_PARSER.parse("2/1/2018 11:20:30", dmy_and_iso);
+    assertLocalDateTimeResultEquals("2018-01-02T11:20:30", parseResult);
+    parseResult = TEXTDATE_PARSER.parse("2/1/2018", dmy_and_iso);
+    assertLocalDateResultEquals("2018-01-02", parseResult);
   }
 
   private void testDateRangeStart(int y, int m, int d, String inDate) {
@@ -288,6 +308,10 @@ public class TextDateParserTest {
 
   private void assertLocalDateResultEquals(String expected, ParseResult<TemporalAccessor> parseResult) {
     assertEquals(expected, LocalDate.from(parseResult.getPayload()).toString());
+  }
+
+  private void assertYearMonthResultEquals(String expected, ParseResult<TemporalAccessor> parseResult) {
+    assertEquals(expected, YearMonth.from(parseResult.getPayload()).toString());
   }
 
   private void assertLocalDateTimeResultEquals(String expected, ParseResult<TemporalAccessor> parseResult) {

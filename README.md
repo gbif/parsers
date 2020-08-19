@@ -41,7 +41,7 @@ localDate = LocalDate.from(ta.getPayload());
 // other formats will return a parse failure with possible dates
 ta = dateParser.parse("1980-1-0", DateComponentOrdering.YMD);
 
-// or try all date formats, but use the provided format(s) to choose between ambiguous formats.
+// or use a list of possible formats
 ta = dateParser.parse("12/08/2020", DateComponentOrdering.DMY_FORMATS);
 ```
 For more information and details about the date parsing see the [Date Parsing Documentation](/assets/DateParsingDocumentation.md).
