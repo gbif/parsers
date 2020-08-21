@@ -1,5 +1,6 @@
 package org.gbif.common.parsers.date;
 
+import java.io.Serializable;
 import org.gbif.common.parsers.core.ParseResult;
 
 import java.time.DateTimeException;
@@ -18,7 +19,7 @@ import org.apache.commons.lang3.StringUtils;
  *
  * This class is basically a decorator on top of default NumericalDateParser to handle months written in text.
  */
-class TextDateParser implements TemporalParser {
+class TextDateParser implements TemporalParser, Serializable {
   /*
    * ISO format intervals, which are datetime/datetime or datetime/period.
    * Match 2013/2014, 2013/P1Y, 2013-02/03.
