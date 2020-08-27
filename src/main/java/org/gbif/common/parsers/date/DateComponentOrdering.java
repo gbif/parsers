@@ -28,7 +28,8 @@ public enum DateComponentOrdering {
   Y,
   /** Chinese, Japanese, Korean: Year, month, day. */
   HAN,
-  NONE;
+  /** The default set of unambiguous, year-month-day-like orderings. */
+  ISO_ETC;
 
   /** ISO formats */
   public static DateComponentOrdering[] ISO_FORMATS = new DateComponentOrdering[]{YMDTZ, YMDT, YMD, YM, YW, YD, Y};
