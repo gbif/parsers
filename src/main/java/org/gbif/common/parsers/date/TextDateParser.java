@@ -104,7 +104,12 @@ class TextDateParser implements TemporalParser, Serializable {
    * NOTE, this behaviour <strong>differs</strong> from <code>parse(String input, DateComponentOrdering ordering)</code>
    */
   public ParseResult<TemporalAccessor> parse(String input, DateComponentOrdering[] orderings) {
-    return NUMERICAL_DATE_PARSER.parse(input, orderings);
+    ParseResult <TemporalAccessor> result = this.parse(input);
+    if(result.isSuccessful()){
+      return result;
+    }else{
+      return NUMERICAL_DATE_PARSER.parse(input, orderings);
+    }
   }
 
   /**
