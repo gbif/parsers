@@ -2,6 +2,8 @@ package org.gbif.common.parsers.date;
 
 import static junit.framework.TestCase.assertEquals;
 import static org.gbif.common.parsers.date.DateComponentOrdering.DMY_FORMATS;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import java.time.LocalDate;
 import java.time.Month;
@@ -22,5 +24,7 @@ public class PrefTexDateParserTest {
     assertEquals(LocalDate.of(2000, Month.FEBRUARY, 1), LocalDate.from(parseResult.getPayload()));
     parseResult = parser.parse("23-March-1969");
     assertEquals(LocalDate.of(1969, Month.MARCH, 23), LocalDate.from(parseResult.getPayload()));
+    parseResult = parser.parse("7/10/08");
+    assertEquals(LocalDate.of(2008, Month.OCTOBER, 7), LocalDate.from(parseResult.getPayload()));
   }
 }
