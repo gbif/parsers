@@ -156,6 +156,10 @@ class ThreeTenNumericalDateParser implements TemporalParser {
         .appendDateTimeParser("d/M/uuuu", DMY, LocalDate::from, "/", HYPHEN + MINUS)
         .appendDateTimeParser("M/d/uuuu", MDY, LocalDate::from, "/", HYPHEN + MINUS)
         .build(),
+      DateTimeParserBuilder.newMultiParserListBuilder()
+        .appendDateTimeParser("d/M/uu", DMY, LocalDate::from, "/", HYPHEN + MINUS)
+        .appendDateTimeParser("M/d/uu", MDY, LocalDate::from, "/", HYPHEN + MINUS)
+        .build(),
       // Dates with no separator.
       DateTimeParserBuilder.newMultiParserListBuilder()
         .appendDateTimeParser("ddMMuuuu", DMY, LocalDate::from)
