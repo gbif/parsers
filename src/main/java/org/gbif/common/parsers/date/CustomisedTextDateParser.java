@@ -2,6 +2,7 @@ package org.gbif.common.parsers.date;
 
 import java.io.Serializable;
 import java.time.temporal.TemporalAccessor;
+import org.apache.commons.lang3.ArrayUtils;
 import org.gbif.common.parsers.core.ParseResult;
 import javax.annotation.Nullable;
 
@@ -10,7 +11,7 @@ import javax.annotation.Nullable;
  *
  * Use <code>orderings</code> formatters to parse date, if ISO formatter parsing process fails
  */
-public class PrefTextDateParser implements TemporalParser, Serializable {
+public class CustomisedTextDateParser implements TemporalParser, Serializable {
   private DateComponentOrdering[] orderings;
   private TextDateParser parser = new TextDateParser();
   /**
@@ -18,14 +19,18 @@ public class PrefTextDateParser implements TemporalParser, Serializable {
    * @return
    */
   public static TemporalParser getInstance(DateComponentOrdering[] orderings){
-      PrefTextDateParser ptdp = new PrefTextDateParser();
+      CustomisedTextDateParser ptdp = new CustomisedTextDateParser();
       ptdp.orderings = orderings;
       return ptdp;
   }
 
   @Override
   public ParseResult<TemporalAccessor> parse(String input) {
-    return parser.parse(input, orderings);
+    if (ArrayUtils.isNotEmpty(orderings)) {
+      return parser.parse(input, orderings);
+    }else{
+      return parser.parse(input);
+    }
   }
 
   @Override
