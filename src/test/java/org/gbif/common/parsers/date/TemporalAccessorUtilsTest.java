@@ -122,4 +122,20 @@ public class TemporalAccessorUtilsTest {
     assertFalse(TemporalAccessorUtils.sameOrContained(ymd, YearMonth.of(1996, 5)));
     assertFalse(TemporalAccessorUtils.sameOrContained(ymd, LocalDate.of(1996, 4, 27)));
   }
+
+  @Test
+  public void testLastDay(){
+    TemporalAccessor year = Year.of(1996);
+    assertEquals("1996-12-31T00:00", TemporalAccessorUtils.toLastLocalDateTime(year,true).toString());
+    TemporalAccessor ym = YearMonth.of(1996,1);
+    assertEquals("1996-01-31T00:00", TemporalAccessorUtils.toLastLocalDateTime(ym,true).toString());
+    ym = YearMonth.of(1996,2);
+    assertEquals("1996-02-29T00:00", TemporalAccessorUtils.toLastLocalDateTime(ym,true).toString());
+    TemporalAccessor ymd = LocalDate.of(1996,2,3);
+    assertEquals("1996-02-03T00:00", TemporalAccessorUtils.toLastLocalDateTime(ymd,true).toString());
+    TemporalAccessor ymdt = LocalDateTime.of(1996,2,3,1,20);
+    assertEquals("1996-02-03T01:20", TemporalAccessorUtils.toLastLocalDateTime(ymdt,true).toString());
+
+
+  }
 }
