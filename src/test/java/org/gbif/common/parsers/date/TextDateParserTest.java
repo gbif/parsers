@@ -300,6 +300,8 @@ public class TextDateParserTest {
     assertLocalDateTimeResultEquals("2018-01-02T11:20:30", parseResult);
     parseResult = TEXTDATE_PARSER.parse("2/1/2018", dmy_and_iso);
     assertLocalDateResultEquals("2018-01-02", parseResult);
+    parseResult = TEXTDATE_PARSER.parse("2-January-2018", dmy_and_iso);
+    assertLocalDateResultEquals("2018-01-02", parseResult);
   }
 
   private void testDateRangeStart(int y, int m, int d, String inDate) {

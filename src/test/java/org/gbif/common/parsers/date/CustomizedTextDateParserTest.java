@@ -12,9 +12,9 @@ import org.gbif.common.parsers.core.ParseResult;
 
 import org.junit.Test;
 
-public class CustomisedTexDateParserTest {
+public class CustomizedTextDateParserTest {
 
-  private final TemporalParser parser =  CustomisedTextDateParser.getInstance(DMY_FORMATS);
+  private final TemporalParser parser =  CustomizedTextDateParser.getInstance(DMY_FORMATS);
 
   @Test
   public void testTextDateParsing(){

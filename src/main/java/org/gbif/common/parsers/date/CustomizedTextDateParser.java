@@ -2,46 +2,48 @@ package org.gbif.common.parsers.date;
 
 import java.io.Serializable;
 import java.time.temporal.TemporalAccessor;
+
 import org.apache.commons.lang3.ArrayUtils;
 import org.gbif.common.parsers.core.ParseResult;
+
 import javax.annotation.Nullable;
 
 /**
- * Wrap up a set of DateTimeFormatters to <code>parse</code> method.
- *
- * Use <code>orderings</code> formatters to parse date, if ISO formatter parsing process fails
+ * Wrap a set of DateTimeFormatters to <code>parse</code> method.
+ * <p>
+ * If the ISO format parsing process fails, use <code>orderings</code> formatters to parse the date.
  */
-public class CustomisedTextDateParser implements TemporalParser, Serializable {
+public class CustomizedTextDateParser implements TemporalParser, Serializable {
   private DateComponentOrdering[] orderings;
   private TextDateParser parser = new TextDateParser();
+
   /**
    * @param orderings a set of DateTimeFormatters
-   * @return
    */
-  public static TemporalParser getInstance(DateComponentOrdering[] orderings){
-      CustomisedTextDateParser ptdp = new CustomisedTextDateParser();
-      ptdp.orderings = orderings;
-      return ptdp;
+  public static TemporalParser getInstance(DateComponentOrdering[] orderings) {
+    CustomizedTextDateParser ptdp = new CustomizedTextDateParser();
+    ptdp.orderings = orderings;
+    return ptdp;
   }
 
   @Override
   public ParseResult<TemporalAccessor> parse(String input) {
     if (ArrayUtils.isNotEmpty(orderings)) {
       return parser.parse(input, orderings);
-    }else{
+    } else {
       return parser.parse(input);
     }
   }
 
   @Override
   public ParseResult<TemporalAccessor> parse(String input,
-    @Nullable DateComponentOrdering ordering) {
-    return parser.parse(input,ordering);
+                                             @Nullable DateComponentOrdering ordering) {
+    return parser.parse(input, ordering);
   }
 
   @Override
   public ParseResult<TemporalAccessor> parse(String input,
-    @Nullable DateComponentOrdering[] orderings) {
+                                             @Nullable DateComponentOrdering[] orderings) {
     return parser.parse(input, orderings);
   }
 
