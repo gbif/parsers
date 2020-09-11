@@ -14,45 +14,67 @@
 <span class="sourceLineNo">006</span>import java.time.temporal.TemporalAccessor;<a name="line.6"></a>
 <span class="sourceLineNo">007</span>import javax.annotation.Nullable;<a name="line.7"></a>
 <span class="sourceLineNo">008</span><a name="line.8"></a>
-<span class="sourceLineNo">009</span><a name="line.9"></a>
-<span class="sourceLineNo">010</span>/**<a name="line.10"></a>
-<span class="sourceLineNo">011</span> *<a name="line.11"></a>
-<span class="sourceLineNo">012</span> * Main interface for date/time parsing based.<a name="line.12"></a>
-<span class="sourceLineNo">013</span> *<a name="line.13"></a>
-<span class="sourceLineNo">014</span> */<a name="line.14"></a>
-<span class="sourceLineNo">015</span>public interface TemporalParser extends Parsable&lt;TemporalAccessor&gt; {<a name="line.15"></a>
-<span class="sourceLineNo">016</span><a name="line.16"></a>
-<span class="sourceLineNo">017</span>  /**<a name="line.17"></a>
-<span class="sourceLineNo">018</span>   * Parse a date represented as a single String into a TemporalAccessor.<a name="line.18"></a>
-<span class="sourceLineNo">019</span>   *<a name="line.19"></a>
-<span class="sourceLineNo">020</span>   * @param input<a name="line.20"></a>
-<span class="sourceLineNo">021</span>   * @param hint help to speed up the parsing and possibly return a better confidence<a name="line.21"></a>
-<span class="sourceLineNo">022</span>   * @return result, never null<a name="line.22"></a>
-<span class="sourceLineNo">023</span>   */<a name="line.23"></a>
-<span class="sourceLineNo">024</span>  ParseResult&lt;TemporalAccessor&gt; parse(String input, @Nullable DateFormatHint hint);<a name="line.24"></a>
-<span class="sourceLineNo">025</span><a name="line.25"></a>
-<span class="sourceLineNo">026</span>  /**<a name="line.26"></a>
-<span class="sourceLineNo">027</span>   * Parse year, month, day strings as a TemporalAccessor.<a name="line.27"></a>
-<span class="sourceLineNo">028</span>   *<a name="line.28"></a>
-<span class="sourceLineNo">029</span>   * @param year numerical value of a year<a name="line.29"></a>
-<span class="sourceLineNo">030</span>   * @param month value of the mont depending on the implementation, numerical value of a<a name="line.30"></a>
-<span class="sourceLineNo">031</span>   *              month (starting at 1 for January) or possibly text.<a name="line.31"></a>
-<span class="sourceLineNo">032</span>   * @param day numerical value of a day<a name="line.32"></a>
-<span class="sourceLineNo">033</span>   * @return result, never null<a name="line.33"></a>
-<span class="sourceLineNo">034</span>   */<a name="line.34"></a>
-<span class="sourceLineNo">035</span>  ParseResult&lt;TemporalAccessor&gt; parse(@Nullable String year, @Nullable String month, @Nullable String day);<a name="line.35"></a>
-<span class="sourceLineNo">036</span><a name="line.36"></a>
-<span class="sourceLineNo">037</span>  /**<a name="line.37"></a>
-<span class="sourceLineNo">038</span>   * Parse year, month, day integers as a TemporalAccessor.<a name="line.38"></a>
-<span class="sourceLineNo">039</span>   *<a name="line.39"></a>
-<span class="sourceLineNo">040</span>   * @param year numerical value of a year<a name="line.40"></a>
-<span class="sourceLineNo">041</span>   * @param month numerical value of a month (starting at 1 for January)<a name="line.41"></a>
-<span class="sourceLineNo">042</span>   * @param day numerical value of a day<a name="line.42"></a>
-<span class="sourceLineNo">043</span>   * @return result, never null<a name="line.43"></a>
-<span class="sourceLineNo">044</span>   */<a name="line.44"></a>
-<span class="sourceLineNo">045</span>  ParseResult&lt;TemporalAccessor&gt; parse(@Nullable Integer year, @Nullable Integer month, @Nullable Integer day);<a name="line.45"></a>
-<span class="sourceLineNo">046</span><a name="line.46"></a>
-<span class="sourceLineNo">047</span>}<a name="line.47"></a>
+<span class="sourceLineNo">009</span>/**<a name="line.9"></a>
+<span class="sourceLineNo">010</span> * Main interface for date/time parsing based.<a name="line.10"></a>
+<span class="sourceLineNo">011</span> */<a name="line.11"></a>
+<span class="sourceLineNo">012</span>public interface TemporalParser extends Parsable&lt;TemporalAccessor&gt; {<a name="line.12"></a>
+<span class="sourceLineNo">013</span><a name="line.13"></a>
+<span class="sourceLineNo">014</span>  /**<a name="line.14"></a>
+<span class="sourceLineNo">015</span>   * Parse a date represented as a single String into a TemporalAccessor.<a name="line.15"></a>
+<span class="sourceLineNo">016</span>   *<a name="line.16"></a>
+<span class="sourceLineNo">017</span>   * @param input<a name="line.17"></a>
+<span class="sourceLineNo">018</span>   * @return result, never null<a name="line.18"></a>
+<span class="sourceLineNo">019</span>   */<a name="line.19"></a>
+<span class="sourceLineNo">020</span>  ParseResult&lt;TemporalAccessor&gt; parse(String input);<a name="line.20"></a>
+<span class="sourceLineNo">021</span><a name="line.21"></a>
+<span class="sourceLineNo">022</span>  /**<a name="line.22"></a>
+<span class="sourceLineNo">023</span>   * Parse a String date &lt;em&gt;restricted to the &lt;code&gt;ordering&lt;/code&gt; provided&lt;/em&gt;.<a name="line.23"></a>
+<span class="sourceLineNo">024</span>   *<a name="line.24"></a>
+<span class="sourceLineNo">025</span>   * Set a general date ordering for the parsing.  For example, DMY will support both 14.08.2020 and<a name="line.25"></a>
+<span class="sourceLineNo">026</span>   * 14/08/2020, but &lt;em&gt;not&lt;/em&gt; 2020-08-14 or 08/14/2020.<a name="line.26"></a>
+<span class="sourceLineNo">027</span>   *<a name="line.27"></a>
+<span class="sourceLineNo">028</span>   * NOTE, this behaviour &lt;strong&gt;differs&lt;/strong&gt; from {@link #parse(String, DateComponentOrdering[])}.<a name="line.28"></a>
+<span class="sourceLineNo">029</span>   *<a name="line.29"></a>
+<span class="sourceLineNo">030</span>   * @param ordering required date ordering.<a name="line.30"></a>
+<span class="sourceLineNo">031</span>   * @return result, never null<a name="line.31"></a>
+<span class="sourceLineNo">032</span>   */<a name="line.32"></a>
+<span class="sourceLineNo">033</span>  ParseResult&lt;TemporalAccessor&gt; parse(String input, @Nullable DateComponentOrdering ordering);<a name="line.33"></a>
+<span class="sourceLineNo">034</span><a name="line.34"></a>
+<span class="sourceLineNo">035</span>  /**<a name="line.35"></a>
+<span class="sourceLineNo">036</span>   * Parse a String date to a TemporalAccessor, attempting unambiguous formats and the<a name="line.36"></a>
+<span class="sourceLineNo">037</span>   * &lt;code&gt;orderings&lt;/code&gt; provided.<a name="line.37"></a>
+<span class="sourceLineNo">038</span>   *<a name="line.38"></a>
+<span class="sourceLineNo">039</span>   * The date 2020-08-14 will always parse.  An &lt;code&gt;ordering&lt;/code&gt; of DMY_FORMATS will also<a name="line.39"></a>
+<span class="sourceLineNo">040</span>   * support 14.08.2020, 14/08/2020 and 14/08/2020 14:11:00, but not 08/14/2020.<a name="line.40"></a>
+<span class="sourceLineNo">041</span>   *<a name="line.41"></a>
+<span class="sourceLineNo">042</span>   * NOTE, this behaviour &lt;strong&gt;differs&lt;/strong&gt; from {@link #parse(String, DateComponentOrdering)}.<a name="line.42"></a>
+<span class="sourceLineNo">043</span>   *<a name="line.43"></a>
+<span class="sourceLineNo">044</span>   * @param orderings required general date orderings<a name="line.44"></a>
+<span class="sourceLineNo">045</span>   * @return result, never null<a name="line.45"></a>
+<span class="sourceLineNo">046</span>   */<a name="line.46"></a>
+<span class="sourceLineNo">047</span>  ParseResult&lt;TemporalAccessor&gt; parse(String input, @Nullable DateComponentOrdering[] orderings);<a name="line.47"></a>
+<span class="sourceLineNo">048</span><a name="line.48"></a>
+<span class="sourceLineNo">049</span>  /**<a name="line.49"></a>
+<span class="sourceLineNo">050</span>   * Parse year, month, day strings as a TemporalAccessor.<a name="line.50"></a>
+<span class="sourceLineNo">051</span>   *<a name="line.51"></a>
+<span class="sourceLineNo">052</span>   * @param year numerical value of a year<a name="line.52"></a>
+<span class="sourceLineNo">053</span>   * @param month value of the mont depending on the implementation, numerical value of a<a name="line.53"></a>
+<span class="sourceLineNo">054</span>   *              month (starting at 1 for January) or possibly text.<a name="line.54"></a>
+<span class="sourceLineNo">055</span>   * @param day numerical value of a day<a name="line.55"></a>
+<span class="sourceLineNo">056</span>   * @return result, never null<a name="line.56"></a>
+<span class="sourceLineNo">057</span>   */<a name="line.57"></a>
+<span class="sourceLineNo">058</span>  ParseResult&lt;TemporalAccessor&gt; parse(@Nullable String year, @Nullable String month, @Nullable String day);<a name="line.58"></a>
+<span class="sourceLineNo">059</span><a name="line.59"></a>
+<span class="sourceLineNo">060</span>  /**<a name="line.60"></a>
+<span class="sourceLineNo">061</span>   * Parse year, month, day integers as a TemporalAccessor.<a name="line.61"></a>
+<span class="sourceLineNo">062</span>   *<a name="line.62"></a>
+<span class="sourceLineNo">063</span>   * @param year numerical value of a year<a name="line.63"></a>
+<span class="sourceLineNo">064</span>   * @param month numerical value of a month (starting at 1 for January)<a name="line.64"></a>
+<span class="sourceLineNo">065</span>   * @param day numerical value of a day<a name="line.65"></a>
+<span class="sourceLineNo">066</span>   * @return result, never null<a name="line.66"></a>
+<span class="sourceLineNo">067</span>   */<a name="line.67"></a>
+<span class="sourceLineNo">068</span>  ParseResult&lt;TemporalAccessor&gt; parse(@Nullable Integer year, @Nullable Integer month, @Nullable Integer day);<a name="line.68"></a>
+<span class="sourceLineNo">069</span>}<a name="line.69"></a>
 
 
 

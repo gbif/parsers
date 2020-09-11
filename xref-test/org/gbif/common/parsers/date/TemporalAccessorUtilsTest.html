@@ -130,7 +130,25 @@
 <a class="jxr_linenumber" name="L122" href="#L122">122</a>     assertFalse(TemporalAccessorUtils.sameOrContained(ymd, YearMonth.of(1996, 5)));
 <a class="jxr_linenumber" name="L123" href="#L123">123</a>     assertFalse(TemporalAccessorUtils.sameOrContained(ymd, LocalDate.of(1996, 4, 27)));
 <a class="jxr_linenumber" name="L124" href="#L124">124</a>   }
-<a class="jxr_linenumber" name="L125" href="#L125">125</a> }
+<a class="jxr_linenumber" name="L125" href="#L125">125</a> 
+<a class="jxr_linenumber" name="L126" href="#L126">126</a>   @Test
+<a class="jxr_linenumber" name="L127" href="#L127">127</a>   <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testLastDay(){
+<a class="jxr_linenumber" name="L128" href="#L128">128</a>     TemporalAccessor year = Year.of(1996);
+<a class="jxr_linenumber" name="L129" href="#L129">129</a>     assertEquals(<span class="jxr_string">"1996-12-31T23:59:59"</span>, TemporalAccessorUtils.toLatestLocalDateTime(year,<strong class="jxr_keyword">true</strong>).toString());
+<a class="jxr_linenumber" name="L130" href="#L130">130</a> 
+<a class="jxr_linenumber" name="L131" href="#L131">131</a>     TemporalAccessor ym = YearMonth.of(1996,1);
+<a class="jxr_linenumber" name="L132" href="#L132">132</a>     assertEquals(<span class="jxr_string">"1996-01-31T23:59:59"</span>, TemporalAccessorUtils.toLatestLocalDateTime(ym,<strong class="jxr_keyword">true</strong>).toString());
+<a class="jxr_linenumber" name="L133" href="#L133">133</a> 
+<a class="jxr_linenumber" name="L134" href="#L134">134</a>     ym = YearMonth.of(1996,2);
+<a class="jxr_linenumber" name="L135" href="#L135">135</a>     assertEquals(<span class="jxr_string">"1996-02-29T23:59:59"</span>, TemporalAccessorUtils.toLatestLocalDateTime(ym,<strong class="jxr_keyword">true</strong>).toString());
+<a class="jxr_linenumber" name="L136" href="#L136">136</a> 
+<a class="jxr_linenumber" name="L137" href="#L137">137</a>     TemporalAccessor ymd = LocalDate.of(1996,2,3);
+<a class="jxr_linenumber" name="L138" href="#L138">138</a>     assertEquals(<span class="jxr_string">"1996-02-03T23:59:59"</span>, TemporalAccessorUtils.toLatestLocalDateTime(ymd,<strong class="jxr_keyword">true</strong>).toString());
+<a class="jxr_linenumber" name="L139" href="#L139">139</a> 
+<a class="jxr_linenumber" name="L140" href="#L140">140</a>     TemporalAccessor ymdt = LocalDateTime.of(1996,2,3,1,20);
+<a class="jxr_linenumber" name="L141" href="#L141">141</a>     assertEquals(<span class="jxr_string">"1996-02-03T01:20"</span>, TemporalAccessorUtils.toLatestLocalDateTime(ymdt,<strong class="jxr_keyword">true</strong>).toString());
+<a class="jxr_linenumber" name="L142" href="#L142">142</a>   }
+<a class="jxr_linenumber" name="L143" href="#L143">143</a> }
 </pre>
 <hr/>
 <div id="footer">Copyright &#169; 2020 <a href="http://www.gbif.org">Global Biodiversity Information Facility</a>. All rights reserved.</div>
