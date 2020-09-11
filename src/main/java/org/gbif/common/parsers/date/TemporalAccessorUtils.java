@@ -16,7 +16,6 @@ import java.util.Optional;
 
 /**
  * Utility methods to work with {@link TemporalAccessor}
- *
  */
 public class TemporalAccessorUtils {
 
@@ -92,6 +91,54 @@ public class TemporalAccessorUtils {
 
     if (localDate != null) {
       return LocalDateTime.from(localDate.atStartOfDay(UTC_ZONE_ID));
+    }
+
+    return null;
+  }
+
+  /**
+   * Transform a {@link TemporalAccessor} to a {@link java.time.LocalDateTime}, rounding a partial date/time to the
+   * the end of the period.
+   *
+   * 1990 will be 1990-12-31,
+   * 1996-02 will be 1996-02-29
+   *
+   * @param temporalAccessor
+   * @param ignoreOffset in case offset information is available in the provided {@link TemporalAccessor}, should it
+   *                     be used ?
+   * @return the LocalDateTime object or null if a LocalDateTime object can not be created
+   */
+  public static LocalDateTime toLatestLocalDateTime(TemporalAccessor temporalAccessor, boolean ignoreOffset) {
+    if (temporalAccessor == null) {
+      return null;
+    }
+
+    // Use offset if present
+    if (!ignoreOffset && temporalAccessor.isSupported(ChronoField.OFFSET_SECONDS)) {
+      return temporalAccessor.query(OffsetDateTime::from).atZoneSameInstant(UTC_ZONE_ID).toLocalDateTime();
+    }
+
+    if (temporalAccessor.isSupported(ChronoField.SECOND_OF_DAY)) {
+      return temporalAccessor.query(LocalDateTime::from);
+    }
+
+    // this may return null in case of partial dates
+    LocalDate localDate = temporalAccessor.query(TemporalQueries.localDate());
+
+    // try YearMonth
+    if (localDate == null && temporalAccessor.isSupported(ChronoField.MONTH_OF_YEAR)) {
+      YearMonth yearMonth = YearMonth.from(temporalAccessor);
+      localDate = yearMonth.atEndOfMonth();
+    }
+
+    // try Year
+    if (localDate == null && temporalAccessor.isSupported(ChronoField.YEAR)) {
+      Year year = Year.from(temporalAccessor);
+      localDate = LocalDate.of(year.getValue(), 12, 31);
+    }
+
+    if (localDate != null) {
+      return LocalDateTime.from(localDate.atTime(23, 59, 59));
     }
 
     return null;
