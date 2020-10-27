@@ -15,11 +15,11 @@ import com.google.common.collect.Sets;
 import org.apache.commons.lang3.StringUtils;
 
 /**
- * Singleton implementation of the case insensitive iso 639-1 language dictionary
+ * Singleton implementation of the case insensitive ISO 639-1 language dictionary
  * that uses the org.gbif.common.api.Language enumeration.
  * Parsing results will be upper cased 2 letter codes.
- * Understood inputs are 2 or 3 letter (both terminological and bibliographical) iso codes
- * and natural language names given in any of the iso languages.
+ * Understood inputs are 2 or 3 letter (both terminological and bibliographical) ISO codes
+ * and natural language names given in any of the ISO languages.
  */
 public class LanguageParser extends EnumParser<Language> {
 
@@ -28,9 +28,9 @@ public class LanguageParser extends EnumParser<Language> {
   private static final List<Pattern> REMOVE_FROM_NAME_PATTERNS = ImmutableList.of(
       // remove brackets
       Pattern.compile("\\(.\\)"),
-      // remove french ", langues"
+      // remove French ", langues"
       Pattern.compile(", ?langues"),
-      // remove english " languages"
+      // remove English " languages"
       Pattern.compile(" languages")
   );
 
@@ -65,7 +65,7 @@ public class LanguageParser extends EnumParser<Language> {
     // OFFICIAL LIST, downloaded from
     // http://www.loc.gov/standards/iso639-2/ascii_8bits.html
 
-    //  An alpha-3 (bibliographic) code
+    // An alpha-3 (bibliographic) code
     // an alpha-3 (terminologic) code (when given)
     // an alpha-2 code (when given)
     // an English name
@@ -75,7 +75,7 @@ public class LanguageParser extends EnumParser<Language> {
       while(r.hasNext()) {
         String[] row = r.next();
         if (row.length>2) {
-          // iso 2 letter code
+          // ISO 2 letter code
           String alpha2 = row[2];
           if (!StringUtils.isBlank(alpha2)) {
             Language lang = Language.fromIsoCode(alpha2);
@@ -87,11 +87,11 @@ public class LanguageParser extends EnumParser<Language> {
             add(row[0], lang);
             // alpha-3 (terminologic)
             add(row[1], lang);
-            // english
+            // English
             for (String l : mutateLanguageName(row[3])) {
               add(l, lang);
             }
-            // french
+            // French
             for (String l : mutateLanguageName(row[4])) {
               add(l, lang);
             }
@@ -153,8 +153,8 @@ public class LanguageParser extends EnumParser<Language> {
     if (value != null) {
       /**
        * A language string could come in as a locale like "en_US" or if it was constructed improperly "eng_US", so
-       * extract only the part before the underscore". Only if it contains an "_" is parsing attempted.
-       * Whether it actually represents an iso 369 language code is left for the language parser to determine.
+       * extract only the part before the underscore. Only if it contains an "_" is parsing attempted.
+       * Whether it actually represents an ISO 369 language code is left for the language parser to determine.
        */
       if (LOCALE.matcher(value).find()) {
         int index = value.indexOf("_");
