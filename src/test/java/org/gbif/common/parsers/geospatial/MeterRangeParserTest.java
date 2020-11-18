@@ -2,6 +2,7 @@ package org.gbif.common.parsers.geospatial;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import org.gbif.api.vocabulary.OccurrenceIssue;
@@ -12,10 +13,12 @@ import org.junit.Test;
 public class MeterRangeParserTest {
 
   @Test
-  public void testParseMeterRange() throws Exception {}
+  public void testParseMeters() {
+    assertFalse(MeterRangeParser.parseMeters("Somewhere between (1-2m) or (3-6ft)").isSuccessful());
+  }
 
   @Test
-  public void testParseElevation() throws Exception {
+  public void testParseElevation() {
     assertResult(MeterRangeParser.parseElevation("10", "20", null), true, 15d, 5d);
     assertResult(MeterRangeParser.parseElevation("10", "20", "1"), true, 15d, 6d);
     assertResult(MeterRangeParser.parseElevation("10", "10", "1"), true, 10d, 1d);

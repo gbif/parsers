@@ -375,11 +375,12 @@ public class MeterRangeParser {
             Double minDouble = NumberParser.parseDouble(min);
             Double maxDouble = NumberParser.parseDouble(max);
 
-            if(minDouble == null && maxDouble != null){
+            if (minDouble == null && maxDouble != null){
               iMeter.measurement = maxDouble;
-            }else if(maxDouble == null && minDouble != null){
+            } else if(maxDouble == null && minDouble != null){
               iMeter.measurement = maxDouble;
-            }else if (minDouble != 0 && maxDouble != 0 && maxDouble - minDouble != 0) {
+            } else if (minDouble != null && maxDouble != null && minDouble != 0 && maxDouble != 0
+              && maxDouble - minDouble != 0) {
               iMeter.measurement = (maxDouble + minDouble) / 2;
             }
           } catch (NumberFormatException ignored) {
