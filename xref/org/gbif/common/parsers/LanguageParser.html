@@ -23,11 +23,11 @@
 <a class="jxr_linenumber" name="L15" href="#L15">15</a>  <strong class="jxr_keyword">import</strong> org.apache.commons.lang3.StringUtils;
 <a class="jxr_linenumber" name="L16" href="#L16">16</a>  
 <a class="jxr_linenumber" name="L17" href="#L17">17</a>  <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L18" href="#L18">18</a>  <em class="jxr_javadoccomment"> * Singleton implementation of the case insensitive iso 639-1 language dictionary</em>
+<a class="jxr_linenumber" name="L18" href="#L18">18</a>  <em class="jxr_javadoccomment"> * Singleton implementation of the case insensitive ISO 639-1 language dictionary</em>
 <a class="jxr_linenumber" name="L19" href="#L19">19</a>  <em class="jxr_javadoccomment"> * that uses the org.gbif.common.api.Language enumeration.</em>
 <a class="jxr_linenumber" name="L20" href="#L20">20</a>  <em class="jxr_javadoccomment"> * Parsing results will be upper cased 2 letter codes.</em>
-<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <em class="jxr_javadoccomment"> * Understood inputs are 2 or 3 letter (both terminological and bibliographical) iso codes</em>
-<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <em class="jxr_javadoccomment"> * and natural language names given in any of the iso languages.</em>
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <em class="jxr_javadoccomment"> * Understood inputs are 2 or 3 letter (both terminological and bibliographical) ISO codes</em>
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <em class="jxr_javadoccomment"> * and natural language names given in any of the ISO languages.</em>
 <a class="jxr_linenumber" name="L23" href="#L23">23</a>  <em class="jxr_javadoccomment"> */</em>
 <a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../org/gbif/common/parsers/LanguageParser.html">LanguageParser</a> <strong class="jxr_keyword">extends</strong> EnumParser&lt;Language&gt; {
 <a class="jxr_linenumber" name="L25" href="#L25">25</a>  
@@ -36,9 +36,9 @@
 <a class="jxr_linenumber" name="L28" href="#L28">28</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> List&lt;Pattern&gt; REMOVE_FROM_NAME_PATTERNS = ImmutableList.of(
 <a class="jxr_linenumber" name="L29" href="#L29">29</a>        <em class="jxr_comment">// remove brackets</em>
 <a class="jxr_linenumber" name="L30" href="#L30">30</a>        Pattern.compile(<span class="jxr_string">"&#92;&#92;(.&#92;&#92;)"</span>),
-<a class="jxr_linenumber" name="L31" href="#L31">31</a>        <em class="jxr_comment">// remove french ", langues"</em>
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>        <em class="jxr_comment">// remove French ", langues"</em>
 <a class="jxr_linenumber" name="L32" href="#L32">32</a>        Pattern.compile(<span class="jxr_string">", ?langues"</span>),
-<a class="jxr_linenumber" name="L33" href="#L33">33</a>        <em class="jxr_comment">// remove english " languages"</em>
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>        <em class="jxr_comment">// remove English " languages"</em>
 <a class="jxr_linenumber" name="L34" href="#L34">34</a>        Pattern.compile(<span class="jxr_string">" languages"</span>)
 <a class="jxr_linenumber" name="L35" href="#L35">35</a>    );
 <a class="jxr_linenumber" name="L36" href="#L36">36</a>  
@@ -73,7 +73,7 @@
 <a class="jxr_linenumber" name="L65" href="#L65">65</a>      <em class="jxr_comment">// OFFICIAL LIST, downloaded from</em>
 <a class="jxr_linenumber" name="L66" href="#L66">66</a>      <em class="jxr_comment">// http://www.loc.gov/standards/iso639-2/ascii_8bits.html</em>
 <a class="jxr_linenumber" name="L67" href="#L67">67</a>  
-<a class="jxr_linenumber" name="L68" href="#L68">68</a>      <em class="jxr_comment">//  An alpha-3 (bibliographic) code</em>
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>      <em class="jxr_comment">// An alpha-3 (bibliographic) code</em>
 <a class="jxr_linenumber" name="L69" href="#L69">69</a>      <em class="jxr_comment">// an alpha-3 (terminologic) code (when given)</em>
 <a class="jxr_linenumber" name="L70" href="#L70">70</a>      <em class="jxr_comment">// an alpha-2 code (when given)</em>
 <a class="jxr_linenumber" name="L71" href="#L71">71</a>      <em class="jxr_comment">// an English name</em>
@@ -83,7 +83,7 @@
 <a class="jxr_linenumber" name="L75" href="#L75">75</a>        <strong class="jxr_keyword">while</strong>(r.hasNext()) {
 <a class="jxr_linenumber" name="L76" href="#L76">76</a>          String[] row = r.next();
 <a class="jxr_linenumber" name="L77" href="#L77">77</a>          <strong class="jxr_keyword">if</strong> (row.length&gt;2) {
-<a class="jxr_linenumber" name="L78" href="#L78">78</a>            <em class="jxr_comment">// iso 2 letter code</em>
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>            <em class="jxr_comment">// ISO 2 letter code</em>
 <a class="jxr_linenumber" name="L79" href="#L79">79</a>            String alpha2 = row[2];
 <a class="jxr_linenumber" name="L80" href="#L80">80</a>            <strong class="jxr_keyword">if</strong> (!StringUtils.isBlank(alpha2)) {
 <a class="jxr_linenumber" name="L81" href="#L81">81</a>              Language lang = Language.fromIsoCode(alpha2);
@@ -95,11 +95,11 @@
 <a class="jxr_linenumber" name="L87" href="#L87">87</a>              add(row[0], lang);
 <a class="jxr_linenumber" name="L88" href="#L88">88</a>              <em class="jxr_comment">// alpha-3 (terminologic)</em>
 <a class="jxr_linenumber" name="L89" href="#L89">89</a>              add(row[1], lang);
-<a class="jxr_linenumber" name="L90" href="#L90">90</a>              <em class="jxr_comment">// english</em>
+<a class="jxr_linenumber" name="L90" href="#L90">90</a>              <em class="jxr_comment">// English</em>
 <a class="jxr_linenumber" name="L91" href="#L91">91</a>              <strong class="jxr_keyword">for</strong> (String l : mutateLanguageName(row[3])) {
 <a class="jxr_linenumber" name="L92" href="#L92">92</a>                add(l, lang);
 <a class="jxr_linenumber" name="L93" href="#L93">93</a>              }
-<a class="jxr_linenumber" name="L94" href="#L94">94</a>              <em class="jxr_comment">// french</em>
+<a class="jxr_linenumber" name="L94" href="#L94">94</a>              <em class="jxr_comment">// French</em>
 <a class="jxr_linenumber" name="L95" href="#L95">95</a>              <strong class="jxr_keyword">for</strong> (String l : mutateLanguageName(row[4])) {
 <a class="jxr_linenumber" name="L96" href="#L96">96</a>                add(l, lang);
 <a class="jxr_linenumber" name="L97" href="#L97">97</a>              }
@@ -161,8 +161,8 @@
 <a class="jxr_linenumber" name="L153" href="#L153">153</a>     <strong class="jxr_keyword">if</strong> (value != <strong class="jxr_keyword">null</strong>) {
 <a class="jxr_linenumber" name="L154" href="#L154">154</a>       <em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L155" href="#L155">155</a> <em class="jxr_javadoccomment">       * A language string could come in as a locale like "en_US" or if it was constructed improperly "eng_US", so</em>
-<a class="jxr_linenumber" name="L156" href="#L156">156</a> <em class="jxr_javadoccomment">       * extract only the part before the underscore". Only if it contains an "_" is parsing attempted.</em>
-<a class="jxr_linenumber" name="L157" href="#L157">157</a> <em class="jxr_javadoccomment">       * Whether it actually represents an iso 369 language code is left for the language parser to determine.</em>
+<a class="jxr_linenumber" name="L156" href="#L156">156</a> <em class="jxr_javadoccomment">       * extract only the part before the underscore. Only if it contains an "_" is parsing attempted.</em>
+<a class="jxr_linenumber" name="L157" href="#L157">157</a> <em class="jxr_javadoccomment">       * Whether it actually represents an ISO 369 language code is left for the language parser to determine.</em>
 <a class="jxr_linenumber" name="L158" href="#L158">158</a> <em class="jxr_javadoccomment">       */</em>
 <a class="jxr_linenumber" name="L159" href="#L159">159</a>       <strong class="jxr_keyword">if</strong> (LOCALE.matcher(value).find()) {
 <a class="jxr_linenumber" name="L160" href="#L160">160</a>         <strong class="jxr_keyword">int</strong> index = value.indexOf(<span class="jxr_string">"_"</span>);
