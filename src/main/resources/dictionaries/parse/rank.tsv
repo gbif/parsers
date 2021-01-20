@@ -207,9 +207,13 @@ spe	SPECIES
 spec	SPECIES
 special form	FORMA_SPECIALIS
 species	SPECIES
+species agg	SPECIES_AGGREGATE
+species aggr	SPECIES_AGGREGATE
+species complex	SPECIES_AGGREGATE
 species group	SPECIES_AGGREGATE
 species subgroup	SPECIES_AGGREGATE
 speciesaggregate	SPECIES_AGGREGATE
+speciescomplex	SPECIES_AGGREGATE
 speciesgroup	SPECIES_AGGREGATE
 specieshypothesis	UNRANKED
 ss	SUBSPECIES
@@ -298,6 +302,7 @@ superregnum	SUPERKINGDOM
 supersect	
 superser	SUPERSERIES
 superseries	SUPERSERIES
+superspecies	SPECIES_AGGREGATE
 supersubtrib	
 supersubtribe	
 supertrib	SUPERTRIBE
