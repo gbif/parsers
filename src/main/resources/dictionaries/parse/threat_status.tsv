@@ -1,0 +1,4 @@
+# A command used to sort this file:
+# LANG=C sort threat_status.tsv -i -t $'\t' -k 2,2 -k1,1
+Lower Risk/least concern	LEAST_CONCERN
+Lower Risk/near threatened	NEAR_THREATENED

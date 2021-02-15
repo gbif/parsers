@@ -22,7 +22,7 @@ public class ThreatStatusParserTest extends ParserTestBase<ThreatStatus> {
 
   @Test
   public void testParseFail() {
-    assertParseFailure("Really great britain");
+    assertParseFailure("Not dead yet.");
     assertParseFailure("Padua");
   }
 
@@ -30,8 +30,8 @@ public class ThreatStatusParserTest extends ParserTestBase<ThreatStatus> {
   public void testParseSuccess() {
     assertParseSuccess(ThreatStatus.ENDANGERED, "ENDANGERED");
     assertParseSuccess(ThreatStatus.LEAST_CONCERN, "Least Concern");
+    assertParseSuccess(ThreatStatus.LEAST_CONCERN, "Lower Risk/least concern");
     assertParseSuccess(ThreatStatus.EXTINCT, "EX");
     assertParseSuccess(ThreatStatus.EXTINCT_IN_THE_WILD, "EW");
   }
-
 }
