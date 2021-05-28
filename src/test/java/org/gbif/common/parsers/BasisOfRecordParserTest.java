@@ -69,6 +69,13 @@ public class BasisOfRecordParserTest extends ParserTestBase<BasisOfRecord> {
     assertParseSuccess(BasisOfRecord.LIVING_SPECIMEN, "germplasm");
     assertParseSuccess(BasisOfRecord.PRESERVED_SPECIMEN, "Alcohol / Microscope");
     assertParseSuccess(BasisOfRecord.PRESERVED_SPECIMEN, "preservé 179600");
+
+    assertParseSuccess(BasisOfRecord.IMAGE, "JPG");
+    assertParseSuccess(BasisOfRecord.SOUND, "SND");
+    assertParseSuccess(BasisOfRecord.VIDEO, "MP4");
+    assertParseSuccess(BasisOfRecord.ENVIRONMENTAL_DNA, "eDNA");
+    assertParseSuccess(BasisOfRecord.GENOMIC_DNA, "Genomic DNA");
+    assertParseSuccess(BasisOfRecord.NOMENCLATURAL_CHECKLIST, "Nomenclatural checklist");
   }
 
 

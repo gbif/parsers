@@ -45,7 +45,7 @@ Unpublished Report
 Plant
 preserved
 Especimen preservado
-HumanObservation 
+HumanObservation
 still image
 FishPreparation
 Fossil Specimen
@@ -820,3 +820,10 @@ Pres
 Boodlea composita
 Saw  1
 Found 50 ova on Rumex crispus
+EnvironmentalDNA
+environmentalDNA
+genomic DNA
+Genomic DNA
+Image
+NomenclaturalChecklist
+Still Images
