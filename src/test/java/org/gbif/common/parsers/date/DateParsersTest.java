@@ -4,6 +4,7 @@ import java.time.DateTimeException;
 import java.time.YearMonth;
 import java.time.format.DateTimeParseException;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 import static org.junit.Assert.assertNotNull;
@@ -58,6 +59,7 @@ public class DateParsersTest {
   }
 
   //  -- ISO_LOCAL_PARTIAL_DATE --
+  @Ignore
   public void testIsoLocalPartialDateParser(){
     // to be implemented
   }

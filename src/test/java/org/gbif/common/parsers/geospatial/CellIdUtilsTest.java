@@ -4,11 +4,13 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
@@ -41,6 +43,7 @@ public class CellIdUtilsTest {
   /**
    * Test method for {@link CellIdUtils#toCentiCellId(Double, Double)}.
    */
+  @Test
   public void testCreateCentiCellId() {
     try {
       assertEquals(0, CellIdUtils.toCentiCellId(-90.0, (double) 170));
@@ -56,13 +59,14 @@ public class CellIdUtilsTest {
     try {
       CellIdUtils.toCellId((double) -100, null);
       fail("-100, null should throw exception");
-    } catch (UnableToGenerateCellIdException e) {
+    } catch (UnableToGenerateCellIdException ignored) {
     }
   }
 
   /**
    * Test method for {@link CellIdUtils#toBoundingBox(int)}.
    */
+  @Test
   public void testToBoundingBox() {
     assertEquals(new LatLngBoundingBox(-180, -90, -179, -89), CellIdUtils.toBoundingBox(0));
     assertEquals(new LatLngBoundingBox(-179, -90, -178, -89), CellIdUtils.toBoundingBox(1));
@@ -73,6 +77,8 @@ public class CellIdUtilsTest {
   /**
    * Test method for {@link CellIdUtils#toBoundingBox(int, int)}.
    */
+  @Ignore("This one was not annotated with @Test, now failing")
+  @Test
   public void testToBoundingBox2() {
     assertEquals(new LatLngBoundingBox((float) -180.0, (float) -90.0, (float) -179.9, (float) -89.9),
       CellIdUtils.toBoundingBox(0, 0));
@@ -86,6 +92,7 @@ public class CellIdUtilsTest {
    * The cells enclosed by should return cells that are partially enclosed also Test method for {@link
    * CellIdUtils#getCellsEnclosedBy(double, double, double, double)}.
    */
+  @Test
   public void testGetCellsEnclosedBy() {
     try {
       Set<Integer> results = CellIdUtils.getCellsEnclosedBy(-90, -89, -180, -179);
@@ -105,6 +112,7 @@ public class CellIdUtilsTest {
   }
 
   // test the bottom left corner of the world
+  @Test
   public void testGetCellsEnclosedByBottomLeft() {
     try {
       Set<Integer> results = CellIdUtils.getCellsEnclosedBy(-90, -89, -180, -179);
@@ -152,6 +160,7 @@ public class CellIdUtilsTest {
   }
 
   // test the bottom right corner of the world
+  @Test
   public void testGetCellsEnclosedByBottomRight() {
     try {
       Set<Integer> results = CellIdUtils.getCellsEnclosedBy(-90, -89, 179, 180);
@@ -180,6 +189,7 @@ public class CellIdUtilsTest {
   }
 
   // test the top left corner of the world
+  @Test
   public void testGetCellsEnclosedByTopLeft() {
     try {
       Set<Integer> results = CellIdUtils.getCellsEnclosedBy(89, 90, -180, -179);
@@ -208,6 +218,7 @@ public class CellIdUtilsTest {
   }
 
   // test the top right corner of the world
+  @Test
   public void testGetCellsEnclosedByTopRight() {
     try {
       Set<Integer> results = CellIdUtils.getCellsEnclosedBy(89, 90, 179, 180);
@@ -236,6 +247,7 @@ public class CellIdUtilsTest {
   }
 
   // test the 0,0 area of the world
+  @Test
   public void testGetCellsEnclosedByCentre() {
     try {
       Set<Integer> results = CellIdUtils.getCellsEnclosedBy(0, 1, 0, 1);
@@ -270,6 +282,7 @@ public class CellIdUtilsTest {
     }
   }
 
+  @Test
   public void testToCellId() {
     try {
       assertEquals(2, CellIdUtils.toCellId(-89.5d, -177.5d));
@@ -283,9 +296,10 @@ public class CellIdUtilsTest {
   /**
    * Test a conversion from and to ids
    */
+  @Test
   public void testLL2Id2LL() {
     try {
-      List<Integer> cells = new LinkedList<Integer>(CellIdUtils.getCellsEnclosedBy(-30, -20, 110, 130));
+      List<Integer> cells = new LinkedList<>(CellIdUtils.getCellsEnclosedBy(-30, -20, 110, 130));
       LatLngBoundingBox bb = CellIdUtils.getBoundingBoxForCells(cells);
       assertEquals(110, (int) bb.getMinLong());
       assertEquals(-30, (int) bb.getMinLat());
@@ -296,21 +310,28 @@ public class CellIdUtilsTest {
     }
   }
 
+  @Ignore("This one was not annotated with @Test, now failing")
+  @Test
   public void testGetCentiCellIdforBoundingBox() {
     try {
       Integer[] centiCell = CellIdUtils.getCentiCellIdForBoundingBox(17.1f, 19.2f, 17.2f, 19.3f);
+      assertNotNull(centiCell);
       assertEquals(2, centiCell.length);
-      assertTrue(centiCell[1] == 21);
+      assertEquals(21, (int) centiCell[1]);
       centiCell = CellIdUtils.getCentiCellIdForBoundingBox(17.0f, 19.8f, 17.1f, 19.9f);
+      assertNotNull(centiCell);
       assertEquals(2, centiCell.length);
-      assertTrue(centiCell[1] == 80);
+      assertEquals(80, (int) centiCell[1]);
       centiCell = CellIdUtils.getCentiCellIdForBoundingBox(-17.0f, 19.8f, -16.9f, 19.9f);
+      assertNotNull(centiCell);
       assertEquals(2, centiCell.length);
       //assertTrue(centiCell[2]==21);
       centiCell = CellIdUtils.getCentiCellIdForBoundingBox(-17.0f, -19.9f, -16.9f, -19.8f);
+      assertNotNull(centiCell);
       assertEquals(2, centiCell.length);
       //assertTrue(centiCell[2]==21);
       centiCell = CellIdUtils.getCentiCellIdForBoundingBox(17.0f, -19.9f, 17.1f, -19.8f);
+      assertNotNull(centiCell);
       assertEquals(2, centiCell.length);
       //assertTrue(centiCell[2]==21);
     } catch (Exception e) {

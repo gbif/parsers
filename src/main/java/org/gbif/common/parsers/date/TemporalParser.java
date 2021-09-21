@@ -17,6 +17,7 @@ public interface TemporalParser extends Parsable<TemporalAccessor> {
    * @param input
    * @return result, never null
    */
+  @Override
   ParseResult<TemporalAccessor> parse(String input);
 
   /**

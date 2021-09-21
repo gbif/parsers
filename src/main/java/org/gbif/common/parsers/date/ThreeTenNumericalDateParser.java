@@ -359,6 +359,7 @@ class ThreeTenNumericalDateParser implements TemporalParser {
    * <p>
    * NOTE, this behaviour <strong>differs</strong> from <code>parse(String input, DateComponentOrdering ordering)</code>
    */
+  @Override
   public ParseResult<TemporalAccessor> parse(String input, DateComponentOrdering[] orderings) {
     ParseResult<TemporalAccessor> result = parse(input);
     if (result.getStatus() == ParseResult.STATUS.FAIL
