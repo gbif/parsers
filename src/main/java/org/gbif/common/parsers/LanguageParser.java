@@ -5,13 +5,13 @@ import org.gbif.common.parsers.core.EnumParser;
 import org.gbif.utils.file.csv.CSVReader;
 import org.gbif.utils.file.csv.CSVReaderFactory;
 
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 import java.util.regex.Pattern;
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Sets;
 import org.apache.commons.lang3.StringUtils;
 
 /**
@@ -25,7 +25,7 @@ public class LanguageParser extends EnumParser<Language> {
 
   private static LanguageParser singletonObject = null;
   private static final Pattern LOCALE = Pattern.compile("^[a-zA-Z]{2,3}_[a-zA-Z]");
-  private static final List<Pattern> REMOVE_FROM_NAME_PATTERNS = ImmutableList.of(
+  private static final List<Pattern> REMOVE_FROM_NAME_PATTERNS = Arrays.asList(
       // remove brackets
       Pattern.compile("\\(.\\)"),
       // remove French ", langues"
@@ -137,7 +137,7 @@ public class LanguageParser extends EnumParser<Language> {
   }
 
   private Set<String> mutateLanguageName(String lang) {
-    Set<String> langs = Sets.newHashSet();
+    Set<String> langs = new HashSet<>();
     for (String l : lang.split(";")) {
       langs.add(l);
       // also remove common patterns

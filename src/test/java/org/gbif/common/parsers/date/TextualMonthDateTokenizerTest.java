@@ -2,8 +2,9 @@ package org.gbif.common.parsers.date;
 
 import javax.annotation.Nullable;
 
-import com.google.common.base.Function;
 import org.junit.Test;
+
+import java.util.function.Function;
 
 import static org.gbif.common.parsers.utils.CSVBasedAssertions.assertTestFile;
 

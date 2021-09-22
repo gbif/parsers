@@ -4,9 +4,6 @@ import org.gbif.api.vocabulary.Continent;
 
 import org.junit.Test;
 
-/**
- *
- */
 public class ContinentParserTest extends ParserTestBase<Continent> {
 
   public ContinentParserTest() {

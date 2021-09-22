@@ -1,7 +1,5 @@
 package org.gbif.common.parsers;
 
-import com.google.common.base.Charsets;
-import com.google.common.collect.Sets;
 import org.gbif.common.parsers.core.ParseResult;
 import org.junit.Test;
 
@@ -9,13 +7,12 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URI;
+import java.nio.charset.StandardCharsets;
+import java.util.HashSet;
 import java.util.Set;
 
 import static org.junit.Assert.assertTrue;
 
-/**
- *
- */
 public class LicenseUriParserTest extends ParserTestBase<URI> {
 
   public LicenseUriParserTest() {
@@ -52,9 +49,10 @@ public class LicenseUriParserTest extends ParserTestBase<URI> {
 
     int failed = 0;
     int success = 0;
-    Set<URI> values = Sets.newHashSet();
+    Set<URI> values = new HashSet<>();
 
-    BufferedReader r = new BufferedReader(new InputStreamReader(getClass().getResourceAsStream("/parse/license_uri.txt"), Charsets.UTF_8));
+    BufferedReader r = new BufferedReader(
+        new InputStreamReader(getClass().getResourceAsStream("/parse/license_uri.txt"), StandardCharsets.UTF_8));
     String line;
     while ((line=r.readLine()) != null) {
       ParseResult<URI> parsed = parser.parse(line);

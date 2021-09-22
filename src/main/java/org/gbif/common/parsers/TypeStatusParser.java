@@ -1,14 +1,13 @@
 package org.gbif.common.parsers;
 
+import org.apache.commons.lang3.StringUtils;
 import org.gbif.api.vocabulary.TypeStatus;
-import org.gbif.common.parsers.core.ASCIIParser;
 import org.gbif.common.parsers.core.EnumParser;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import com.google.common.base.CharMatcher;
-import com.google.common.base.Strings;
 import org.gbif.common.parsers.core.ParseResult;
 
 /**
@@ -27,7 +26,7 @@ public class TypeStatusParser extends EnumParser<TypeStatus> {
 
   @Override
   protected String normalize(String value) {
-    if (Strings.isNullOrEmpty(value)) {
+    if (StringUtils.isEmpty(value)) {
       return null;
     }
     // uppercase

@@ -4,13 +4,12 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.StringUtils;
-
-import com.google.common.base.Charsets;
 
 /**
  * A very simple Dictionary backed by a tab delimited file.
@@ -59,7 +58,7 @@ public abstract class FileBasedDictionaryParser<T> extends DictionaryBackedParse
     }
 
     Source(InputStream file, String commentMarker) {
-      r = new BufferedReader(new InputStreamReader(file, Charsets.UTF_8));
+      r = new BufferedReader(new InputStreamReader(file, StandardCharsets.UTF_8));
       this.commentMarker = commentMarker;
     }
 
@@ -115,7 +114,7 @@ public abstract class FileBasedDictionaryParser<T> extends DictionaryBackedParse
 
       String[] atoms = tab.split(line);
       line = null;
-      return new KeyValue<String, T>(StringUtils.trimToNull(atoms[0]), fromDictFile(StringUtils.trimToNull(atoms[1])));
+      return new KeyValue<>(StringUtils.trimToNull(atoms[0]), fromDictFile(StringUtils.trimToNull(atoms[1])));
     }
 
     @Override

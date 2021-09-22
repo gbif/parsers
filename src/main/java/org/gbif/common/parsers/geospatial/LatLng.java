@@ -1,7 +1,7 @@
 package org.gbif.common.parsers.geospatial;
 
-import com.google.common.base.MoreObjects;
-import com.google.common.base.Objects;
+import java.util.Objects;
+import java.util.StringJoiner;
 
 /**
  * Simple container class for an interpreted coordinate.
@@ -31,28 +31,22 @@ public class LatLng {
 
   @Override
   public String toString() {
-    return MoreObjects.toStringHelper(this)
-      .add("lat", lat)
-      .add("lng", lng)
-      .toString();
+    return new StringJoiner(", ", LatLng.class.getSimpleName() + "[", "]")
+        .add("lat=" + lat)
+        .add("lng=" + lng)
+        .toString();
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+    LatLng latLng = (LatLng) o;
+    return Objects.equals(lat, latLng.lat) && Objects.equals(lng, latLng.lng);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hashCode(lat, lng);
-  }
-
-  @Override
-  public boolean equals(Object object) {
-    if (this == object) {
-      return true;
-    }
-    if (!(object instanceof LatLng)) {
-      return false;
-    }
-
-    LatLng that = (LatLng) object;
-    return Objects.equal(this.lat, that.lat)
-           && Objects.equal(this.lng, that.lng);
+    return Objects.hash(lat, lng);
   }
 }

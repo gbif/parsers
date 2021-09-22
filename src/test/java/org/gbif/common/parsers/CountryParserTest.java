@@ -6,11 +6,11 @@ import org.gbif.common.parsers.core.ParseResult;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import com.google.common.base.Charsets;
-import com.google.common.collect.Maps;
 import org.junit.Test;
 
 import static org.junit.Assert.assertTrue;
@@ -43,13 +43,13 @@ public class CountryParserTest extends ParserTestBase<Country> {
     final int CURRENT_TESTS_SUCCESSFUL = 5273;
 
     // remember number of successful parsed countries:
-    Map<Country, AtomicInteger> stats = Maps.newHashMap();
+    Map<Country, AtomicInteger> stats = new HashMap<>();
     int values = 0;
     int failed = 0;
     int success = 0;
     BufferedReader r = new BufferedReader(
       new InputStreamReader(this.getClass().getResourceAsStream("/parse/countryname/occurrence_countries.txt"),
-        Charsets.UTF_8));
+        StandardCharsets.UTF_8));
     String line;
     do {
       line = r.readLine();

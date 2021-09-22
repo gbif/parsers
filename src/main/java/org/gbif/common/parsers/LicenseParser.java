@@ -1,5 +1,6 @@
 package org.gbif.common.parsers;
 
+import org.apache.commons.lang3.StringUtils;
 import org.gbif.api.vocabulary.License;
 import org.gbif.common.parsers.core.EnumParser;
 import org.gbif.common.parsers.core.ParseResult;
@@ -7,8 +8,6 @@ import org.gbif.common.parsers.core.ParseResult;
 import java.net.URI;
 import java.util.regex.Pattern;
 import javax.annotation.Nullable;
-
-import com.google.common.base.Strings;
 
 /**
  * Singleton implementation of the dictionary that uses the file /dictionaries/parse/license.txt to lookup a
@@ -69,7 +68,7 @@ public class LicenseParser extends EnumParser<License> {
    * otherwise defaults to License.UNSUPPORTED
    */
   public License parseUriThenTitle(@Nullable URI uri, @Nullable String title) {
-    if (uri == null && Strings.isNullOrEmpty(title)) {
+    if (uri == null && StringUtils.isEmpty(title)) {
       return License.UNSPECIFIED;
     }
 
@@ -80,7 +79,7 @@ public class LicenseParser extends EnumParser<License> {
       }
     }
 
-    if (!Strings.isNullOrEmpty(title)) {
+    if (StringUtils.isNotEmpty(title)) {
       ParseResult<License> result = singletonObject.parse(title);
       if (result.isSuccessful()) {
         return result.getPayload();

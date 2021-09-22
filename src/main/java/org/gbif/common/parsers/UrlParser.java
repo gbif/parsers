@@ -1,14 +1,13 @@
 package org.gbif.common.parsers;
 
 import java.net.URI;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
-import com.google.common.base.CharMatcher;
-import com.google.common.base.Splitter;
-import com.google.common.base.Strings;
-import com.google.common.collect.Iterables;
-import com.google.common.collect.Lists;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -38,8 +37,8 @@ public class UrlParser {
    * @return The converted value, or null if not parsable or exception occurred
    */
   public static URI parse(String value) {
-    value = CharMatcher.WHITESPACE.trimFrom(Strings.nullToEmpty(value));
-    if (Strings.isNullOrEmpty(value)) {
+    value = StringUtils.trimToEmpty(value);
+    if (StringUtils.isEmpty(value)) {
       return null;
     }
 
@@ -56,7 +55,7 @@ public class UrlParser {
       }
 
       // verify that we have a domain
-      if (Strings.isNullOrEmpty(uri.getHost())) {
+      if (StringUtils.isEmpty(uri.getHost())) {
         return null;
       }
 
@@ -71,9 +70,9 @@ public class UrlParser {
    * Parses a single string with null, one or many URIs concatenated together as found in dwc:associatedMedia.
    */
   public static List<URI> parseUriList(String uris) {
-    List<URI> result = Lists.newArrayList();
+    List<URI> result = new ArrayList<>();
 
-    if (!Strings.isNullOrEmpty(uris)) {
+    if (StringUtils.isNotEmpty(uris)) {
       // first try to use the entire string
       URI uri = UrlParser.parse(uris);
       if (uri != null) {
@@ -83,11 +82,14 @@ public class UrlParser {
         // try common delimiters
         int maxValidUrls = 0;
         for (String delimiter : MULTI_VALUE_DELIMITERS) {
-          Splitter splitter = Splitter.on(delimiter).omitEmptyStrings().trimResults();
-          String[] urls = Iterables.toArray(splitter.split(uris), String.class);
-          // avoid parsing if we haven' actually split anything
-          if (urls.length > 1) {
-            List<URI> tmp = Lists.newArrayList();
+          List<String> urls = Arrays.stream(StringUtils.splitByWholeSeparator(uris, delimiter))
+              .filter(StringUtils::isNotBlank)
+              .map(String::trim)
+              .collect(Collectors.toList());
+
+          // avoid parsing if we haven't actually split anything
+          if (urls.size() > 1) {
+            List<URI> tmp = new ArrayList<>();
             for (String url : urls) {
               uri = UrlParser.parse(url);
               if (uri != null) {

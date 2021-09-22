@@ -10,8 +10,6 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import com.google.common.annotations.VisibleForTesting;
-import com.google.common.base.Strings;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -71,7 +69,7 @@ public class CoordinateParseUtils {
    * @return The parse result
    */
   public static OccurrenceParseResult<LatLng> parseLatLng(final String latitude, final String longitude) {
-    if (Strings.isNullOrEmpty(latitude) || Strings.isNullOrEmpty(longitude)) {
+    if (StringUtils.isEmpty(latitude) || StringUtils.isEmpty(longitude)) {
       return OccurrenceParseResult.fail();
     }
     Double lat = NumberParser.parseDouble(latitude);
@@ -109,7 +107,7 @@ public class CoordinateParseUtils {
 
   // 02° 49' 52" N	131° 47' 03" E
   public static OccurrenceParseResult<LatLng> parseVerbatimCoordinates(final String coordinates) {
-    if (Strings.isNullOrEmpty(coordinates)) {
+    if (StringUtils.isEmpty(coordinates)) {
       return OccurrenceParseResult.fail();
     }
     Matcher m = DMS_COORD.matcher(coordinates);
@@ -192,7 +190,6 @@ public class CoordinateParseUtils {
    * @param lat
    * @return the converted decimal up to 6 decimals accuracy
    */
-  @VisibleForTesting
   protected static double parseDMS(String coord, boolean lat) {
     final String DIRS = lat ? "NS" : "EOW";
     coord = coord.trim().toUpperCase();

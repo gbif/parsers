@@ -5,14 +5,16 @@ import org.gbif.utils.file.csv.CSVReaderFactory;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.time.Month;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
-import com.google.common.base.Charsets;
-import com.google.common.base.Splitter;
-import com.google.common.collect.Maps;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -34,7 +36,6 @@ public class DatePartsNormalizer {
 
   private static final String STRING_NULL = "\\N";
   private static final String COLUMN_SEPARATOR = "\t";
-  private static final Splitter ROW_ELEMENT_SPLITTER = Splitter.on(',').trimResults().omitEmptyStrings();
 
   private static final String COMMENT_MARKER = "#";
   private static final String MONTH_FILEPATH = "/dictionaries/parse/month.tsv";
@@ -43,11 +44,11 @@ public class DatePartsNormalizer {
 
   // Load all the month names and alternative month names from a file
   static {
-    Map<String, Set<String>> monthMap = Maps.newHashMapWithExpectedSize(Month.values().length);
+    Map<String, Set<String>> monthMap = new HashMap<>(Month.values().length);
     String keyName;
     for (Month m : Month.values()) {
       keyName = m.name().toLowerCase();
-      monthMap.put(keyName, new HashSet<String>());
+      monthMap.put(keyName, new HashSet<>());
       //add the key itself
       monthMap.get(keyName).add(keyName);
     }
@@ -57,7 +58,7 @@ public class DatePartsNormalizer {
     if (monthFileStream == null) {
       LOG.error("Month file can not be loaded. File not found: {}", MONTH_FILEPATH);
     } else {
-      try (CSVReader csv = CSVReaderFactory.build(monthFileStream, Charsets.UTF_8.name(), COLUMN_SEPARATOR, null, 0)) {
+      try (CSVReader csv = CSVReaderFactory.build(monthFileStream, StandardCharsets.UTF_8.name(), COLUMN_SEPARATOR, null, 0)) {
         while (csv.hasNext()) {
           String[] row = csv.next();
           if (row == null || StringUtils.isBlank(row[0]) || row[0].startsWith(COMMENT_MARKER)) {
@@ -65,7 +66,12 @@ public class DatePartsNormalizer {
           }
           String monthKey = row[0].toLowerCase();
           if (monthMap.containsKey(monthKey)) {
-            for (String monthAltName : ROW_ELEMENT_SPLITTER.split(row[1])) {
+            List<String> split = Arrays.stream(StringUtils.split(row[1], ','))
+                .filter(StringUtils::isNotBlank)
+                .map(String::trim)
+                .collect(Collectors.toList());
+
+            for (String monthAltName : split) {
               monthMap.get(monthKey).add(monthAltName.toLowerCase());
             }
           } else {

@@ -10,9 +10,6 @@ import org.junit.Test;
 
 import static org.junit.Assert.assertTrue;
 
-/**
- *
- */
 public class TypeStatusParserTest extends ParserTestBase<TypeStatus> {
 
   public TypeStatusParserTest() {

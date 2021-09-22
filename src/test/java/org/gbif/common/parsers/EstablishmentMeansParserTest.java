@@ -4,9 +4,6 @@ import org.gbif.api.vocabulary.EstablishmentMeans;
 
 import org.junit.Test;
 
-/**
- *
- */
 public class EstablishmentMeansParserTest extends ParserTestBase<EstablishmentMeans> {
 
   public EstablishmentMeansParserTest() {

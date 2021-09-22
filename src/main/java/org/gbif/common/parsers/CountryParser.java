@@ -1,5 +1,6 @@
 package org.gbif.common.parsers;
 
+import org.apache.commons.lang3.StringUtils;
 import org.gbif.api.util.VocabularyUtils;
 import org.gbif.api.vocabulary.Country;
 import org.gbif.common.parsers.core.EnumParser;
@@ -7,7 +8,6 @@ import org.gbif.common.parsers.core.EnumParser;
 import java.util.regex.Pattern;
 
 import com.google.common.base.CharMatcher;
-import com.google.common.base.Strings;
 
 /**
  * Singleton implementation of the dictionary that uses the file /dictionaries/parse/countryName.txt.
@@ -51,7 +51,7 @@ public class CountryParser extends EnumParser<Country> {
       String cleanedCountry = LETTER_MATCHER.retainFrom(value);
       cleanedCountry = REMOVE_OFF_PATTERN.matcher(cleanedCountry).replaceFirst("");
       cleanedCountry = WHITESPACE_MATCHER.trimAndCollapseFrom(cleanedCountry, ' ');
-      cleanedCountry = Strings.emptyToNull(cleanedCountry);
+      cleanedCountry = StringUtils.trimToNull(cleanedCountry);
       return super.normalize(cleanedCountry);
     }
     return null;

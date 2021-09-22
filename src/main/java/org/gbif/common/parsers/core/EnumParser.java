@@ -1,13 +1,12 @@
 package org.gbif.common.parsers.core;
 
-import com.google.common.collect.Sets;
+import org.apache.commons.lang3.StringUtils;
 import org.gbif.api.util.VocabularyUtils;
 
 import java.io.InputStream;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.regex.Pattern;
-
-import com.google.common.base.Strings;
 
 /**
  * Generic parser for enumerations making use of our vocabulary util to lookup an enum value from a string.
@@ -21,11 +20,12 @@ public class EnumParser<T extends Enum<T>> extends FileBasedDictionaryParser<T> 
   protected final ASCIIParser asciiParser = ASCIIParser.getInstance();
 
   // These become null, as after removing non-letters "N/A" might mean something like "Namibia".
-  private final HashSet<String> notAvailable = Sets.newHashSet(
+  private final HashSet<String> notAvailable = new HashSet<>(
+      Arrays.asList(
           "N/A", "N/a", "n/a", "n/A", "n.a.", // Not available
           "N/K", "N/k", "n/k", "n/K", "n.k.", // Not known
           "UNK.", "Unk.", "unk.", "UNK", "Unk", "unk" // Unknown
-  );
+      ));
 
   protected EnumParser(Class<T> clazz, boolean allowDigits, final InputStream... inputs) {
     super(false);
@@ -57,7 +57,7 @@ public class EnumParser<T extends Enum<T>> extends FileBasedDictionaryParser<T> 
 
   @Override
   protected String normalize(String value) {
-    if (Strings.isNullOrEmpty(handleNotAvailable(value))) return null;
+    if (StringUtils.isEmpty(handleNotAvailable(value))) return null;
 
     // convert to ascii
     ParseResult<String> asci = asciiParser.parse(value);

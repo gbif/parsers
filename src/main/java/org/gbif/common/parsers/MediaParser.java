@@ -1,8 +1,7 @@
 package org.gbif.common.parsers;
 
-import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.ImmutableSet;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.tika.Tika;
 import org.apache.tika.mime.MediaTypeRegistry;
 import org.apache.tika.mime.MimeType;
@@ -15,6 +14,9 @@ import org.slf4j.LoggerFactory;
 
 import javax.annotation.Nullable;
 import java.net.URI;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.regex.Pattern;
@@ -25,9 +27,10 @@ public class MediaParser {
   private static final MimeTypes MIME_TYPES = MimeTypes.getDefaultMimeTypes();
   private static final String HTML_TYPE = "text/html";
   // MIME types which we consider as HTML links instead of real media file URIs
-  private static final Set<String> HTML_MIME_TYPES = ImmutableSet
-    .of("text/x-coldfusion", "text/x-php", "text/asp", "text/aspdotnet", "text/x-cgi", "text/x-jsp", "text/x-perl",
-      HTML_TYPE, MIME_TYPES.OCTET_STREAM);
+  private static final Set<String> HTML_MIME_TYPES = Collections.unmodifiableSet(
+      new HashSet<>(
+          Arrays.asList("text/x-coldfusion", "text/x-php", "text/asp", "text/aspdotnet", "text/x-cgi",
+              "text/x-jsp", "text/x-perl", HTML_TYPE, MimeTypes.OCTET_STREAM)));
 
   // List of exceptions, could be read from a file if it grows. URLs matching this return a media file.
   private static final Map<Pattern, String> knownUrlPatterns = new ImmutableMap.Builder<Pattern, String>()
@@ -60,7 +63,7 @@ public class MediaParser {
   }
 
   public MediaObject detectType(MediaObject mo) {
-    if (Strings.isNullOrEmpty(mo.getFormat())) {
+    if (StringUtils.isEmpty(mo.getFormat())) {
       // derive from URI
       mo.setFormat(parseMimeType(mo.getIdentifier()));
     }
@@ -73,7 +76,7 @@ public class MediaParser {
       mo.setFormat(null);
     }
 
-    if (!Strings.isNullOrEmpty(mo.getFormat())) {
+    if (StringUtils.isNotEmpty(mo.getFormat())) {
       if (mo.getFormat().startsWith("image")) {
         mo.setType(MediaType.StillImage);
       } else if (mo.getFormat().startsWith("audio")) {
@@ -94,7 +97,7 @@ public class MediaParser {
    */
   public String parseMimeType(@Nullable String format) {
     if (format != null) {
-      format = Strings.emptyToNull(format.trim().toLowerCase());
+      format = StringUtils.trimToNull(format.trim().toLowerCase());
     }
     if (format == null) {
       return null;

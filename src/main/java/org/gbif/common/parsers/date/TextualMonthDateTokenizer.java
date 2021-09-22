@@ -1,15 +1,14 @@
 package org.gbif.common.parsers.date;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+import java.util.StringJoiner;
 import java.util.regex.Pattern;
 
-import com.google.common.base.MoreObjects;
-import com.google.common.base.Objects;
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
 import org.apache.commons.lang3.StringUtils;
 
 /**
@@ -36,10 +35,15 @@ public class TextualMonthDateTokenizer {
   private static final Pattern DAY_SUFFIXES_PATTERN =  Pattern.compile("(?<=[0-9]{1,2})(st|nd|rd|th|\\.)",
           Pattern.CASE_INSENSITIVE);
 
-  private static final Map<TokenType, Pattern> PATTERNS_BY_TYPE = ImmutableMap.of(
-          TokenType.INT_2, Pattern.compile("[0-9]{1,2}"),
-          TokenType.INT_4, Pattern.compile("[0-9]{4}"),
-          TokenType.TEXT, Pattern.compile("[A-Za-z.]{1,10}"));
+  private static final Map<TokenType, Pattern> PATTERNS_BY_TYPE;
+
+  static {
+    Map<TokenType, Pattern> patternsByType = new HashMap<>();
+    patternsByType.put(TokenType.INT_2, Pattern.compile("[0-9]{1,2}"));
+    patternsByType.put(TokenType.INT_4, Pattern.compile("[0-9]{4}"));
+    patternsByType.put(TokenType.TEXT, Pattern.compile("[A-Za-z.]{1,10}"));
+    PATTERNS_BY_TYPE = Collections.unmodifiableMap(patternsByType);
+  }
 
   /**
    * Private constructor use static method {@link #newInstance()}
@@ -87,7 +91,7 @@ public class TextualMonthDateTokenizer {
    *
    */
   public static class DateTokens {
-    private final Map<TokenType, DateToken> tokens = Maps.newHashMapWithExpectedSize(3);
+    private final Map<TokenType, DateToken> tokens = new HashMap<>(3);
     private List<DateToken> discardedTokens = null;
 
     private void addToken(DateToken dateToken){
@@ -99,7 +103,7 @@ public class TextualMonthDateTokenizer {
 
     private void addDiscardedToken(DateToken dateToken){
       if(discardedTokens == null){
-        discardedTokens = Lists.newArrayList();
+        discardedTokens = new ArrayList<>();
       }
       discardedTokens.add(dateToken);
     }
@@ -127,16 +131,16 @@ public class TextualMonthDateTokenizer {
     }
 
     public List<DateToken> getDiscardedTokens() {
-      return ImmutableList.copyOf(discardedTokens);
+      return Collections.unmodifiableList(discardedTokens);
     }
 
     @Override
-    public String toString(){
-      return MoreObjects.toStringHelper(this)
-              .add("tokens", tokens)
-              .add("discardedTokens", discardedTokens).toString();
+    public String toString() {
+      return new StringJoiner(", ", DateTokens.class.getSimpleName() + "[", "]")
+          .add("tokens=" + tokens)
+          .add("discardedTokens=" + discardedTokens)
+          .toString();
     }
-
   }
 
   /**
@@ -159,25 +163,24 @@ public class TextualMonthDateTokenizer {
     }
 
     @Override
+    public String toString() {
+      return new StringJoiner(", ", DateToken.class.getSimpleName() + "[", "]")
+          .add("token='" + token + "'")
+          .add("type=" + type)
+          .toString();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+      if (this == o) return true;
+      if (o == null || getClass() != o.getClass()) return false;
+      DateToken dateToken = (DateToken) o;
+      return Objects.equals(token, dateToken.token) && type == dateToken.type;
+    }
+
+    @Override
     public int hashCode() {
-      return Objects.hashCode(token, type);
-    }
-
-    @Override
-    public boolean equals(Object object){
-      if (object instanceof DateToken) {
-        DateToken that = (DateToken) object;
-        return Objects.equal(this.token, that.token)
-                && Objects.equal(this.type, that.type);
-      }
-      return false;
-    }
-
-    @Override
-    public String toString(){
-      return MoreObjects.toStringHelper(this)
-              .add("token", token)
-              .add("type", type).toString();
+      return Objects.hash(token, type);
     }
   }
 }

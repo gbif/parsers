@@ -2,9 +2,6 @@ package org.gbif.common.parsers;
 
 import org.junit.Test;
 
-/**
- *
- */
 public class TypifiedNameParserTest extends ParserTestBase<String> {
 
   public TypifiedNameParserTest() {

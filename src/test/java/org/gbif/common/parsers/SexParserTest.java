@@ -1,7 +1,5 @@
 package org.gbif.common.parsers;
 
-import com.google.common.base.Charsets;
-import com.google.common.collect.Sets;
 import org.gbif.api.vocabulary.Sex;
 
 import org.gbif.common.parsers.core.ParseResult;
@@ -10,13 +8,12 @@ import org.junit.Test;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
+import java.util.HashSet;
 import java.util.Set;
 
 import static org.junit.Assert.assertTrue;
 
-/**
- *
- */
 public class SexParserTest extends ParserTestBase<Sex> {
 
   public SexParserTest() {
@@ -58,10 +55,10 @@ public class SexParserTest extends ParserTestBase<Sex> {
 
     int failed = 0;
     int success = 0;
-    Set<Sex> values = Sets.newHashSet();
+    Set<Sex> values = new HashSet<>();
 
     BufferedReader r = new BufferedReader(new InputStreamReader(
-      getClass().getResourceAsStream("/parse/sexes.txt"), Charsets.UTF_8));
+      getClass().getResourceAsStream("/parse/sexes.txt"), StandardCharsets.UTF_8));
     String line;
     while ((line=r.readLine()) != null) {
       ParseResult<Sex> parsed = parser.parse(line);

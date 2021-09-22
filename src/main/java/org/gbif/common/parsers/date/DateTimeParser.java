@@ -4,10 +4,11 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.time.temporal.TemporalAccessor;
 import java.time.temporal.TemporalQuery;
+import java.util.Objects;
 import javax.annotation.Nullable;
 import javax.validation.constraints.NotNull;
 
-import com.google.common.base.Preconditions;
+import org.gbif.utils.PreconditionUtils;
 
 /**
  * Adds some flexibility around {@link DateTimeFormatter} with the {@link DateTimeSeparatorNormalizer} and
@@ -31,10 +32,10 @@ public class DateTimeParser {
   DateTimeParser(@NotNull DateTimeFormatter formatter, @Nullable DateTimeSeparatorNormalizer normalizer,
                  @NotNull DateComponentOrdering ordering, TemporalQuery<?>[] type, int minLength) {
 
-    Preconditions.checkNotNull(formatter, "DateTimeFormatter can not be null");
-    Preconditions.checkNotNull(ordering, "DateComponentOrdering can not be null");
-    Preconditions.checkNotNull(type, "TemporalQuery can not be null");
-    Preconditions.checkArgument(minLength > 0, "minLength must be greater than 0");
+    Objects.requireNonNull(formatter, "DateTimeFormatter can not be null");
+    Objects.requireNonNull(ordering, "DateComponentOrdering can not be null");
+    Objects.requireNonNull(type, "TemporalQuery can not be null");
+    PreconditionUtils.checkArgument(minLength > 0, "minLength must be greater than 0");
 
     this.formatter = formatter;
     this.ordering = ordering;

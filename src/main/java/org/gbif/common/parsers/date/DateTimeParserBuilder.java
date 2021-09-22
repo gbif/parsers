@@ -7,16 +7,17 @@ import java.time.format.DateTimeFormatterBuilder;
 import java.time.format.ResolverStyle;
 import java.time.temporal.ChronoField;
 import java.time.temporal.TemporalQuery;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import javax.validation.constraints.NotNull;
 
 import com.google.common.base.CharMatcher;
-import com.google.common.base.Preconditions;
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
 import org.apache.commons.lang3.StringUtils;
+import org.gbif.utils.PreconditionUtils;
 
 /**
  * The DateTimeParserBuilder can build objects directly (build(..) methods) or return an instance
@@ -49,7 +50,7 @@ public class DateTimeParserBuilder {
    */
   private static DateTimeParser build(@NotNull String pattern, @NotNull DateComponentOrdering ordering,
                                      @NotNull TemporalQuery<?> type) {
-    Preconditions.checkNotNull(type);
+    Objects.requireNonNull(type);
     return build(pattern, ordering, new TemporalQuery[]{type});
   }
 
@@ -58,7 +59,7 @@ public class DateTimeParserBuilder {
    */
   private static DateTimeParser build(@NotNull String pattern, @NotNull DateComponentOrdering ordering,
                                       @NotNull TemporalQuery<?> type, ZoneId zoneId) {
-    Preconditions.checkNotNull(type);
+    Objects.requireNonNull(type);
     return build(pattern, ordering, new TemporalQuery[]{type}, zoneId);
   }
 
@@ -66,8 +67,8 @@ public class DateTimeParserBuilder {
    * Build a single, possibly lenient, DateTimeParser.
    */
   private static DateTimeParser build(@NotNull String pattern, @NotNull DateComponentOrdering ordering, @NotNull TemporalQuery<?>[] type) {
-    Preconditions.checkNotNull(pattern);
-    Preconditions.checkNotNull(ordering);
+    Objects.requireNonNull(pattern);
+    Objects.requireNonNull(ordering);
 
     int minLength = getMinimumStringLengthForPattern(pattern);
     DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(pattern).withResolverStyle(ResolverStyle.STRICT);
@@ -76,8 +77,8 @@ public class DateTimeParserBuilder {
 
   private static DateTimeParser build(@NotNull String pattern, @NotNull DateComponentOrdering ordering,
                                       @NotNull TemporalQuery<?>[] type, ZoneId zoneId) {
-    Preconditions.checkNotNull(pattern);
-    Preconditions.checkNotNull(ordering);
+    Objects.requireNonNull(pattern);
+    Objects.requireNonNull(ordering);
 
     int minLength = getMinimumStringLengthForPattern(pattern);
     DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(pattern).withZone(zoneId)
@@ -98,10 +99,10 @@ public class DateTimeParserBuilder {
    */
   private static DateTimeParser build(String pattern, DateComponentOrdering ordering, @NotNull TemporalQuery<?>[] type, String separator,
                                       String alternativeSeparators) {
-    Preconditions.checkNotNull(pattern);
-    Preconditions.checkNotNull(ordering);
-    Preconditions.checkArgument(StringUtils.isNotBlank(separator), "separator must NOT be blank");
-    Preconditions.checkArgument(StringUtils.isNotBlank(alternativeSeparators), "alternativeSeparators must NOT be blank");
+    Objects.requireNonNull(pattern);
+    Objects.requireNonNull(ordering);
+    PreconditionUtils.checkArgument(StringUtils.isNotBlank(separator), "separator must NOT be blank");
+    PreconditionUtils.checkArgument(StringUtils.isNotBlank(alternativeSeparators), "alternativeSeparators must NOT be blank");
 
     DateTimeSeparatorNormalizer dateTimeNormalizer = new DateTimeSeparatorNormalizer(CharMatcher.anyOf(alternativeSeparators), separator);
     DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(pattern).withResolverStyle(ResolverStyle.STRICT);
@@ -125,10 +126,10 @@ public class DateTimeParserBuilder {
    */
   private static DateTimeParser build(String pattern, DateComponentOrdering ordering, @NotNull TemporalQuery<?>[] type, String separator,
                                       String alternativeSeparators, Year baseYear) {
-    Preconditions.checkNotNull(pattern);
-    Preconditions.checkNotNull(ordering);
-    Preconditions.checkArgument(StringUtils.isNotBlank(separator), "separator must NOT be blank");
-    Preconditions.checkArgument(StringUtils.isNotBlank(alternativeSeparators), "alternativeSeparators must NOT be blank");
+    Objects.requireNonNull(pattern);
+    Objects.requireNonNull(ordering);
+    PreconditionUtils.checkArgument(StringUtils.isNotBlank(separator), "separator must NOT be blank");
+    PreconditionUtils.checkArgument(StringUtils.isNotBlank(alternativeSeparators), "alternativeSeparators must NOT be blank");
 
     DateTimeSeparatorNormalizer dateTimeNormalizer = new DateTimeSeparatorNormalizer(CharMatcher.anyOf(alternativeSeparators), separator);
     DateTimeFormatter dateTimeFormatter = build2DigitsYearDateTimeFormatter(pattern, baseYear);
@@ -147,7 +148,7 @@ public class DateTimeParserBuilder {
   }
 
   private static DateTimeFormatter build2DigitsYearDateTimeFormatter(String pattern, Year baseYear) {
-    Preconditions.checkState(pattern.matches(IS_YEAR_2_DIGITS_PATTERN) || pattern.equals(YEAR_2_DIGITS_PATTERN_SUFFIX),
+    PreconditionUtils.checkState(pattern.matches(IS_YEAR_2_DIGITS_PATTERN) || pattern.equals(YEAR_2_DIGITS_PATTERN_SUFFIX),
             "build2DigitsYearDateTimeFormatter can only be used for patterns with 2 digit year");
     pattern = StringUtils.removeEnd(pattern, YEAR_2_DIGITS_PATTERN_SUFFIX);
     return new DateTimeFormatterBuilder().append(DateTimeFormatter.ofPattern(pattern))
@@ -158,7 +159,7 @@ public class DateTimeParserBuilder {
    * Builder used to build a List of {@link DateTimeParser}.
    */
   public static class ThreeTenDateParserListBuilder {
-    private final List<DateTimeParser> dateTimeParsers = Lists.newArrayList();
+    private final List<DateTimeParser> dateTimeParsers = new ArrayList<>();
 
     /**
      * @param type expected {@link TemporalQuery} from the provided pattern
@@ -218,7 +219,7 @@ public class DateTimeParserBuilder {
     }
 
     public List<DateTimeParser> build() {
-      return ImmutableList.copyOf(dateTimeParsers);
+      return Collections.unmodifiableList(dateTimeParsers);
     }
   }
 
@@ -227,7 +228,7 @@ public class DateTimeParserBuilder {
    */
   public static class ThreeTenDateMultiParserListBuilder {
     private DateTimeParser preferred;
-    private List<DateTimeParser> otherParsers = Lists.newArrayList();
+    private List<DateTimeParser> otherParsers = new ArrayList<>();
 
     public ThreeTenDateMultiParserListBuilder preferredDateTimeParser(String pattern, DateComponentOrdering ordering, TemporalQuery<?> type) {
       preferred = DateTimeParserBuilder.build(pattern, ordering, type);
@@ -271,7 +272,7 @@ public class DateTimeParserBuilder {
      * Currently (this could change) we should only have one DateTimeParser per DateComponentOrdering.
      */
     private void validate() throws IllegalStateException {
-      Set<DateComponentOrdering> orderings = Sets.newHashSet();
+      Set<DateComponentOrdering> orderings = new HashSet<>();
       if(preferred != null) {
         orderings.add(preferred.getOrdering());
       }

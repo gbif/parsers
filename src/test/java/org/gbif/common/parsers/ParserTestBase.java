@@ -1,7 +1,7 @@
 package org.gbif.common.parsers;
 
-import com.google.common.base.Strings;
 import com.google.common.io.LineProcessor;
+import org.apache.commons.lang3.StringUtils;
 import org.gbif.common.parsers.core.Parsable;
 import org.gbif.common.parsers.core.ParseResult;
 import org.junit.Before;
@@ -52,7 +52,7 @@ public abstract class ParserTestBase<T> implements LineProcessor<ParserTestBase.
 
   @Override
   public boolean processLine(String line) throws IOException {
-    if (Strings.isNullOrEmpty(line)) {
+    if (StringUtils.isEmpty(line)) {
       return false;
     }
     ParseResult<T> parsed = parser.parse(line);

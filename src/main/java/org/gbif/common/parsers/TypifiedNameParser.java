@@ -1,7 +1,7 @@
 package org.gbif.common.parsers;
 
-import com.google.common.base.Strings;
 import com.google.common.collect.Range;
+import org.apache.commons.lang3.StringUtils;
 import org.gbif.api.exception.UnparsableException;
 import org.gbif.api.model.checklistbank.ParsedName;
 import org.gbif.common.parsers.core.Parsable;
@@ -32,7 +32,7 @@ public class TypifiedNameParser implements Parsable<String> {
 
   @Override
   public ParseResult<String> parse(String input) {
-    if (!Strings.isNullOrEmpty(input)) {
+    if (StringUtils.isNotEmpty(input)) {
       Matcher m = NAME_SEPARATOR.matcher(input);
       if (m.find()) {
         String name = m.group(1);

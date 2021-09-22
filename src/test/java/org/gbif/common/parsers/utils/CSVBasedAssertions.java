@@ -6,8 +6,7 @@ import org.gbif.utils.file.csv.CSVReaderFactory;
 
 import java.io.File;
 import java.io.IOException;
-
-import com.google.common.base.Function;
+import java.util.function.Function;
 
 import static org.junit.Assert.fail;
 

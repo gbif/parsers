@@ -4,8 +4,9 @@ import org.gbif.api.vocabulary.OccurrenceIssue;
 import org.gbif.common.parsers.core.OccurrenceParseResult;
 import org.gbif.common.parsers.core.ParseResult;
 
-import com.google.common.collect.Lists;
 import org.junit.Test;
+
+import java.util.Arrays;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -144,11 +145,10 @@ public class CoordinateParseUtilsTest {
     assertEquals(c, pr.getConfidence());
     assertNotNull(pr.getPayload());
     assertEquals(expected, pr.getPayload());
-    //System.out.println(Lists.newArrayList(issue));
     if (issue == null) {
       assertTrue(pr.getIssues().isEmpty());
     } else {
-      assertEquals("Wrong number of issues. Found " + pr.getIssues() + ", expected " + Lists.newArrayList(issue), issue.length, pr.getIssues().size());
+      assertEquals("Wrong number of issues. Found " + pr.getIssues() + ", expected " + Arrays.asList(issue), issue.length, pr.getIssues().size());
       for (OccurrenceIssue iss : issue) {
         assertTrue(pr.getIssues().contains(iss));
       }

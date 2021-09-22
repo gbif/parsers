@@ -9,9 +9,6 @@ import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 
-/**
- *
- */
 public class AtomizedLocalDateTimeTest {
 
   private static final int YEAR = 1978;

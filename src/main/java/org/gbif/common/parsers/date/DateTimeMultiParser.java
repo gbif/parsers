@@ -2,13 +2,13 @@ package org.gbif.common.parsers.date;
 
 import java.time.temporal.TemporalAccessor;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import javax.annotation.Nullable;
 import javax.validation.constraints.NotNull;
 
-import com.google.common.base.Preconditions;
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Lists;
+import org.gbif.utils.PreconditionUtils;
 
 /**
  * Supports multiple {@link DateTimeParser} that are considered ambiguous. Two {@link DateTimeParser} are considered
@@ -43,25 +43,25 @@ public class DateTimeMultiParser {
    *                     preferred {@link DateTimeParser} is provided. Otherwise, the list must contain at least 1 element.
    */
   DateTimeMultiParser(@Nullable DateTimeParser preferred, @NotNull List<DateTimeParser> otherParsers) {
-
-    Preconditions.checkNotNull(otherParsers, "otherParsers list can not be null");
-    Preconditions.checkArgument(otherParsers.size() > 0, "otherParsers must contain at least 1 element");
+    Objects.requireNonNull(otherParsers, "otherParsers list can not be null");
+    PreconditionUtils.checkArgument(otherParsers.size() > 0, "otherParsers must contain at least 1 element");
 
     if (preferred == null) {
-      Preconditions.checkArgument(otherParsers.size() > 1, "If no preferred DateTimeParser is provided, " +
+      PreconditionUtils.checkArgument(otherParsers.size() > 1, "If no preferred DateTimeParser is provided, " +
               "the otherParsers list must contain more than 1 element");
     }
 
     this.preferred = preferred;
-    this.otherParsers = Lists.newArrayList(otherParsers);
+    this.otherParsers = new ArrayList<>(otherParsers);
 
-    ImmutableList.Builder immutableListBuilder = new ImmutableList.Builder<DateTimeParser>();
+    List<DateTimeParser> resultList = new ArrayList<>();
+
     if (preferred != null) {
-      immutableListBuilder.add(preferred);
+      resultList.add(preferred);
     }
-    immutableListBuilder.addAll(otherParsers);
+    resultList.addAll(otherParsers);
 
-    this.allParsers = immutableListBuilder.build();
+    this.allParsers = Collections.unmodifiableList(resultList);
   }
 
   /**
@@ -93,7 +93,7 @@ public class DateTimeMultiParser {
       if (lastParsed != null) {
         numberParsed++;
         if (otherResults == null) {
-          otherResults = Lists.newArrayList();
+          otherResults = new ArrayList<>();
         }
         otherResults.add(lastParsed);
         usedFormats.add(currParser.getOrdering().name());

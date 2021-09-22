@@ -1,16 +1,16 @@
 package org.gbif.common.parsers.geospatial;
 
+import org.apache.commons.lang3.StringUtils;
 import org.gbif.api.vocabulary.OccurrenceIssue;
 import org.gbif.common.parsers.core.OccurrenceParseResult;
 import org.gbif.common.parsers.core.ParseResult;
 import org.gbif.common.parsers.NumberParser;
 
+import java.util.HashSet;
 import java.util.Set;
 import java.util.regex.Pattern;
 import javax.annotation.Nullable;
 
-import com.google.common.base.Strings;
-import com.google.common.collect.Sets;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -263,7 +263,7 @@ public class MeterRangeParser {
 
     MeasurementWrapper<DoubleAccuracy> elevation = parseMeterRange(min, max, precision);
 
-    Set<OccurrenceIssue> issues = Sets.newHashSet();
+    Set<OccurrenceIssue> issues = new HashSet<>();
     if(elevation.containsNonNumeric) {
       issues.add(OccurrenceIssue.ELEVATION_NON_NUMERIC);
     }
@@ -295,7 +295,7 @@ public class MeterRangeParser {
   public static OccurrenceParseResult<DoubleAccuracy> parseDepth(@Nullable String min, @Nullable String max, @Nullable String precision) {
     MeasurementWrapper<DoubleAccuracy> depth = parseMeterRange(min, max, precision);
 
-    Set<OccurrenceIssue> issues = Sets.newHashSet();
+    Set<OccurrenceIssue> issues = new HashSet<>();
     if(depth.containsNonNumeric) {
       issues.add(OccurrenceIssue.DEPTH_NON_NUMERIC);
     }
@@ -343,9 +343,9 @@ public class MeterRangeParser {
   }
 
   private static MeasurementWrapper<Double> parseInMeter(String meter) {
-    MeasurementWrapper<Double> iMeter = new MeasurementWrapper<Double>();
+    MeasurementWrapper<Double> iMeter = new MeasurementWrapper<>();
 
-    if (Strings.isNullOrEmpty(meter)) {
+    if (StringUtils.isEmpty(meter)) {
       return iMeter;
     }
 

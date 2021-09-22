@@ -3,8 +3,8 @@ package org.gbif.common.parsers.date;
 import java.time.Duration;
 import java.time.temporal.ChronoField;
 import java.time.temporal.TemporalAccessor;
+import java.util.Objects;
 
-import com.google.common.base.Objects;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -155,22 +155,18 @@ public class AtomizedLocalDateTime {
   }
 
   @Override
-  public boolean equals(Object obj) {
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
 
-    if (this == obj) {
-      return true;
-    }
-    if (!(obj instanceof AtomizedLocalDateTime)) {
-      return false;
-    }
+    AtomizedLocalDateTime that = (AtomizedLocalDateTime) o;
 
-    AtomizedLocalDateTime that = (AtomizedLocalDateTime) obj;
-    return Objects.equal(this.localDate, that.localDate)
-            && Objects.equal(this.hour, that.hour)
-            && Objects.equal(this.minute, that.minute)
-            && Objects.equal(this.second, that.second)
-            && Objects.equal(this.millisecond, that.millisecond)
-            && Objects.equal(this.resolution, that.resolution);
+    return resolution == that.resolution
+        && Objects.equals(localDate, that.localDate)
+        && Objects.equals(hour, that.hour)
+        && Objects.equals(minute, that.minute)
+        && Objects.equals(second, that.second)
+        && Objects.equals(millisecond, that.millisecond);
   }
 
   @Override

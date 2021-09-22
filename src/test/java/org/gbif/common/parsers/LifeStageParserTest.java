@@ -4,9 +4,6 @@ import org.gbif.api.vocabulary.LifeStage;
 
 import org.junit.Test;
 
-/**
- *
- */
 public class LifeStageParserTest extends ParserTestBase<LifeStage> {
 
   public LifeStageParserTest() {

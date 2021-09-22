@@ -2,8 +2,8 @@ package org.gbif.common.parsers.date;
 
 import java.time.temporal.ChronoField;
 import java.time.temporal.TemporalAccessor;
+import java.util.Objects;
 
-import com.google.common.base.Objects;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -101,20 +101,16 @@ public class AtomizedLocalDate {
   }
 
   @Override
-  public boolean equals(Object obj) {
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
 
-    if (this == obj) {
-      return true;
-    }
-    if (!(obj instanceof AtomizedLocalDate)) {
-      return false;
-    }
+    AtomizedLocalDate that = (AtomizedLocalDate) o;
 
-    AtomizedLocalDate that = (AtomizedLocalDate) obj;
-    return Objects.equal(this.year, that.year)
-            && Objects.equal(this.month, that.month)
-            && Objects.equal(this.day, that.day)
-            && Objects.equal(this.resolution, that.resolution);
+    return resolution == that.resolution
+        && Objects.equals(year, that.year)
+        && Objects.equals(month, that.month)
+        && Objects.equals(day, that.day);
   }
 
   @Override

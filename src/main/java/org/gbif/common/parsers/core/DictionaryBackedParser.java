@@ -4,7 +4,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-import com.google.common.base.Strings;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -44,7 +43,7 @@ public class DictionaryBackedParser<V> implements Parsable<V> {
   final protected void add(String key, V value) {
     if (!StringUtils.isBlank(key)) {
       String normedKey = normalize(key);
-      if (!Strings.isNullOrEmpty(normedKey)) {
+      if (StringUtils.isNotEmpty(normedKey)) {
         V existingValue = dictionary.get(normedKey);
         if (existingValue == null) {
           dictionary.put(normedKey, value);

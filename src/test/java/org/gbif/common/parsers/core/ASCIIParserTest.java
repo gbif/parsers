@@ -4,9 +4,6 @@ import org.gbif.common.parsers.ParserTestBase;
 
 import org.junit.Test;
 
-/**
- *
- */
 public class ASCIIParserTest extends ParserTestBase<String> {
 
   public ASCIIParserTest() {

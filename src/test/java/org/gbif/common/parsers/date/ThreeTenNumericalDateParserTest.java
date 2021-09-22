@@ -12,9 +12,9 @@ import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.time.temporal.ChronoField;
 import java.time.temporal.TemporalAccessor;
+import java.util.function.Function;
 import javax.annotation.Nullable;
 
-import com.google.common.base.Function;
 import org.junit.Test;
 
 import static org.gbif.common.parsers.utils.CSVBasedAssertions.assertTestFile;

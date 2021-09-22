@@ -6,17 +6,14 @@ import org.gbif.common.parsers.core.ParseResult;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
+import java.util.HashSet;
 import java.util.Set;
 
-import com.google.common.base.Charsets;
-import com.google.common.collect.Sets;
 import org.junit.Test;
 
 import static org.junit.Assert.assertTrue;
 
-/**
- *
- */
 public class BasisOfRecordParserTest extends ParserTestBase<BasisOfRecord> {
 
   public BasisOfRecordParserTest() {
@@ -42,7 +39,6 @@ public class BasisOfRecordParserTest extends ParserTestBase<BasisOfRecord> {
     assertParseFailure("");
     assertParseFailure("Tim");
   }
-
 
   @Test
   public void testParse() {
@@ -71,7 +67,6 @@ public class BasisOfRecordParserTest extends ParserTestBase<BasisOfRecord> {
     assertParseSuccess(BasisOfRecord.PRESERVED_SPECIMEN, "preservé 179600");
   }
 
-
   /**
    * Parse all unique basis of record values found in our index and make sure parsing doesn't get worse.
    * If the test file is updated, values here need to be adjusted!
@@ -83,10 +78,10 @@ public class BasisOfRecordParserTest extends ParserTestBase<BasisOfRecord> {
 
     int failed = 0;
     int success = 0;
-    Set<BasisOfRecord> values = Sets.newHashSet();
+    Set<BasisOfRecord> values = new HashSet<>();
 
     BufferedReader r = new BufferedReader(new InputStreamReader(
-      getClass().getResourceAsStream("/parse/basisofrecord/test_bor.txt"), Charsets.UTF_8));
+      getClass().getResourceAsStream("/parse/basisofrecord/test_bor.txt"), StandardCharsets.UTF_8));
     String line;
     while ((line=r.readLine()) != null) {
       ParseResult<BasisOfRecord> parsed = parser.parse(line);

@@ -1,6 +1,6 @@
 package org.gbif.common.parsers.utils;
 
-import com.google.common.base.Strings;
+import org.apache.commons.lang3.StringUtils;
 import org.gbif.api.exception.UnparsableException;
 import org.gbif.api.model.checklistbank.ParsedName;
 import org.gbif.api.vocabulary.Rank;
@@ -58,7 +58,7 @@ public final class ClassificationUtils {
    * @param taxon to check
    */
   public static String clean(String taxon) {
-    if (Strings.isNullOrEmpty(taxon) || NULL_STRINGS.contains(taxon)) {
+    if (StringUtils.isEmpty(taxon) || NULL_STRINGS.contains(taxon)) {
       return null;
     }
 
@@ -109,7 +109,7 @@ public final class ClassificationUtils {
       return null;
     }
 
-    return Strings.emptyToNull(cleanedTaxon);
+    return StringUtils.trimToNull(cleanedTaxon);
   }
 
   /**
@@ -120,7 +120,7 @@ public final class ClassificationUtils {
    * @return cleaned author
    */
   public static String cleanAuthor(String author) {
-    if (Strings.isNullOrEmpty(author) || NULL_STRINGS.contains(author)) {
+    if (StringUtils.isEmpty(author) || NULL_STRINGS.contains(author)) {
       return null;
     }
 
@@ -138,7 +138,7 @@ public final class ClassificationUtils {
     cleanedAuthor = CLEAN_REG_EX.matcher(cleanedAuthor).replaceAll("");
     cleanedAuthor = cleanedAuthor.trim();
 
-    return Strings.emptyToNull(cleanedAuthor);
+    return StringUtils.trimToNull(cleanedAuthor);
   }
 
   /**

@@ -1,13 +1,12 @@
 package org.gbif.common.parsers.geospatial;
 
+import org.apache.commons.lang3.StringUtils;
 import org.gbif.common.parsers.core.ASCIIParser;
 import org.gbif.common.parsers.core.FileBasedDictionaryParser;
 import org.gbif.common.parsers.core.ParseResult;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import com.google.common.base.Strings;
 
 /**
  * Parser for geodetic datum strings into EPSG integer codes.
@@ -45,7 +44,7 @@ public class DatumParser extends FileBasedDictionaryParser<Integer> {
 
   @Override
   public ParseResult<Integer> parse(String input) {
-    if (Strings.isNullOrEmpty(input)) {
+    if (StringUtils.isEmpty(input)) {
       return null;
     }
     // try EPSG codes directly, allow common typo
@@ -60,7 +59,7 @@ public class DatumParser extends FileBasedDictionaryParser<Integer> {
 
   @Override
   protected String normalize(String value) {
-    if (Strings.isNullOrEmpty(value)) return null;
+    if (StringUtils.isEmpty(value)) return null;
     // convert to ascii
     ParseResult<String> asci = ascii.parse(value);
     return NORMALIZER.matcher(asci.getPayload()).replaceAll("").toUpperCase();
@@ -68,7 +67,7 @@ public class DatumParser extends FileBasedDictionaryParser<Integer> {
 
   @Override
   protected Integer fromDictFile(String value) {
-    if (Strings.isNullOrEmpty(value)) {
+    if (StringUtils.isEmpty(value)) {
       return null;
     }
     return Integer.valueOf(value);

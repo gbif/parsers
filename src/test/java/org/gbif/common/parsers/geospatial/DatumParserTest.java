@@ -6,17 +6,14 @@ import org.gbif.common.parsers.core.ParseResult;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
+import java.util.HashSet;
 import java.util.Set;
 
-import com.google.common.base.Charsets;
-import com.google.common.collect.Sets;
 import org.junit.Test;
 
 import static org.junit.Assert.assertTrue;
 
-/**
- *
- */
 public class DatumParserTest extends ParserTestBase<Integer> {
 
   public DatumParserTest() {
@@ -60,10 +57,10 @@ public class DatumParserTest extends ParserTestBase<Integer> {
 
     int failed = 0;
     int success = 0;
-    Set<Integer> codes = Sets.newHashSet();
+    Set<Integer> codes = new HashSet<>();
 
     BufferedReader r = new BufferedReader(new InputStreamReader(
-          getClass().getResourceAsStream("/parse/test_datum.txt"), Charsets.UTF_8));
+          getClass().getResourceAsStream("/parse/test_datum.txt"), StandardCharsets.UTF_8));
     String line;
     while ((line=r.readLine()) != null) {
       ParseResult<Integer> parsed = parser.parse(line);

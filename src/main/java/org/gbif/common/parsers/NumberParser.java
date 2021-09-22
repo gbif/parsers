@@ -1,11 +1,11 @@
 package org.gbif.common.parsers;
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.ParsePosition;
 import java.util.Locale;
-
-import com.google.common.base.Strings;
 
 /**
  * Utils class to parse numbers trying various locales so that dots and comma based formats are both supported.
@@ -19,7 +19,7 @@ public class NumberParser {
 
   public static Double parseDouble(String x) {
     final String trimmed = x == null ? null : x.trim();
-    if (Strings.isNullOrEmpty(trimmed)) return null;
+    if (StringUtils.isEmpty(trimmed)) return null;
 
     try {
       return Double.parseDouble(x);
@@ -37,7 +37,7 @@ public class NumberParser {
 
   public static Integer parseInteger(String x) {
     final String trimmed = x == null ? null : x.trim();
-    if (Strings.isNullOrEmpty(trimmed)) return null;
+    if (StringUtils.isEmpty(trimmed)) return null;
 
     try {
       return Integer.parseInt(x);

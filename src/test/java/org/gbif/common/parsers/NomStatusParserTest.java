@@ -1,7 +1,7 @@
 package org.gbif.common.parsers;
 
-import com.google.common.base.Strings;
 import com.google.common.io.Resources;
+import org.apache.commons.lang3.StringUtils;
 import org.gbif.api.vocabulary.NomenclaturalStatus;
 import org.gbif.common.parsers.core.ParseResult;
 import org.junit.Test;
@@ -31,10 +31,10 @@ public class NomStatusParserTest extends ParserTestBase<NomenclaturalStatus> {
             assertParseSuccess(t, t.name());
             assertParseSuccess(t, t.name().toLowerCase());
             assertParseSuccess(t, t.name().replace("_", "").toLowerCase());
-            if (!Strings.isNullOrEmpty(t.getLatinLabel())) {
+            if (StringUtils.isNotEmpty(t.getLatinLabel())) {
                 assertParseSuccess(t, t.getLatinLabel());
             }
-            if (!Strings.isNullOrEmpty(t.getAbbreviatedLabel())) {
+            if (StringUtils.isNotEmpty(t.getAbbreviatedLabel())) {
                 assertParseSuccess(t, t.getAbbreviatedLabel());
             }
         }
@@ -46,7 +46,6 @@ public class NomStatusParserTest extends ParserTestBase<NomenclaturalStatus> {
         assertParseFailure("");
         assertParseFailure("Tim");
     }
-
 
     @Test
     public void testParse() {
@@ -61,7 +60,6 @@ public class NomStatusParserTest extends ParserTestBase<NomenclaturalStatus> {
         assertParseSuccess(NomenclaturalStatus.NEW_SPECIES, "sp nov , heterotypic syn");
     }
 
-
     @Test
     public void testFileCoverage() throws IOException {
         // parses all values in our test file (generated from real occurrence data) and verifies we never get worse at parsing
@@ -70,5 +68,4 @@ public class NomStatusParserTest extends ParserTestBase<NomenclaturalStatus> {
         System.out.println(String.format("%s out of %s lines failed to parse", result.failed, result.total));
         assertTrue(result.failed <= 166); // out of 747
     }
-
 }

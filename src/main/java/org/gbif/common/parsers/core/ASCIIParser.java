@@ -1,7 +1,6 @@
 package org.gbif.common.parsers.core;
 
-import com.google.common.base.Strings;
-
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * This class converts alphabetic, numeric, and symbolic Unicode characters
@@ -52,7 +51,7 @@ public final class ASCIIParser implements Parsable<String> {
 
   @Override
   public ParseResult<String> parse(String input) {
-    if (Strings.isNullOrEmpty(input)) {
+    if (StringUtils.isEmpty(input)) {
       return ParseResult.fail();
     } else {
       StringBuilder sb = new StringBuilder();
