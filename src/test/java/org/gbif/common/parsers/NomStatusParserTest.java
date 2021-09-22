@@ -1,14 +1,16 @@
 package org.gbif.common.parsers;
 
-import com.google.common.io.Resources;
 import org.apache.commons.lang3.StringUtils;
 import org.gbif.api.vocabulary.NomenclaturalStatus;
 import org.gbif.common.parsers.core.ParseResult;
 import org.junit.Test;
 
+import java.io.BufferedReader;
 import java.io.IOException;
-import java.nio.charset.Charset;
+import java.io.InputStreamReader;
+import java.net.URL;
 
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 /**
@@ -63,9 +65,16 @@ public class NomStatusParserTest extends ParserTestBase<NomenclaturalStatus> {
     @Test
     public void testFileCoverage() throws IOException {
         // parses all values in our test file (generated from real occurrence data) and verifies we never get worse at parsing
-        Resources.readLines(Resources.getResource("parse/nom_status.txt"), Charset.forName("UTF8"), this);
+        URL fileUrl = this.getClass().getClassLoader().getResource("parse/nom_status.txt");
+        assertNotNull(fileUrl);
+
+        try (BufferedReader in = new BufferedReader(new InputStreamReader(fileUrl.openStream()))) {
+            readLines(in, this);
+        }
+
         BatchParseResult result = getResult();
-        System.out.println(String.format("%s out of %s lines failed to parse", result.failed, result.total));
+        System.out.printf("%s out of %s lines failed to parse%n", result.failed, result.total);
+        assertTrue(result.failed > 0);
         assertTrue(result.failed <= 166); // out of 747
     }
 }

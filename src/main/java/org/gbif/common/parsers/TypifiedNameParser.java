@@ -1,6 +1,6 @@
 package org.gbif.common.parsers;
 
-import com.google.common.collect.Range;
+import org.apache.commons.lang3.Range;
 import org.apache.commons.lang3.StringUtils;
 import org.gbif.api.exception.UnparsableException;
 import org.gbif.api.model.checklistbank.ParsedName;
@@ -23,7 +23,7 @@ public class TypifiedNameParser implements Parsable<String> {
   protected final Logger log = LoggerFactory.getLogger(getClass());
   private static TypifiedNameParser singletonObject = null;
 
-  private static final Range<Integer> REASONABLE_NAME_SIZE_RANGE = Range.closed(4, 40);
+  private static final Range<Integer> REASONABLE_NAME_SIZE_RANGE = Range.between(4, 40);
   private static final Pattern NAME_SEPARATOR = Pattern.compile("\\sOF\\W*\\s+\\W*(.+)\\W*\\s*$", Pattern.CASE_INSENSITIVE);
   private static final Pattern CLEAN_WHITESPACE = Pattern.compile("\\s+");
 
@@ -63,6 +63,4 @@ public class TypifiedNameParser implements Parsable<String> {
     }
     return singletonObject;
   }
-
-
 }

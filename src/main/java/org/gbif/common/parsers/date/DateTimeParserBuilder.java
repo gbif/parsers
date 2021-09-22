@@ -15,7 +15,6 @@ import java.util.Objects;
 import java.util.Set;
 import javax.validation.constraints.NotNull;
 
-import com.google.common.base.CharMatcher;
 import org.apache.commons.lang3.StringUtils;
 import org.gbif.utils.PreconditionUtils;
 
@@ -104,7 +103,7 @@ public class DateTimeParserBuilder {
     PreconditionUtils.checkArgument(StringUtils.isNotBlank(separator), "separator must NOT be blank");
     PreconditionUtils.checkArgument(StringUtils.isNotBlank(alternativeSeparators), "alternativeSeparators must NOT be blank");
 
-    DateTimeSeparatorNormalizer dateTimeNormalizer = new DateTimeSeparatorNormalizer(CharMatcher.anyOf(alternativeSeparators), separator);
+    DateTimeSeparatorNormalizer dateTimeNormalizer = new DateTimeSeparatorNormalizer(alternativeSeparators, separator);
     DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(pattern).withResolverStyle(ResolverStyle.STRICT);
     int minLength = getMinimumStringLengthForPattern(pattern);
     return new DateTimeParser(dateTimeFormatter, dateTimeNormalizer, ordering, type, minLength);
@@ -131,7 +130,7 @@ public class DateTimeParserBuilder {
     PreconditionUtils.checkArgument(StringUtils.isNotBlank(separator), "separator must NOT be blank");
     PreconditionUtils.checkArgument(StringUtils.isNotBlank(alternativeSeparators), "alternativeSeparators must NOT be blank");
 
-    DateTimeSeparatorNormalizer dateTimeNormalizer = new DateTimeSeparatorNormalizer(CharMatcher.anyOf(alternativeSeparators), separator);
+    DateTimeSeparatorNormalizer dateTimeNormalizer = new DateTimeSeparatorNormalizer(alternativeSeparators, separator);
     DateTimeFormatter dateTimeFormatter = build2DigitsYearDateTimeFormatter(pattern, baseYear);
     int minLength = getMinimumStringLengthForPattern(pattern);
     return new DateTimeParser(dateTimeFormatter, dateTimeNormalizer, ordering, type, minLength);

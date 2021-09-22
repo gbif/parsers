@@ -28,7 +28,6 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import javax.annotation.Nullable;
 
-import com.google.common.collect.ImmutableMap;
 import org.apache.commons.lang3.StringUtils;
 import org.gbif.utils.PreconditionUtils;
 import org.slf4j.Logger;
@@ -207,7 +206,7 @@ class ThreeTenNumericalDateParser implements TemporalParser {
    * Private constructor, use static methods {@link #newInstance()} and {@link #newInstance(Year)}.
    */
   private ThreeTenNumericalDateParser() {
-    this.activeFormattersByOrdering = ImmutableMap.copyOf(FORMATTERS_BY_ORDERING);
+    this.activeFormattersByOrdering = Collections.unmodifiableMap(FORMATTERS_BY_ORDERING);
     this.activeMultiParserList = MULTIPARSER_PARSER_LIST;
   }
 
@@ -246,7 +245,7 @@ class ThreeTenNumericalDateParser implements TemporalParser {
     }
 
     this.activeMultiParserList = Collections.unmodifiableList(multiParserList);
-    this.activeFormattersByOrdering = ImmutableMap.copyOf(formattersByOrdering);
+    this.activeFormattersByOrdering = Collections.unmodifiableMap(formattersByOrdering);
   }
 
   @Override

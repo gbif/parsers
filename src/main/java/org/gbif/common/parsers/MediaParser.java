@@ -1,6 +1,5 @@
 package org.gbif.common.parsers;
 
-import com.google.common.collect.ImmutableMap;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.tika.Tika;
 import org.apache.tika.mime.MediaTypeRegistry;
@@ -16,6 +15,7 @@ import javax.annotation.Nullable;
 import java.net.URI;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -33,19 +33,19 @@ public class MediaParser {
               "text/x-jsp", "text/x-perl", HTML_TYPE, MimeTypes.OCTET_STREAM)));
 
   // List of exceptions, could be read from a file if it grows. URLs matching this return a media file.
-  private static final Map<Pattern, String> knownUrlPatterns = new ImmutableMap.Builder<Pattern, String>()
-    .put(Pattern.compile("http://www\\.unimus\\.no/felles/bilder/web_hent_bilde\\.php\\?id=\\d+&type=jpeg"), "image/jpeg")
-    .put(Pattern.compile("http://www\\.jacq\\.org/image\\.php\\?filename=\\d+&method=europeana"), "image/jpeg")
-    .put(Pattern.compile("https://images\\.ala\\.org\\.au/image/proxyImageThumbnailLarge\\?imageId=[0-9a-f-]{36}"), "image/jpeg")
-    .put(Pattern.compile("http://[a-zA-Z0-9-]+\\.wildlifemonitoring\\.ru/get_photo\\.php\\?id=\\d+"), "image/jpeg")
-    .put(Pattern.compile("http://procyon\\.acadiau\\.ca/ecsmith/cgi-bin/image\\.cgi\\?[0-9A-Z]+,jpeg"), "image/jpeg")
-
-    .put(Pattern.compile("http://www\\.biologie\\.uni-ulm\\.de/cgi-bin/perl/sound\\.pl\\?sid=T&objid=\\d+"), "audio/vnd.wave")
-    .put(Pattern.compile("https://dofbasen\\.dk/sound_proxy\\.php\\?referer=gbif&mode=o&snd=[0-9_]+.mp3&raw=1"), "audio/mpeg")
-    .build();
+  private static final Map<Pattern, String> knownUrlPatterns;
 
   // Add missing alias types.
   static {
+    knownUrlPatterns = new HashMap<>();
+    knownUrlPatterns.put(Pattern.compile("http://www\\.unimus\\.no/felles/bilder/web_hent_bilde\\.php\\?id=\\d+&type=jpeg"), "image/jpeg");
+    knownUrlPatterns.put(Pattern.compile("http://www\\.jacq\\.org/image\\.php\\?filename=\\d+&method=europeana"), "image/jpeg");
+    knownUrlPatterns.put(Pattern.compile("https://images\\.ala\\.org\\.au/image/proxyImageThumbnailLarge\\?imageId=[0-9a-f-]{36}"), "image/jpeg");
+    knownUrlPatterns.put(Pattern.compile("http://[a-zA-Z0-9-]+\\.wildlifemonitoring\\.ru/get_photo\\.php\\?id=\\d+"), "image/jpeg");
+    knownUrlPatterns.put(Pattern.compile("http://procyon\\.acadiau\\.ca/ecsmith/cgi-bin/image\\.cgi\\?[0-9A-Z]+,jpeg"), "image/jpeg");
+    knownUrlPatterns.put(Pattern.compile("http://www\\.biologie\\.uni-ulm\\.de/cgi-bin/perl/sound\\.pl\\?sid=T&objid=\\d+"), "audio/vnd.wave");
+    knownUrlPatterns.put(Pattern.compile("https://dofbasen\\.dk/sound_proxy\\.php\\?referer=gbif&mode=o&snd=[0-9_]+.mp3&raw=1"), "audio/mpeg");
+
     MediaTypeRegistry mediaTypeRegistry = MIME_TYPES.getMediaTypeRegistry();
     mediaTypeRegistry.addAlias(org.apache.tika.mime.MediaType.audio("mpeg"), org.apache.tika.mime.MediaType.audio("mp3"));
     mediaTypeRegistry.addAlias(org.apache.tika.mime.MediaType.audio("mpeg"), org.apache.tika.mime.MediaType.audio("mpeg3"));

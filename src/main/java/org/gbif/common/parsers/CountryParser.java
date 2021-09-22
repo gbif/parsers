@@ -7,8 +7,6 @@ import org.gbif.common.parsers.core.EnumParser;
 
 import java.util.regex.Pattern;
 
-import com.google.common.base.CharMatcher;
-
 /**
  * Singleton implementation of the dictionary that uses the file /dictionaries/parse/countryName.txt.
  */
@@ -16,8 +14,6 @@ public class CountryParser extends EnumParser<Country> {
 
   private static CountryParser singletonObject = null;
 
-  private static final CharMatcher LETTER_MATCHER = CharMatcher.JAVA_LETTER.or(CharMatcher.WHITESPACE).precomputed();
-  private static final CharMatcher WHITESPACE_MATCHER = CharMatcher.WHITESPACE.precomputed();
   // "off Australia"
   private static final Pattern REMOVE_OFF_PATTERN = Pattern.compile("off ", Pattern.CASE_INSENSITIVE);
 
@@ -48,9 +44,16 @@ public class CountryParser extends EnumParser<Country> {
   protected String normalize(String value) {
     value = handleNotAvailable(value);
     if (value != null) {
-      String cleanedCountry = LETTER_MATCHER.retainFrom(value);
+      // step 1: remove all non-letter and not-whitespace characters
+      String cleanedCountry = value.chars()
+          .filter(p -> Character.isLetter((char) p) || Character.isWhitespace(p))
+          .collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append)
+          .toString();
+      // step 2: remove 'off '
       cleanedCountry = REMOVE_OFF_PATTERN.matcher(cleanedCountry).replaceFirst("");
-      cleanedCountry = WHITESPACE_MATCHER.trimAndCollapseFrom(cleanedCountry, ' ');
+      // step 3: normalize whitespaces
+      cleanedCountry = StringUtils.normalizeSpace(cleanedCountry);
+      // step 4: trim to null
       cleanedCountry = StringUtils.trimToNull(cleanedCountry);
       return super.normalize(cleanedCountry);
     }

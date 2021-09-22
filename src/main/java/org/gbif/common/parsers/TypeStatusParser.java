@@ -7,7 +7,6 @@ import org.gbif.common.parsers.core.EnumParser;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import com.google.common.base.CharMatcher;
 import org.gbif.common.parsers.core.ParseResult;
 
 /**
@@ -16,7 +15,6 @@ import org.gbif.common.parsers.core.ParseResult;
 public class TypeStatusParser extends EnumParser<TypeStatus> {
 
   private static TypeStatusParser singletonObject = null;
-  private static final CharMatcher NON_LETTERS = CharMatcher.JAVA_LETTER.negate();
   private static final Pattern NAME_SEPARATOR = Pattern.compile("^(.+) (OF|FOR) ");
 
   private TypeStatusParser() {
@@ -39,8 +37,14 @@ public class TypeStatusParser extends EnumParser<TypeStatus> {
     }
     // remove whitespace and non letters
     ParseResult<String> ascii = asciiParser.parse(value);
-    return NON_LETTERS.removeFrom(ascii.getPayload());
+
+    // remove all non-letters
+    return ascii.getPayload().chars()
+        .filter(p -> Character.isLetter((char) p))
+        .collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append)
+        .toString();
   }
+
 
   public static TypeStatusParser getInstance()
     throws ClassCastException, AbstractMethodError, ArithmeticException, ArrayIndexOutOfBoundsException {

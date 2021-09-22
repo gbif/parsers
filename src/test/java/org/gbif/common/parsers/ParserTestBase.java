@@ -1,12 +1,13 @@
 package org.gbif.common.parsers;
 
-import com.google.common.io.LineProcessor;
 import org.apache.commons.lang3.StringUtils;
 import org.gbif.common.parsers.core.Parsable;
 import org.gbif.common.parsers.core.ParseResult;
 import org.junit.Before;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.util.Objects;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -51,7 +52,7 @@ public abstract class ParserTestBase<T> implements LineProcessor<ParserTestBase.
   }
 
   @Override
-  public boolean processLine(String line) throws IOException {
+  public boolean processLine(String line) {
     if (StringUtils.isEmpty(line)) {
       return false;
     }
@@ -66,5 +67,17 @@ public abstract class ParserTestBase<T> implements LineProcessor<ParserTestBase.
   @Override
   public ParserTestBase.BatchParseResult getResult() {
     return batchResult;
+  }
+
+  public static <T> void readLines(BufferedReader reader, LineProcessor<T> processor) throws IOException {
+    Objects.requireNonNull(reader);
+    Objects.requireNonNull(processor);
+
+    String line;
+    while ((line = reader.readLine()) != null) {
+      if (!processor.processLine(line)) {
+        break;
+      }
+    }
   }
 }
