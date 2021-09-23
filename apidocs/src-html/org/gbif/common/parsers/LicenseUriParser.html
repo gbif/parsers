@@ -8,7 +8,7 @@
 <div class="sourceContainer">
 <pre><span class="sourceLineNo">001</span>package org.gbif.common.parsers;<a name="line.1"></a>
 <span class="sourceLineNo">002</span><a name="line.2"></a>
-<span class="sourceLineNo">003</span>import com.google.common.base.Strings;<a name="line.3"></a>
+<span class="sourceLineNo">003</span>import org.apache.commons.lang3.StringUtils;<a name="line.3"></a>
 <span class="sourceLineNo">004</span>import org.gbif.api.vocabulary.License;<a name="line.4"></a>
 <span class="sourceLineNo">005</span>import org.gbif.common.parsers.core.ASCIIParser;<a name="line.5"></a>
 <span class="sourceLineNo">006</span>import org.gbif.common.parsers.core.FileBasedDictionaryParser;<a name="line.6"></a>
@@ -58,7 +58,7 @@
 <span class="sourceLineNo">050</span><a name="line.50"></a>
 <span class="sourceLineNo">051</span>  @Override<a name="line.51"></a>
 <span class="sourceLineNo">052</span>  protected String normalize(String value) {<a name="line.52"></a>
-<span class="sourceLineNo">053</span>    if (Strings.isNullOrEmpty(value)) {<a name="line.53"></a>
+<span class="sourceLineNo">053</span>    if (StringUtils.isEmpty(value)) {<a name="line.53"></a>
 <span class="sourceLineNo">054</span>      return null;<a name="line.54"></a>
 <span class="sourceLineNo">055</span>    }<a name="line.55"></a>
 <span class="sourceLineNo">056</span>    ParseResult&lt;String&gt; ascii = asciiParser.parse(value);<a name="line.56"></a>

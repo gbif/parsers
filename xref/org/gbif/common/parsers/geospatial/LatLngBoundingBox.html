@@ -11,9 +11,9 @@
 <a class="jxr_linenumber" name="L3" href="#L3">3</a>   <em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L4" href="#L4">4</a>   <em class="jxr_javadoccomment"> * A bounding box for lat long.</em>
 <a class="jxr_linenumber" name="L5" href="#L5">5</a>   <em class="jxr_javadoccomment"> */</em>
-<a class="jxr_linenumber" name="L6" href="#L6">6</a>   <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../../org/gbif/common/parsers/geospatial/LatLngBoundingBox.html">LatLngBoundingBox</a> {
+<a class="jxr_linenumber" name="L6" href="#L6">6</a>   <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a name="LatLngBoundingBox" href="../../../../../org/gbif/common/parsers/geospatial/LatLngBoundingBox.html#LatLngBoundingBox">LatLngBoundingBox</a> {
 <a class="jxr_linenumber" name="L7" href="#L7">7</a>   
-<a class="jxr_linenumber" name="L8" href="#L8">8</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <a href="../../../../../org/gbif/common/parsers/geospatial/LatLngBoundingBox.html">LatLngBoundingBox</a> GLOBAL_BOUNDING_BOX = <strong class="jxr_keyword">new</strong> <a href="../../../../../org/gbif/common/parsers/geospatial/LatLngBoundingBox.html">LatLngBoundingBox</a>(-180, -90, 180, 90);
+<a class="jxr_linenumber" name="L8" href="#L8">8</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <a name="LatLngBoundingBox" href="../../../../../org/gbif/common/parsers/geospati<a name="LatLngBoundingBox" href="../../../../../org/gbif/common/parsers/geospatial/LatLngBoundingBox.html#LatLngBoundingBox">LatLngBoundingBox</a>Box.html#LatLngBoundingBox">LatLngBoundingBox</a> GLOBAL_BOUNDING_BOX = <strong class="jxr_keyword">new</strong> <a name="LatLngBoundingBox" href="../../../../../org/gbif/common/parsers/geospatial/LatLngBoundingBox.html#LatLngBoundingBox">LatLngBoundingBox</a>(-180, -90, 180, 90);
 <a class="jxr_linenumber" name="L9" href="#L9">9</a>   
 <a class="jxr_linenumber" name="L10" href="#L10">10</a>    <strong class="jxr_keyword">double</strong> minLong;
 <a class="jxr_linenumber" name="L11" href="#L11">11</a>    <strong class="jxr_keyword">double</strong> minLat;
@@ -23,7 +23,7 @@
 <a class="jxr_linenumber" name="L15" href="#L15">15</a>    <em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L16" href="#L16">16</a>  <em class="jxr_javadoccomment">   * Force the box to be well formed</em>
 <a class="jxr_linenumber" name="L17" href="#L17">17</a>  <em class="jxr_javadoccomment">   */</em>
-<a class="jxr_linenumber" name="L18" href="#L18">18</a>    <strong class="jxr_keyword">public</strong> <a href="../../../../../org/gbif/common/parsers/geospatial/LatLngBoundingBox.html">LatLngBoundingBox</a>(<strong class="jxr_keyword">double</strong> minLong, <strong class="jxr_keyword">double</strong> minLat, <strong class="jxr_keyword">double</strong> maxLong, <strong class="jxr_keyword">double</strong> maxLat) {
+<a class="jxr_linenumber" name="L18" href="#L18">18</a>    <strong class="jxr_keyword">public</strong> <a name="LatLngBoundingBox" href="../../../../../org/gbif/common/parsers/geospatial/LatLngBoundingBox.html#LatLngBoundingBox">LatLngBoundingBox</a>(<strong class="jxr_keyword">double</strong> minLong, <strong class="jxr_keyword">double</strong> minLat, <strong class="jxr_keyword">double</strong> maxLong, <strong class="jxr_keyword">double</strong> maxLat) {
 <a class="jxr_linenumber" name="L19" href="#L19">19</a>      <strong class="jxr_keyword">this</strong>.minLong = minLong;
 <a class="jxr_linenumber" name="L20" href="#L20">20</a>      <strong class="jxr_keyword">this</strong>.minLat = minLat;
 <a class="jxr_linenumber" name="L21" href="#L21">21</a>      <strong class="jxr_keyword">this</strong>.maxLong = maxLong;
@@ -32,8 +32,8 @@
 <a class="jxr_linenumber" name="L24" href="#L24">24</a>  
 <a class="jxr_linenumber" name="L25" href="#L25">25</a>    @Override
 <a class="jxr_linenumber" name="L26" href="#L26">26</a>    <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> equals(Object t) {
-<a class="jxr_linenumber" name="L27" href="#L27">27</a>      <strong class="jxr_keyword">if</strong> (t instanceof LatLngBoundingBox) {
-<a class="jxr_linenumber" name="L28" href="#L28">28</a>        <a href="../../../../../org/gbif/common/parsers/geospatial/LatLngBoundingBox.html">LatLngBoundingBox</a> target = (LatLngBoundingBox) t;
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>      <strong class="jxr_keyword">if</strong> (t instanceof <a name="LatLngBoundingBox" href="../../../../../org/gbif/common/parsers/geospatial/LatLngBoundingBox.html#LatLngBoundingBox">LatLngBoundingBox</a>) {
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>        <a name="LatLngBoundingBox" <a name="LatLngBoundingBox" href="../../../../../org/gbif/common/parsers/geospatial/LatLngBoundingBox.html#LatLngBoundingBox">LatLngBoundingBox</a>/../org/gbif/common/parsers/geospatial/LatLngBoundingBox.html#LatLngBoundingBox">LatLngBoundingBox</a> target = (<a name="LatLngBoundingBox" href="../../../../../org/gbif/common/parsers/geospatial/LatLngBoundingBox.html#LatLngBoundingBox">LatLngBoundingBox</a>) t;
 <a class="jxr_linenumber" name="L29" href="#L29">29</a>        <strong class="jxr_keyword">if</strong> (minLat == target.getMinLat() &amp;&amp; minLong == target.getMinLong() &amp;&amp; maxLat == target.getMaxLat()
 <a class="jxr_linenumber" name="L30" href="#L30">30</a>            &amp;&amp; maxLong == target.getMaxLong()) {
 <a class="jxr_linenumber" name="L31" href="#L31">31</a>          <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">true</strong>;
@@ -105,6 +105,6 @@
 <a class="jxr_linenumber" name="L97" href="#L97">97</a>  }
 </pre>
 <hr/>
-<div id="footer">Copyright &#169; 2021 <a href="http://www.gbif.org">Global Biodiversity Information Facility</a>. All rights reserved.</div>
+<div id="footer">Copyright &#169; 2021 <a href="https://www.gbif.org">Global Biodiversity Information Facility</a>. All rights reserved.</div>
 </body>
 </html>

@@ -21,15 +21,15 @@
 <a class="jxr_linenumber" name="L13" href="#L13">13</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
 <a class="jxr_linenumber" name="L14" href="#L14">14</a>  <em class="jxr_javadoccomment"> * If the ISO format parsing process fails, use &lt;code&gt;orderings&lt;/code&gt; formatters to parse the date.</em>
 <a class="jxr_linenumber" name="L15" href="#L15">15</a>  <em class="jxr_javadoccomment"> */</em>
-<a class="jxr_linenumber" name="L16" href="#L16">16</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../../org/gbif/common/parsers/date/CustomizedTextDateParser.html">CustomizedTextDateParser</a> <strong class="jxr_keyword">implements</strong> TemporalParser, Serializable {
-<a class="jxr_linenumber" name="L17" href="#L17">17</a>    <strong class="jxr_keyword">private</strong> <a href="../../../../../org/gbif/common/parsers/date/DateComponentOrdering.html">DateComponentOrdering</a>[] orderings;
-<a class="jxr_linenumber" name="L18" href="#L18">18</a>    <strong class="jxr_keyword">private</strong> <a href="../../../../../org/gbif/common/parsers/date/TextDateParser.html">TextDateParser</a> parser = <strong class="jxr_keyword">new</strong> <a href="../../../../../org/gbif/common/parsers/date/TextDateParser.html">TextDateParser</a>();
+<a class="jxr_linenumber" name="L16" href="#L16">16</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a name="CustomizedTextDateParser" href="../../../../../org/gbif/common/parsers/date/CustomizedTextDateParser.html#CustomizedTextDateParser">CustomizedTextDateParser</a> <strong class="jxr_keyword">implements</strong> TemporalParser, Serializable {
+<a class="jxr_linenumber" name="L17" href="#L17">17</a>    <strong class="jxr_keyword">private</strong> <a name="DateComponentOrdering" href="../../../../../org/gbif/common/parsers/date/DateComponentOrdering.html#DateComponentOrdering">DateComponentOrdering</a>[] orderings;
+<a class="jxr_linenumber" name="L18" href="#L18">18</a>    <strong class="jxr_keyword">private</strong> <a name="TextDateParser" href="../../../../../org/gbif/common/par<a name="TextDateParser" href="../../../../../org/gbif/common/parsers/date/TextDateParser.html#TextDateParser">TextDateParser</a>DateParser.html#TextDateParser">TextDateParser</a> parser = <strong class="jxr_keyword">new</strong> <a name="TextDateParser" href="../../../../../org/gbif/common/parsers/date/TextDateParser.html#TextDateParser">TextDateParser</a>();
 <a class="jxr_linenumber" name="L19" href="#L19">19</a>  
 <a class="jxr_linenumber" name="L20" href="#L20">20</a>    <em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L21" href="#L21">21</a>  <em class="jxr_javadoccomment">   * @param orderings a set of DateTimeFormatters</em>
 <a class="jxr_linenumber" name="L22" href="#L22">22</a>  <em class="jxr_javadoccomment">   */</em>
-<a class="jxr_linenumber" name="L23" href="#L23">23</a>    <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <a href="../../../../../org/gbif/common/parsers/date/TemporalParser.html">TemporalParser</a> getInstance(<a href="../../../../../org/gbif/common/parsers/date/DateComponentOrdering.html">DateComponentOrdering</a>[] orderings) {
-<a class="jxr_linenumber" name="L24" href="#L24">24</a>      <a href="../../../../../org/gbif/common/parsers/date/CustomizedTextDateParser.html">CustomizedTextDateParser</a> ptdp = <strong class="jxr_keyword">new</strong> <a href="../../../../../org/gbif/common/parsers/date/CustomizedTextDateParser.html">CustomizedTextDateParser</a>();
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>    <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <a name="TemporalParser" href="../../../../../org/gbif/common/parsers/date/TemporalParser.html#TemporalParser">TemporalParser</a> getInstance(<a name="DateComponentOrdering" href="../../../../../org/gbif/common/parsers/date/DateComponentOrdering.html#DateComponentOrdering">DateComponentOrdering</a>[] orderings) {
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>      <a name="CustomizedTextDateParser" href="../../../../../org/gbif/common/p<a name="CustomizedTextDateParser" href="../../../../../org/gbif/common/parsers/date/CustomizedTextDateParser.html#CustomizedTextDateParser">CustomizedTextDateParser</a>xtDateParser.html#CustomizedTextDateParser">CustomizedTextDateParser</a> ptdp = <strong class="jxr_keyword">new</strong> <a name="CustomizedTextDateParser" href="../../../../../org/gbif/common/parsers/date/CustomizedTextDateParser.html#CustomizedTextDateParser">CustomizedTextDateParser</a>();
 <a class="jxr_linenumber" name="L25" href="#L25">25</a>      ptdp.orderings = orderings;
 <a class="jxr_linenumber" name="L26" href="#L26">26</a>      <strong class="jxr_keyword">return</strong> ptdp;
 <a class="jxr_linenumber" name="L27" href="#L27">27</a>    }
@@ -45,13 +45,13 @@
 <a class="jxr_linenumber" name="L37" href="#L37">37</a>  
 <a class="jxr_linenumber" name="L38" href="#L38">38</a>    @Override
 <a class="jxr_linenumber" name="L39" href="#L39">39</a>    <strong class="jxr_keyword">public</strong> ParseResult&lt;TemporalAccessor&gt; parse(String input,
-<a class="jxr_linenumber" name="L40" href="#L40">40</a>                                               @Nullable <a href="../../../../../org/gbif/common/parsers/date/DateComponentOrdering.html">DateComponentOrdering</a> ordering) {
+<a class="jxr_linenumber" name="L40" href="#L40">40</a>                                               @Nullable <a name="DateComponentOrdering" href="../../../../../org/gbif/common/parsers/date/DateComponentOrdering.html#DateComponentOrdering">DateComponentOrdering</a> ordering) {
 <a class="jxr_linenumber" name="L41" href="#L41">41</a>      <strong class="jxr_keyword">return</strong> parser.parse(input, ordering);
 <a class="jxr_linenumber" name="L42" href="#L42">42</a>    }
 <a class="jxr_linenumber" name="L43" href="#L43">43</a>  
 <a class="jxr_linenumber" name="L44" href="#L44">44</a>    @Override
 <a class="jxr_linenumber" name="L45" href="#L45">45</a>    <strong class="jxr_keyword">public</strong> ParseResult&lt;TemporalAccessor&gt; parse(String input,
-<a class="jxr_linenumber" name="L46" href="#L46">46</a>                                               @Nullable <a href="../../../../../org/gbif/common/parsers/date/DateComponentOrdering.html">DateComponentOrdering</a>[] orderings) {
+<a class="jxr_linenumber" name="L46" href="#L46">46</a>                                               @Nullable <a name="DateComponentOrdering" href="../../../../../org/gbif/common/parsers/date/DateComponentOrdering.html#DateComponentOrdering">DateComponentOrdering</a>[] orderings) {
 <a class="jxr_linenumber" name="L47" href="#L47">47</a>      <strong class="jxr_keyword">return</strong> parser.parse(input, orderings);
 <a class="jxr_linenumber" name="L48" href="#L48">48</a>    }
 <a class="jxr_linenumber" name="L49" href="#L49">49</a>  
@@ -73,6 +73,6 @@
 <a class="jxr_linenumber" name="L65" href="#L65">65</a>  }
 </pre>
 <hr/>
-<div id="footer">Copyright &#169; 2021 <a href="http://www.gbif.org">Global Biodiversity Information Facility</a>. All rights reserved.</div>
+<div id="footer">Copyright &#169; 2021 <a href="https://www.gbif.org">Global Biodiversity Information Facility</a>. All rights reserved.</div>
 </body>
 </html>

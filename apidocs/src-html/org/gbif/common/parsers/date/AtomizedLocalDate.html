@@ -10,8 +10,8 @@
 <span class="sourceLineNo">002</span><a name="line.2"></a>
 <span class="sourceLineNo">003</span>import java.time.temporal.ChronoField;<a name="line.3"></a>
 <span class="sourceLineNo">004</span>import java.time.temporal.TemporalAccessor;<a name="line.4"></a>
-<span class="sourceLineNo">005</span><a name="line.5"></a>
-<span class="sourceLineNo">006</span>import com.google.common.base.Objects;<a name="line.6"></a>
+<span class="sourceLineNo">005</span>import java.util.Objects;<a name="line.5"></a>
+<span class="sourceLineNo">006</span><a name="line.6"></a>
 <span class="sourceLineNo">007</span>import org.apache.commons.lang3.builder.HashCodeBuilder;<a name="line.7"></a>
 <span class="sourceLineNo">008</span>import org.apache.commons.lang3.builder.ToStringBuilder;<a name="line.8"></a>
 <span class="sourceLineNo">009</span>import org.apache.commons.lang3.builder.ToStringStyle;<a name="line.9"></a>
@@ -109,32 +109,28 @@
 <span class="sourceLineNo">101</span>  }<a name="line.101"></a>
 <span class="sourceLineNo">102</span><a name="line.102"></a>
 <span class="sourceLineNo">103</span>  @Override<a name="line.103"></a>
-<span class="sourceLineNo">104</span>  public boolean equals(Object obj) {<a name="line.104"></a>
-<span class="sourceLineNo">105</span><a name="line.105"></a>
-<span class="sourceLineNo">106</span>    if (this == obj) {<a name="line.106"></a>
-<span class="sourceLineNo">107</span>      return true;<a name="line.107"></a>
-<span class="sourceLineNo">108</span>    }<a name="line.108"></a>
-<span class="sourceLineNo">109</span>    if (!(obj instanceof AtomizedLocalDate)) {<a name="line.109"></a>
-<span class="sourceLineNo">110</span>      return false;<a name="line.110"></a>
-<span class="sourceLineNo">111</span>    }<a name="line.111"></a>
-<span class="sourceLineNo">112</span><a name="line.112"></a>
-<span class="sourceLineNo">113</span>    AtomizedLocalDate that = (AtomizedLocalDate) obj;<a name="line.113"></a>
-<span class="sourceLineNo">114</span>    return Objects.equal(this.year, that.year)<a name="line.114"></a>
-<span class="sourceLineNo">115</span>            &amp;&amp; Objects.equal(this.month, that.month)<a name="line.115"></a>
-<span class="sourceLineNo">116</span>            &amp;&amp; Objects.equal(this.day, that.day)<a name="line.116"></a>
-<span class="sourceLineNo">117</span>            &amp;&amp; Objects.equal(this.resolution, that.resolution);<a name="line.117"></a>
-<span class="sourceLineNo">118</span>  }<a name="line.118"></a>
-<span class="sourceLineNo">119</span><a name="line.119"></a>
-<span class="sourceLineNo">120</span>  @Override<a name="line.120"></a>
-<span class="sourceLineNo">121</span>  public String toString() {<a name="line.121"></a>
-<span class="sourceLineNo">122</span>    return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)<a name="line.122"></a>
-<span class="sourceLineNo">123</span>            .append("year", year)<a name="line.123"></a>
-<span class="sourceLineNo">124</span>            .append("month", month)<a name="line.124"></a>
-<span class="sourceLineNo">125</span>            .append("day", day)<a name="line.125"></a>
-<span class="sourceLineNo">126</span>            .append("resolution", resolution)<a name="line.126"></a>
-<span class="sourceLineNo">127</span>            .toString();<a name="line.127"></a>
-<span class="sourceLineNo">128</span>  }<a name="line.128"></a>
-<span class="sourceLineNo">129</span>}<a name="line.129"></a>
+<span class="sourceLineNo">104</span>  public boolean equals(Object o) {<a name="line.104"></a>
+<span class="sourceLineNo">105</span>    if (this == o) return true;<a name="line.105"></a>
+<span class="sourceLineNo">106</span>    if (o == null || getClass() != o.getClass()) return false;<a name="line.106"></a>
+<span class="sourceLineNo">107</span><a name="line.107"></a>
+<span class="sourceLineNo">108</span>    AtomizedLocalDate that = (AtomizedLocalDate) o;<a name="line.108"></a>
+<span class="sourceLineNo">109</span><a name="line.109"></a>
+<span class="sourceLineNo">110</span>    return resolution == that.resolution<a name="line.110"></a>
+<span class="sourceLineNo">111</span>        &amp;&amp; Objects.equals(year, that.year)<a name="line.111"></a>
+<span class="sourceLineNo">112</span>        &amp;&amp; Objects.equals(month, that.month)<a name="line.112"></a>
+<span class="sourceLineNo">113</span>        &amp;&amp; Objects.equals(day, that.day);<a name="line.113"></a>
+<span class="sourceLineNo">114</span>  }<a name="line.114"></a>
+<span class="sourceLineNo">115</span><a name="line.115"></a>
+<span class="sourceLineNo">116</span>  @Override<a name="line.116"></a>
+<span class="sourceLineNo">117</span>  public String toString() {<a name="line.117"></a>
+<span class="sourceLineNo">118</span>    return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)<a name="line.118"></a>
+<span class="sourceLineNo">119</span>            .append("year", year)<a name="line.119"></a>
+<span class="sourceLineNo">120</span>            .append("month", month)<a name="line.120"></a>
+<span class="sourceLineNo">121</span>            .append("day", day)<a name="line.121"></a>
+<span class="sourceLineNo">122</span>            .append("resolution", resolution)<a name="line.122"></a>
+<span class="sourceLineNo">123</span>            .toString();<a name="line.123"></a>
+<span class="sourceLineNo">124</span>  }<a name="line.124"></a>
+<span class="sourceLineNo">125</span>}<a name="line.125"></a>
 
 
 

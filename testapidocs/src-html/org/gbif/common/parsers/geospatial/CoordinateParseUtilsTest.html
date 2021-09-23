@@ -12,151 +12,151 @@
 <span class="sourceLineNo">004</span>import org.gbif.common.parsers.core.OccurrenceParseResult;<a name="line.4"></a>
 <span class="sourceLineNo">005</span>import org.gbif.common.parsers.core.ParseResult;<a name="line.5"></a>
 <span class="sourceLineNo">006</span><a name="line.6"></a>
-<span class="sourceLineNo">007</span>import com.google.common.collect.Lists;<a name="line.7"></a>
-<span class="sourceLineNo">008</span>import org.junit.Test;<a name="line.8"></a>
-<span class="sourceLineNo">009</span><a name="line.9"></a>
-<span class="sourceLineNo">010</span>import static org.junit.Assert.assertEquals;<a name="line.10"></a>
-<span class="sourceLineNo">011</span>import static org.junit.Assert.assertNotNull;<a name="line.11"></a>
-<span class="sourceLineNo">012</span>import static org.junit.Assert.assertTrue;<a name="line.12"></a>
-<span class="sourceLineNo">013</span>import static org.junit.Assert.fail;<a name="line.13"></a>
-<span class="sourceLineNo">014</span><a name="line.14"></a>
-<span class="sourceLineNo">015</span>public class CoordinateParseUtilsTest {<a name="line.15"></a>
-<span class="sourceLineNo">016</span><a name="line.16"></a>
-<span class="sourceLineNo">017</span>  @Test<a name="line.17"></a>
-<span class="sourceLineNo">018</span>  public void testParseLatLng() {<a name="line.18"></a>
-<span class="sourceLineNo">019</span>    assertExpected(CoordinateParseUtils.parseLatLng("-46,33", "51,8717"), new LatLng(-46.33, 51.8717), ParseResult.CONFIDENCE.DEFINITE);<a name="line.19"></a>
-<span class="sourceLineNo">020</span>    assertExpected(CoordinateParseUtils.parseLatLng("10.3", "99.99"), new LatLng(10.3, 99.99), ParseResult.CONFIDENCE.DEFINITE);<a name="line.20"></a>
-<span class="sourceLineNo">021</span>    assertExpected(CoordinateParseUtils.parseLatLng("10", "10"), new LatLng(10, 10), ParseResult.CONFIDENCE.DEFINITE);<a name="line.21"></a>
-<span class="sourceLineNo">022</span>    assertExpected(CoordinateParseUtils.parseLatLng("90", "180"), new LatLng(90, 180), ParseResult.CONFIDENCE.DEFINITE);<a name="line.22"></a>
-<span class="sourceLineNo">023</span>    assertExpected(CoordinateParseUtils.parseLatLng("-90", "180"), new LatLng(-90, 180), ParseResult.CONFIDENCE.DEFINITE);<a name="line.23"></a>
-<span class="sourceLineNo">024</span>    assertExpected(CoordinateParseUtils.parseLatLng("90", "-180"), new LatLng(90, -180), ParseResult.CONFIDENCE.DEFINITE);<a name="line.24"></a>
-<span class="sourceLineNo">025</span>    assertExpected(CoordinateParseUtils.parseLatLng("-90", "-180"), new LatLng(-90, -180), ParseResult.CONFIDENCE.DEFINITE);<a name="line.25"></a>
-<span class="sourceLineNo">026</span>    assertExpected(CoordinateParseUtils.parseLatLng("0", "0"), new LatLng(0, 0), ParseResult.CONFIDENCE.POSSIBLE, OccurrenceIssue.ZERO_COORDINATE);<a name="line.26"></a>
-<span class="sourceLineNo">027</span><a name="line.27"></a>
-<span class="sourceLineNo">028</span>    // rounding<a name="line.28"></a>
-<span class="sourceLineNo">029</span>    assertExpected(CoordinateParseUtils.parseLatLng("2.123450678", "-8.123450678"), new LatLng(2.123451, -8.123451), ParseResult.CONFIDENCE.DEFINITE, OccurrenceIssue.COORDINATE_ROUNDED);<a name="line.29"></a>
-<span class="sourceLineNo">030</span>    assertExpected(CoordinateParseUtils.parseLatLng("2.123451", "-8.123450678"), new LatLng(2.123451, -8.123451), ParseResult.CONFIDENCE.DEFINITE, OccurrenceIssue.COORDINATE_ROUNDED);<a name="line.30"></a>
-<span class="sourceLineNo">031</span>    assertExpected(CoordinateParseUtils.parseLatLng("2.123451", "-8.123451"), new LatLng(2.123451, -8.123451), ParseResult.CONFIDENCE.DEFINITE);<a name="line.31"></a>
-<span class="sourceLineNo">032</span>    assertExpected(CoordinateParseUtils.parseLatLng("2.12345100", "-8.1234510"), new LatLng(2.123451, -8.123451), ParseResult.CONFIDENCE.DEFINITE);<a name="line.32"></a>
-<span class="sourceLineNo">033</span>    assertExpected(CoordinateParseUtils.parseLatLng("2.123", "-8.1234506"), new LatLng(2.123, -8.123451), ParseResult.CONFIDENCE.DEFINITE, OccurrenceIssue.COORDINATE_ROUNDED);<a name="line.33"></a>
-<span class="sourceLineNo">034</span><a name="line.34"></a>
-<span class="sourceLineNo">035</span>    // degree minutes seconds<a name="line.35"></a>
-<span class="sourceLineNo">036</span>    assertExpected(CoordinateParseUtils.parseLatLng("02° 49' 52\" N", "131° 47' 03\" E"), new LatLng(2.831111d, 131.784167d), ParseResult.CONFIDENCE.DEFINITE);<a name="line.36"></a>
-<span class="sourceLineNo">037</span><a name="line.37"></a>
-<span class="sourceLineNo">038</span>    // check swapped coordinates<a name="line.38"></a>
-<span class="sourceLineNo">039</span>    assertExpected(CoordinateParseUtils.parseLatLng("100", "40"), new LatLng(40, 100), ParseResult.CONFIDENCE.PROBABLE, OccurrenceIssue.PRESUMED_SWAPPED_COORDINATE);<a name="line.39"></a>
-<span class="sourceLineNo">040</span>    assertExpected(CoordinateParseUtils.parseLatLng("-100", "90"), new LatLng(90, -100), ParseResult.CONFIDENCE.PROBABLE, OccurrenceIssue.PRESUMED_SWAPPED_COORDINATE);<a name="line.40"></a>
-<span class="sourceLineNo">041</span><a name="line.41"></a>
-<span class="sourceLineNo">042</span>    // check errors<a name="line.42"></a>
-<span class="sourceLineNo">043</span>    assertFailed(CoordinateParseUtils.parseLatLng("", "30"));<a name="line.43"></a>
-<span class="sourceLineNo">044</span>    assertFailedWithIssues(CoordinateParseUtils.parseLatLng("tim", "tom"), OccurrenceIssue.COORDINATE_INVALID);<a name="line.44"></a>
-<span class="sourceLineNo">045</span>    assertFailedWithIssues(CoordinateParseUtils.parseLatLng("20,432,12", "13,4"), OccurrenceIssue.COORDINATE_INVALID);<a name="line.45"></a>
-<span class="sourceLineNo">046</span>    assertFailedWithIssues(CoordinateParseUtils.parseLatLng("200", "200"), OccurrenceIssue.COORDINATE_OUT_OF_RANGE);<a name="line.46"></a>
-<span class="sourceLineNo">047</span>    assertFailedWithIssues(CoordinateParseUtils.parseLatLng("-200", "30"), OccurrenceIssue.COORDINATE_OUT_OF_RANGE);<a name="line.47"></a>
-<span class="sourceLineNo">048</span>    assertFailedWithIssues(CoordinateParseUtils.parseLatLng("200", "30"), OccurrenceIssue.COORDINATE_OUT_OF_RANGE);<a name="line.48"></a>
-<span class="sourceLineNo">049</span>    assertFailedWithIssues(CoordinateParseUtils.parseLatLng("20.432,12", "13,4"), OccurrenceIssue.COORDINATE_OUT_OF_RANGE);<a name="line.49"></a>
-<span class="sourceLineNo">050</span>    assertFailedWithIssues(CoordinateParseUtils.parseLatLng("20,432,12", "13,4"), OccurrenceIssue.COORDINATE_INVALID);<a name="line.50"></a>
-<span class="sourceLineNo">051</span>  }<a name="line.51"></a>
-<span class="sourceLineNo">052</span><a name="line.52"></a>
-<span class="sourceLineNo">053</span>  @Test<a name="line.53"></a>
-<span class="sourceLineNo">054</span>  public void testParseDMS() {<a name="line.54"></a>
-<span class="sourceLineNo">055</span>    assertDMS("2°49'N", "131°47'E", 2.816667d, 131.783333d);<a name="line.55"></a>
-<span class="sourceLineNo">056</span><a name="line.56"></a>
-<span class="sourceLineNo">057</span>    assertDMS("02° 49' 52\" N", "131° 47' 03\" E", 2.831111d, 131.784167d);<a name="line.57"></a>
-<span class="sourceLineNo">058</span>    assertDMS("2°49'52\"S", "131°47'03\" W", -2.831111d, -131.784167d);<a name="line.58"></a>
-<span class="sourceLineNo">059</span>    assertDMS("2°49'52\"  n", "131°47'03\"  O", 2.831111d, 131.784167d);<a name="line.59"></a>
-<span class="sourceLineNo">060</span>    assertDMS("002°49'52\"N", "131°47'03\"E", 2.831111d, 131.784167d);<a name="line.60"></a>
-<span class="sourceLineNo">061</span>    assertDMS("2°49'N", "131°47'E", 2.816667d, 131.783333d);<a name="line.61"></a>
-<span class="sourceLineNo">062</span>    assertDMS("002°49'52''N", "131°47'03''E", 2.831111d, 131.784167d);<a name="line.62"></a>
-<span class="sourceLineNo">063</span>    assertDMS("6º39'36\"S","35º59'59\"W", -6.66d, -35.999722);<a name="line.63"></a>
-<span class="sourceLineNo">064</span>    assertDMS("17  02.877 N", "121  05.966 E", 17.04795, 121.099433);<a name="line.64"></a>
-<span class="sourceLineNo">065</span>    assertDMS("08º37'S", "37º10'W", -8.616667, -37.166667);<a name="line.65"></a>
-<span class="sourceLineNo">066</span>    assertDMS("39g30mS", "56g27mW", -39.5, -56.45);<a name="line.66"></a>
-<span class="sourceLineNo">067</span>    assertDMS("42g24m50.00sS", "64g17m20.00sW", -42.413889, -64.288889);<a name="line.67"></a>
-<span class="sourceLineNo">068</span>    assertDMS("42º30´S", "54º14´W", -42.5, -54.233333);<a name="line.68"></a>
-<span class="sourceLineNo">069</span>    assertDMS("61o50'N", "30o45'E", 61.833333, 30.75);<a name="line.69"></a>
-<span class="sourceLineNo">070</span>    assertDMS("07°35N", "38°44E", 7.583333, 38.733333);<a name="line.70"></a>
-<span class="sourceLineNo">071</span>    assertDMS("29º32.3’N", "113º34.9’W", 29.538333, -113.581667);<a name="line.71"></a>
-<span class="sourceLineNo">072</span>    assertDMS("5°45′30″N", "100º30′30″W", 5.758333, -100.508333);<a name="line.72"></a>
-<span class="sourceLineNo">073</span>    assertDMS("125º52´2´´S", "39º28´47´´W", -125.867222, -39.479722);<a name="line.73"></a>
-<span class="sourceLineNo">074</span>    assertDMS("13.1939 N", "59.5432 W", 13.1939, -59.5432);<a name="line.74"></a>
-<span class="sourceLineNo">075</span>    assertDMS("24 06.363 N", "110 11.969 E", 24.10605d, 110.199483d);<a name="line.75"></a>
-<span class="sourceLineNo">076</span>    // even if it's out of range that's expected here - we validate elsewhere, this is an internal method only!<a name="line.76"></a>
-<span class="sourceLineNo">077</span>    assertDMS("122°49'52\"N", "131°47'03\"E", 122.831111d, 131.784167d);<a name="line.77"></a>
-<span class="sourceLineNo">078</span>    assertDMS("122°49'52.39\"N", "131°47'03.23\"E", 122.83121944444444d, 131.78423055555555d);<a name="line.78"></a>
-<span class="sourceLineNo">079</span>    assertDMS("122d49m52.39sN", "131d47m03.23sE", 122.83121944444444d, 131.78423055555555d);<a name="line.79"></a>
-<span class="sourceLineNo">080</span>    assertDMS("122 49 52.39", "131 47 03.23", 122.83121944444444d, 131.78423055555555d);<a name="line.80"></a>
-<span class="sourceLineNo">081</span>    assertDMS("N122°49'52.39\"", "E131°47'03.23\"", 122.83121944444444d, 131.78423055555555d);<a name="line.81"></a>
-<span class="sourceLineNo">082</span>    assertDMS("N 122° 49' 52.39\"", "E 131° 47' 03.23\"", 122.83121944444444d, 131.78423055555555d);<a name="line.82"></a>
-<span class="sourceLineNo">083</span>    assertDMS("N 122°49'52.39\"", "E 131°47'03.23\"", 122.83121944444444d, 131.78423055555555d);<a name="line.83"></a>
-<span class="sourceLineNo">084</span>    assertDMS("N 122°49'52\"", "E 131°47'03.23\"", 122.831111d, 131.78423055555555d);<a name="line.84"></a>
-<span class="sourceLineNo">085</span>    assertDMS("N122°49'52.39\"", "E131°47'03.23\"", 122.83121944444444d, 131.78423055555555d);<a name="line.85"></a>
-<span class="sourceLineNo">086</span>    assertDMS("N36.93276", "W102.96361", 36.93276, -102.96361);<a name="line.86"></a>
-<span class="sourceLineNo">087</span>    assertDMS("90°N", "180°", 90, 180);<a name="line.87"></a>
-<span class="sourceLineNo">088</span><a name="line.88"></a>
-<span class="sourceLineNo">089</span>    // truly failing<a name="line.89"></a>
-<span class="sourceLineNo">090</span>    assertIllegalArg("12344", true);<a name="line.90"></a>
-<span class="sourceLineNo">091</span>    assertIllegalArg("432", false);<a name="line.91"></a>
-<span class="sourceLineNo">092</span>    assertIllegalArg(" ", true);<a name="line.92"></a>
-<span class="sourceLineNo">093</span>    assertIllegalArg(" ", false);<a name="line.93"></a>
-<span class="sourceLineNo">094</span>    assertIllegalArg("131°47'132\"", false);<a name="line.94"></a>
-<span class="sourceLineNo">095</span>    assertIllegalArg("131 47 132", false);<a name="line.95"></a>
-<span class="sourceLineNo">096</span>    assertIllegalArg("131°47'132\"", false);<a name="line.96"></a>
-<span class="sourceLineNo">097</span>    assertIllegalArg("043300S",true);<a name="line.97"></a>
-<span class="sourceLineNo">098</span>    assertIllegalArg("0433S",true);<a name="line.98"></a>
-<span class="sourceLineNo">099</span>    assertIllegalArg("043300 S",true);<a name="line.99"></a>
-<span class="sourceLineNo">100</span>    assertIllegalArg("0433 S",true);<a name="line.100"></a>
-<span class="sourceLineNo">101</span>  }<a name="line.101"></a>
-<span class="sourceLineNo">102</span><a name="line.102"></a>
-<span class="sourceLineNo">103</span>  private void assertDMS(String lat, String lon, double eLat, double eLon){<a name="line.103"></a>
-<span class="sourceLineNo">104</span>    assertEquals(eLat, CoordinateParseUtils.parseDMS(lat, true), 0.000001);<a name="line.104"></a>
-<span class="sourceLineNo">105</span>    assertEquals(eLon, CoordinateParseUtils.parseDMS(lon, false), 0.000001);<a name="line.105"></a>
-<span class="sourceLineNo">106</span>  }<a name="line.106"></a>
-<span class="sourceLineNo">107</span><a name="line.107"></a>
-<span class="sourceLineNo">108</span>  private void assertIllegalArg(String coord, boolean lat){<a name="line.108"></a>
-<span class="sourceLineNo">109</span>    try {<a name="line.109"></a>
-<span class="sourceLineNo">110</span>      CoordinateParseUtils.parseDMS(coord, lat);<a name="line.110"></a>
-<span class="sourceLineNo">111</span>      fail("IllegalArgumentException expected");<a name="line.111"></a>
-<span class="sourceLineNo">112</span>    } catch (IllegalArgumentException e) {<a name="line.112"></a>
-<span class="sourceLineNo">113</span>      // expected!<a name="line.113"></a>
-<span class="sourceLineNo">114</span>    }<a name="line.114"></a>
-<span class="sourceLineNo">115</span>  }<a name="line.115"></a>
-<span class="sourceLineNo">116</span><a name="line.116"></a>
-<span class="sourceLineNo">117</span>  @Test<a name="line.117"></a>
-<span class="sourceLineNo">118</span>  public void testParseVerbatimCoordinates() {<a name="line.118"></a>
-<span class="sourceLineNo">119</span>    assertExpected( CoordinateParseUtils.parseVerbatimCoordinates("02° 49' 52\" N 131° 47' 03\" E"), new LatLng(2.831111d, 131.784167d), ParseResult.CONFIDENCE.DEFINITE);<a name="line.119"></a>
-<span class="sourceLineNo">120</span>    assertExpected( CoordinateParseUtils.parseVerbatimCoordinates("02° 49' 52\" N, 131° 47' 03\" E"), new LatLng(2.831111d, 131.784167d), ParseResult.CONFIDENCE.DEFINITE);<a name="line.120"></a>
-<span class="sourceLineNo">121</span>    assertExpected( CoordinateParseUtils.parseVerbatimCoordinates("02°49'52\"N; 131°47'03\"O"), new LatLng(2.831111d, 131.784167d), ParseResult.CONFIDENCE.DEFINITE);<a name="line.121"></a>
-<span class="sourceLineNo">122</span>    assertExpected( CoordinateParseUtils.parseVerbatimCoordinates("17d 33m 5s N/99d 30m 3s W"), new LatLng(17.551389d, -99.500833d), ParseResult.CONFIDENCE.DEFINITE);<a name="line.122"></a>
-<span class="sourceLineNo">123</span>    assertExpected( CoordinateParseUtils.parseVerbatimCoordinates("14.93333/-91.9"), new LatLng(14.93333d, -91.9d), ParseResult.CONFIDENCE.DEFINITE);<a name="line.123"></a>
-<span class="sourceLineNo">124</span>    assertExpected( CoordinateParseUtils.parseVerbatimCoordinates("63d 41m 39s N 170d 28m 44s W"), new LatLng(63.694167d, -170.478889d), ParseResult.CONFIDENCE.DEFINITE);<a name="line.124"></a>
-<span class="sourceLineNo">125</span>    assertExpected( CoordinateParseUtils.parseVerbatimCoordinates("37° 28' N, 122° 6' W"), new LatLng(37.466667d, -122.1d), ParseResult.CONFIDENCE.DEFINITE);<a name="line.125"></a>
-<span class="sourceLineNo">126</span>    assertExpected( CoordinateParseUtils.parseVerbatimCoordinates("2°49'52\"N, 131°47'03\""), new LatLng(2.831111d, 131.784167d), ParseResult.CONFIDENCE.DEFINITE);<a name="line.126"></a>
-<span class="sourceLineNo">127</span>    assertExpected( CoordinateParseUtils.parseVerbatimCoordinates("10°07'06\"N 20°48'23\"W"), new LatLng(10.118333, -20.806389), ParseResult.CONFIDENCE.DEFINITE);<a name="line.127"></a>
-<span class="sourceLineNo">128</span>    assertExpected( CoordinateParseUtils.parseVerbatimCoordinates("10º07'06\"N 20º48'23\"W"), new LatLng(10.118333, -20.806389), ParseResult.CONFIDENCE.DEFINITE);<a name="line.128"></a>
-<span class="sourceLineNo">129</span>    assertExpected( CoordinateParseUtils.parseVerbatimCoordinates("10°07'N 20°48'W"), new LatLng(10.116667, -20.8), ParseResult.CONFIDENCE.DEFINITE);<a name="line.129"></a>
-<span class="sourceLineNo">130</span>    assertExpected( CoordinateParseUtils.parseVerbatimCoordinates("10°07.55'N 20°48.55'W"), new LatLng(10.125833, -20.809167), ParseResult.CONFIDENCE.DEFINITE);<a name="line.130"></a>
-<span class="sourceLineNo">131</span>    assertExpected( CoordinateParseUtils.parseVerbatimCoordinates("100º23'05\"N 20º35'25\"W"), new LatLng(-20.590278, 100.384722), ParseResult.CONFIDENCE.PROBABLE, OccurrenceIssue.PRESUMED_SWAPPED_COORDINATE);<a name="line.131"></a>
-<span class="sourceLineNo">132</span><a name="line.132"></a>
-<span class="sourceLineNo">133</span>    // failed<a name="line.133"></a>
-<span class="sourceLineNo">134</span>    assertFailed(CoordinateParseUtils.parseVerbatimCoordinates(""));<a name="line.134"></a>
-<span class="sourceLineNo">135</span>    assertFailedWithIssues(CoordinateParseUtils.parseVerbatimCoordinates("12344"), OccurrenceIssue.COORDINATE_INVALID);<a name="line.135"></a>
-<span class="sourceLineNo">136</span>    assertFailedWithIssues(CoordinateParseUtils.parseVerbatimCoordinates(" "), OccurrenceIssue.COORDINATE_INVALID);<a name="line.136"></a>
-<span class="sourceLineNo">137</span>    assertFailedWithIssues(CoordinateParseUtils.parseVerbatimCoordinates(",11.12"), OccurrenceIssue.COORDINATE_INVALID);<a name="line.137"></a>
-<span class="sourceLineNo">138</span>    assertFailedWithIssues(CoordinateParseUtils.parseVerbatimCoordinates("122°49'52\"N, 131°47'03\"E"), OccurrenceIssue.COORDINATE_OUT_OF_RANGE);<a name="line.138"></a>
-<span class="sourceLineNo">139</span>  }<a name="line.139"></a>
-<span class="sourceLineNo">140</span><a name="line.140"></a>
-<span class="sourceLineNo">141</span>  private void assertExpected(OccurrenceParseResult&lt;?&gt; pr, Object expected, ParseResult.CONFIDENCE c, OccurrenceIssue ... issue) {<a name="line.141"></a>
-<span class="sourceLineNo">142</span>    assertNotNull(pr);<a name="line.142"></a>
-<span class="sourceLineNo">143</span>    assertEquals(ParseResult.STATUS.SUCCESS, pr.getStatus());<a name="line.143"></a>
-<span class="sourceLineNo">144</span>    assertEquals(c, pr.getConfidence());<a name="line.144"></a>
-<span class="sourceLineNo">145</span>    assertNotNull(pr.getPayload());<a name="line.145"></a>
-<span class="sourceLineNo">146</span>    assertEquals(expected, pr.getPayload());<a name="line.146"></a>
-<span class="sourceLineNo">147</span>    //System.out.println(Lists.newArrayList(issue));<a name="line.147"></a>
+<span class="sourceLineNo">007</span>import org.junit.jupiter.api.Test;<a name="line.7"></a>
+<span class="sourceLineNo">008</span><a name="line.8"></a>
+<span class="sourceLineNo">009</span>import java.util.Arrays;<a name="line.9"></a>
+<span class="sourceLineNo">010</span><a name="line.10"></a>
+<span class="sourceLineNo">011</span>import static org.junit.jupiter.api.Assertions.assertEquals;<a name="line.11"></a>
+<span class="sourceLineNo">012</span>import static org.junit.jupiter.api.Assertions.assertNotNull;<a name="line.12"></a>
+<span class="sourceLineNo">013</span>import static org.junit.jupiter.api.Assertions.assertTrue;<a name="line.13"></a>
+<span class="sourceLineNo">014</span>import static org.junit.jupiter.api.Assertions.fail;<a name="line.14"></a>
+<span class="sourceLineNo">015</span><a name="line.15"></a>
+<span class="sourceLineNo">016</span>public class CoordinateParseUtilsTest {<a name="line.16"></a>
+<span class="sourceLineNo">017</span><a name="line.17"></a>
+<span class="sourceLineNo">018</span>  @Test<a name="line.18"></a>
+<span class="sourceLineNo">019</span>  public void testParseLatLng() {<a name="line.19"></a>
+<span class="sourceLineNo">020</span>    assertExpected(CoordinateParseUtils.parseLatLng("-46,33", "51,8717"), new LatLng(-46.33, 51.8717), ParseResult.CONFIDENCE.DEFINITE);<a name="line.20"></a>
+<span class="sourceLineNo">021</span>    assertExpected(CoordinateParseUtils.parseLatLng("10.3", "99.99"), new LatLng(10.3, 99.99), ParseResult.CONFIDENCE.DEFINITE);<a name="line.21"></a>
+<span class="sourceLineNo">022</span>    assertExpected(CoordinateParseUtils.parseLatLng("10", "10"), new LatLng(10, 10), ParseResult.CONFIDENCE.DEFINITE);<a name="line.22"></a>
+<span class="sourceLineNo">023</span>    assertExpected(CoordinateParseUtils.parseLatLng("90", "180"), new LatLng(90, 180), ParseResult.CONFIDENCE.DEFINITE);<a name="line.23"></a>
+<span class="sourceLineNo">024</span>    assertExpected(CoordinateParseUtils.parseLatLng("-90", "180"), new LatLng(-90, 180), ParseResult.CONFIDENCE.DEFINITE);<a name="line.24"></a>
+<span class="sourceLineNo">025</span>    assertExpected(CoordinateParseUtils.parseLatLng("90", "-180"), new LatLng(90, -180), ParseResult.CONFIDENCE.DEFINITE);<a name="line.25"></a>
+<span class="sourceLineNo">026</span>    assertExpected(CoordinateParseUtils.parseLatLng("-90", "-180"), new LatLng(-90, -180), ParseResult.CONFIDENCE.DEFINITE);<a name="line.26"></a>
+<span class="sourceLineNo">027</span>    assertExpected(CoordinateParseUtils.parseLatLng("0", "0"), new LatLng(0, 0), ParseResult.CONFIDENCE.POSSIBLE, OccurrenceIssue.ZERO_COORDINATE);<a name="line.27"></a>
+<span class="sourceLineNo">028</span><a name="line.28"></a>
+<span class="sourceLineNo">029</span>    // rounding<a name="line.29"></a>
+<span class="sourceLineNo">030</span>    assertExpected(CoordinateParseUtils.parseLatLng("2.123450678", "-8.123450678"), new LatLng(2.123451, -8.123451), ParseResult.CONFIDENCE.DEFINITE, OccurrenceIssue.COORDINATE_ROUNDED);<a name="line.30"></a>
+<span class="sourceLineNo">031</span>    assertExpected(CoordinateParseUtils.parseLatLng("2.123451", "-8.123450678"), new LatLng(2.123451, -8.123451), ParseResult.CONFIDENCE.DEFINITE, OccurrenceIssue.COORDINATE_ROUNDED);<a name="line.31"></a>
+<span class="sourceLineNo">032</span>    assertExpected(CoordinateParseUtils.parseLatLng("2.123451", "-8.123451"), new LatLng(2.123451, -8.123451), ParseResult.CONFIDENCE.DEFINITE);<a name="line.32"></a>
+<span class="sourceLineNo">033</span>    assertExpected(CoordinateParseUtils.parseLatLng("2.12345100", "-8.1234510"), new LatLng(2.123451, -8.123451), ParseResult.CONFIDENCE.DEFINITE);<a name="line.33"></a>
+<span class="sourceLineNo">034</span>    assertExpected(CoordinateParseUtils.parseLatLng("2.123", "-8.1234506"), new LatLng(2.123, -8.123451), ParseResult.CONFIDENCE.DEFINITE, OccurrenceIssue.COORDINATE_ROUNDED);<a name="line.34"></a>
+<span class="sourceLineNo">035</span><a name="line.35"></a>
+<span class="sourceLineNo">036</span>    // degree minutes seconds<a name="line.36"></a>
+<span class="sourceLineNo">037</span>    assertExpected(CoordinateParseUtils.parseLatLng("02° 49' 52\" N", "131° 47' 03\" E"), new LatLng(2.831111d, 131.784167d), ParseResult.CONFIDENCE.DEFINITE);<a name="line.37"></a>
+<span class="sourceLineNo">038</span><a name="line.38"></a>
+<span class="sourceLineNo">039</span>    // check swapped coordinates<a name="line.39"></a>
+<span class="sourceLineNo">040</span>    assertExpected(CoordinateParseUtils.parseLatLng("100", "40"), new LatLng(40, 100), ParseResult.CONFIDENCE.PROBABLE, OccurrenceIssue.PRESUMED_SWAPPED_COORDINATE);<a name="line.40"></a>
+<span class="sourceLineNo">041</span>    assertExpected(CoordinateParseUtils.parseLatLng("-100", "90"), new LatLng(90, -100), ParseResult.CONFIDENCE.PROBABLE, OccurrenceIssue.PRESUMED_SWAPPED_COORDINATE);<a name="line.41"></a>
+<span class="sourceLineNo">042</span><a name="line.42"></a>
+<span class="sourceLineNo">043</span>    // check errors<a name="line.43"></a>
+<span class="sourceLineNo">044</span>    assertFailed(CoordinateParseUtils.parseLatLng("", "30"));<a name="line.44"></a>
+<span class="sourceLineNo">045</span>    assertFailedWithIssues(CoordinateParseUtils.parseLatLng("tim", "tom"), OccurrenceIssue.COORDINATE_INVALID);<a name="line.45"></a>
+<span class="sourceLineNo">046</span>    assertFailedWithIssues(CoordinateParseUtils.parseLatLng("20,432,12", "13,4"), OccurrenceIssue.COORDINATE_INVALID);<a name="line.46"></a>
+<span class="sourceLineNo">047</span>    assertFailedWithIssues(CoordinateParseUtils.parseLatLng("200", "200"), OccurrenceIssue.COORDINATE_OUT_OF_RANGE);<a name="line.47"></a>
+<span class="sourceLineNo">048</span>    assertFailedWithIssues(CoordinateParseUtils.parseLatLng("-200", "30"), OccurrenceIssue.COORDINATE_OUT_OF_RANGE);<a name="line.48"></a>
+<span class="sourceLineNo">049</span>    assertFailedWithIssues(CoordinateParseUtils.parseLatLng("200", "30"), OccurrenceIssue.COORDINATE_OUT_OF_RANGE);<a name="line.49"></a>
+<span class="sourceLineNo">050</span>    assertFailedWithIssues(CoordinateParseUtils.parseLatLng("20.432,12", "13,4"), OccurrenceIssue.COORDINATE_OUT_OF_RANGE);<a name="line.50"></a>
+<span class="sourceLineNo">051</span>    assertFailedWithIssues(CoordinateParseUtils.parseLatLng("20,432,12", "13,4"), OccurrenceIssue.COORDINATE_INVALID);<a name="line.51"></a>
+<span class="sourceLineNo">052</span>  }<a name="line.52"></a>
+<span class="sourceLineNo">053</span><a name="line.53"></a>
+<span class="sourceLineNo">054</span>  @Test<a name="line.54"></a>
+<span class="sourceLineNo">055</span>  public void testParseDMS() {<a name="line.55"></a>
+<span class="sourceLineNo">056</span>    assertDMS("2°49'N", "131°47'E", 2.816667d, 131.783333d);<a name="line.56"></a>
+<span class="sourceLineNo">057</span><a name="line.57"></a>
+<span class="sourceLineNo">058</span>    assertDMS("02° 49' 52\" N", "131° 47' 03\" E", 2.831111d, 131.784167d);<a name="line.58"></a>
+<span class="sourceLineNo">059</span>    assertDMS("2°49'52\"S", "131°47'03\" W", -2.831111d, -131.784167d);<a name="line.59"></a>
+<span class="sourceLineNo">060</span>    assertDMS("2°49'52\"  n", "131°47'03\"  O", 2.831111d, 131.784167d);<a name="line.60"></a>
+<span class="sourceLineNo">061</span>    assertDMS("002°49'52\"N", "131°47'03\"E", 2.831111d, 131.784167d);<a name="line.61"></a>
+<span class="sourceLineNo">062</span>    assertDMS("2°49'N", "131°47'E", 2.816667d, 131.783333d);<a name="line.62"></a>
+<span class="sourceLineNo">063</span>    assertDMS("002°49'52''N", "131°47'03''E", 2.831111d, 131.784167d);<a name="line.63"></a>
+<span class="sourceLineNo">064</span>    assertDMS("6º39'36\"S","35º59'59\"W", -6.66d, -35.999722);<a name="line.64"></a>
+<span class="sourceLineNo">065</span>    assertDMS("17  02.877 N", "121  05.966 E", 17.04795, 121.099433);<a name="line.65"></a>
+<span class="sourceLineNo">066</span>    assertDMS("08º37'S", "37º10'W", -8.616667, -37.166667);<a name="line.66"></a>
+<span class="sourceLineNo">067</span>    assertDMS("39g30mS", "56g27mW", -39.5, -56.45);<a name="line.67"></a>
+<span class="sourceLineNo">068</span>    assertDMS("42g24m50.00sS", "64g17m20.00sW", -42.413889, -64.288889);<a name="line.68"></a>
+<span class="sourceLineNo">069</span>    assertDMS("42º30´S", "54º14´W", -42.5, -54.233333);<a name="line.69"></a>
+<span class="sourceLineNo">070</span>    assertDMS("61o50'N", "30o45'E", 61.833333, 30.75);<a name="line.70"></a>
+<span class="sourceLineNo">071</span>    assertDMS("07°35N", "38°44E", 7.583333, 38.733333);<a name="line.71"></a>
+<span class="sourceLineNo">072</span>    assertDMS("29º32.3’N", "113º34.9’W", 29.538333, -113.581667);<a name="line.72"></a>
+<span class="sourceLineNo">073</span>    assertDMS("5°45′30″N", "100º30′30″W", 5.758333, -100.508333);<a name="line.73"></a>
+<span class="sourceLineNo">074</span>    assertDMS("125º52´2´´S", "39º28´47´´W", -125.867222, -39.479722);<a name="line.74"></a>
+<span class="sourceLineNo">075</span>    assertDMS("13.1939 N", "59.5432 W", 13.1939, -59.5432);<a name="line.75"></a>
+<span class="sourceLineNo">076</span>    assertDMS("24 06.363 N", "110 11.969 E", 24.10605d, 110.199483d);<a name="line.76"></a>
+<span class="sourceLineNo">077</span>    // even if it's out of range that's expected here - we validate elsewhere, this is an internal method only!<a name="line.77"></a>
+<span class="sourceLineNo">078</span>    assertDMS("122°49'52\"N", "131°47'03\"E", 122.831111d, 131.784167d);<a name="line.78"></a>
+<span class="sourceLineNo">079</span>    assertDMS("122°49'52.39\"N", "131°47'03.23\"E", 122.83121944444444d, 131.78423055555555d);<a name="line.79"></a>
+<span class="sourceLineNo">080</span>    assertDMS("122d49m52.39sN", "131d47m03.23sE", 122.83121944444444d, 131.78423055555555d);<a name="line.80"></a>
+<span class="sourceLineNo">081</span>    assertDMS("122 49 52.39", "131 47 03.23", 122.83121944444444d, 131.78423055555555d);<a name="line.81"></a>
+<span class="sourceLineNo">082</span>    assertDMS("N122°49'52.39\"", "E131°47'03.23\"", 122.83121944444444d, 131.78423055555555d);<a name="line.82"></a>
+<span class="sourceLineNo">083</span>    assertDMS("N 122° 49' 52.39\"", "E 131° 47' 03.23\"", 122.83121944444444d, 131.78423055555555d);<a name="line.83"></a>
+<span class="sourceLineNo">084</span>    assertDMS("N 122°49'52.39\"", "E 131°47'03.23\"", 122.83121944444444d, 131.78423055555555d);<a name="line.84"></a>
+<span class="sourceLineNo">085</span>    assertDMS("N 122°49'52\"", "E 131°47'03.23\"", 122.831111d, 131.78423055555555d);<a name="line.85"></a>
+<span class="sourceLineNo">086</span>    assertDMS("N122°49'52.39\"", "E131°47'03.23\"", 122.83121944444444d, 131.78423055555555d);<a name="line.86"></a>
+<span class="sourceLineNo">087</span>    assertDMS("N36.93276", "W102.96361", 36.93276, -102.96361);<a name="line.87"></a>
+<span class="sourceLineNo">088</span>    assertDMS("90°N", "180°", 90, 180);<a name="line.88"></a>
+<span class="sourceLineNo">089</span><a name="line.89"></a>
+<span class="sourceLineNo">090</span>    // truly failing<a name="line.90"></a>
+<span class="sourceLineNo">091</span>    assertIllegalArg("12344", true);<a name="line.91"></a>
+<span class="sourceLineNo">092</span>    assertIllegalArg("432", false);<a name="line.92"></a>
+<span class="sourceLineNo">093</span>    assertIllegalArg(" ", true);<a name="line.93"></a>
+<span class="sourceLineNo">094</span>    assertIllegalArg(" ", false);<a name="line.94"></a>
+<span class="sourceLineNo">095</span>    assertIllegalArg("131°47'132\"", false);<a name="line.95"></a>
+<span class="sourceLineNo">096</span>    assertIllegalArg("131 47 132", false);<a name="line.96"></a>
+<span class="sourceLineNo">097</span>    assertIllegalArg("131°47'132\"", false);<a name="line.97"></a>
+<span class="sourceLineNo">098</span>    assertIllegalArg("043300S",true);<a name="line.98"></a>
+<span class="sourceLineNo">099</span>    assertIllegalArg("0433S",true);<a name="line.99"></a>
+<span class="sourceLineNo">100</span>    assertIllegalArg("043300 S",true);<a name="line.100"></a>
+<span class="sourceLineNo">101</span>    assertIllegalArg("0433 S",true);<a name="line.101"></a>
+<span class="sourceLineNo">102</span>  }<a name="line.102"></a>
+<span class="sourceLineNo">103</span><a name="line.103"></a>
+<span class="sourceLineNo">104</span>  private void assertDMS(String lat, String lon, double eLat, double eLon){<a name="line.104"></a>
+<span class="sourceLineNo">105</span>    assertEquals(eLat, CoordinateParseUtils.parseDMS(lat, true), 0.000001);<a name="line.105"></a>
+<span class="sourceLineNo">106</span>    assertEquals(eLon, CoordinateParseUtils.parseDMS(lon, false), 0.000001);<a name="line.106"></a>
+<span class="sourceLineNo">107</span>  }<a name="line.107"></a>
+<span class="sourceLineNo">108</span><a name="line.108"></a>
+<span class="sourceLineNo">109</span>  private void assertIllegalArg(String coord, boolean lat){<a name="line.109"></a>
+<span class="sourceLineNo">110</span>    try {<a name="line.110"></a>
+<span class="sourceLineNo">111</span>      CoordinateParseUtils.parseDMS(coord, lat);<a name="line.111"></a>
+<span class="sourceLineNo">112</span>      fail("IllegalArgumentException expected");<a name="line.112"></a>
+<span class="sourceLineNo">113</span>    } catch (IllegalArgumentException e) {<a name="line.113"></a>
+<span class="sourceLineNo">114</span>      // expected!<a name="line.114"></a>
+<span class="sourceLineNo">115</span>    }<a name="line.115"></a>
+<span class="sourceLineNo">116</span>  }<a name="line.116"></a>
+<span class="sourceLineNo">117</span><a name="line.117"></a>
+<span class="sourceLineNo">118</span>  @Test<a name="line.118"></a>
+<span class="sourceLineNo">119</span>  public void testParseVerbatimCoordinates() {<a name="line.119"></a>
+<span class="sourceLineNo">120</span>    assertExpected( CoordinateParseUtils.parseVerbatimCoordinates("02° 49' 52\" N 131° 47' 03\" E"), new LatLng(2.831111d, 131.784167d), ParseResult.CONFIDENCE.DEFINITE);<a name="line.120"></a>
+<span class="sourceLineNo">121</span>    assertExpected( CoordinateParseUtils.parseVerbatimCoordinates("02° 49' 52\" N, 131° 47' 03\" E"), new LatLng(2.831111d, 131.784167d), ParseResult.CONFIDENCE.DEFINITE);<a name="line.121"></a>
+<span class="sourceLineNo">122</span>    assertExpected( CoordinateParseUtils.parseVerbatimCoordinates("02°49'52\"N; 131°47'03\"O"), new LatLng(2.831111d, 131.784167d), ParseResult.CONFIDENCE.DEFINITE);<a name="line.122"></a>
+<span class="sourceLineNo">123</span>    assertExpected( CoordinateParseUtils.parseVerbatimCoordinates("17d 33m 5s N/99d 30m 3s W"), new LatLng(17.551389d, -99.500833d), ParseResult.CONFIDENCE.DEFINITE);<a name="line.123"></a>
+<span class="sourceLineNo">124</span>    assertExpected( CoordinateParseUtils.parseVerbatimCoordinates("14.93333/-91.9"), new LatLng(14.93333d, -91.9d), ParseResult.CONFIDENCE.DEFINITE);<a name="line.124"></a>
+<span class="sourceLineNo">125</span>    assertExpected( CoordinateParseUtils.parseVerbatimCoordinates("63d 41m 39s N 170d 28m 44s W"), new LatLng(63.694167d, -170.478889d), ParseResult.CONFIDENCE.DEFINITE);<a name="line.125"></a>
+<span class="sourceLineNo">126</span>    assertExpected( CoordinateParseUtils.parseVerbatimCoordinates("37° 28' N, 122° 6' W"), new LatLng(37.466667d, -122.1d), ParseResult.CONFIDENCE.DEFINITE);<a name="line.126"></a>
+<span class="sourceLineNo">127</span>    assertExpected( CoordinateParseUtils.parseVerbatimCoordinates("2°49'52\"N, 131°47'03\""), new LatLng(2.831111d, 131.784167d), ParseResult.CONFIDENCE.DEFINITE);<a name="line.127"></a>
+<span class="sourceLineNo">128</span>    assertExpected( CoordinateParseUtils.parseVerbatimCoordinates("10°07'06\"N 20°48'23\"W"), new LatLng(10.118333, -20.806389), ParseResult.CONFIDENCE.DEFINITE);<a name="line.128"></a>
+<span class="sourceLineNo">129</span>    assertExpected( CoordinateParseUtils.parseVerbatimCoordinates("10º07'06\"N 20º48'23\"W"), new LatLng(10.118333, -20.806389), ParseResult.CONFIDENCE.DEFINITE);<a name="line.129"></a>
+<span class="sourceLineNo">130</span>    assertExpected( CoordinateParseUtils.parseVerbatimCoordinates("10°07'N 20°48'W"), new LatLng(10.116667, -20.8), ParseResult.CONFIDENCE.DEFINITE);<a name="line.130"></a>
+<span class="sourceLineNo">131</span>    assertExpected( CoordinateParseUtils.parseVerbatimCoordinates("10°07.55'N 20°48.55'W"), new LatLng(10.125833, -20.809167), ParseResult.CONFIDENCE.DEFINITE);<a name="line.131"></a>
+<span class="sourceLineNo">132</span>    assertExpected( CoordinateParseUtils.parseVerbatimCoordinates("100º23'05\"N 20º35'25\"W"), new LatLng(-20.590278, 100.384722), ParseResult.CONFIDENCE.PROBABLE, OccurrenceIssue.PRESUMED_SWAPPED_COORDINATE);<a name="line.132"></a>
+<span class="sourceLineNo">133</span><a name="line.133"></a>
+<span class="sourceLineNo">134</span>    // failed<a name="line.134"></a>
+<span class="sourceLineNo">135</span>    assertFailed(CoordinateParseUtils.parseVerbatimCoordinates(""));<a name="line.135"></a>
+<span class="sourceLineNo">136</span>    assertFailedWithIssues(CoordinateParseUtils.parseVerbatimCoordinates("12344"), OccurrenceIssue.COORDINATE_INVALID);<a name="line.136"></a>
+<span class="sourceLineNo">137</span>    assertFailedWithIssues(CoordinateParseUtils.parseVerbatimCoordinates(" "), OccurrenceIssue.COORDINATE_INVALID);<a name="line.137"></a>
+<span class="sourceLineNo">138</span>    assertFailedWithIssues(CoordinateParseUtils.parseVerbatimCoordinates(",11.12"), OccurrenceIssue.COORDINATE_INVALID);<a name="line.138"></a>
+<span class="sourceLineNo">139</span>    assertFailedWithIssues(CoordinateParseUtils.parseVerbatimCoordinates("122°49'52\"N, 131°47'03\"E"), OccurrenceIssue.COORDINATE_OUT_OF_RANGE);<a name="line.139"></a>
+<span class="sourceLineNo">140</span>  }<a name="line.140"></a>
+<span class="sourceLineNo">141</span><a name="line.141"></a>
+<span class="sourceLineNo">142</span>  private void assertExpected(OccurrenceParseResult&lt;?&gt; pr, Object expected, ParseResult.CONFIDENCE c, OccurrenceIssue ... issue) {<a name="line.142"></a>
+<span class="sourceLineNo">143</span>    assertNotNull(pr);<a name="line.143"></a>
+<span class="sourceLineNo">144</span>    assertEquals(ParseResult.STATUS.SUCCESS, pr.getStatus());<a name="line.144"></a>
+<span class="sourceLineNo">145</span>    assertEquals(c, pr.getConfidence());<a name="line.145"></a>
+<span class="sourceLineNo">146</span>    assertNotNull(pr.getPayload());<a name="line.146"></a>
+<span class="sourceLineNo">147</span>    assertEquals(expected, pr.getPayload());<a name="line.147"></a>
 <span class="sourceLineNo">148</span>    if (issue == null) {<a name="line.148"></a>
 <span class="sourceLineNo">149</span>      assertTrue(pr.getIssues().isEmpty());<a name="line.149"></a>
 <span class="sourceLineNo">150</span>    } else {<a name="line.150"></a>
-<span class="sourceLineNo">151</span>      assertEquals("Wrong number of issues. Found " + pr.getIssues() + ", expected " + Lists.newArrayList(issue), issue.length, pr.getIssues().size());<a name="line.151"></a>
+<span class="sourceLineNo">151</span>      assertEquals(issue.length, pr.getIssues().size(), "Wrong number of issues. Found " + pr.getIssues() + ", expected " + Arrays.asList(issue));<a name="line.151"></a>
 <span class="sourceLineNo">152</span>      for (OccurrenceIssue iss : issue) {<a name="line.152"></a>
 <span class="sourceLineNo">153</span>        assertTrue(pr.getIssues().contains(iss));<a name="line.153"></a>
 <span class="sourceLineNo">154</span>      }<a name="line.154"></a>

@@ -8,84 +8,87 @@
 <div class="sourceContainer">
 <pre><span class="sourceLineNo">001</span>package org.gbif.common.parsers;<a name="line.1"></a>
 <span class="sourceLineNo">002</span><a name="line.2"></a>
-<span class="sourceLineNo">003</span>import org.gbif.api.util.VocabularyUtils;<a name="line.3"></a>
-<span class="sourceLineNo">004</span>import org.gbif.api.vocabulary.Country;<a name="line.4"></a>
-<span class="sourceLineNo">005</span>import org.gbif.common.parsers.core.EnumParser;<a name="line.5"></a>
-<span class="sourceLineNo">006</span><a name="line.6"></a>
-<span class="sourceLineNo">007</span>import java.util.regex.Pattern;<a name="line.7"></a>
-<span class="sourceLineNo">008</span><a name="line.8"></a>
-<span class="sourceLineNo">009</span>import com.google.common.base.CharMatcher;<a name="line.9"></a>
-<span class="sourceLineNo">010</span>import com.google.common.base.Strings;<a name="line.10"></a>
-<span class="sourceLineNo">011</span><a name="line.11"></a>
-<span class="sourceLineNo">012</span>/**<a name="line.12"></a>
-<span class="sourceLineNo">013</span> * Singleton implementation of the dictionary that uses the file /dictionaries/parse/countryName.txt.<a name="line.13"></a>
-<span class="sourceLineNo">014</span> */<a name="line.14"></a>
-<span class="sourceLineNo">015</span>public class CountryParser extends EnumParser&lt;Country&gt; {<a name="line.15"></a>
+<span class="sourceLineNo">003</span>import org.apache.commons.lang3.StringUtils;<a name="line.3"></a>
+<span class="sourceLineNo">004</span>import org.gbif.api.util.VocabularyUtils;<a name="line.4"></a>
+<span class="sourceLineNo">005</span>import org.gbif.api.vocabulary.Country;<a name="line.5"></a>
+<span class="sourceLineNo">006</span>import org.gbif.common.parsers.core.EnumParser;<a name="line.6"></a>
+<span class="sourceLineNo">007</span><a name="line.7"></a>
+<span class="sourceLineNo">008</span>import java.util.regex.Pattern;<a name="line.8"></a>
+<span class="sourceLineNo">009</span><a name="line.9"></a>
+<span class="sourceLineNo">010</span>/**<a name="line.10"></a>
+<span class="sourceLineNo">011</span> * Singleton implementation of the dictionary that uses the file /dictionaries/parse/countryName.txt.<a name="line.11"></a>
+<span class="sourceLineNo">012</span> */<a name="line.12"></a>
+<span class="sourceLineNo">013</span>public class CountryParser extends EnumParser&lt;Country&gt; {<a name="line.13"></a>
+<span class="sourceLineNo">014</span><a name="line.14"></a>
+<span class="sourceLineNo">015</span>  private static CountryParser singletonObject = null;<a name="line.15"></a>
 <span class="sourceLineNo">016</span><a name="line.16"></a>
-<span class="sourceLineNo">017</span>  private static CountryParser singletonObject = null;<a name="line.17"></a>
-<span class="sourceLineNo">018</span><a name="line.18"></a>
-<span class="sourceLineNo">019</span>  private static final CharMatcher LETTER_MATCHER = CharMatcher.JAVA_LETTER.or(CharMatcher.WHITESPACE).precomputed();<a name="line.19"></a>
-<span class="sourceLineNo">020</span>  private static final CharMatcher WHITESPACE_MATCHER = CharMatcher.WHITESPACE.precomputed();<a name="line.20"></a>
-<span class="sourceLineNo">021</span>  // "off Australia"<a name="line.21"></a>
-<span class="sourceLineNo">022</span>  private static final Pattern REMOVE_OFF_PATTERN = Pattern.compile("off ", Pattern.CASE_INSENSITIVE);<a name="line.22"></a>
-<span class="sourceLineNo">023</span><a name="line.23"></a>
-<span class="sourceLineNo">024</span>  private static final String ISO_3166_2_FORMAT = "ISO_3166-2:";<a name="line.24"></a>
-<span class="sourceLineNo">025</span>  private static final String ISO_3166_3_FORMAT = "ISO_3166-3:";<a name="line.25"></a>
-<span class="sourceLineNo">026</span><a name="line.26"></a>
-<span class="sourceLineNo">027</span>  private CountryParser() {<a name="line.27"></a>
-<span class="sourceLineNo">028</span>    super(Country.class, false);<a name="line.28"></a>
-<span class="sourceLineNo">029</span>    // also make sure we have all official iso countries mapped<a name="line.29"></a>
-<span class="sourceLineNo">030</span>    for (Country c : Country.OFFICIAL_COUNTRIES) {<a name="line.30"></a>
-<span class="sourceLineNo">031</span>      add(c.name(), c);<a name="line.31"></a>
-<span class="sourceLineNo">032</span>      add(c.getTitle(), c);<a name="line.32"></a>
-<span class="sourceLineNo">033</span>      add(c.getIso2LetterCode(), c);<a name="line.33"></a>
-<span class="sourceLineNo">034</span>      add(c.getIso3LetterCode(), c);<a name="line.34"></a>
-<span class="sourceLineNo">035</span>      add(ISO_3166_2_FORMAT+c.getIso2LetterCode(), c);<a name="line.35"></a>
-<span class="sourceLineNo">036</span>      add(ISO_3166_3_FORMAT+c.getIso3LetterCode(), c);<a name="line.36"></a>
-<span class="sourceLineNo">037</span>    }<a name="line.37"></a>
-<span class="sourceLineNo">038</span>    // and Kosovo (which is not an official code, but should be treated as such by GBIF)<a name="line.38"></a>
-<span class="sourceLineNo">039</span>    add(Country.KOSOVO.name(), Country.KOSOVO);<a name="line.39"></a>
-<span class="sourceLineNo">040</span>    add(Country.KOSOVO.getTitle(), Country.KOSOVO);<a name="line.40"></a>
-<span class="sourceLineNo">041</span>    add(Country.KOSOVO.getIso2LetterCode(), Country.KOSOVO);<a name="line.41"></a>
-<span class="sourceLineNo">042</span>    add(Country.KOSOVO.getIso3LetterCode(), Country.KOSOVO);<a name="line.42"></a>
-<span class="sourceLineNo">043</span>    // use dict file last<a name="line.43"></a>
-<span class="sourceLineNo">044</span>    init(CountryParser.class.getResourceAsStream("/dictionaries/parse/countryName.tsv"));<a name="line.44"></a>
-<span class="sourceLineNo">045</span>  }<a name="line.45"></a>
-<span class="sourceLineNo">046</span><a name="line.46"></a>
-<span class="sourceLineNo">047</span>  @Override<a name="line.47"></a>
-<span class="sourceLineNo">048</span>  protected String normalize(String value) {<a name="line.48"></a>
-<span class="sourceLineNo">049</span>    value = handleNotAvailable(value);<a name="line.49"></a>
-<span class="sourceLineNo">050</span>    if (value != null) {<a name="line.50"></a>
-<span class="sourceLineNo">051</span>      String cleanedCountry = LETTER_MATCHER.retainFrom(value);<a name="line.51"></a>
-<span class="sourceLineNo">052</span>      cleanedCountry = REMOVE_OFF_PATTERN.matcher(cleanedCountry).replaceFirst("");<a name="line.52"></a>
-<span class="sourceLineNo">053</span>      cleanedCountry = WHITESPACE_MATCHER.trimAndCollapseFrom(cleanedCountry, ' ');<a name="line.53"></a>
-<span class="sourceLineNo">054</span>      cleanedCountry = Strings.emptyToNull(cleanedCountry);<a name="line.54"></a>
-<span class="sourceLineNo">055</span>      return super.normalize(cleanedCountry);<a name="line.55"></a>
-<span class="sourceLineNo">056</span>    }<a name="line.56"></a>
-<span class="sourceLineNo">057</span>    return null;<a name="line.57"></a>
-<span class="sourceLineNo">058</span>  }<a name="line.58"></a>
-<span class="sourceLineNo">059</span><a name="line.59"></a>
-<span class="sourceLineNo">060</span>  @Override<a name="line.60"></a>
-<span class="sourceLineNo">061</span>  protected Country fromDictFile(String value) {<a name="line.61"></a>
-<span class="sourceLineNo">062</span>    Country c = Country.fromIsoCode(value);<a name="line.62"></a>
-<span class="sourceLineNo">063</span>    if (c == null) {<a name="line.63"></a>
-<span class="sourceLineNo">064</span>      try {<a name="line.64"></a>
-<span class="sourceLineNo">065</span>        c = VocabularyUtils.lookupEnum(value, Country.class);<a name="line.65"></a>
-<span class="sourceLineNo">066</span>      } catch (RuntimeException e) {<a name="line.66"></a>
-<span class="sourceLineNo">067</span>      }<a name="line.67"></a>
-<span class="sourceLineNo">068</span>    }<a name="line.68"></a>
-<span class="sourceLineNo">069</span>    return c;<a name="line.69"></a>
-<span class="sourceLineNo">070</span>  }<a name="line.70"></a>
-<span class="sourceLineNo">071</span><a name="line.71"></a>
-<span class="sourceLineNo">072</span>  public static CountryParser getInstance() {<a name="line.72"></a>
-<span class="sourceLineNo">073</span>    synchronized (CountryParser.class) {<a name="line.73"></a>
-<span class="sourceLineNo">074</span>      if (singletonObject == null) {<a name="line.74"></a>
-<span class="sourceLineNo">075</span>        singletonObject = new CountryParser();<a name="line.75"></a>
-<span class="sourceLineNo">076</span>      }<a name="line.76"></a>
-<span class="sourceLineNo">077</span>    }<a name="line.77"></a>
-<span class="sourceLineNo">078</span>    return singletonObject;<a name="line.78"></a>
-<span class="sourceLineNo">079</span>  }<a name="line.79"></a>
-<span class="sourceLineNo">080</span>}<a name="line.80"></a>
+<span class="sourceLineNo">017</span>  // "off Australia"<a name="line.17"></a>
+<span class="sourceLineNo">018</span>  private static final Pattern REMOVE_OFF_PATTERN = Pattern.compile("off ", Pattern.CASE_INSENSITIVE);<a name="line.18"></a>
+<span class="sourceLineNo">019</span><a name="line.19"></a>
+<span class="sourceLineNo">020</span>  private static final String ISO_3166_2_FORMAT = "ISO_3166-2:";<a name="line.20"></a>
+<span class="sourceLineNo">021</span>  private static final String ISO_3166_3_FORMAT = "ISO_3166-3:";<a name="line.21"></a>
+<span class="sourceLineNo">022</span><a name="line.22"></a>
+<span class="sourceLineNo">023</span>  private CountryParser() {<a name="line.23"></a>
+<span class="sourceLineNo">024</span>    super(Country.class, false);<a name="line.24"></a>
+<span class="sourceLineNo">025</span>    // also make sure we have all official iso countries mapped<a name="line.25"></a>
+<span class="sourceLineNo">026</span>    for (Country c : Country.OFFICIAL_COUNTRIES) {<a name="line.26"></a>
+<span class="sourceLineNo">027</span>      add(c.name(), c);<a name="line.27"></a>
+<span class="sourceLineNo">028</span>      add(c.getTitle(), c);<a name="line.28"></a>
+<span class="sourceLineNo">029</span>      add(c.getIso2LetterCode(), c);<a name="line.29"></a>
+<span class="sourceLineNo">030</span>      add(c.getIso3LetterCode(), c);<a name="line.30"></a>
+<span class="sourceLineNo">031</span>      add(ISO_3166_2_FORMAT+c.getIso2LetterCode(), c);<a name="line.31"></a>
+<span class="sourceLineNo">032</span>      add(ISO_3166_3_FORMAT+c.getIso3LetterCode(), c);<a name="line.32"></a>
+<span class="sourceLineNo">033</span>    }<a name="line.33"></a>
+<span class="sourceLineNo">034</span>    // and Kosovo (which is not an official code, but should be treated as such by GBIF)<a name="line.34"></a>
+<span class="sourceLineNo">035</span>    add(Country.KOSOVO.name(), Country.KOSOVO);<a name="line.35"></a>
+<span class="sourceLineNo">036</span>    add(Country.KOSOVO.getTitle(), Country.KOSOVO);<a name="line.36"></a>
+<span class="sourceLineNo">037</span>    add(Country.KOSOVO.getIso2LetterCode(), Country.KOSOVO);<a name="line.37"></a>
+<span class="sourceLineNo">038</span>    add(Country.KOSOVO.getIso3LetterCode(), Country.KOSOVO);<a name="line.38"></a>
+<span class="sourceLineNo">039</span>    // use dict file last<a name="line.39"></a>
+<span class="sourceLineNo">040</span>    init(CountryParser.class.getResourceAsStream("/dictionaries/parse/countryName.tsv"));<a name="line.40"></a>
+<span class="sourceLineNo">041</span>  }<a name="line.41"></a>
+<span class="sourceLineNo">042</span><a name="line.42"></a>
+<span class="sourceLineNo">043</span>  @Override<a name="line.43"></a>
+<span class="sourceLineNo">044</span>  protected String normalize(String value) {<a name="line.44"></a>
+<span class="sourceLineNo">045</span>    value = handleNotAvailable(value);<a name="line.45"></a>
+<span class="sourceLineNo">046</span>    if (value != null) {<a name="line.46"></a>
+<span class="sourceLineNo">047</span>      // step 1: remove all non-letter and not-whitespace characters<a name="line.47"></a>
+<span class="sourceLineNo">048</span>      String cleanedCountry = value.chars()<a name="line.48"></a>
+<span class="sourceLineNo">049</span>          .filter(p -&gt; Character.isLetter((char) p) || Character.isWhitespace(p))<a name="line.49"></a>
+<span class="sourceLineNo">050</span>          .collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append)<a name="line.50"></a>
+<span class="sourceLineNo">051</span>          .toString();<a name="line.51"></a>
+<span class="sourceLineNo">052</span>      // step 2: remove 'off '<a name="line.52"></a>
+<span class="sourceLineNo">053</span>      cleanedCountry = REMOVE_OFF_PATTERN.matcher(cleanedCountry).replaceFirst("");<a name="line.53"></a>
+<span class="sourceLineNo">054</span>      // step 3: normalize whitespaces<a name="line.54"></a>
+<span class="sourceLineNo">055</span>      cleanedCountry = StringUtils.normalizeSpace(cleanedCountry);<a name="line.55"></a>
+<span class="sourceLineNo">056</span>      // step 4: trim to null<a name="line.56"></a>
+<span class="sourceLineNo">057</span>      cleanedCountry = StringUtils.trimToNull(cleanedCountry);<a name="line.57"></a>
+<span class="sourceLineNo">058</span>      return super.normalize(cleanedCountry);<a name="line.58"></a>
+<span class="sourceLineNo">059</span>    }<a name="line.59"></a>
+<span class="sourceLineNo">060</span>    return null;<a name="line.60"></a>
+<span class="sourceLineNo">061</span>  }<a name="line.61"></a>
+<span class="sourceLineNo">062</span><a name="line.62"></a>
+<span class="sourceLineNo">063</span>  @Override<a name="line.63"></a>
+<span class="sourceLineNo">064</span>  protected Country fromDictFile(String value) {<a name="line.64"></a>
+<span class="sourceLineNo">065</span>    Country c = Country.fromIsoCode(value);<a name="line.65"></a>
+<span class="sourceLineNo">066</span>    if (c == null) {<a name="line.66"></a>
+<span class="sourceLineNo">067</span>      try {<a name="line.67"></a>
+<span class="sourceLineNo">068</span>        c = VocabularyUtils.lookupEnum(value, Country.class);<a name="line.68"></a>
+<span class="sourceLineNo">069</span>      } catch (RuntimeException e) {<a name="line.69"></a>
+<span class="sourceLineNo">070</span>      }<a name="line.70"></a>
+<span class="sourceLineNo">071</span>    }<a name="line.71"></a>
+<span class="sourceLineNo">072</span>    return c;<a name="line.72"></a>
+<span class="sourceLineNo">073</span>  }<a name="line.73"></a>
+<span class="sourceLineNo">074</span><a name="line.74"></a>
+<span class="sourceLineNo">075</span>  public static CountryParser getInstance() {<a name="line.75"></a>
+<span class="sourceLineNo">076</span>    synchronized (CountryParser.class) {<a name="line.76"></a>
+<span class="sourceLineNo">077</span>      if (singletonObject == null) {<a name="line.77"></a>
+<span class="sourceLineNo">078</span>        singletonObject = new CountryParser();<a name="line.78"></a>
+<span class="sourceLineNo">079</span>      }<a name="line.79"></a>
+<span class="sourceLineNo">080</span>    }<a name="line.80"></a>
+<span class="sourceLineNo">081</span>    return singletonObject;<a name="line.81"></a>
+<span class="sourceLineNo">082</span>  }<a name="line.82"></a>
+<span class="sourceLineNo">083</span>}<a name="line.83"></a>
 
 
 

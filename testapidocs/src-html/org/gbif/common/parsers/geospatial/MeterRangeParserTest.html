@@ -8,15 +8,15 @@
 <div class="sourceContainer">
 <pre><span class="sourceLineNo">001</span>package org.gbif.common.parsers.geospatial;<a name="line.1"></a>
 <span class="sourceLineNo">002</span><a name="line.2"></a>
-<span class="sourceLineNo">003</span>import static org.junit.Assert.assertEquals;<a name="line.3"></a>
-<span class="sourceLineNo">004</span>import static org.junit.Assert.assertNotNull;<a name="line.4"></a>
-<span class="sourceLineNo">005</span>import static org.junit.Assert.assertFalse;<a name="line.5"></a>
-<span class="sourceLineNo">006</span>import static org.junit.Assert.assertTrue;<a name="line.6"></a>
+<span class="sourceLineNo">003</span>import static org.junit.jupiter.api.Assertions.assertEquals;<a name="line.3"></a>
+<span class="sourceLineNo">004</span>import static org.junit.jupiter.api.Assertions.assertNotNull;<a name="line.4"></a>
+<span class="sourceLineNo">005</span>import static org.junit.jupiter.api.Assertions.assertFalse;<a name="line.5"></a>
+<span class="sourceLineNo">006</span>import static org.junit.jupiter.api.Assertions.assertTrue;<a name="line.6"></a>
 <span class="sourceLineNo">007</span><a name="line.7"></a>
 <span class="sourceLineNo">008</span>import org.gbif.api.vocabulary.OccurrenceIssue;<a name="line.8"></a>
 <span class="sourceLineNo">009</span>import org.gbif.common.parsers.core.OccurrenceParseResult;<a name="line.9"></a>
 <span class="sourceLineNo">010</span>import org.gbif.common.parsers.core.ParseResult;<a name="line.10"></a>
-<span class="sourceLineNo">011</span>import org.junit.Test;<a name="line.11"></a>
+<span class="sourceLineNo">011</span>import org.junit.jupiter.api.Test;<a name="line.11"></a>
 <span class="sourceLineNo">012</span><a name="line.12"></a>
 <span class="sourceLineNo">013</span>public class MeterRangeParserTest {<a name="line.13"></a>
 <span class="sourceLineNo">014</span><a name="line.14"></a>
@@ -225,7 +225,7 @@
 <span class="sourceLineNo">217</span>      assertTrue(pr.getIssues().isEmpty());<a name="line.217"></a>
 <span class="sourceLineNo">218</span>    } else {<a name="line.218"></a>
 <span class="sourceLineNo">219</span>      assertEquals(<a name="line.219"></a>
-<span class="sourceLineNo">220</span>          "Issue mismatch, found issues: " + pr.getIssues(), issue.length, pr.getIssues().size());<a name="line.220"></a>
+<span class="sourceLineNo">220</span>          issue.length, pr.getIssues().size(), "Issue mismatch, found issues: " + pr.getIssues());<a name="line.220"></a>
 <span class="sourceLineNo">221</span>      for (OccurrenceIssue iss : issue) {<a name="line.221"></a>
 <span class="sourceLineNo">222</span>        assertTrue(pr.getIssues().contains(iss));<a name="line.222"></a>
 <span class="sourceLineNo">223</span>      }<a name="line.223"></a>

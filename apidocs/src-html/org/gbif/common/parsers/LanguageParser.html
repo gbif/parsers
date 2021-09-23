@@ -13,13 +13,13 @@
 <span class="sourceLineNo">005</span>import org.gbif.utils.file.csv.CSVReader;<a name="line.5"></a>
 <span class="sourceLineNo">006</span>import org.gbif.utils.file.csv.CSVReaderFactory;<a name="line.6"></a>
 <span class="sourceLineNo">007</span><a name="line.7"></a>
-<span class="sourceLineNo">008</span>import java.util.List;<a name="line.8"></a>
-<span class="sourceLineNo">009</span>import java.util.Locale;<a name="line.9"></a>
-<span class="sourceLineNo">010</span>import java.util.Set;<a name="line.10"></a>
-<span class="sourceLineNo">011</span>import java.util.regex.Pattern;<a name="line.11"></a>
-<span class="sourceLineNo">012</span><a name="line.12"></a>
-<span class="sourceLineNo">013</span>import com.google.common.collect.ImmutableList;<a name="line.13"></a>
-<span class="sourceLineNo">014</span>import com.google.common.collect.Sets;<a name="line.14"></a>
+<span class="sourceLineNo">008</span>import java.util.Arrays;<a name="line.8"></a>
+<span class="sourceLineNo">009</span>import java.util.HashSet;<a name="line.9"></a>
+<span class="sourceLineNo">010</span>import java.util.List;<a name="line.10"></a>
+<span class="sourceLineNo">011</span>import java.util.Locale;<a name="line.11"></a>
+<span class="sourceLineNo">012</span>import java.util.Set;<a name="line.12"></a>
+<span class="sourceLineNo">013</span>import java.util.regex.Pattern;<a name="line.13"></a>
+<span class="sourceLineNo">014</span><a name="line.14"></a>
 <span class="sourceLineNo">015</span>import org.apache.commons.lang3.StringUtils;<a name="line.15"></a>
 <span class="sourceLineNo">016</span><a name="line.16"></a>
 <span class="sourceLineNo">017</span>/**<a name="line.17"></a>
@@ -33,7 +33,7 @@
 <span class="sourceLineNo">025</span><a name="line.25"></a>
 <span class="sourceLineNo">026</span>  private static LanguageParser singletonObject = null;<a name="line.26"></a>
 <span class="sourceLineNo">027</span>  private static final Pattern LOCALE = Pattern.compile("^[a-zA-Z]{2,3}_[a-zA-Z]");<a name="line.27"></a>
-<span class="sourceLineNo">028</span>  private static final List&lt;Pattern&gt; REMOVE_FROM_NAME_PATTERNS = ImmutableList.of(<a name="line.28"></a>
+<span class="sourceLineNo">028</span>  private static final List&lt;Pattern&gt; REMOVE_FROM_NAME_PATTERNS = Arrays.asList(<a name="line.28"></a>
 <span class="sourceLineNo">029</span>      // remove brackets<a name="line.29"></a>
 <span class="sourceLineNo">030</span>      Pattern.compile("\\(.\\)"),<a name="line.30"></a>
 <span class="sourceLineNo">031</span>      // remove French ", langues"<a name="line.31"></a>
@@ -145,7 +145,7 @@
 <span class="sourceLineNo">137</span>  }<a name="line.137"></a>
 <span class="sourceLineNo">138</span><a name="line.138"></a>
 <span class="sourceLineNo">139</span>  private Set&lt;String&gt; mutateLanguageName(String lang) {<a name="line.139"></a>
-<span class="sourceLineNo">140</span>    Set&lt;String&gt; langs = Sets.newHashSet();<a name="line.140"></a>
+<span class="sourceLineNo">140</span>    Set&lt;String&gt; langs = new HashSet&lt;&gt;();<a name="line.140"></a>
 <span class="sourceLineNo">141</span>    for (String l : lang.split(";")) {<a name="line.141"></a>
 <span class="sourceLineNo">142</span>      langs.add(l);<a name="line.142"></a>
 <span class="sourceLineNo">143</span>      // also remove common patterns<a name="line.143"></a>

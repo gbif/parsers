@@ -8,8 +8,8 @@
 <div id="overview"><a href="../../../../../apidocs/org/gbif/common/parsers/TypifiedNameParser.html">View Javadoc</a></div><pre>
 <a class="jxr_linenumber" name="L1" href="#L1">1</a>   <strong class="jxr_keyword">package</strong> org.gbif.common.parsers;
 <a class="jxr_linenumber" name="L2" href="#L2">2</a>   
-<a class="jxr_linenumber" name="L3" href="#L3">3</a>   <strong class="jxr_keyword">import</strong> com.google.common.base.Strings;
-<a class="jxr_linenumber" name="L4" href="#L4">4</a>   <strong class="jxr_keyword">import</strong> com.google.common.collect.Range;
+<a class="jxr_linenumber" name="L3" href="#L3">3</a>   <strong class="jxr_keyword">import</strong> org.apache.commons.lang3.Range;
+<a class="jxr_linenumber" name="L4" href="#L4">4</a>   <strong class="jxr_keyword">import</strong> org.apache.commons.lang3.StringUtils;
 <a class="jxr_linenumber" name="L5" href="#L5">5</a>   <strong class="jxr_keyword">import</strong> org.gbif.api.exception.UnparsableException;
 <a class="jxr_linenumber" name="L6" href="#L6">6</a>   <strong class="jxr_keyword">import</strong> org.gbif.api.model.checklistbank.ParsedName;
 <a class="jxr_linenumber" name="L7" href="#L7">7</a>   <strong class="jxr_keyword">import</strong> org.gbif.common.parsers.core.Parsable;
@@ -27,20 +27,20 @@
 <a class="jxr_linenumber" name="L19" href="#L19">19</a>  <em class="jxr_javadoccomment"> * For example given the input "Holotype of Dianthus fruticosus ssp. amorginus Runemark"</em>
 <a class="jxr_linenumber" name="L20" href="#L20">20</a>  <em class="jxr_javadoccomment"> * the parser will extract Dianthus fruticosus ssp. amorginus Runemark.</em>
 <a class="jxr_linenumber" name="L21" href="#L21">21</a>  <em class="jxr_javadoccomment"> */</em>
-<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../org/gbif/common/parsers/TypifiedNameParser.html">TypifiedNameParser</a> <strong class="jxr_keyword">implements</strong> Parsable&lt;String&gt; {
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a name="TypifiedNameParser" href="../../../../org/gbif/common/parsers/TypifiedNameParser.html#TypifiedNameParser">TypifiedNameParser</a> <strong class="jxr_keyword">implements</strong> Parsable&lt;String&gt; {
 <a class="jxr_linenumber" name="L23" href="#L23">23</a>    <strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">final</strong> Logger log = LoggerFactory.getLogger(getClass());
-<a class="jxr_linenumber" name="L24" href="#L24">24</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <a href="../../../../org/gbif/common/parsers/TypifiedNameParser.html">TypifiedNameParser</a> singletonObject = <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <a name="TypifiedNameParser" href="../../../../org/gbif/common/parsers/TypifiedNameParser.html#TypifiedNameParser">TypifiedNameParser</a> singletonObject = <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L25" href="#L25">25</a>  
-<a class="jxr_linenumber" name="L26" href="#L26">26</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Range&lt;Integer&gt; REASONABLE_NAME_SIZE_RANGE = Range.closed(4, 40);
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Range&lt;Integer&gt; REASONABLE_NAME_SIZE_RANGE = Range.between(4, 40);
 <a class="jxr_linenumber" name="L27" href="#L27">27</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Pattern NAME_SEPARATOR = Pattern.compile(<span class="jxr_string">"&#92;&#92;sOF&#92;&#92;W*&#92;&#92;s+&#92;&#92;W*(.+)&#92;&#92;W*&#92;&#92;s*$"</span>, Pattern.CASE_INSENSITIVE);
 <a class="jxr_linenumber" name="L28" href="#L28">28</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Pattern CLEAN_WHITESPACE = Pattern.compile(<span class="jxr_string">"&#92;&#92;s+"</span>);
 <a class="jxr_linenumber" name="L29" href="#L29">29</a>  
-<a class="jxr_linenumber" name="L30" href="#L30">30</a>    <strong class="jxr_keyword">private</strong> <a href="../../../../org/gbif/common/parsers/TypifiedNameParser.html">TypifiedNameParser</a>() {
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>    <strong class="jxr_keyword">private</strong> <a name="TypifiedNameParser" href="../../../../org/gbif/common/parsers/TypifiedNameParser.html#TypifiedNameParser">TypifiedNameParser</a>() {
 <a class="jxr_linenumber" name="L31" href="#L31">31</a>    }
 <a class="jxr_linenumber" name="L32" href="#L32">32</a>  
 <a class="jxr_linenumber" name="L33" href="#L33">33</a>    @Override
 <a class="jxr_linenumber" name="L34" href="#L34">34</a>    <strong class="jxr_keyword">public</strong> ParseResult&lt;String&gt; parse(String input) {
-<a class="jxr_linenumber" name="L35" href="#L35">35</a>      <strong class="jxr_keyword">if</strong> (!Strings.isNullOrEmpty(input)) {
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>      <strong class="jxr_keyword">if</strong> (StringUtils.isNotEmpty(input)) {
 <a class="jxr_linenumber" name="L36" href="#L36">36</a>        Matcher m = NAME_SEPARATOR.matcher(input);
 <a class="jxr_linenumber" name="L37" href="#L37">37</a>        <strong class="jxr_keyword">if</strong> (m.find()) {
 <a class="jxr_linenumber" name="L38" href="#L38">38</a>          String name = m.group(1);
@@ -63,19 +63,17 @@
 <a class="jxr_linenumber" name="L55" href="#L55">55</a>      <strong class="jxr_keyword">return</strong> ParseResult.fail();
 <a class="jxr_linenumber" name="L56" href="#L56">56</a>    }
 <a class="jxr_linenumber" name="L57" href="#L57">57</a>  
-<a class="jxr_linenumber" name="L58" href="#L58">58</a>    <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <a href="../../../../org/gbif/common/parsers/TypifiedNameParser.html">TypifiedNameParser</a> getInstance() {
+<a class="jxr_linenumber" name="L58" href="#L58">58</a>    <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <a name="TypifiedNameParser" href="../../../../org/gbif/common/parsers/TypifiedNameParser.html#TypifiedNameParser">TypifiedNameParser</a> getInstance() {
 <a class="jxr_linenumber" name="L59" href="#L59">59</a>      <strong class="jxr_keyword">synchronized</strong> (TypifiedNameParser.<strong class="jxr_keyword">class</strong>) {
 <a class="jxr_linenumber" name="L60" href="#L60">60</a>        <strong class="jxr_keyword">if</strong> (singletonObject == <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L61" href="#L61">61</a>          singletonObject = <strong class="jxr_keyword">new</strong> <a href="../../../../org/gbif/common/parsers/TypifiedNameParser.html">TypifiedNameParser</a>();
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>          singletonObject = <strong class="jxr_keyword">new</strong> <a name="TypifiedNameParser" href="../../../../org/gbif/common/parsers/TypifiedNameParser.html#TypifiedNameParser">TypifiedNameParser</a>();
 <a class="jxr_linenumber" name="L62" href="#L62">62</a>        }
 <a class="jxr_linenumber" name="L63" href="#L63">63</a>      }
 <a class="jxr_linenumber" name="L64" href="#L64">64</a>      <strong class="jxr_keyword">return</strong> singletonObject;
 <a class="jxr_linenumber" name="L65" href="#L65">65</a>    }
-<a class="jxr_linenumber" name="L66" href="#L66">66</a>  
-<a class="jxr_linenumber" name="L67" href="#L67">67</a>  
-<a class="jxr_linenumber" name="L68" href="#L68">68</a>  }
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>  }
 </pre>
 <hr/>
-<div id="footer">Copyright &#169; 2021 <a href="http://www.gbif.org">Global Biodiversity Information Facility</a>. All rights reserved.</div>
+<div id="footer">Copyright &#169; 2021 <a href="https://www.gbif.org">Global Biodiversity Information Facility</a>. All rights reserved.</div>
 </body>
 </html>

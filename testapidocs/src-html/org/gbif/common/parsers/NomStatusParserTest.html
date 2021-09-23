@@ -8,78 +8,84 @@
 <div class="sourceContainer">
 <pre><span class="sourceLineNo">001</span>package org.gbif.common.parsers;<a name="line.1"></a>
 <span class="sourceLineNo">002</span><a name="line.2"></a>
-<span class="sourceLineNo">003</span>import com.google.common.base.Strings;<a name="line.3"></a>
-<span class="sourceLineNo">004</span>import com.google.common.io.Resources;<a name="line.4"></a>
-<span class="sourceLineNo">005</span>import org.gbif.api.vocabulary.NomenclaturalStatus;<a name="line.5"></a>
-<span class="sourceLineNo">006</span>import org.gbif.common.parsers.core.ParseResult;<a name="line.6"></a>
-<span class="sourceLineNo">007</span>import org.junit.Test;<a name="line.7"></a>
-<span class="sourceLineNo">008</span><a name="line.8"></a>
+<span class="sourceLineNo">003</span>import org.apache.commons.lang3.StringUtils;<a name="line.3"></a>
+<span class="sourceLineNo">004</span>import org.gbif.api.vocabulary.NomenclaturalStatus;<a name="line.4"></a>
+<span class="sourceLineNo">005</span>import org.gbif.common.parsers.core.ParseResult;<a name="line.5"></a>
+<span class="sourceLineNo">006</span>import org.junit.jupiter.api.Test;<a name="line.6"></a>
+<span class="sourceLineNo">007</span><a name="line.7"></a>
+<span class="sourceLineNo">008</span>import java.io.BufferedReader;<a name="line.8"></a>
 <span class="sourceLineNo">009</span>import java.io.IOException;<a name="line.9"></a>
-<span class="sourceLineNo">010</span>import java.nio.charset.Charset;<a name="line.10"></a>
-<span class="sourceLineNo">011</span><a name="line.11"></a>
-<span class="sourceLineNo">012</span>import static org.junit.Assert.assertTrue;<a name="line.12"></a>
-<span class="sourceLineNo">013</span><a name="line.13"></a>
-<span class="sourceLineNo">014</span>/**<a name="line.14"></a>
-<span class="sourceLineNo">015</span> * Parses a single nomenclatural status out of a given string.<a name="line.15"></a>
-<span class="sourceLineNo">016</span> * TODO: Improve parser and return a status set instead, see nomStatus.txt file with comma separated values<a name="line.16"></a>
-<span class="sourceLineNo">017</span> */<a name="line.17"></a>
-<span class="sourceLineNo">018</span>public class NomStatusParserTest extends ParserTestBase&lt;NomenclaturalStatus&gt; {<a name="line.18"></a>
-<span class="sourceLineNo">019</span><a name="line.19"></a>
-<span class="sourceLineNo">020</span>    public NomStatusParserTest() {<a name="line.20"></a>
-<span class="sourceLineNo">021</span>        super(NomStatusParser.getInstance());<a name="line.21"></a>
-<span class="sourceLineNo">022</span>    }<a name="line.22"></a>
-<span class="sourceLineNo">023</span><a name="line.23"></a>
-<span class="sourceLineNo">024</span>    /**<a name="line.24"></a>
-<span class="sourceLineNo">025</span>     * This ensures that ALL enum values are at least parsable by the name they<a name="line.25"></a>
-<span class="sourceLineNo">026</span>     * are created with.<a name="line.26"></a>
-<span class="sourceLineNo">027</span>     */<a name="line.27"></a>
-<span class="sourceLineNo">028</span>    @Test<a name="line.28"></a>
-<span class="sourceLineNo">029</span>    public void testCompleteness() {<a name="line.29"></a>
-<span class="sourceLineNo">030</span>        for (NomenclaturalStatus t : NomenclaturalStatus.values()) {<a name="line.30"></a>
-<span class="sourceLineNo">031</span>            assertParseSuccess(t, t.name());<a name="line.31"></a>
-<span class="sourceLineNo">032</span>            assertParseSuccess(t, t.name().toLowerCase());<a name="line.32"></a>
-<span class="sourceLineNo">033</span>            assertParseSuccess(t, t.name().replace("_", "").toLowerCase());<a name="line.33"></a>
-<span class="sourceLineNo">034</span>            if (!Strings.isNullOrEmpty(t.getLatinLabel())) {<a name="line.34"></a>
-<span class="sourceLineNo">035</span>                assertParseSuccess(t, t.getLatinLabel());<a name="line.35"></a>
-<span class="sourceLineNo">036</span>            }<a name="line.36"></a>
-<span class="sourceLineNo">037</span>            if (!Strings.isNullOrEmpty(t.getAbbreviatedLabel())) {<a name="line.37"></a>
-<span class="sourceLineNo">038</span>                assertParseSuccess(t, t.getAbbreviatedLabel());<a name="line.38"></a>
-<span class="sourceLineNo">039</span>            }<a name="line.39"></a>
-<span class="sourceLineNo">040</span>        }<a name="line.40"></a>
-<span class="sourceLineNo">041</span>    }<a name="line.41"></a>
-<span class="sourceLineNo">042</span><a name="line.42"></a>
-<span class="sourceLineNo">043</span>    @Test<a name="line.43"></a>
-<span class="sourceLineNo">044</span>    public void testFailures() {<a name="line.44"></a>
-<span class="sourceLineNo">045</span>        assertParseFailure(null);<a name="line.45"></a>
-<span class="sourceLineNo">046</span>        assertParseFailure("");<a name="line.46"></a>
-<span class="sourceLineNo">047</span>        assertParseFailure("Tim");<a name="line.47"></a>
-<span class="sourceLineNo">048</span>    }<a name="line.48"></a>
-<span class="sourceLineNo">049</span><a name="line.49"></a>
-<span class="sourceLineNo">050</span><a name="line.50"></a>
-<span class="sourceLineNo">051</span>    @Test<a name="line.51"></a>
-<span class="sourceLineNo">052</span>    public void testParse() {<a name="line.52"></a>
-<span class="sourceLineNo">053</span>        // run a few basic tests to check it bootstraps and appears to work<a name="line.53"></a>
-<span class="sourceLineNo">054</span>        assertParseSuccess(NomenclaturalStatus.NUDUM, "nom nud");<a name="line.54"></a>
-<span class="sourceLineNo">055</span>        assertParseSuccess(NomenclaturalStatus.ILLEGITIMATE, "later HOmonym");<a name="line.55"></a>
-<span class="sourceLineNo">056</span>        assertParseSuccess(NomenclaturalStatus.NEW_COMBINATION, ParseResult.CONFIDENCE.PROBABLE, "comb nov , rejected name, homotypic syn\tcomb nov , rejected name, homotypic syn");<a name="line.56"></a>
-<span class="sourceLineNo">057</span>        assertParseSuccess(NomenclaturalStatus.CONSERVED, "nom cons , see art 14");<a name="line.57"></a>
-<span class="sourceLineNo">058</span>        assertParseSuccess(NomenclaturalStatus.ILLEGITIMATE, ParseResult.CONFIDENCE.PROBABLE, "nom illeg ; (1775), non mill (1768)");<a name="line.58"></a>
-<span class="sourceLineNo">059</span>        assertParseSuccess(NomenclaturalStatus.ILLEGITIMATE, "nom illegit , arts 53 1, 53 3");<a name="line.59"></a>
-<span class="sourceLineNo">060</span>        assertParseSuccess(NomenclaturalStatus.INVALID, ParseResult.CONFIDENCE.PROBABLE, "nom inval , art 32 1(b), see art 18 3");<a name="line.60"></a>
-<span class="sourceLineNo">061</span>        assertParseSuccess(NomenclaturalStatus.NEW_SPECIES, "sp nov , heterotypic syn");<a name="line.61"></a>
-<span class="sourceLineNo">062</span>    }<a name="line.62"></a>
-<span class="sourceLineNo">063</span><a name="line.63"></a>
+<span class="sourceLineNo">010</span>import java.io.InputStreamReader;<a name="line.10"></a>
+<span class="sourceLineNo">011</span>import java.net.URL;<a name="line.11"></a>
+<span class="sourceLineNo">012</span><a name="line.12"></a>
+<span class="sourceLineNo">013</span>import static org.junit.jupiter.api.Assertions.assertNotNull;<a name="line.13"></a>
+<span class="sourceLineNo">014</span>import static org.junit.jupiter.api.Assertions.assertTrue;<a name="line.14"></a>
+<span class="sourceLineNo">015</span><a name="line.15"></a>
+<span class="sourceLineNo">016</span>/**<a name="line.16"></a>
+<span class="sourceLineNo">017</span> * Parses a single nomenclatural status out of a given string.<a name="line.17"></a>
+<span class="sourceLineNo">018</span> * TODO: Improve parser and return a status set instead, see nomStatus.txt file with comma separated values<a name="line.18"></a>
+<span class="sourceLineNo">019</span> */<a name="line.19"></a>
+<span class="sourceLineNo">020</span>public class NomStatusParserTest extends ParserTestBase&lt;NomenclaturalStatus&gt; {<a name="line.20"></a>
+<span class="sourceLineNo">021</span><a name="line.21"></a>
+<span class="sourceLineNo">022</span>    public NomStatusParserTest() {<a name="line.22"></a>
+<span class="sourceLineNo">023</span>        super(NomStatusParser.getInstance());<a name="line.23"></a>
+<span class="sourceLineNo">024</span>    }<a name="line.24"></a>
+<span class="sourceLineNo">025</span><a name="line.25"></a>
+<span class="sourceLineNo">026</span>    /**<a name="line.26"></a>
+<span class="sourceLineNo">027</span>     * This ensures that ALL enum values are at least parsable by the name they<a name="line.27"></a>
+<span class="sourceLineNo">028</span>     * are created with.<a name="line.28"></a>
+<span class="sourceLineNo">029</span>     */<a name="line.29"></a>
+<span class="sourceLineNo">030</span>    @Test<a name="line.30"></a>
+<span class="sourceLineNo">031</span>    public void testCompleteness() {<a name="line.31"></a>
+<span class="sourceLineNo">032</span>        for (NomenclaturalStatus t : NomenclaturalStatus.values()) {<a name="line.32"></a>
+<span class="sourceLineNo">033</span>            assertParseSuccess(t, t.name());<a name="line.33"></a>
+<span class="sourceLineNo">034</span>            assertParseSuccess(t, t.name().toLowerCase());<a name="line.34"></a>
+<span class="sourceLineNo">035</span>            assertParseSuccess(t, t.name().replace("_", "").toLowerCase());<a name="line.35"></a>
+<span class="sourceLineNo">036</span>            if (StringUtils.isNotEmpty(t.getLatinLabel())) {<a name="line.36"></a>
+<span class="sourceLineNo">037</span>                assertParseSuccess(t, t.getLatinLabel());<a name="line.37"></a>
+<span class="sourceLineNo">038</span>            }<a name="line.38"></a>
+<span class="sourceLineNo">039</span>            if (StringUtils.isNotEmpty(t.getAbbreviatedLabel())) {<a name="line.39"></a>
+<span class="sourceLineNo">040</span>                assertParseSuccess(t, t.getAbbreviatedLabel());<a name="line.40"></a>
+<span class="sourceLineNo">041</span>            }<a name="line.41"></a>
+<span class="sourceLineNo">042</span>        }<a name="line.42"></a>
+<span class="sourceLineNo">043</span>    }<a name="line.43"></a>
+<span class="sourceLineNo">044</span><a name="line.44"></a>
+<span class="sourceLineNo">045</span>    @Test<a name="line.45"></a>
+<span class="sourceLineNo">046</span>    public void testFailures() {<a name="line.46"></a>
+<span class="sourceLineNo">047</span>        assertParseFailure(null);<a name="line.47"></a>
+<span class="sourceLineNo">048</span>        assertParseFailure("");<a name="line.48"></a>
+<span class="sourceLineNo">049</span>        assertParseFailure("Tim");<a name="line.49"></a>
+<span class="sourceLineNo">050</span>    }<a name="line.50"></a>
+<span class="sourceLineNo">051</span><a name="line.51"></a>
+<span class="sourceLineNo">052</span>    @Test<a name="line.52"></a>
+<span class="sourceLineNo">053</span>    public void testParse() {<a name="line.53"></a>
+<span class="sourceLineNo">054</span>        // run a few basic tests to check it bootstraps and appears to work<a name="line.54"></a>
+<span class="sourceLineNo">055</span>        assertParseSuccess(NomenclaturalStatus.NUDUM, "nom nud");<a name="line.55"></a>
+<span class="sourceLineNo">056</span>        assertParseSuccess(NomenclaturalStatus.ILLEGITIMATE, "later HOmonym");<a name="line.56"></a>
+<span class="sourceLineNo">057</span>        assertParseSuccess(NomenclaturalStatus.NEW_COMBINATION, ParseResult.CONFIDENCE.PROBABLE, "comb nov , rejected name, homotypic syn\tcomb nov , rejected name, homotypic syn");<a name="line.57"></a>
+<span class="sourceLineNo">058</span>        assertParseSuccess(NomenclaturalStatus.CONSERVED, "nom cons , see art 14");<a name="line.58"></a>
+<span class="sourceLineNo">059</span>        assertParseSuccess(NomenclaturalStatus.ILLEGITIMATE, ParseResult.CONFIDENCE.PROBABLE, "nom illeg ; (1775), non mill (1768)");<a name="line.59"></a>
+<span class="sourceLineNo">060</span>        assertParseSuccess(NomenclaturalStatus.ILLEGITIMATE, "nom illegit , arts 53 1, 53 3");<a name="line.60"></a>
+<span class="sourceLineNo">061</span>        assertParseSuccess(NomenclaturalStatus.INVALID, ParseResult.CONFIDENCE.PROBABLE, "nom inval , art 32 1(b), see art 18 3");<a name="line.61"></a>
+<span class="sourceLineNo">062</span>        assertParseSuccess(NomenclaturalStatus.NEW_SPECIES, "sp nov , heterotypic syn");<a name="line.62"></a>
+<span class="sourceLineNo">063</span>    }<a name="line.63"></a>
 <span class="sourceLineNo">064</span><a name="line.64"></a>
 <span class="sourceLineNo">065</span>    @Test<a name="line.65"></a>
 <span class="sourceLineNo">066</span>    public void testFileCoverage() throws IOException {<a name="line.66"></a>
 <span class="sourceLineNo">067</span>        // parses all values in our test file (generated from real occurrence data) and verifies we never get worse at parsing<a name="line.67"></a>
-<span class="sourceLineNo">068</span>        Resources.readLines(Resources.getResource("parse/nom_status.txt"), Charset.forName("UTF8"), this);<a name="line.68"></a>
-<span class="sourceLineNo">069</span>        BatchParseResult result = getResult();<a name="line.69"></a>
-<span class="sourceLineNo">070</span>        System.out.println(String.format("%s out of %s lines failed to parse", result.failed, result.total));<a name="line.70"></a>
-<span class="sourceLineNo">071</span>        assertTrue(result.failed &lt;= 166); // out of 747<a name="line.71"></a>
-<span class="sourceLineNo">072</span>    }<a name="line.72"></a>
-<span class="sourceLineNo">073</span><a name="line.73"></a>
-<span class="sourceLineNo">074</span>}<a name="line.74"></a>
+<span class="sourceLineNo">068</span>        URL fileUrl = this.getClass().getClassLoader().getResource("parse/nom_status.txt");<a name="line.68"></a>
+<span class="sourceLineNo">069</span>        assertNotNull(fileUrl);<a name="line.69"></a>
+<span class="sourceLineNo">070</span><a name="line.70"></a>
+<span class="sourceLineNo">071</span>        try (BufferedReader in = new BufferedReader(new InputStreamReader(fileUrl.openStream()))) {<a name="line.71"></a>
+<span class="sourceLineNo">072</span>            readLines(in, this);<a name="line.72"></a>
+<span class="sourceLineNo">073</span>        }<a name="line.73"></a>
+<span class="sourceLineNo">074</span><a name="line.74"></a>
+<span class="sourceLineNo">075</span>        BatchParseResult result = getResult();<a name="line.75"></a>
+<span class="sourceLineNo">076</span>        System.out.printf("%s out of %s lines failed to parse%n", result.failed, result.total);<a name="line.76"></a>
+<span class="sourceLineNo">077</span>        assertTrue(result.failed &gt; 0);<a name="line.77"></a>
+<span class="sourceLineNo">078</span>        assertTrue(result.failed &lt;= 166); // out of 747<a name="line.78"></a>
+<span class="sourceLineNo">079</span>    }<a name="line.79"></a>
+<span class="sourceLineNo">080</span>}<a name="line.80"></a>
 
 
 

@@ -15,16 +15,16 @@
 <span class="sourceLineNo">007</span>import java.time.format.ResolverStyle;<a name="line.7"></a>
 <span class="sourceLineNo">008</span>import java.time.temporal.ChronoField;<a name="line.8"></a>
 <span class="sourceLineNo">009</span>import java.time.temporal.TemporalQuery;<a name="line.9"></a>
-<span class="sourceLineNo">010</span>import java.util.List;<a name="line.10"></a>
-<span class="sourceLineNo">011</span>import java.util.Set;<a name="line.11"></a>
-<span class="sourceLineNo">012</span>import javax.validation.constraints.NotNull;<a name="line.12"></a>
-<span class="sourceLineNo">013</span><a name="line.13"></a>
-<span class="sourceLineNo">014</span>import com.google.common.base.CharMatcher;<a name="line.14"></a>
-<span class="sourceLineNo">015</span>import com.google.common.base.Preconditions;<a name="line.15"></a>
-<span class="sourceLineNo">016</span>import com.google.common.collect.ImmutableList;<a name="line.16"></a>
-<span class="sourceLineNo">017</span>import com.google.common.collect.Lists;<a name="line.17"></a>
-<span class="sourceLineNo">018</span>import com.google.common.collect.Sets;<a name="line.18"></a>
-<span class="sourceLineNo">019</span>import org.apache.commons.lang3.StringUtils;<a name="line.19"></a>
+<span class="sourceLineNo">010</span>import java.util.ArrayList;<a name="line.10"></a>
+<span class="sourceLineNo">011</span>import java.util.Collections;<a name="line.11"></a>
+<span class="sourceLineNo">012</span>import java.util.HashSet;<a name="line.12"></a>
+<span class="sourceLineNo">013</span>import java.util.List;<a name="line.13"></a>
+<span class="sourceLineNo">014</span>import java.util.Objects;<a name="line.14"></a>
+<span class="sourceLineNo">015</span>import java.util.Set;<a name="line.15"></a>
+<span class="sourceLineNo">016</span>import javax.validation.constraints.NotNull;<a name="line.16"></a>
+<span class="sourceLineNo">017</span><a name="line.17"></a>
+<span class="sourceLineNo">018</span>import org.apache.commons.lang3.StringUtils;<a name="line.18"></a>
+<span class="sourceLineNo">019</span>import org.gbif.utils.PreconditionUtils;<a name="line.19"></a>
 <span class="sourceLineNo">020</span><a name="line.20"></a>
 <span class="sourceLineNo">021</span>/**<a name="line.21"></a>
 <span class="sourceLineNo">022</span> * The DateTimeParserBuilder can build objects directly (build(..) methods) or return an instance<a name="line.22"></a>
@@ -57,7 +57,7 @@
 <span class="sourceLineNo">049</span>   */<a name="line.49"></a>
 <span class="sourceLineNo">050</span>  private static DateTimeParser build(@NotNull String pattern, @NotNull DateComponentOrdering ordering,<a name="line.50"></a>
 <span class="sourceLineNo">051</span>                                     @NotNull TemporalQuery&lt;?&gt; type) {<a name="line.51"></a>
-<span class="sourceLineNo">052</span>    Preconditions.checkNotNull(type);<a name="line.52"></a>
+<span class="sourceLineNo">052</span>    Objects.requireNonNull(type);<a name="line.52"></a>
 <span class="sourceLineNo">053</span>    return build(pattern, ordering, new TemporalQuery[]{type});<a name="line.53"></a>
 <span class="sourceLineNo">054</span>  }<a name="line.54"></a>
 <span class="sourceLineNo">055</span><a name="line.55"></a>
@@ -66,7 +66,7 @@
 <span class="sourceLineNo">058</span>   */<a name="line.58"></a>
 <span class="sourceLineNo">059</span>  private static DateTimeParser build(@NotNull String pattern, @NotNull DateComponentOrdering ordering,<a name="line.59"></a>
 <span class="sourceLineNo">060</span>                                      @NotNull TemporalQuery&lt;?&gt; type, ZoneId zoneId) {<a name="line.60"></a>
-<span class="sourceLineNo">061</span>    Preconditions.checkNotNull(type);<a name="line.61"></a>
+<span class="sourceLineNo">061</span>    Objects.requireNonNull(type);<a name="line.61"></a>
 <span class="sourceLineNo">062</span>    return build(pattern, ordering, new TemporalQuery[]{type}, zoneId);<a name="line.62"></a>
 <span class="sourceLineNo">063</span>  }<a name="line.63"></a>
 <span class="sourceLineNo">064</span><a name="line.64"></a>
@@ -74,8 +74,8 @@
 <span class="sourceLineNo">066</span>   * Build a single, possibly lenient, DateTimeParser.<a name="line.66"></a>
 <span class="sourceLineNo">067</span>   */<a name="line.67"></a>
 <span class="sourceLineNo">068</span>  private static DateTimeParser build(@NotNull String pattern, @NotNull DateComponentOrdering ordering, @NotNull TemporalQuery&lt;?&gt;[] type) {<a name="line.68"></a>
-<span class="sourceLineNo">069</span>    Preconditions.checkNotNull(pattern);<a name="line.69"></a>
-<span class="sourceLineNo">070</span>    Preconditions.checkNotNull(ordering);<a name="line.70"></a>
+<span class="sourceLineNo">069</span>    Objects.requireNonNull(pattern);<a name="line.69"></a>
+<span class="sourceLineNo">070</span>    Objects.requireNonNull(ordering);<a name="line.70"></a>
 <span class="sourceLineNo">071</span><a name="line.71"></a>
 <span class="sourceLineNo">072</span>    int minLength = getMinimumStringLengthForPattern(pattern);<a name="line.72"></a>
 <span class="sourceLineNo">073</span>    DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(pattern).withResolverStyle(ResolverStyle.STRICT);<a name="line.73"></a>
@@ -84,8 +84,8 @@
 <span class="sourceLineNo">076</span><a name="line.76"></a>
 <span class="sourceLineNo">077</span>  private static DateTimeParser build(@NotNull String pattern, @NotNull DateComponentOrdering ordering,<a name="line.77"></a>
 <span class="sourceLineNo">078</span>                                      @NotNull TemporalQuery&lt;?&gt;[] type, ZoneId zoneId) {<a name="line.78"></a>
-<span class="sourceLineNo">079</span>    Preconditions.checkNotNull(pattern);<a name="line.79"></a>
-<span class="sourceLineNo">080</span>    Preconditions.checkNotNull(ordering);<a name="line.80"></a>
+<span class="sourceLineNo">079</span>    Objects.requireNonNull(pattern);<a name="line.79"></a>
+<span class="sourceLineNo">080</span>    Objects.requireNonNull(ordering);<a name="line.80"></a>
 <span class="sourceLineNo">081</span><a name="line.81"></a>
 <span class="sourceLineNo">082</span>    int minLength = getMinimumStringLengthForPattern(pattern);<a name="line.82"></a>
 <span class="sourceLineNo">083</span>    DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(pattern).withZone(zoneId)<a name="line.83"></a>
@@ -106,12 +106,12 @@
 <span class="sourceLineNo">098</span>   */<a name="line.98"></a>
 <span class="sourceLineNo">099</span>  private static DateTimeParser build(String pattern, DateComponentOrdering ordering, @NotNull TemporalQuery&lt;?&gt;[] type, String separator,<a name="line.99"></a>
 <span class="sourceLineNo">100</span>                                      String alternativeSeparators) {<a name="line.100"></a>
-<span class="sourceLineNo">101</span>    Preconditions.checkNotNull(pattern);<a name="line.101"></a>
-<span class="sourceLineNo">102</span>    Preconditions.checkNotNull(ordering);<a name="line.102"></a>
-<span class="sourceLineNo">103</span>    Preconditions.checkArgument(StringUtils.isNotBlank(separator), "separator must NOT be blank");<a name="line.103"></a>
-<span class="sourceLineNo">104</span>    Preconditions.checkArgument(StringUtils.isNotBlank(alternativeSeparators), "alternativeSeparators must NOT be blank");<a name="line.104"></a>
+<span class="sourceLineNo">101</span>    Objects.requireNonNull(pattern);<a name="line.101"></a>
+<span class="sourceLineNo">102</span>    Objects.requireNonNull(ordering);<a name="line.102"></a>
+<span class="sourceLineNo">103</span>    PreconditionUtils.checkArgument(StringUtils.isNotBlank(separator), "separator must NOT be blank");<a name="line.103"></a>
+<span class="sourceLineNo">104</span>    PreconditionUtils.checkArgument(StringUtils.isNotBlank(alternativeSeparators), "alternativeSeparators must NOT be blank");<a name="line.104"></a>
 <span class="sourceLineNo">105</span><a name="line.105"></a>
-<span class="sourceLineNo">106</span>    DateTimeSeparatorNormalizer dateTimeNormalizer = new DateTimeSeparatorNormalizer(CharMatcher.anyOf(alternativeSeparators), separator);<a name="line.106"></a>
+<span class="sourceLineNo">106</span>    DateTimeSeparatorNormalizer dateTimeNormalizer = new DateTimeSeparatorNormalizer(alternativeSeparators, separator);<a name="line.106"></a>
 <span class="sourceLineNo">107</span>    DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(pattern).withResolverStyle(ResolverStyle.STRICT);<a name="line.107"></a>
 <span class="sourceLineNo">108</span>    int minLength = getMinimumStringLengthForPattern(pattern);<a name="line.108"></a>
 <span class="sourceLineNo">109</span>    return new DateTimeParser(dateTimeFormatter, dateTimeNormalizer, ordering, type, minLength);<a name="line.109"></a>
@@ -133,12 +133,12 @@
 <span class="sourceLineNo">125</span>   */<a name="line.125"></a>
 <span class="sourceLineNo">126</span>  private static DateTimeParser build(String pattern, DateComponentOrdering ordering, @NotNull TemporalQuery&lt;?&gt;[] type, String separator,<a name="line.126"></a>
 <span class="sourceLineNo">127</span>                                      String alternativeSeparators, Year baseYear) {<a name="line.127"></a>
-<span class="sourceLineNo">128</span>    Preconditions.checkNotNull(pattern);<a name="line.128"></a>
-<span class="sourceLineNo">129</span>    Preconditions.checkNotNull(ordering);<a name="line.129"></a>
-<span class="sourceLineNo">130</span>    Preconditions.checkArgument(StringUtils.isNotBlank(separator), "separator must NOT be blank");<a name="line.130"></a>
-<span class="sourceLineNo">131</span>    Preconditions.checkArgument(StringUtils.isNotBlank(alternativeSeparators), "alternativeSeparators must NOT be blank");<a name="line.131"></a>
+<span class="sourceLineNo">128</span>    Objects.requireNonNull(pattern);<a name="line.128"></a>
+<span class="sourceLineNo">129</span>    Objects.requireNonNull(ordering);<a name="line.129"></a>
+<span class="sourceLineNo">130</span>    PreconditionUtils.checkArgument(StringUtils.isNotBlank(separator), "separator must NOT be blank");<a name="line.130"></a>
+<span class="sourceLineNo">131</span>    PreconditionUtils.checkArgument(StringUtils.isNotBlank(alternativeSeparators), "alternativeSeparators must NOT be blank");<a name="line.131"></a>
 <span class="sourceLineNo">132</span><a name="line.132"></a>
-<span class="sourceLineNo">133</span>    DateTimeSeparatorNormalizer dateTimeNormalizer = new DateTimeSeparatorNormalizer(CharMatcher.anyOf(alternativeSeparators), separator);<a name="line.133"></a>
+<span class="sourceLineNo">133</span>    DateTimeSeparatorNormalizer dateTimeNormalizer = new DateTimeSeparatorNormalizer(alternativeSeparators, separator);<a name="line.133"></a>
 <span class="sourceLineNo">134</span>    DateTimeFormatter dateTimeFormatter = build2DigitsYearDateTimeFormatter(pattern, baseYear);<a name="line.134"></a>
 <span class="sourceLineNo">135</span>    int minLength = getMinimumStringLengthForPattern(pattern);<a name="line.135"></a>
 <span class="sourceLineNo">136</span>    return new DateTimeParser(dateTimeFormatter, dateTimeNormalizer, ordering, type, minLength);<a name="line.136"></a>
@@ -155,7 +155,7 @@
 <span class="sourceLineNo">147</span>  }<a name="line.147"></a>
 <span class="sourceLineNo">148</span><a name="line.148"></a>
 <span class="sourceLineNo">149</span>  private static DateTimeFormatter build2DigitsYearDateTimeFormatter(String pattern, Year baseYear) {<a name="line.149"></a>
-<span class="sourceLineNo">150</span>    Preconditions.checkState(pattern.matches(IS_YEAR_2_DIGITS_PATTERN) || pattern.equals(YEAR_2_DIGITS_PATTERN_SUFFIX),<a name="line.150"></a>
+<span class="sourceLineNo">150</span>    PreconditionUtils.checkState(pattern.matches(IS_YEAR_2_DIGITS_PATTERN) || pattern.equals(YEAR_2_DIGITS_PATTERN_SUFFIX),<a name="line.150"></a>
 <span class="sourceLineNo">151</span>            "build2DigitsYearDateTimeFormatter can only be used for patterns with 2 digit year");<a name="line.151"></a>
 <span class="sourceLineNo">152</span>    pattern = StringUtils.removeEnd(pattern, YEAR_2_DIGITS_PATTERN_SUFFIX);<a name="line.152"></a>
 <span class="sourceLineNo">153</span>    return new DateTimeFormatterBuilder().append(DateTimeFormatter.ofPattern(pattern))<a name="line.153"></a>
@@ -166,7 +166,7 @@
 <span class="sourceLineNo">158</span>   * Builder used to build a List of {@link DateTimeParser}.<a name="line.158"></a>
 <span class="sourceLineNo">159</span>   */<a name="line.159"></a>
 <span class="sourceLineNo">160</span>  public static class ThreeTenDateParserListBuilder {<a name="line.160"></a>
-<span class="sourceLineNo">161</span>    private final List&lt;DateTimeParser&gt; dateTimeParsers = Lists.newArrayList();<a name="line.161"></a>
+<span class="sourceLineNo">161</span>    private final List&lt;DateTimeParser&gt; dateTimeParsers = new ArrayList&lt;&gt;();<a name="line.161"></a>
 <span class="sourceLineNo">162</span><a name="line.162"></a>
 <span class="sourceLineNo">163</span>    /**<a name="line.163"></a>
 <span class="sourceLineNo">164</span>     * @param type expected {@link TemporalQuery} from the provided pattern<a name="line.164"></a>
@@ -226,7 +226,7 @@
 <span class="sourceLineNo">218</span>    }<a name="line.218"></a>
 <span class="sourceLineNo">219</span><a name="line.219"></a>
 <span class="sourceLineNo">220</span>    public List&lt;DateTimeParser&gt; build() {<a name="line.220"></a>
-<span class="sourceLineNo">221</span>      return ImmutableList.copyOf(dateTimeParsers);<a name="line.221"></a>
+<span class="sourceLineNo">221</span>      return Collections.unmodifiableList(dateTimeParsers);<a name="line.221"></a>
 <span class="sourceLineNo">222</span>    }<a name="line.222"></a>
 <span class="sourceLineNo">223</span>  }<a name="line.223"></a>
 <span class="sourceLineNo">224</span><a name="line.224"></a>
@@ -235,7 +235,7 @@
 <span class="sourceLineNo">227</span>   */<a name="line.227"></a>
 <span class="sourceLineNo">228</span>  public static class ThreeTenDateMultiParserListBuilder {<a name="line.228"></a>
 <span class="sourceLineNo">229</span>    private DateTimeParser preferred;<a name="line.229"></a>
-<span class="sourceLineNo">230</span>    private List&lt;DateTimeParser&gt; otherParsers = Lists.newArrayList();<a name="line.230"></a>
+<span class="sourceLineNo">230</span>    private List&lt;DateTimeParser&gt; otherParsers = new ArrayList&lt;&gt;();<a name="line.230"></a>
 <span class="sourceLineNo">231</span><a name="line.231"></a>
 <span class="sourceLineNo">232</span>    public ThreeTenDateMultiParserListBuilder preferredDateTimeParser(String pattern, DateComponentOrdering ordering, TemporalQuery&lt;?&gt; type) {<a name="line.232"></a>
 <span class="sourceLineNo">233</span>      preferred = DateTimeParserBuilder.build(pattern, ordering, type);<a name="line.233"></a>
@@ -279,7 +279,7 @@
 <span class="sourceLineNo">271</span>     * Currently (this could change) we should only have one DateTimeParser per DateComponentOrdering.<a name="line.271"></a>
 <span class="sourceLineNo">272</span>     */<a name="line.272"></a>
 <span class="sourceLineNo">273</span>    private void validate() throws IllegalStateException {<a name="line.273"></a>
-<span class="sourceLineNo">274</span>      Set&lt;DateComponentOrdering&gt; orderings = Sets.newHashSet();<a name="line.274"></a>
+<span class="sourceLineNo">274</span>      Set&lt;DateComponentOrdering&gt; orderings = new HashSet&lt;&gt;();<a name="line.274"></a>
 <span class="sourceLineNo">275</span>      if(preferred != null) {<a name="line.275"></a>
 <span class="sourceLineNo">276</span>        orderings.add(preferred.getOrdering());<a name="line.276"></a>
 <span class="sourceLineNo">277</span>      }<a name="line.277"></a>

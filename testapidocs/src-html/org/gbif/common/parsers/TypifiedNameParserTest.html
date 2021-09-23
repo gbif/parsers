@@ -8,33 +8,30 @@
 <div class="sourceContainer">
 <pre><span class="sourceLineNo">001</span>package org.gbif.common.parsers;<a name="line.1"></a>
 <span class="sourceLineNo">002</span><a name="line.2"></a>
-<span class="sourceLineNo">003</span>import org.junit.Test;<a name="line.3"></a>
+<span class="sourceLineNo">003</span>import org.junit.jupiter.api.Test;<a name="line.3"></a>
 <span class="sourceLineNo">004</span><a name="line.4"></a>
-<span class="sourceLineNo">005</span>/**<a name="line.5"></a>
-<span class="sourceLineNo">006</span> *<a name="line.6"></a>
-<span class="sourceLineNo">007</span> */<a name="line.7"></a>
-<span class="sourceLineNo">008</span>public class TypifiedNameParserTest extends ParserTestBase&lt;String&gt; {<a name="line.8"></a>
-<span class="sourceLineNo">009</span><a name="line.9"></a>
-<span class="sourceLineNo">010</span>  public TypifiedNameParserTest() {<a name="line.10"></a>
-<span class="sourceLineNo">011</span>    super(TypifiedNameParser.getInstance());<a name="line.11"></a>
-<span class="sourceLineNo">012</span>  }<a name="line.12"></a>
-<span class="sourceLineNo">013</span><a name="line.13"></a>
-<span class="sourceLineNo">014</span>  @Test<a name="line.14"></a>
-<span class="sourceLineNo">015</span>  public void testParse() throws Exception {<a name="line.15"></a>
-<span class="sourceLineNo">016</span>    assertParseSuccess("Abies alba", null, " Holotype of Abies alba");<a name="line.16"></a>
-<span class="sourceLineNo">017</span>    assertParseSuccess("Dianthus fruticosus subsp. amorginus Runemark", null, "Holotype of Dianthus fruticosus ssp. amorginus Runemark");<a name="line.17"></a>
-<span class="sourceLineNo">018</span>    assertParseSuccess("Abies alba", null, " Holotype of: Abies alba");<a name="line.18"></a>
-<span class="sourceLineNo">019</span>    assertParseSuccess("Abies alba", null, " Holotype of  Abies alba.");<a name="line.19"></a>
-<span class="sourceLineNo">020</span><a name="line.20"></a>
-<span class="sourceLineNo">021</span>    assertParseFailure("Part of Holotype");<a name="line.21"></a>
-<span class="sourceLineNo">022</span>    assertParseFailure("Figured Specimen");<a name="line.22"></a>
-<span class="sourceLineNo">023</span>//    assertParseFailure("Cast of Figured Specimen");<a name="line.23"></a>
-<span class="sourceLineNo">024</span>    assertParseFailure("Cast of holotype");<a name="line.24"></a>
-<span class="sourceLineNo">025</span>    assertParseFailure("Cast of syntype");<a name="line.25"></a>
-<span class="sourceLineNo">026</span>    assertParseFailure("mark");<a name="line.26"></a>
-<span class="sourceLineNo">027</span>  }<a name="line.27"></a>
-<span class="sourceLineNo">028</span><a name="line.28"></a>
-<span class="sourceLineNo">029</span>}<a name="line.29"></a>
+<span class="sourceLineNo">005</span>public class TypifiedNameParserTest extends ParserTestBase&lt;String&gt; {<a name="line.5"></a>
+<span class="sourceLineNo">006</span><a name="line.6"></a>
+<span class="sourceLineNo">007</span>  public TypifiedNameParserTest() {<a name="line.7"></a>
+<span class="sourceLineNo">008</span>    super(TypifiedNameParser.getInstance());<a name="line.8"></a>
+<span class="sourceLineNo">009</span>  }<a name="line.9"></a>
+<span class="sourceLineNo">010</span><a name="line.10"></a>
+<span class="sourceLineNo">011</span>  @Test<a name="line.11"></a>
+<span class="sourceLineNo">012</span>  public void testParse() throws Exception {<a name="line.12"></a>
+<span class="sourceLineNo">013</span>    assertParseSuccess("Abies alba", null, " Holotype of Abies alba");<a name="line.13"></a>
+<span class="sourceLineNo">014</span>    assertParseSuccess("Dianthus fruticosus subsp. amorginus Runemark", null, "Holotype of Dianthus fruticosus ssp. amorginus Runemark");<a name="line.14"></a>
+<span class="sourceLineNo">015</span>    assertParseSuccess("Abies alba", null, " Holotype of: Abies alba");<a name="line.15"></a>
+<span class="sourceLineNo">016</span>    assertParseSuccess("Abies alba", null, " Holotype of  Abies alba.");<a name="line.16"></a>
+<span class="sourceLineNo">017</span><a name="line.17"></a>
+<span class="sourceLineNo">018</span>    assertParseFailure("Part of Holotype");<a name="line.18"></a>
+<span class="sourceLineNo">019</span>    assertParseFailure("Figured Specimen");<a name="line.19"></a>
+<span class="sourceLineNo">020</span>//    assertParseFailure("Cast of Figured Specimen");<a name="line.20"></a>
+<span class="sourceLineNo">021</span>    assertParseFailure("Cast of holotype");<a name="line.21"></a>
+<span class="sourceLineNo">022</span>    assertParseFailure("Cast of syntype");<a name="line.22"></a>
+<span class="sourceLineNo">023</span>    assertParseFailure("mark");<a name="line.23"></a>
+<span class="sourceLineNo">024</span>  }<a name="line.24"></a>
+<span class="sourceLineNo">025</span><a name="line.25"></a>
+<span class="sourceLineNo">026</span>}<a name="line.26"></a>
 
 
 

@@ -11,13 +11,13 @@
 <span class="sourceLineNo">003</span>import java.util.HashMap;<a name="line.3"></a>
 <span class="sourceLineNo">004</span>import java.util.Map;<a name="line.4"></a>
 <span class="sourceLineNo">005</span><a name="line.5"></a>
-<span class="sourceLineNo">006</span>import org.junit.Test;<a name="line.6"></a>
+<span class="sourceLineNo">006</span>import org.junit.jupiter.api.Test;<a name="line.6"></a>
 <span class="sourceLineNo">007</span><a name="line.7"></a>
 <span class="sourceLineNo">008</span>import static org.gbif.common.parsers.utils.ClassificationUtils.clean;<a name="line.8"></a>
 <span class="sourceLineNo">009</span>import static org.gbif.common.parsers.utils.ClassificationUtils.cleanAuthor;<a name="line.9"></a>
 <span class="sourceLineNo">010</span><a name="line.10"></a>
-<span class="sourceLineNo">011</span>import static org.junit.Assert.assertEquals;<a name="line.11"></a>
-<span class="sourceLineNo">012</span>import static org.junit.Assert.assertNull;<a name="line.12"></a>
+<span class="sourceLineNo">011</span>import static org.junit.jupiter.api.Assertions.assertEquals;<a name="line.11"></a>
+<span class="sourceLineNo">012</span>import static org.junit.jupiter.api.Assertions.assertNull;<a name="line.12"></a>
 <span class="sourceLineNo">013</span><a name="line.13"></a>
 <span class="sourceLineNo">014</span>public class ClassificationUtilsTest {<a name="line.14"></a>
 <span class="sourceLineNo">015</span><a name="line.15"></a>
@@ -59,7 +59,7 @@
 <span class="sourceLineNo">051</span>    }<a name="line.51"></a>
 <span class="sourceLineNo">052</span><a name="line.52"></a>
 <span class="sourceLineNo">053</span>    assertNull(clean(null));<a name="line.53"></a>
-<span class="sourceLineNo">054</span>    assertNull("Empty strings should return null", clean(""));<a name="line.54"></a>
+<span class="sourceLineNo">054</span>    assertNull(clean(""), "Empty strings should return null");<a name="line.54"></a>
 <span class="sourceLineNo">055</span>  }<a name="line.55"></a>
 <span class="sourceLineNo">056</span><a name="line.56"></a>
 <span class="sourceLineNo">057</span>  @Test<a name="line.57"></a>
@@ -93,7 +93,7 @@
 <span class="sourceLineNo">085</span>    }<a name="line.85"></a>
 <span class="sourceLineNo">086</span><a name="line.86"></a>
 <span class="sourceLineNo">087</span>    assertNull(cleanAuthor(null));<a name="line.87"></a>
-<span class="sourceLineNo">088</span>    assertNull("Empty strings should return null", cleanAuthor(""));<a name="line.88"></a>
+<span class="sourceLineNo">088</span>    assertNull(cleanAuthor(""), "Empty strings should return null");<a name="line.88"></a>
 <span class="sourceLineNo">089</span>  }<a name="line.89"></a>
 <span class="sourceLineNo">090</span><a name="line.90"></a>
 <span class="sourceLineNo">091</span>}<a name="line.91"></a>

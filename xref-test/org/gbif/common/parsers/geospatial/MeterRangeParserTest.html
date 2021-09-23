@@ -8,17 +8,17 @@
 <div id="overview"><a href="../../../../../../testapidocs/org/gbif/common/parsers/geospatial/MeterRangeParserTest.html">View Javadoc</a></div><pre>
 <a class="jxr_linenumber" name="L1" href="#L1">1</a>   <strong class="jxr_keyword">package</strong> org.gbif.common.parsers.geospatial;
 <a class="jxr_linenumber" name="L2" href="#L2">2</a>   
-<a class="jxr_linenumber" name="L3" href="#L3">3</a>   <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.junit.Assert.assertEquals;
-<a class="jxr_linenumber" name="L4" href="#L4">4</a>   <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.junit.Assert.assertNotNull;
-<a class="jxr_linenumber" name="L5" href="#L5">5</a>   <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.junit.Assert.assertFalse;
-<a class="jxr_linenumber" name="L6" href="#L6">6</a>   <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.junit.Assert.assertTrue;
+<a class="jxr_linenumber" name="L3" href="#L3">3</a>   <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.junit.jupiter.api.Assertions.assertEquals;
+<a class="jxr_linenumber" name="L4" href="#L4">4</a>   <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.junit.jupiter.api.Assertions.assertNotNull;
+<a class="jxr_linenumber" name="L5" href="#L5">5</a>   <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.junit.jupiter.api.Assertions.assertFalse;
+<a class="jxr_linenumber" name="L6" href="#L6">6</a>   <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.junit.jupiter.api.Assertions.assertTrue;
 <a class="jxr_linenumber" name="L7" href="#L7">7</a>   
 <a class="jxr_linenumber" name="L8" href="#L8">8</a>   <strong class="jxr_keyword">import</strong> org.gbif.api.vocabulary.OccurrenceIssue;
 <a class="jxr_linenumber" name="L9" href="#L9">9</a>   <strong class="jxr_keyword">import</strong> org.gbif.common.parsers.core.OccurrenceParseResult;
 <a class="jxr_linenumber" name="L10" href="#L10">10</a>  <strong class="jxr_keyword">import</strong> org.gbif.common.parsers.core.ParseResult;
-<a class="jxr_linenumber" name="L11" href="#L11">11</a>  <strong class="jxr_keyword">import</strong> org.junit.Test;
+<a class="jxr_linenumber" name="L11" href="#L11">11</a>  <strong class="jxr_keyword">import</strong> org.junit.jupiter.api.Test;
 <a class="jxr_linenumber" name="L12" href="#L12">12</a>  
-<a class="jxr_linenumber" name="L13" href="#L13">13</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../../org/gbif/common/parsers/geospatial/MeterRangeParserTest.html">MeterRangeParserTest</a> {
+<a class="jxr_linenumber" name="L13" href="#L13">13</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a name="MeterRangeParserTest" href="../../../../../org/gbif/common/parsers/geospatial/MeterRangeParserTest.html#MeterRangeParserTest">MeterRangeParserTest</a> {
 <a class="jxr_linenumber" name="L14" href="#L14">14</a>  
 <a class="jxr_linenumber" name="L15" href="#L15">15</a>    @Test
 <a class="jxr_linenumber" name="L16" href="#L16">16</a>    <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testParseMeters() {
@@ -225,7 +225,7 @@
 <a class="jxr_linenumber" name="L217" href="#L217">217</a>       assertTrue(pr.getIssues().isEmpty());
 <a class="jxr_linenumber" name="L218" href="#L218">218</a>     } <strong class="jxr_keyword">else</strong> {
 <a class="jxr_linenumber" name="L219" href="#L219">219</a>       assertEquals(
-<a class="jxr_linenumber" name="L220" href="#L220">220</a>           <span class="jxr_string">"Issue mismatch, found issues: "</span> + pr.getIssues(), issue.length, pr.getIssues().size());
+<a class="jxr_linenumber" name="L220" href="#L220">220</a>           issue.length, pr.getIssues().size(), <span class="jxr_string">"Issue mismatch, found issues: "</span> + pr.getIssues());
 <a class="jxr_linenumber" name="L221" href="#L221">221</a>       <strong class="jxr_keyword">for</strong> (OccurrenceIssue iss : issue) {
 <a class="jxr_linenumber" name="L222" href="#L222">222</a>         assertTrue(pr.getIssues().contains(iss));
 <a class="jxr_linenumber" name="L223" href="#L223">223</a>       }
@@ -239,6 +239,6 @@
 <a class="jxr_linenumber" name="L231" href="#L231">231</a> }
 </pre>
 <hr/>
-<div id="footer">Copyright &#169; 2021 <a href="http://www.gbif.org">Global Biodiversity Information Facility</a>. All rights reserved.</div>
+<div id="footer">Copyright &#169; 2021 <a href="https://www.gbif.org">Global Biodiversity Information Facility</a>. All rights reserved.</div>
 </body>
 </html>
