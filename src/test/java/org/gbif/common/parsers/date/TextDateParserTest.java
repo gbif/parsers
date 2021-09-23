@@ -1,9 +1,23 @@
+/*
+ * Copyright 2021 Global Biodiversity Information Facility (GBIF)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package org.gbif.common.parsers.date;
 
 import org.gbif.common.parsers.core.ParseResult;
 import org.gbif.common.parsers.core.ParseResult.CONFIDENCE;
 import org.gbif.common.parsers.core.ParseResult.STATUS;
-import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -12,13 +26,15 @@ import java.time.YearMonth;
 import java.time.ZonedDateTime;
 import java.time.temporal.TemporalAccessor;
 
+import org.junit.jupiter.api.Test;
+
 import static org.gbif.common.parsers.date.DateComponentOrdering.DMY;
 import static org.gbif.common.parsers.date.DateComponentOrdering.DMYT;
 import static org.gbif.common.parsers.date.DateComponentOrdering.DMY_FORMATS;
+import static org.gbif.common.parsers.date.DateComponentOrdering.ISO_ETC;
 import static org.gbif.common.parsers.date.DateComponentOrdering.MDY;
 import static org.gbif.common.parsers.date.DateComponentOrdering.MDYT;
 import static org.gbif.common.parsers.date.DateComponentOrdering.MDY_FORMATS;
-import static org.gbif.common.parsers.date.DateComponentOrdering.ISO_ETC;
 import static org.gbif.common.parsers.date.DateComponentOrdering.YMD;
 import static org.gbif.common.parsers.date.DateComponentOrdering.YMDT;
 import static org.gbif.common.parsers.date.DateComponentOrdering.YMDTZ;
