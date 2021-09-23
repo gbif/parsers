@@ -2,15 +2,15 @@ package org.gbif.common.parsers.date;
 
 import javax.annotation.Nullable;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.function.Function;
 
 import static org.gbif.common.parsers.utils.CSVBasedAssertions.assertTestFile;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Test for {@link TextualMonthDateTokenizer }.
@@ -41,12 +41,12 @@ public class TextualMonthDateTokenizerTest {
         String int2Token = row[INT_2_IDX];
 
         TextualMonthDateTokenizer.DateTokens dateTokens = DATE_TOKENIZER.tokenize(raw);
-        assertEquals("Raw: " + raw, new TextualMonthDateTokenizer.DateToken(int2Token, TextualMonthDateTokenizer.TokenType.INT_2),
-                dateTokens.getToken(TextualMonthDateTokenizer.TokenType.INT_2));
-        assertEquals("Raw: " + raw, new TextualMonthDateTokenizer.DateToken(textToken, TextualMonthDateTokenizer.TokenType.TEXT),
-                dateTokens.getToken(TextualMonthDateTokenizer.TokenType.TEXT));
-        assertEquals("Raw: " + raw, new TextualMonthDateTokenizer.DateToken(int4Token, TextualMonthDateTokenizer.TokenType.INT_4),
-                dateTokens.getToken(TextualMonthDateTokenizer.TokenType.INT_4));
+        assertEquals(new TextualMonthDateTokenizer.DateToken(int2Token, TextualMonthDateTokenizer.TokenType.INT_2), dateTokens.getToken(TextualMonthDateTokenizer.TokenType.INT_2),
+            "Raw: " + raw);
+        assertEquals(new TextualMonthDateTokenizer.DateToken(textToken, TextualMonthDateTokenizer.TokenType.TEXT), dateTokens.getToken(TextualMonthDateTokenizer.TokenType.TEXT),
+            "Raw: " + raw);
+        assertEquals(new TextualMonthDateTokenizer.DateToken(int4Token, TextualMonthDateTokenizer.TokenType.INT_4), dateTokens.getToken(TextualMonthDateTokenizer.TokenType.INT_4),
+            "Raw: " + raw);
 
         return null;
       }

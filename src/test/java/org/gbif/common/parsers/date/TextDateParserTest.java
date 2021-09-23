@@ -3,7 +3,7 @@ package org.gbif.common.parsers.date;
 import org.gbif.common.parsers.core.ParseResult;
 import org.gbif.common.parsers.core.ParseResult.CONFIDENCE;
 import org.gbif.common.parsers.core.ParseResult.STATUS;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -12,7 +12,6 @@ import java.time.YearMonth;
 import java.time.ZonedDateTime;
 import java.time.temporal.TemporalAccessor;
 
-import static junit.framework.TestCase.assertEquals;
 import static org.gbif.common.parsers.date.DateComponentOrdering.DMY;
 import static org.gbif.common.parsers.date.DateComponentOrdering.DMYT;
 import static org.gbif.common.parsers.date.DateComponentOrdering.DMY_FORMATS;
@@ -20,13 +19,12 @@ import static org.gbif.common.parsers.date.DateComponentOrdering.MDY;
 import static org.gbif.common.parsers.date.DateComponentOrdering.MDYT;
 import static org.gbif.common.parsers.date.DateComponentOrdering.MDY_FORMATS;
 import static org.gbif.common.parsers.date.DateComponentOrdering.ISO_ETC;
-import static org.gbif.common.parsers.date.DateComponentOrdering.Y;
-import static org.gbif.common.parsers.date.DateComponentOrdering.YM;
 import static org.gbif.common.parsers.date.DateComponentOrdering.YMD;
 import static org.gbif.common.parsers.date.DateComponentOrdering.YMDT;
 import static org.gbif.common.parsers.date.DateComponentOrdering.YMDTZ;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Unit tests for {@link TextDateParser}.

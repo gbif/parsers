@@ -10,12 +10,11 @@ import java.time.ZonedDateTime;
 import java.time.temporal.TemporalAccessor;
 import java.util.Date;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static junit.framework.TestCase.assertEquals;
-import static junit.framework.TestCase.assertFalse;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Unit test for {@link TemporalAccessorUtils}.
@@ -26,10 +25,10 @@ public class TemporalAccessorUtilsTest {
   private ZoneId EUROPE_CENTRAL_TIME = ZoneId.of("Europe/Paris");
 
   // January 1st 2000, 00:00:00 (midnight)
-  private long YEAR2000_1JAN_EPOCH_UTC = 946684800000l;
+  private long YEAR2000_1JAN_EPOCH_UTC = 946684800000L;
 
   // January 1st 2000, 02:03:04
-  private long YEAR2000_1JAN_2H_3M_4S_EPOCH_UTC = 946692184000l;
+  private long YEAR2000_1JAN_2H_3M_4S_EPOCH_UTC = 946692184000L;
 
   // February 1st 2000, midnight
   private long YEAR2000_2FEB_0H_0M_0S_EPOCH_UTC = 949363200000l;
@@ -39,11 +38,11 @@ public class TemporalAccessorUtilsTest {
 
   @Test
   public void testToDate(){
-    TemporalAccessor ta = LocalDate.of(2000,01,01);
+    TemporalAccessor ta = LocalDate.of(2000, 1,1);
     Date date = TemporalAccessorUtils.toDate(ta, false);
     assertEquals(YEAR2000_1JAN_EPOCH_UTC, date.getTime());
 
-    ta = LocalDateTime.of(2000, 01, 01, 2, 3, 4);
+    ta = LocalDateTime.of(2000, 1, 1, 2, 3, 4);
     date = TemporalAccessorUtils.toDate(ta, false);
     assertEquals(YEAR2000_1JAN_2H_3M_4S_EPOCH_UTC, date.getTime());
 
@@ -101,7 +100,7 @@ public class TemporalAccessorUtilsTest {
 
   @Test
   public void testSameOrContained() {
-    TemporalAccessor ymd = LocalDate.of(1996, 04, 26);
+    TemporalAccessor ymd = LocalDate.of(1996, 4, 26);
 
     // Test nulls and wrong resolutions
     assertFalse(TemporalAccessorUtils.sameOrContained(null, null));
@@ -113,9 +112,9 @@ public class TemporalAccessorUtilsTest {
     // Test against same month
     assertTrue(TemporalAccessorUtils.sameOrContained(ymd, YearMonth.of(1996, 4)));
     // Test against same date
-    assertTrue(TemporalAccessorUtils.sameOrContained(ymd, LocalDate.of(1996, 04, 26)));
+    assertTrue(TemporalAccessorUtils.sameOrContained(ymd, LocalDate.of(1996, 4, 26)));
     // Test against time on that day
-    assertTrue(TemporalAccessorUtils.sameOrContained(ymd, LocalDateTime.of(1996, 04, 26, 1, 2, 3)));
+    assertTrue(TemporalAccessorUtils.sameOrContained(ymd, LocalDateTime.of(1996, 4, 26, 1, 2, 3)));
 
     // Then different year/month/date
     assertFalse(TemporalAccessorUtils.sameOrContained(ymd, Year.of(1998)));

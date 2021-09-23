@@ -4,14 +4,14 @@ import org.gbif.api.vocabulary.OccurrenceIssue;
 import org.gbif.common.parsers.core.OccurrenceParseResult;
 import org.gbif.common.parsers.core.ParseResult;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 public class CoordinateParseUtilsTest {
 
@@ -148,7 +148,7 @@ public class CoordinateParseUtilsTest {
     if (issue == null) {
       assertTrue(pr.getIssues().isEmpty());
     } else {
-      assertEquals("Wrong number of issues. Found " + pr.getIssues() + ", expected " + Arrays.asList(issue), issue.length, pr.getIssues().size());
+      assertEquals(issue.length, pr.getIssues().size(), "Wrong number of issues. Found " + pr.getIssues() + ", expected " + Arrays.asList(issue));
       for (OccurrenceIssue iss : issue) {
         assertTrue(pr.getIssues().contains(iss));
       }

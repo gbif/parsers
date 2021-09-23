@@ -4,15 +4,15 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
-import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 /**
  * @author tim
@@ -77,7 +77,7 @@ public class CellIdUtilsTest {
   /**
    * Test method for {@link CellIdUtils#toBoundingBox(int, int)}.
    */
-  @Ignore("This one was not annotated with @Test, now failing")
+  @Disabled("This one was not annotated with @Test, now failing")
   @Test
   public void testToBoundingBox2() {
     assertEquals(new LatLngBoundingBox((float) -180.0, (float) -90.0, (float) -179.9, (float) -89.9),
@@ -310,7 +310,7 @@ public class CellIdUtilsTest {
     }
   }
 
-  @Ignore("This one was not annotated with @Test, now failing")
+  @Disabled("This one was not annotated with @Test, now failing")
   @Test
   public void testGetCentiCellIdforBoundingBox() {
     try {

@@ -2,7 +2,7 @@ package org.gbif.common.parsers.core;
 
 import org.gbif.common.parsers.ParserTestBase;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class ASCIIParserTest extends ParserTestBase<String> {
 

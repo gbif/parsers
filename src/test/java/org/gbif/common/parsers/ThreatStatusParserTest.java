@@ -2,7 +2,7 @@ package org.gbif.common.parsers;
 
 import org.gbif.api.vocabulary.ThreatStatus;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class ThreatStatusParserTest extends ParserTestBase<ThreatStatus> {
 

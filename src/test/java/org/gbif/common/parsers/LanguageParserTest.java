@@ -3,7 +3,7 @@ package org.gbif.common.parsers;
 
 import org.gbif.api.vocabulary.Language;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class LanguageParserTest extends ParserTestBase<Language> {
 

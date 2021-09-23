@@ -3,15 +3,15 @@ package org.gbif.common.parsers;
 import org.apache.commons.lang3.StringUtils;
 import org.gbif.api.vocabulary.NomenclaturalStatus;
 import org.gbif.common.parsers.core.ParseResult;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
 
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Parses a single nomenclatural status out of a given string.

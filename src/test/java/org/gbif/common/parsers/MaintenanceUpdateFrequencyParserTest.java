@@ -2,7 +2,7 @@ package org.gbif.common.parsers;
 
 import org.gbif.api.vocabulary.MaintenanceUpdateFrequency;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class MaintenanceUpdateFrequencyParserTest extends ParserTestBase<MaintenanceUpdateFrequency> {
 

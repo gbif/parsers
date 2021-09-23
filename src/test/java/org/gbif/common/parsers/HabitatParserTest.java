@@ -2,9 +2,9 @@ package org.gbif.common.parsers;
 
 import org.gbif.api.vocabulary.Habitat;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class HabitatParserTest extends ParserTestBase<Habitat> {
 

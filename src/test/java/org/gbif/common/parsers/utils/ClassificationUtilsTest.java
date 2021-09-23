@@ -3,13 +3,13 @@ package org.gbif.common.parsers.utils;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static org.gbif.common.parsers.utils.ClassificationUtils.clean;
 import static org.gbif.common.parsers.utils.ClassificationUtils.cleanAuthor;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 public class ClassificationUtilsTest {
 
@@ -51,7 +51,7 @@ public class ClassificationUtilsTest {
     }
 
     assertNull(clean(null));
-    assertNull("Empty strings should return null", clean(""));
+    assertNull(clean(""), "Empty strings should return null");
   }
 
   @Test
@@ -85,7 +85,7 @@ public class ClassificationUtilsTest {
     }
 
     assertNull(cleanAuthor(null));
-    assertNull("Empty strings should return null", cleanAuthor(""));
+    assertNull(cleanAuthor(""), "Empty strings should return null");
   }
 
 }

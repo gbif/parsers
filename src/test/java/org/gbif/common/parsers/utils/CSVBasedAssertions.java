@@ -8,7 +8,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.function.Function;
 
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.fail;
 
 /**
  * Helper to help running assertions against data held in CSV files.

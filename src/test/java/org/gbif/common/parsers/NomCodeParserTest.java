@@ -1,7 +1,7 @@
 package org.gbif.common.parsers;
 
 import org.gbif.api.vocabulary.NomenclaturalCode;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class NomCodeParserTest extends ParserTestBase<NomenclaturalCode> {
 

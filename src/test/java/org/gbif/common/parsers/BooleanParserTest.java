@@ -3,9 +3,9 @@ package org.gbif.common.parsers;
 import org.gbif.api.vocabulary.BasisOfRecord;
 import org.gbif.common.parsers.core.Parsable;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class BooleanParserTest extends ParserTestBase<Boolean>  {
 

@@ -1,9 +1,8 @@
 package org.gbif.common.parsers.date;
 
-import static junit.framework.TestCase.assertEquals;
 import static org.gbif.common.parsers.date.DateComponentOrdering.DMY_FORMATS;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 import java.time.LocalDate;
 import java.time.Month;
@@ -11,7 +10,7 @@ import java.time.YearMonth;
 import java.time.temporal.TemporalAccessor;
 import org.gbif.common.parsers.core.ParseResult;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class CustomizedTextDateParserTest {
 

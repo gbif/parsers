@@ -3,14 +3,14 @@ package org.gbif.common.parsers;
 import org.apache.commons.lang3.StringUtils;
 import org.gbif.common.parsers.core.Parsable;
 import org.gbif.common.parsers.core.ParseResult;
-import org.junit.Before;
+import org.junit.jupiter.api.BeforeEach;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.Objects;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 public abstract class ParserTestBase<T> implements LineProcessor<ParserTestBase.BatchParseResult>  {
   protected final Parsable<T> parser;
@@ -21,7 +21,7 @@ public abstract class ParserTestBase<T> implements LineProcessor<ParserTestBase.
     public int failed;
   }
 
-  @Before
+  @BeforeEach
   public void setupBatch() {
     batchResult = new BatchParseResult();
   }
@@ -32,7 +32,7 @@ public abstract class ParserTestBase<T> implements LineProcessor<ParserTestBase.
 
   protected void assertParseFailure(String input) {
     ParseResult<T> parsed = parser.parse(input);
-    assertEquals("Expected "+input+" to fail but got "+parsed.getPayload()+" instead", ParseResult.STATUS.FAIL, parsed.getStatus());
+    assertEquals(ParseResult.STATUS.FAIL, parsed.getStatus(), "Expected " + input + " to fail but got " + parsed.getPayload() + " instead");
   }
 
   protected void assertParseSuccess(T expected, String input) {
@@ -43,9 +43,9 @@ public abstract class ParserTestBase<T> implements LineProcessor<ParserTestBase.
     ParseResult<T> parsed = parser.parse(input);
     assertNotNull(parsed);
 //    System.out.println(parsed);
-    assertEquals("BAD PARSING OF: "+input, ParseResult.STATUS.SUCCESS, parsed.getStatus());
+    assertEquals(ParseResult.STATUS.SUCCESS, parsed.getStatus(), "BAD PARSING OF: " + input);
     assertNotNull(parsed.getPayload());
-    assertEquals("BAD PARSING OF: "+input, expected, parsed.getPayload());
+    assertEquals(expected, parsed.getPayload(), "BAD PARSING OF: " + input);
     if (confidence != null) {
       assertEquals(confidence, parsed.getConfidence());
     }

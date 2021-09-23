@@ -15,15 +15,15 @@ import java.time.temporal.TemporalAccessor;
 import java.util.function.Function;
 import javax.annotation.Nullable;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static org.gbif.common.parsers.utils.CSVBasedAssertions.assertTestFile;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 /**
  * Unit testing for ThreeTenNumericalDateParser.
@@ -60,9 +60,9 @@ public class ThreeTenNumericalDateParserTest {
                   int month = Integer.parseInt(row[MONTH_VAL_IDX]);
                   int day = Integer.parseInt(row[DAY_VAL_IDX]);
                   ParseResult<TemporalAccessor> result = PARSER.parse(raw);
-                  assertNotNull(raw + " generated null payload", result.getPayload());
-                  assertEquals("Test file rawValue: " + raw, LocalDate.of(year, month, day),
-                          LocalDate.from(result.getPayload()));
+                  assertNotNull(result.getPayload(), raw + " generated null payload");
+                  assertEquals(LocalDate.of(year, month, day), LocalDate.from(result.getPayload()),
+                      "Test file rawValue: " + raw);
                 } catch (NumberFormatException nfEx){
                   fail("Error while parsing the test input file content." + nfEx.getMessage());
                 }
@@ -89,10 +89,10 @@ public class ThreeTenNumericalDateParserTest {
                   int nanosecond = Integer.parseInt(row[NS_VAL_IDX]);
 
                   ParseResult<TemporalAccessor> result = PARSER.parse(raw);
-                  assertNotNull(raw + " generated null payload", result.getPayload());
+                  assertNotNull(result.getPayload(), raw + " generated null payload");
 
-                  assertEquals("Test file rawValue: " + raw, LocalDateTime.of(year, month, day, hour, minute, second, nanosecond),
-                          LocalDateTime.from(result.getPayload()));
+                  assertEquals(LocalDateTime.of(year, month, day, hour, minute, second, nanosecond), LocalDateTime.from(result.getPayload()),
+                      "Test file rawValue: " + raw);
                 } catch (NumberFormatException nfEx) {
                   fail("Error while parsing the test input file content." + nfEx.getMessage());
                 }
@@ -120,11 +120,11 @@ public class ThreeTenNumericalDateParserTest {
                   String zoneId = row[TZ_VAL_IDX];
 
                   ParseResult<TemporalAccessor> result = PARSER.parse(raw);
-                  assertNotNull(raw + " generated null payload", result.getPayload());
+                  assertNotNull(result.getPayload(), raw + " generated null payload");
 
-                  assertEquals("Test file rawValue: " + raw, ZonedDateTime.of(year, month, day, hour, minute, second,
-                          0, ZoneId.of(zoneId)).with(ChronoField.MILLI_OF_SECOND, millisecond),
-                          ZonedDateTime.from(result.getPayload()));
+                  assertEquals(ZonedDateTime.of(year, month, day, hour, minute, second,
+                                            0, ZoneId.of(zoneId)).with(ChronoField.MILLI_OF_SECOND, millisecond), ZonedDateTime.from(result.getPayload()),
+                      "Test file rawValue: " + raw);
                 } catch (NumberFormatException nfEx) {
                   fail("Error while parsing the test input file content." + nfEx.getMessage());
                 }
@@ -140,7 +140,7 @@ public class ThreeTenNumericalDateParserTest {
               @Nullable
               @Override
               public Void apply(@Nullable String[] row) {
-                assertEquals("Test file rawValue: " + row[RAW_VAL_IDX], ParseResult.STATUS.FAIL, PARSER.parse(row[RAW_VAL_IDX]).getStatus());
+                assertEquals(ParseResult.STATUS.FAIL, PARSER.parse(row[RAW_VAL_IDX]).getStatus(), "Test file rawValue: " + row[RAW_VAL_IDX]);
                 return null;
               }
             });

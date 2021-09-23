@@ -2,7 +2,7 @@ package org.gbif.common.parsers;
 
 import org.gbif.api.vocabulary.Kingdom;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class KingdomParserTest extends ParserTestBase<Kingdom> {
 

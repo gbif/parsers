@@ -3,7 +3,7 @@ package org.gbif.common.parsers;
 import org.gbif.api.vocabulary.Sex;
 
 import org.gbif.common.parsers.core.ParseResult;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -12,7 +12,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.HashSet;
 import java.util.Set;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class SexParserTest extends ParserTestBase<Sex> {
 
