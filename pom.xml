@@ -40,7 +40,7 @@
     <logback.version>1.2.3</logback.version>
     <slf4j.version>1.7.30</slf4j.version>
     <gbif-api.version>0.155</gbif-api.version>
-    <gbif-common.version>0.51</gbif-common.version>
+    <gbif-common.version>0.52</gbif-common.version>
     <name-parser.version>3.6.3</name-parser.version>
     <tika.version>1.22</tika.version>
   </properties>

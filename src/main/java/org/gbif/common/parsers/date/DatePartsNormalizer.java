@@ -82,8 +82,8 @@ public class DatePartsNormalizer {
           String monthKey = row[0].toLowerCase();
           if (monthMap.containsKey(monthKey)) {
             List<String> split = Arrays.stream(StringUtils.split(row[1], ','))
-                .filter(StringUtils::isNotBlank)
-                .map(String::trim)
+                .map(org.gbif.utils.text.StringUtils::trim)
+                .filter(StringUtils::isNotEmpty)
                 .collect(Collectors.toList());
 
             for (String monthAltName : split) {

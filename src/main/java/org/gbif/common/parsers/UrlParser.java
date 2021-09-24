@@ -74,7 +74,7 @@ public class UrlParser {
         return null;
       }
 
-    } catch (IllegalArgumentException e) {
+    } catch (IllegalArgumentException ignored) {
     }
 
     return uri;
@@ -98,8 +98,8 @@ public class UrlParser {
         int maxValidUrls = 0;
         for (String delimiter : MULTI_VALUE_DELIMITERS) {
           List<String> urls = Arrays.stream(StringUtils.splitByWholeSeparator(uris, delimiter))
-              .filter(StringUtils::isNotBlank)
-              .map(String::trim)
+              .map(org.gbif.utils.text.StringUtils::trim)
+              .filter(StringUtils::isNotEmpty)
               .collect(Collectors.toList());
 
           // avoid parsing if we haven't actually split anything
