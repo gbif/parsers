@@ -6,185 +6,200 @@
 </head>
 <body>
 <div class="sourceContainer">
-<pre><span class="sourceLineNo">001</span>package org.gbif.common.parsers;<a name="line.1"></a>
-<span class="sourceLineNo">002</span><a name="line.2"></a>
-<span class="sourceLineNo">003</span>import org.gbif.api.vocabulary.Language;<a name="line.3"></a>
-<span class="sourceLineNo">004</span>import org.gbif.common.parsers.core.EnumParser;<a name="line.4"></a>
-<span class="sourceLineNo">005</span>import org.gbif.utils.file.csv.CSVReader;<a name="line.5"></a>
-<span class="sourceLineNo">006</span>import org.gbif.utils.file.csv.CSVReaderFactory;<a name="line.6"></a>
-<span class="sourceLineNo">007</span><a name="line.7"></a>
-<span class="sourceLineNo">008</span>import java.util.Arrays;<a name="line.8"></a>
-<span class="sourceLineNo">009</span>import java.util.HashSet;<a name="line.9"></a>
-<span class="sourceLineNo">010</span>import java.util.List;<a name="line.10"></a>
-<span class="sourceLineNo">011</span>import java.util.Locale;<a name="line.11"></a>
-<span class="sourceLineNo">012</span>import java.util.Set;<a name="line.12"></a>
-<span class="sourceLineNo">013</span>import java.util.regex.Pattern;<a name="line.13"></a>
-<span class="sourceLineNo">014</span><a name="line.14"></a>
-<span class="sourceLineNo">015</span>import org.apache.commons.lang3.StringUtils;<a name="line.15"></a>
-<span class="sourceLineNo">016</span><a name="line.16"></a>
-<span class="sourceLineNo">017</span>/**<a name="line.17"></a>
-<span class="sourceLineNo">018</span> * Singleton implementation of the case insensitive ISO 639-1 language dictionary<a name="line.18"></a>
-<span class="sourceLineNo">019</span> * that uses the org.gbif.common.api.Language enumeration.<a name="line.19"></a>
-<span class="sourceLineNo">020</span> * Parsing results will be upper cased 2 letter codes.<a name="line.20"></a>
-<span class="sourceLineNo">021</span> * Understood inputs are 2 or 3 letter (both terminological and bibliographical) ISO codes<a name="line.21"></a>
-<span class="sourceLineNo">022</span> * and natural language names given in any of the ISO languages.<a name="line.22"></a>
-<span class="sourceLineNo">023</span> */<a name="line.23"></a>
-<span class="sourceLineNo">024</span>public class LanguageParser extends EnumParser&lt;Language&gt; {<a name="line.24"></a>
-<span class="sourceLineNo">025</span><a name="line.25"></a>
-<span class="sourceLineNo">026</span>  private static LanguageParser singletonObject = null;<a name="line.26"></a>
-<span class="sourceLineNo">027</span>  private static final Pattern LOCALE = Pattern.compile("^[a-zA-Z]{2,3}_[a-zA-Z]");<a name="line.27"></a>
-<span class="sourceLineNo">028</span>  private static final List&lt;Pattern&gt; REMOVE_FROM_NAME_PATTERNS = Arrays.asList(<a name="line.28"></a>
-<span class="sourceLineNo">029</span>      // remove brackets<a name="line.29"></a>
-<span class="sourceLineNo">030</span>      Pattern.compile("\\(.\\)"),<a name="line.30"></a>
-<span class="sourceLineNo">031</span>      // remove French ", langues"<a name="line.31"></a>
-<span class="sourceLineNo">032</span>      Pattern.compile(", ?langues"),<a name="line.32"></a>
-<span class="sourceLineNo">033</span>      // remove English " languages"<a name="line.33"></a>
-<span class="sourceLineNo">034</span>      Pattern.compile(" languages")<a name="line.34"></a>
-<span class="sourceLineNo">035</span>  );<a name="line.35"></a>
-<span class="sourceLineNo">036</span><a name="line.36"></a>
-<span class="sourceLineNo">037</span><a name="line.37"></a>
-<span class="sourceLineNo">038</span>  private LanguageParser() {<a name="line.38"></a>
-<span class="sourceLineNo">039</span>    super(Language.class, false, LanguageParser.class.getResourceAsStream("/dictionaries/parse/language.tsv"));<a name="line.39"></a>
+<pre><span class="sourceLineNo">001</span>/*<a name="line.1"></a>
+<span class="sourceLineNo">002</span> * Copyright 2021 Global Biodiversity Information Facility (GBIF)<a name="line.2"></a>
+<span class="sourceLineNo">003</span> *<a name="line.3"></a>
+<span class="sourceLineNo">004</span> * Licensed under the Apache License, Version 2.0 (the "License");<a name="line.4"></a>
+<span class="sourceLineNo">005</span> * you may not use this file except in compliance with the License.<a name="line.5"></a>
+<span class="sourceLineNo">006</span> * You may obtain a copy of the License at<a name="line.6"></a>
+<span class="sourceLineNo">007</span> *<a name="line.7"></a>
+<span class="sourceLineNo">008</span> *     http://www.apache.org/licenses/LICENSE-2.0<a name="line.8"></a>
+<span class="sourceLineNo">009</span> *<a name="line.9"></a>
+<span class="sourceLineNo">010</span> * Unless required by applicable law or agreed to in writing, software<a name="line.10"></a>
+<span class="sourceLineNo">011</span> * distributed under the License is distributed on an "AS IS" BASIS,<a name="line.11"></a>
+<span class="sourceLineNo">012</span> * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.<a name="line.12"></a>
+<span class="sourceLineNo">013</span> * See the License for the specific language governing permissions and<a name="line.13"></a>
+<span class="sourceLineNo">014</span> * limitations under the License.<a name="line.14"></a>
+<span class="sourceLineNo">015</span> */<a name="line.15"></a>
+<span class="sourceLineNo">016</span>package org.gbif.common.parsers;<a name="line.16"></a>
+<span class="sourceLineNo">017</span><a name="line.17"></a>
+<span class="sourceLineNo">018</span>import org.gbif.api.vocabulary.Language;<a name="line.18"></a>
+<span class="sourceLineNo">019</span>import org.gbif.common.parsers.core.EnumParser;<a name="line.19"></a>
+<span class="sourceLineNo">020</span>import org.gbif.utils.file.csv.CSVReader;<a name="line.20"></a>
+<span class="sourceLineNo">021</span>import org.gbif.utils.file.csv.CSVReaderFactory;<a name="line.21"></a>
+<span class="sourceLineNo">022</span><a name="line.22"></a>
+<span class="sourceLineNo">023</span>import java.util.Arrays;<a name="line.23"></a>
+<span class="sourceLineNo">024</span>import java.util.HashSet;<a name="line.24"></a>
+<span class="sourceLineNo">025</span>import java.util.List;<a name="line.25"></a>
+<span class="sourceLineNo">026</span>import java.util.Locale;<a name="line.26"></a>
+<span class="sourceLineNo">027</span>import java.util.Set;<a name="line.27"></a>
+<span class="sourceLineNo">028</span>import java.util.regex.Pattern;<a name="line.28"></a>
+<span class="sourceLineNo">029</span><a name="line.29"></a>
+<span class="sourceLineNo">030</span>import org.apache.commons.lang3.StringUtils;<a name="line.30"></a>
+<span class="sourceLineNo">031</span><a name="line.31"></a>
+<span class="sourceLineNo">032</span>/**<a name="line.32"></a>
+<span class="sourceLineNo">033</span> * Singleton implementation of the case insensitive ISO 639-1 language dictionary<a name="line.33"></a>
+<span class="sourceLineNo">034</span> * that uses the org.gbif.common.api.Language enumeration.<a name="line.34"></a>
+<span class="sourceLineNo">035</span> * Parsing results will be upper cased 2 letter codes.<a name="line.35"></a>
+<span class="sourceLineNo">036</span> * Understood inputs are 2 or 3 letter (both terminological and bibliographical) ISO codes<a name="line.36"></a>
+<span class="sourceLineNo">037</span> * and natural language names given in any of the ISO languages.<a name="line.37"></a>
+<span class="sourceLineNo">038</span> */<a name="line.38"></a>
+<span class="sourceLineNo">039</span>public class LanguageParser extends EnumParser&lt;Language&gt; {<a name="line.39"></a>
 <span class="sourceLineNo">040</span><a name="line.40"></a>
-<span class="sourceLineNo">041</span>    // make sure we have all enum values mapped<a name="line.41"></a>
-<span class="sourceLineNo">042</span>    for (Language r : Language.values()) {<a name="line.42"></a>
-<span class="sourceLineNo">043</span>      add(r.name(), r);<a name="line.43"></a>
-<span class="sourceLineNo">044</span>      add(r.getTitleEnglish(), r);<a name="line.44"></a>
-<span class="sourceLineNo">045</span>      add(r.getTitleNative(), r);<a name="line.45"></a>
-<span class="sourceLineNo">046</span>      add(r.getIso2LetterCode(), r);<a name="line.46"></a>
-<span class="sourceLineNo">047</span>      add(r.getIso3LetterCode(), r);<a name="line.47"></a>
-<span class="sourceLineNo">048</span>    }<a name="line.48"></a>
-<span class="sourceLineNo">049</span><a name="line.49"></a>
-<span class="sourceLineNo">050</span>    // make sure we have all enum values mapped<a name="line.50"></a>
-<span class="sourceLineNo">051</span>    for (Locale l : Locale.getAvailableLocales()) {<a name="line.51"></a>
-<span class="sourceLineNo">052</span>      Language lang = Language.fromIsoCode(l.getISO3Language());<a name="line.52"></a>
-<span class="sourceLineNo">053</span>      if (lang == null) {<a name="line.53"></a>
-<span class="sourceLineNo">054</span>        log.warn("ISO code {} not part of our language enumeration", lang);<a name="line.54"></a>
-<span class="sourceLineNo">055</span>        continue;<a name="line.55"></a>
-<span class="sourceLineNo">056</span>      }<a name="line.56"></a>
-<span class="sourceLineNo">057</span>      add(l.getISO3Language(), lang);<a name="line.57"></a>
-<span class="sourceLineNo">058</span>      add(l.getDisplayLanguage(), lang);<a name="line.58"></a>
-<span class="sourceLineNo">059</span>      add(l.getLanguage(), lang);<a name="line.59"></a>
-<span class="sourceLineNo">060</span>      for (Locale l2 : Locale.getAvailableLocales()) {<a name="line.60"></a>
-<span class="sourceLineNo">061</span>        add(l.getDisplayLanguage(l2), lang);<a name="line.61"></a>
-<span class="sourceLineNo">062</span>      }<a name="line.62"></a>
+<span class="sourceLineNo">041</span>  private static LanguageParser singletonObject = null;<a name="line.41"></a>
+<span class="sourceLineNo">042</span>  private static final Pattern LOCALE = Pattern.compile("^[a-zA-Z]{2,3}_[a-zA-Z]");<a name="line.42"></a>
+<span class="sourceLineNo">043</span>  private static final List&lt;Pattern&gt; REMOVE_FROM_NAME_PATTERNS = Arrays.asList(<a name="line.43"></a>
+<span class="sourceLineNo">044</span>      // remove brackets<a name="line.44"></a>
+<span class="sourceLineNo">045</span>      Pattern.compile("\\(.\\)"),<a name="line.45"></a>
+<span class="sourceLineNo">046</span>      // remove French ", langues"<a name="line.46"></a>
+<span class="sourceLineNo">047</span>      Pattern.compile(", ?langues"),<a name="line.47"></a>
+<span class="sourceLineNo">048</span>      // remove English " languages"<a name="line.48"></a>
+<span class="sourceLineNo">049</span>      Pattern.compile(" languages")<a name="line.49"></a>
+<span class="sourceLineNo">050</span>  );<a name="line.50"></a>
+<span class="sourceLineNo">051</span><a name="line.51"></a>
+<span class="sourceLineNo">052</span><a name="line.52"></a>
+<span class="sourceLineNo">053</span>  private LanguageParser() {<a name="line.53"></a>
+<span class="sourceLineNo">054</span>    super(Language.class, false, LanguageParser.class.getResourceAsStream("/dictionaries/parse/language.tsv"));<a name="line.54"></a>
+<span class="sourceLineNo">055</span><a name="line.55"></a>
+<span class="sourceLineNo">056</span>    // make sure we have all enum values mapped<a name="line.56"></a>
+<span class="sourceLineNo">057</span>    for (Language r : Language.values()) {<a name="line.57"></a>
+<span class="sourceLineNo">058</span>      add(r.name(), r);<a name="line.58"></a>
+<span class="sourceLineNo">059</span>      add(r.getTitleEnglish(), r);<a name="line.59"></a>
+<span class="sourceLineNo">060</span>      add(r.getTitleNative(), r);<a name="line.60"></a>
+<span class="sourceLineNo">061</span>      add(r.getIso2LetterCode(), r);<a name="line.61"></a>
+<span class="sourceLineNo">062</span>      add(r.getIso3LetterCode(), r);<a name="line.62"></a>
 <span class="sourceLineNo">063</span>    }<a name="line.63"></a>
 <span class="sourceLineNo">064</span><a name="line.64"></a>
-<span class="sourceLineNo">065</span>    // OFFICIAL LIST, downloaded from<a name="line.65"></a>
-<span class="sourceLineNo">066</span>    // http://www.loc.gov/standards/iso639-2/ascii_8bits.html<a name="line.66"></a>
-<span class="sourceLineNo">067</span><a name="line.67"></a>
-<span class="sourceLineNo">068</span>    // An alpha-3 (bibliographic) code<a name="line.68"></a>
-<span class="sourceLineNo">069</span>    // an alpha-3 (terminologic) code (when given)<a name="line.69"></a>
-<span class="sourceLineNo">070</span>    // an alpha-2 code (when given)<a name="line.70"></a>
-<span class="sourceLineNo">071</span>    // an English name<a name="line.71"></a>
-<span class="sourceLineNo">072</span>    // a French name<a name="line.72"></a>
-<span class="sourceLineNo">073</span>    try {<a name="line.73"></a>
-<span class="sourceLineNo">074</span>      CSVReader r = CSVReaderFactory.build(LanguageParser.class.getResourceAsStream("/dictionaries/parse/ISO-639-2_utf-8.txt"), "UTF8", "|", null, 0);<a name="line.74"></a>
-<span class="sourceLineNo">075</span>      while(r.hasNext()) {<a name="line.75"></a>
-<span class="sourceLineNo">076</span>        String[] row = r.next();<a name="line.76"></a>
-<span class="sourceLineNo">077</span>        if (row.length&gt;2) {<a name="line.77"></a>
-<span class="sourceLineNo">078</span>          // ISO 2 letter code<a name="line.78"></a>
-<span class="sourceLineNo">079</span>          String alpha2 = row[2];<a name="line.79"></a>
-<span class="sourceLineNo">080</span>          if (!StringUtils.isBlank(alpha2)) {<a name="line.80"></a>
-<span class="sourceLineNo">081</span>            Language lang = Language.fromIsoCode(alpha2);<a name="line.81"></a>
-<span class="sourceLineNo">082</span>            if (lang == null || lang == Language.UNKNOWN) {<a name="line.82"></a>
-<span class="sourceLineNo">083</span>              log.warn("ISO code {} not part of our language enumeration", alpha2);<a name="line.83"></a>
-<span class="sourceLineNo">084</span>              continue;<a name="line.84"></a>
-<span class="sourceLineNo">085</span>            }<a name="line.85"></a>
-<span class="sourceLineNo">086</span>            // alpha-3 (bibliographic)<a name="line.86"></a>
-<span class="sourceLineNo">087</span>            add(row[0], lang);<a name="line.87"></a>
-<span class="sourceLineNo">088</span>            // alpha-3 (terminologic)<a name="line.88"></a>
-<span class="sourceLineNo">089</span>            add(row[1], lang);<a name="line.89"></a>
-<span class="sourceLineNo">090</span>            // English<a name="line.90"></a>
-<span class="sourceLineNo">091</span>            for (String l : mutateLanguageName(row[3])) {<a name="line.91"></a>
-<span class="sourceLineNo">092</span>              add(l, lang);<a name="line.92"></a>
-<span class="sourceLineNo">093</span>            }<a name="line.93"></a>
-<span class="sourceLineNo">094</span>            // French<a name="line.94"></a>
-<span class="sourceLineNo">095</span>            for (String l : mutateLanguageName(row[4])) {<a name="line.95"></a>
-<span class="sourceLineNo">096</span>              add(l, lang);<a name="line.96"></a>
-<span class="sourceLineNo">097</span>            }<a name="line.97"></a>
-<span class="sourceLineNo">098</span>          }<a name="line.98"></a>
-<span class="sourceLineNo">099</span>        }<a name="line.99"></a>
-<span class="sourceLineNo">100</span>      }<a name="line.100"></a>
-<span class="sourceLineNo">101</span>    } catch (Exception e) {<a name="line.101"></a>
-<span class="sourceLineNo">102</span>      log.error("Cannot initiate language parser: {}", e.getMessage());<a name="line.102"></a>
-<span class="sourceLineNo">103</span>      throw new IllegalStateException("Cannot initiate language parser", e);<a name="line.103"></a>
-<span class="sourceLineNo">104</span>    }<a name="line.104"></a>
-<span class="sourceLineNo">105</span><a name="line.105"></a>
-<span class="sourceLineNo">106</span><a name="line.106"></a>
-<span class="sourceLineNo">107</span>    // ISO 639-3 list from SIL:<a name="line.107"></a>
-<span class="sourceLineNo">108</span>    // http://www-01.sil.org/iso639-3/download.asp<a name="line.108"></a>
-<span class="sourceLineNo">109</span>    try {<a name="line.109"></a>
-<span class="sourceLineNo">110</span>      // Id     Part2B  Part2T  Part1   Scope   Language_Type   Ref_Name        Comment<a name="line.110"></a>
-<span class="sourceLineNo">111</span>      CSVReader r = CSVReaderFactory.buildTabReader(LanguageParser.class.getResourceAsStream("/dictionaries/parse/iso-639-3-sil.tab"), "UTF8", 1);<a name="line.111"></a>
-<span class="sourceLineNo">112</span>      while(r.hasNext()) {<a name="line.112"></a>
-<span class="sourceLineNo">113</span>        String[] row = r.next();<a name="line.113"></a>
-<span class="sourceLineNo">114</span>        if (row.length&gt;2) {<a name="line.114"></a>
-<span class="sourceLineNo">115</span>          String alpha2 = row[3];<a name="line.115"></a>
-<span class="sourceLineNo">116</span>          if (!StringUtils.isBlank(alpha2)) {<a name="line.116"></a>
-<span class="sourceLineNo">117</span>            Language lang = Language.fromIsoCode(alpha2);<a name="line.117"></a>
-<span class="sourceLineNo">118</span>            if (lang == null || lang == Language.UNKNOWN) {<a name="line.118"></a>
-<span class="sourceLineNo">119</span>              log.warn("ISO code {} not part of our language enumeration", alpha2);<a name="line.119"></a>
-<span class="sourceLineNo">120</span>              continue;<a name="line.120"></a>
-<span class="sourceLineNo">121</span>            }<a name="line.121"></a>
-<span class="sourceLineNo">122</span>            // 3-letter code<a name="line.122"></a>
-<span class="sourceLineNo">123</span>            add(row[0], lang);<a name="line.123"></a>
-<span class="sourceLineNo">124</span>            // 3-letter code part2B<a name="line.124"></a>
-<span class="sourceLineNo">125</span>            add(row[1], lang);<a name="line.125"></a>
-<span class="sourceLineNo">126</span>            // 3-letter code part2T<a name="line.126"></a>
-<span class="sourceLineNo">127</span>            add(row[2], lang);<a name="line.127"></a>
-<span class="sourceLineNo">128</span>            // name<a name="line.128"></a>
-<span class="sourceLineNo">129</span>            add(row[6], lang);<a name="line.129"></a>
-<span class="sourceLineNo">130</span>          }<a name="line.130"></a>
-<span class="sourceLineNo">131</span>        }<a name="line.131"></a>
-<span class="sourceLineNo">132</span>      }<a name="line.132"></a>
-<span class="sourceLineNo">133</span>    } catch (Exception e) {<a name="line.133"></a>
-<span class="sourceLineNo">134</span>      log.error("Cannot initiate language parser: {}", e.getMessage());<a name="line.134"></a>
-<span class="sourceLineNo">135</span>      throw new IllegalStateException("Cannot initiate language parser", e);<a name="line.135"></a>
-<span class="sourceLineNo">136</span>    }<a name="line.136"></a>
-<span class="sourceLineNo">137</span>  }<a name="line.137"></a>
-<span class="sourceLineNo">138</span><a name="line.138"></a>
-<span class="sourceLineNo">139</span>  private Set&lt;String&gt; mutateLanguageName(String lang) {<a name="line.139"></a>
-<span class="sourceLineNo">140</span>    Set&lt;String&gt; langs = new HashSet&lt;&gt;();<a name="line.140"></a>
-<span class="sourceLineNo">141</span>    for (String l : lang.split(";")) {<a name="line.141"></a>
-<span class="sourceLineNo">142</span>      langs.add(l);<a name="line.142"></a>
-<span class="sourceLineNo">143</span>      // also remove common patterns<a name="line.143"></a>
-<span class="sourceLineNo">144</span>      for (Pattern p : REMOVE_FROM_NAME_PATTERNS) {<a name="line.144"></a>
-<span class="sourceLineNo">145</span>        langs.add(p.matcher(l).replaceAll(""));<a name="line.145"></a>
-<span class="sourceLineNo">146</span>      }<a name="line.146"></a>
-<span class="sourceLineNo">147</span>    }<a name="line.147"></a>
-<span class="sourceLineNo">148</span>    return langs;<a name="line.148"></a>
-<span class="sourceLineNo">149</span>  }<a name="line.149"></a>
-<span class="sourceLineNo">150</span><a name="line.150"></a>
-<span class="sourceLineNo">151</span>  @Override<a name="line.151"></a>
-<span class="sourceLineNo">152</span>  protected String normalize(String value) {<a name="line.152"></a>
-<span class="sourceLineNo">153</span>    if (value != null) {<a name="line.153"></a>
-<span class="sourceLineNo">154</span>      /**<a name="line.154"></a>
-<span class="sourceLineNo">155</span>       * A language string could come in as a locale like "en_US" or if it was constructed improperly "eng_US", so<a name="line.155"></a>
-<span class="sourceLineNo">156</span>       * extract only the part before the underscore. Only if it contains an "_" is parsing attempted.<a name="line.156"></a>
-<span class="sourceLineNo">157</span>       * Whether it actually represents an ISO 369 language code is left for the language parser to determine.<a name="line.157"></a>
-<span class="sourceLineNo">158</span>       */<a name="line.158"></a>
-<span class="sourceLineNo">159</span>      if (LOCALE.matcher(value).find()) {<a name="line.159"></a>
-<span class="sourceLineNo">160</span>        int index = value.indexOf("_");<a name="line.160"></a>
-<span class="sourceLineNo">161</span>        // only allow underscore<a name="line.161"></a>
-<span class="sourceLineNo">162</span>        if (index &gt; 1 &amp;&amp; index &lt; 4 ) {<a name="line.162"></a>
-<span class="sourceLineNo">163</span>          return super.normalize(value.substring(0, index));<a name="line.163"></a>
-<span class="sourceLineNo">164</span>        }<a name="line.164"></a>
-<span class="sourceLineNo">165</span>      }<a name="line.165"></a>
-<span class="sourceLineNo">166</span>      return super.normalize(value);<a name="line.166"></a>
-<span class="sourceLineNo">167</span>    }<a name="line.167"></a>
-<span class="sourceLineNo">168</span>    return null;<a name="line.168"></a>
-<span class="sourceLineNo">169</span>  }<a name="line.169"></a>
-<span class="sourceLineNo">170</span><a name="line.170"></a>
-<span class="sourceLineNo">171</span>  public static LanguageParser getInstance() {<a name="line.171"></a>
-<span class="sourceLineNo">172</span>    synchronized (LanguageParser.class) {<a name="line.172"></a>
-<span class="sourceLineNo">173</span>      if (singletonObject == null) {<a name="line.173"></a>
-<span class="sourceLineNo">174</span>        singletonObject = new LanguageParser();<a name="line.174"></a>
-<span class="sourceLineNo">175</span>      }<a name="line.175"></a>
-<span class="sourceLineNo">176</span>    }<a name="line.176"></a>
-<span class="sourceLineNo">177</span>    return singletonObject;<a name="line.177"></a>
-<span class="sourceLineNo">178</span>  }<a name="line.178"></a>
-<span class="sourceLineNo">179</span>}<a name="line.179"></a>
+<span class="sourceLineNo">065</span>    // make sure we have all enum values mapped<a name="line.65"></a>
+<span class="sourceLineNo">066</span>    for (Locale l : Locale.getAvailableLocales()) {<a name="line.66"></a>
+<span class="sourceLineNo">067</span>      Language lang = Language.fromIsoCode(l.getISO3Language());<a name="line.67"></a>
+<span class="sourceLineNo">068</span>      if (lang == null) {<a name="line.68"></a>
+<span class="sourceLineNo">069</span>        log.warn("ISO code {} not part of our language enumeration", lang);<a name="line.69"></a>
+<span class="sourceLineNo">070</span>        continue;<a name="line.70"></a>
+<span class="sourceLineNo">071</span>      }<a name="line.71"></a>
+<span class="sourceLineNo">072</span>      add(l.getISO3Language(), lang);<a name="line.72"></a>
+<span class="sourceLineNo">073</span>      add(l.getDisplayLanguage(), lang);<a name="line.73"></a>
+<span class="sourceLineNo">074</span>      add(l.getLanguage(), lang);<a name="line.74"></a>
+<span class="sourceLineNo">075</span>      for (Locale l2 : Locale.getAvailableLocales()) {<a name="line.75"></a>
+<span class="sourceLineNo">076</span>        add(l.getDisplayLanguage(l2), lang);<a name="line.76"></a>
+<span class="sourceLineNo">077</span>      }<a name="line.77"></a>
+<span class="sourceLineNo">078</span>    }<a name="line.78"></a>
+<span class="sourceLineNo">079</span><a name="line.79"></a>
+<span class="sourceLineNo">080</span>    // OFFICIAL LIST, downloaded from<a name="line.80"></a>
+<span class="sourceLineNo">081</span>    // http://www.loc.gov/standards/iso639-2/ascii_8bits.html<a name="line.81"></a>
+<span class="sourceLineNo">082</span><a name="line.82"></a>
+<span class="sourceLineNo">083</span>    // An alpha-3 (bibliographic) code<a name="line.83"></a>
+<span class="sourceLineNo">084</span>    // an alpha-3 (terminologic) code (when given)<a name="line.84"></a>
+<span class="sourceLineNo">085</span>    // an alpha-2 code (when given)<a name="line.85"></a>
+<span class="sourceLineNo">086</span>    // an English name<a name="line.86"></a>
+<span class="sourceLineNo">087</span>    // a French name<a name="line.87"></a>
+<span class="sourceLineNo">088</span>    try {<a name="line.88"></a>
+<span class="sourceLineNo">089</span>      CSVReader r = CSVReaderFactory.build(LanguageParser.class.getResourceAsStream("/dictionaries/parse/ISO-639-2_utf-8.txt"), "UTF8", "|", null, 0);<a name="line.89"></a>
+<span class="sourceLineNo">090</span>      while(r.hasNext()) {<a name="line.90"></a>
+<span class="sourceLineNo">091</span>        String[] row = r.next();<a name="line.91"></a>
+<span class="sourceLineNo">092</span>        if (row.length&gt;2) {<a name="line.92"></a>
+<span class="sourceLineNo">093</span>          // ISO 2 letter code<a name="line.93"></a>
+<span class="sourceLineNo">094</span>          String alpha2 = row[2];<a name="line.94"></a>
+<span class="sourceLineNo">095</span>          if (!StringUtils.isBlank(alpha2)) {<a name="line.95"></a>
+<span class="sourceLineNo">096</span>            Language lang = Language.fromIsoCode(alpha2);<a name="line.96"></a>
+<span class="sourceLineNo">097</span>            if (lang == null || lang == Language.UNKNOWN) {<a name="line.97"></a>
+<span class="sourceLineNo">098</span>              log.warn("ISO code {} not part of our language enumeration", alpha2);<a name="line.98"></a>
+<span class="sourceLineNo">099</span>              continue;<a name="line.99"></a>
+<span class="sourceLineNo">100</span>            }<a name="line.100"></a>
+<span class="sourceLineNo">101</span>            // alpha-3 (bibliographic)<a name="line.101"></a>
+<span class="sourceLineNo">102</span>            add(row[0], lang);<a name="line.102"></a>
+<span class="sourceLineNo">103</span>            // alpha-3 (terminologic)<a name="line.103"></a>
+<span class="sourceLineNo">104</span>            add(row[1], lang);<a name="line.104"></a>
+<span class="sourceLineNo">105</span>            // English<a name="line.105"></a>
+<span class="sourceLineNo">106</span>            for (String l : mutateLanguageName(row[3])) {<a name="line.106"></a>
+<span class="sourceLineNo">107</span>              add(l, lang);<a name="line.107"></a>
+<span class="sourceLineNo">108</span>            }<a name="line.108"></a>
+<span class="sourceLineNo">109</span>            // French<a name="line.109"></a>
+<span class="sourceLineNo">110</span>            for (String l : mutateLanguageName(row[4])) {<a name="line.110"></a>
+<span class="sourceLineNo">111</span>              add(l, lang);<a name="line.111"></a>
+<span class="sourceLineNo">112</span>            }<a name="line.112"></a>
+<span class="sourceLineNo">113</span>          }<a name="line.113"></a>
+<span class="sourceLineNo">114</span>        }<a name="line.114"></a>
+<span class="sourceLineNo">115</span>      }<a name="line.115"></a>
+<span class="sourceLineNo">116</span>    } catch (Exception e) {<a name="line.116"></a>
+<span class="sourceLineNo">117</span>      log.error("Cannot initiate language parser: {}", e.getMessage());<a name="line.117"></a>
+<span class="sourceLineNo">118</span>      throw new IllegalStateException("Cannot initiate language parser", e);<a name="line.118"></a>
+<span class="sourceLineNo">119</span>    }<a name="line.119"></a>
+<span class="sourceLineNo">120</span><a name="line.120"></a>
+<span class="sourceLineNo">121</span><a name="line.121"></a>
+<span class="sourceLineNo">122</span>    // ISO 639-3 list from SIL:<a name="line.122"></a>
+<span class="sourceLineNo">123</span>    // http://www-01.sil.org/iso639-3/download.asp<a name="line.123"></a>
+<span class="sourceLineNo">124</span>    try {<a name="line.124"></a>
+<span class="sourceLineNo">125</span>      // Id     Part2B  Part2T  Part1   Scope   Language_Type   Ref_Name        Comment<a name="line.125"></a>
+<span class="sourceLineNo">126</span>      CSVReader r = CSVReaderFactory.buildTabReader(LanguageParser.class.getResourceAsStream("/dictionaries/parse/iso-639-3-sil.tab"), "UTF8", 1);<a name="line.126"></a>
+<span class="sourceLineNo">127</span>      while(r.hasNext()) {<a name="line.127"></a>
+<span class="sourceLineNo">128</span>        String[] row = r.next();<a name="line.128"></a>
+<span class="sourceLineNo">129</span>        if (row.length&gt;2) {<a name="line.129"></a>
+<span class="sourceLineNo">130</span>          String alpha2 = row[3];<a name="line.130"></a>
+<span class="sourceLineNo">131</span>          if (!StringUtils.isBlank(alpha2)) {<a name="line.131"></a>
+<span class="sourceLineNo">132</span>            Language lang = Language.fromIsoCode(alpha2);<a name="line.132"></a>
+<span class="sourceLineNo">133</span>            if (lang == null || lang == Language.UNKNOWN) {<a name="line.133"></a>
+<span class="sourceLineNo">134</span>              log.warn("ISO code {} not part of our language enumeration", alpha2);<a name="line.134"></a>
+<span class="sourceLineNo">135</span>              continue;<a name="line.135"></a>
+<span class="sourceLineNo">136</span>            }<a name="line.136"></a>
+<span class="sourceLineNo">137</span>            // 3-letter code<a name="line.137"></a>
+<span class="sourceLineNo">138</span>            add(row[0], lang);<a name="line.138"></a>
+<span class="sourceLineNo">139</span>            // 3-letter code part2B<a name="line.139"></a>
+<span class="sourceLineNo">140</span>            add(row[1], lang);<a name="line.140"></a>
+<span class="sourceLineNo">141</span>            // 3-letter code part2T<a name="line.141"></a>
+<span class="sourceLineNo">142</span>            add(row[2], lang);<a name="line.142"></a>
+<span class="sourceLineNo">143</span>            // name<a name="line.143"></a>
+<span class="sourceLineNo">144</span>            add(row[6], lang);<a name="line.144"></a>
+<span class="sourceLineNo">145</span>          }<a name="line.145"></a>
+<span class="sourceLineNo">146</span>        }<a name="line.146"></a>
+<span class="sourceLineNo">147</span>      }<a name="line.147"></a>
+<span class="sourceLineNo">148</span>    } catch (Exception e) {<a name="line.148"></a>
+<span class="sourceLineNo">149</span>      log.error("Cannot initiate language parser: {}", e.getMessage());<a name="line.149"></a>
+<span class="sourceLineNo">150</span>      throw new IllegalStateException("Cannot initiate language parser", e);<a name="line.150"></a>
+<span class="sourceLineNo">151</span>    }<a name="line.151"></a>
+<span class="sourceLineNo">152</span>  }<a name="line.152"></a>
+<span class="sourceLineNo">153</span><a name="line.153"></a>
+<span class="sourceLineNo">154</span>  private Set&lt;String&gt; mutateLanguageName(String lang) {<a name="line.154"></a>
+<span class="sourceLineNo">155</span>    Set&lt;String&gt; langs = new HashSet&lt;&gt;();<a name="line.155"></a>
+<span class="sourceLineNo">156</span>    for (String l : lang.split(";")) {<a name="line.156"></a>
+<span class="sourceLineNo">157</span>      langs.add(l);<a name="line.157"></a>
+<span class="sourceLineNo">158</span>      // also remove common patterns<a name="line.158"></a>
+<span class="sourceLineNo">159</span>      for (Pattern p : REMOVE_FROM_NAME_PATTERNS) {<a name="line.159"></a>
+<span class="sourceLineNo">160</span>        langs.add(p.matcher(l).replaceAll(""));<a name="line.160"></a>
+<span class="sourceLineNo">161</span>      }<a name="line.161"></a>
+<span class="sourceLineNo">162</span>    }<a name="line.162"></a>
+<span class="sourceLineNo">163</span>    return langs;<a name="line.163"></a>
+<span class="sourceLineNo">164</span>  }<a name="line.164"></a>
+<span class="sourceLineNo">165</span><a name="line.165"></a>
+<span class="sourceLineNo">166</span>  @Override<a name="line.166"></a>
+<span class="sourceLineNo">167</span>  protected String normalize(String value) {<a name="line.167"></a>
+<span class="sourceLineNo">168</span>    if (value != null) {<a name="line.168"></a>
+<span class="sourceLineNo">169</span>      /**<a name="line.169"></a>
+<span class="sourceLineNo">170</span>       * A language string could come in as a locale like "en_US" or if it was constructed improperly "eng_US", so<a name="line.170"></a>
+<span class="sourceLineNo">171</span>       * extract only the part before the underscore. Only if it contains an "_" is parsing attempted.<a name="line.171"></a>
+<span class="sourceLineNo">172</span>       * Whether it actually represents an ISO 369 language code is left for the language parser to determine.<a name="line.172"></a>
+<span class="sourceLineNo">173</span>       */<a name="line.173"></a>
+<span class="sourceLineNo">174</span>      if (LOCALE.matcher(value).find()) {<a name="line.174"></a>
+<span class="sourceLineNo">175</span>        int index = value.indexOf("_");<a name="line.175"></a>
+<span class="sourceLineNo">176</span>        // only allow underscore<a name="line.176"></a>
+<span class="sourceLineNo">177</span>        if (index &gt; 1 &amp;&amp; index &lt; 4 ) {<a name="line.177"></a>
+<span class="sourceLineNo">178</span>          return super.normalize(value.substring(0, index));<a name="line.178"></a>
+<span class="sourceLineNo">179</span>        }<a name="line.179"></a>
+<span class="sourceLineNo">180</span>      }<a name="line.180"></a>
+<span class="sourceLineNo">181</span>      return super.normalize(value);<a name="line.181"></a>
+<span class="sourceLineNo">182</span>    }<a name="line.182"></a>
+<span class="sourceLineNo">183</span>    return null;<a name="line.183"></a>
+<span class="sourceLineNo">184</span>  }<a name="line.184"></a>
+<span class="sourceLineNo">185</span><a name="line.185"></a>
+<span class="sourceLineNo">186</span>  public static LanguageParser getInstance() {<a name="line.186"></a>
+<span class="sourceLineNo">187</span>    synchronized (LanguageParser.class) {<a name="line.187"></a>
+<span class="sourceLineNo">188</span>      if (singletonObject == null) {<a name="line.188"></a>
+<span class="sourceLineNo">189</span>        singletonObject = new LanguageParser();<a name="line.189"></a>
+<span class="sourceLineNo">190</span>      }<a name="line.190"></a>
+<span class="sourceLineNo">191</span>    }<a name="line.191"></a>
+<span class="sourceLineNo">192</span>    return singletonObject;<a name="line.192"></a>
+<span class="sourceLineNo">193</span>  }<a name="line.193"></a>
+<span class="sourceLineNo">194</span>}<a name="line.194"></a>
 
 
 
