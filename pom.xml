@@ -5,7 +5,7 @@
   <parent>
     <groupId>org.gbif</groupId>
     <artifactId>motherpom</artifactId>
-    <version>54</version>
+    <version>55</version>
   </parent>
 
   <artifactId>gbif-parsers</artifactId>
@@ -31,8 +31,6 @@
   </distributionManagement>
 
   <properties>
-    <main.basedir>${project.basedir}</main.basedir>
-
     <commons-lang.version>3.10</commons-lang.version>
     <commons-math.version>3.6.1</commons-math.version>
     <jsr305.version>3.0.1</jsr305.version>
