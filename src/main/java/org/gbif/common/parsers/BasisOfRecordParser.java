@@ -18,6 +18,7 @@ import org.gbif.common.parsers.core.EnumParser;
 import org.gbif.common.parsers.core.ParseResult;
 
 import java.io.InputStream;
+import java.util.Optional;
 
 /**
  * Singleton implementation of the dictionary that uses the file /dictionaries/parse/basisOfRecord.txt.
@@ -28,6 +29,13 @@ public class BasisOfRecordParser extends EnumParser<BasisOfRecord> {
 
   private BasisOfRecordParser(InputStream... file) {
     super(BasisOfRecord.class, false, file);
+  }
+
+  /**
+   * Handles deprecations.
+   */
+  private static BasisOfRecord getMappedValue(BasisOfRecord basisOfRecord) {
+    return BasisOfRecord.LITERATURE == basisOfRecord || BasisOfRecord.UNKNOWN == basisOfRecord? BasisOfRecord.OCCURRENCE  : null;
   }
 
   public static BasisOfRecordParser getInstance()
@@ -43,8 +51,9 @@ public class BasisOfRecordParser extends EnumParser<BasisOfRecord> {
   @Override
   public ParseResult<BasisOfRecord> parse(String input) {
     ParseResult<BasisOfRecord> result = super.parse(input);
-    if (result.isSuccessful() && BasisOfRecord.LITERATURE == result.getPayload()) {
-      return ParseResult.success(result.getConfidence(), BasisOfRecord.OCCURRENCE);
+    Optional<BasisOfRecord> mappedValue = Optional.ofNullable(result.getPayload()).map(BasisOfRecordParser::getMappedValue);
+    if (result.isSuccessful() && mappedValue.isPresent()) {
+      return ParseResult.success(result.getConfidence(), mappedValue.get());
     }
     return result;
   }

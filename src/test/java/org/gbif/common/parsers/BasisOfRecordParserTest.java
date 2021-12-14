@@ -33,6 +33,10 @@ public class BasisOfRecordParserTest extends ParserTestBase<BasisOfRecord> {
     super(BasisOfRecordParser.getInstance());
   }
 
+  private static BasisOfRecord getValue(BasisOfRecord basisOfRecord) {
+    return BasisOfRecord.LITERATURE == basisOfRecord || BasisOfRecord.UNKNOWN == basisOfRecord? BasisOfRecord.OCCURRENCE  : basisOfRecord;
+  }
+
   /**
    * This ensures that ALL enum values are at least parsable by the name they
    * are created with.
@@ -43,8 +47,8 @@ public class BasisOfRecordParserTest extends ParserTestBase<BasisOfRecord> {
       System.out.println("Testing [" + t.name()
                          + "].  Failures below might indicate new BasisOfRecord added to the BasisOfRecord enum but not to the parse file");
 
-      assertParseSuccess(BasisOfRecord.LITERATURE ==  t? BasisOfRecord.OCCURRENCE : t,
-                         BasisOfRecord.LITERATURE ==  t? BasisOfRecord.OCCURRENCE.name() : t.name());
+      assertParseSuccess(getValue(t),
+                         getValue(t).name());
     }
   }
 
