@@ -15,6 +15,7 @@ package org.gbif.common.parsers;
 
 import org.gbif.api.vocabulary.BasisOfRecord;
 import org.gbif.common.parsers.core.EnumParser;
+import org.gbif.common.parsers.core.ParseResult;
 
 import java.io.InputStream;
 
@@ -39,4 +40,12 @@ public class BasisOfRecordParser extends EnumParser<BasisOfRecord> {
     return singletonObject;
   }
 
+  @Override
+  public ParseResult<BasisOfRecord> parse(String input) {
+    ParseResult<BasisOfRecord> result = super.parse(input);
+    if (result.isSuccessful() && BasisOfRecord.LITERATURE == result.getPayload()) {
+      return ParseResult.success(result.getConfidence(), BasisOfRecord.OCCURRENCE);
+    }
+    return result;
+  }
 }

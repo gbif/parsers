@@ -42,7 +42,9 @@ public class BasisOfRecordParserTest extends ParserTestBase<BasisOfRecord> {
     for (BasisOfRecord t : BasisOfRecord.values()) {
       System.out.println("Testing [" + t.name()
                          + "].  Failures below might indicate new BasisOfRecord added to the BasisOfRecord enum but not to the parse file");
-      assertParseSuccess(t, t.name());
+
+      assertParseSuccess(BasisOfRecord.LITERATURE ==  t? BasisOfRecord.OCCURRENCE : t,
+                         BasisOfRecord.LITERATURE ==  t? BasisOfRecord.OCCURRENCE.name() : t.name());
     }
   }
 
@@ -62,13 +64,13 @@ public class BasisOfRecordParserTest extends ParserTestBase<BasisOfRecord> {
     assertParseSuccess(BasisOfRecord.OBSERVATION, "Observation");
     assertParseSuccess(BasisOfRecord.OBSERVATION, "O");
     assertParseSuccess(BasisOfRecord.HUMAN_OBSERVATION, "HumanObservation");
-    assertParseSuccess(BasisOfRecord.UNKNOWN, "unknown");
+    assertParseSuccess(BasisOfRecord.OCCURRENCE, "unknown");
     assertParseSuccess(BasisOfRecord.OBSERVATION, "observation");
     assertParseSuccess(BasisOfRecord.PRESERVED_SPECIMEN, "specimen");
     assertParseSuccess(BasisOfRecord.LIVING_SPECIMEN, "living");
     assertParseSuccess(BasisOfRecord.LIVING_SPECIMEN, "germplasm");
     assertParseSuccess(BasisOfRecord.FOSSIL_SPECIMEN, "fossil");
-    assertParseSuccess(BasisOfRecord.LITERATURE, "literature");
+    assertParseSuccess(BasisOfRecord.OCCURRENCE, "literature");
 
     assertParseSuccess(BasisOfRecord.PRESERVED_SPECIMEN, "50 specimens");
     assertParseSuccess(BasisOfRecord.PRESERVED_SPECIMEN, "1250 specimens");
@@ -87,7 +89,7 @@ public class BasisOfRecordParserTest extends ParserTestBase<BasisOfRecord> {
   @Test
   public void testOccurrenceValues() throws IOException {
     final int CURRENT_TESTS_SUCCESSFUL = 248;
-    final int CURRENT_DISTINCT = 9;
+    final int CURRENT_DISTINCT = 8;
 
     int failed = 0;
     int success = 0;
