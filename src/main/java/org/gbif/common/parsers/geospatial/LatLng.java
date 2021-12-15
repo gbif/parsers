@@ -52,8 +52,12 @@ public class LatLng {
 
   @Override
   public boolean equals(Object o) {
-    if (this == o) return true;
-    if (o == null || getClass() != o.getClass()) return false;
+    if (this == o) {
+      return true;
+    }
+    if (!(o instanceof LatLng)) {
+      return false;
+    }
     LatLng latLng = (LatLng) o;
     return Objects.equals(lat, latLng.lat) && Objects.equals(lng, latLng.lng);
   }

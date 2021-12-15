@@ -13,6 +13,8 @@
  */
 package org.gbif.common.parsers.geospatial;
 
+import java.util.Objects;
+
 /**
  * A bounding box for lat long.
  */
@@ -37,14 +39,20 @@ public class LatLngBoundingBox {
 
   @Override
   public boolean equals(Object t) {
-    if (t instanceof LatLngBoundingBox) {
-      LatLngBoundingBox target = (LatLngBoundingBox) t;
-      if (minLat == target.getMinLat() && minLong == target.getMinLong() && maxLat == target.getMaxLat()
-          && maxLong == target.getMaxLong()) {
-        return true;
-      }
+    if (this == t) {
+      return true;
     }
-    return super.equals(t);
+    if (!(t instanceof LatLngBoundingBox)) {
+      return false;
+    }
+    LatLngBoundingBox target = (LatLngBoundingBox) t;
+    return minLat == target.getMinLat() && minLong == target.getMinLong() && maxLat == target.getMaxLat()
+           && maxLong == target.getMaxLong();
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(minLong, minLat, maxLong, maxLat);
   }
 
   @Override

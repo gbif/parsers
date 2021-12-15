@@ -100,7 +100,7 @@ public final class ClassificationUtils {
       if (cleanedTaxon.length() == 1) {
         return null;
       }
-      cleanedTaxon = cleanedTaxon.substring(1, cleanedTaxon.length());
+      cleanedTaxon = cleanedTaxon.substring(1);
     }
 
     // remove the " from names with it just at the end
@@ -117,7 +117,7 @@ public final class ClassificationUtils {
     cleanedTaxon = cleanedTaxon.trim();
 
     // don't let any blacklisted names through
-    if (BlacklistedNames.contains(cleanedTaxon.toUpperCase()) || (cleanedTaxon != taxon && BlacklistedNames
+    if (BlacklistedNames.contains(cleanedTaxon.toUpperCase()) || (!cleanedTaxon.equals(taxon) && BlacklistedNames
       .contains(taxon.toUpperCase()))) {
       // blacklisted name
       return null;

@@ -20,6 +20,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 
 import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.Test;
@@ -82,7 +83,7 @@ public class NomStatusParserTest extends ParserTestBase<NomenclaturalStatus> {
         URL fileUrl = this.getClass().getClassLoader().getResource("parse/nom_status.txt");
         assertNotNull(fileUrl);
 
-        try (BufferedReader in = new BufferedReader(new InputStreamReader(fileUrl.openStream()))) {
+        try (BufferedReader in = new BufferedReader(new InputStreamReader(fileUrl.openStream(), StandardCharsets.UTF_8))) {
             readLines(in, this);
         }
 

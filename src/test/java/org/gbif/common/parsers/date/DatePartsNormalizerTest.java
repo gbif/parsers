@@ -36,17 +36,17 @@ public class DatePartsNormalizerTest {
   @Test
   public void testFloatNormalization(){
     DatePartsNormalizer.NormalizedYearMonthDay result = NORMALIZER.normalize("1975.0", "2.0", "1.0");
-    assertEquals(new Integer(1), result.getDay());
+    assertEquals(Integer.valueOf(1), result.getDay());
     assertEquals(Month.FEBRUARY.getValue(), result.getMonth().intValue());
-    assertEquals(new Integer(1975), result.getYear());
+    assertEquals(Integer.valueOf(1975), result.getYear());
   }
 
   @Test
   public void testNormalizationWithSpaces(){
     DatePartsNormalizer.NormalizedYearMonthDay result = NORMALIZER.normalize("1975 ", " 2 ", " 1");
-    assertEquals(new Integer(1), result.getDay());
+    assertEquals(Integer.valueOf(1), result.getDay());
     assertEquals(Month.FEBRUARY.getValue(), result.getMonth().intValue());
-    assertEquals(new Integer(1975), result.getYear());
+    assertEquals(Integer.valueOf(1975), result.getYear());
   }
 
   @Test

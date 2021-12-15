@@ -90,12 +90,12 @@ class ThreeTenNumericalDateParser implements TemporalParser {
   private static final Map<DateComponentOrdering, List<DateTimeParser>> FORMATTERS_BY_ORDERING = new HashMap<>();
 
   // DateTimeFormatter includes some ISO parsers but just to make it explicit we define our own
-  private static final DateTimeFormatter ISO_PARSER = (new DateTimeFormatterBuilder()
+  private static final DateTimeFormatter ISO_PARSER = new DateTimeFormatterBuilder()
     .appendValue(ChronoField.YEAR, 2, 4, SignStyle.NEVER)
     .optionalStart().appendLiteral('-')
     .appendValue(ChronoField.MONTH_OF_YEAR, 1, 2, SignStyle.NEVER)
     .optionalStart().appendLiteral('-')
-    .appendValue(ChronoField.DAY_OF_MONTH, 1, 2, SignStyle.NEVER))
+    .appendValue(ChronoField.DAY_OF_MONTH, 1, 2, SignStyle.NEVER)
     .optionalEnd()
     .optionalEnd()
     .toFormatter().withResolverStyle(ResolverStyle.STRICT);

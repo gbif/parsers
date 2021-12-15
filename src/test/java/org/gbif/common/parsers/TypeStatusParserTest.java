@@ -19,6 +19,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 
 import org.junit.jupiter.api.Test;
 
@@ -66,7 +67,7 @@ public class TypeStatusParserTest extends ParserTestBase<TypeStatus> {
     URL fileUrl = this.getClass().getClassLoader().getResource("parse/typestatus/type_status.txt");
     assertNotNull(fileUrl);
 
-    try (BufferedReader in = new BufferedReader(new InputStreamReader(fileUrl.openStream()))) {
+    try (BufferedReader in = new BufferedReader(new InputStreamReader(fileUrl.openStream(), StandardCharsets.UTF_8))) {
       readLines(in, this);
     }
 

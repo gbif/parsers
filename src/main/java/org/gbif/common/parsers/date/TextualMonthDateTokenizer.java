@@ -13,6 +13,7 @@
  */
 package org.gbif.common.parsers.date;
 
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -185,8 +186,12 @@ public class TextualMonthDateTokenizer {
 
     @Override
     public boolean equals(Object o) {
-      if (this == o) return true;
-      if (o == null || getClass() != o.getClass()) return false;
+      if (this == o) {
+        return true;
+      }
+      if (!(o instanceof DateToken)) {
+        return false;
+      }
       DateToken dateToken = (DateToken) o;
       return Objects.equals(token, dateToken.token) && type == dateToken.type;
     }

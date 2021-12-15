@@ -13,6 +13,7 @@
  */
 package org.gbif.common.parsers.date;
 
+
 import java.time.Duration;
 import java.time.temporal.ChronoField;
 import java.time.temporal.TemporalAccessor;
@@ -169,11 +170,14 @@ public class AtomizedLocalDateTime {
 
   @Override
   public boolean equals(Object o) {
-    if (this == o) return true;
-    if (o == null || getClass() != o.getClass()) return false;
+    if (this == o) {
+      return true;
+    }
+    if (!(o instanceof AtomizedLocalDateTime)) {
+      return false;
+    }
 
     AtomizedLocalDateTime that = (AtomizedLocalDateTime) o;
-
     return resolution == that.resolution
         && Objects.equals(localDate, that.localDate)
         && Objects.equals(hour, that.hour)

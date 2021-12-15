@@ -13,7 +13,7 @@
  */
 package org.gbif.common.parsers.geospatial;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -312,7 +312,7 @@ public class CellIdUtilsTest {
   @Test
   public void testLL2Id2LL() {
     try {
-      List<Integer> cells = new LinkedList<>(CellIdUtils.getCellsEnclosedBy(-30, -20, 110, 130));
+      List<Integer> cells = new ArrayList<>(CellIdUtils.getCellsEnclosedBy(-30, -20, 110, 130));
       LatLngBoundingBox bb = CellIdUtils.getBoundingBoxForCells(cells);
       assertEquals(110, (int) bb.getMinLong());
       assertEquals(-30, (int) bb.getMinLat());

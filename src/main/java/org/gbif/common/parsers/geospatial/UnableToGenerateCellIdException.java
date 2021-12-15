@@ -14,7 +14,7 @@
 package org.gbif.common.parsers.geospatial;
 
 /**
- * Used to indicate that a Cell Id cannot be instantiated.
+ * Used to indicate that a CellId cannot be instantiated.
  */
 public class UnableToGenerateCellIdException extends Exception {
 

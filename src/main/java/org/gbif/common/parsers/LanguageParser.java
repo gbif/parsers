@@ -151,7 +151,7 @@ public class LanguageParser extends EnumParser<Language> {
 
   private Set<String> mutateLanguageName(String lang) {
     Set<String> langs = new HashSet<>();
-    for (String l : lang.split(";")) {
+    for (String l :  lang.split(";")) {
       langs.add(l);
       // also remove common patterns
       for (Pattern p : REMOVE_FROM_NAME_PATTERNS) {

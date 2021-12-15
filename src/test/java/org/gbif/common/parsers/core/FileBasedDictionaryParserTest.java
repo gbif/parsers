@@ -25,7 +25,7 @@ public class FileBasedDictionaryParserTest {
   private static final String COMMENT_MARKER = "#";
   private static final String TEST_DICTIONARY = "/parse/simpleDictionary.txt";
 
-  class TestParser extends FileBasedDictionaryParser<String> {
+  static class TestParser extends FileBasedDictionaryParser<String> {
 
     public TestParser(InputStream... inputs) {
       super(false);
@@ -43,7 +43,7 @@ public class FileBasedDictionaryParserTest {
    *
    * @author cgendreau
    */
-  class TestParserWithCommentSupport extends FileBasedDictionaryParser<String> {
+  static class TestParserWithCommentSupport extends FileBasedDictionaryParser<String> {
 
     public TestParserWithCommentSupport(InputStream... inputs) {
       super(false);

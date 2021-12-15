@@ -13,6 +13,7 @@
  */
 package org.gbif.common.parsers.date;
 
+
 import java.time.temporal.ChronoField;
 import java.time.temporal.TemporalAccessor;
 import java.util.Objects;
@@ -115,8 +116,12 @@ public class AtomizedLocalDate {
 
   @Override
   public boolean equals(Object o) {
-    if (this == o) return true;
-    if (o == null || getClass() != o.getClass()) return false;
+    if (this == o) {
+      return true;
+    }
+    if (!(o instanceof AtomizedLocalDate)) {
+      return false;
+    }
 
     AtomizedLocalDate that = (AtomizedLocalDate) o;
 

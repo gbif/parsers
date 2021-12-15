@@ -176,8 +176,8 @@ public class DatePartsNormalizer {
   public String normalizeFloat(String value) {
     if (value != null && value.contains(".0")) {
       try {
-        Double d = new Double(value);
-        if ((double) d.intValue() == d.doubleValue()) {
+        Double d = Double.valueOf(value);
+        if ((double) d.intValue() == d) {
           return String.valueOf(d.intValue());
         }
       } catch (NumberFormatException e) {

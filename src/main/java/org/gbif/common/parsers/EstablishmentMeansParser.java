@@ -16,6 +16,7 @@ package org.gbif.common.parsers;
 import org.gbif.api.vocabulary.EstablishmentMeans;
 import org.gbif.common.parsers.core.EnumParser;
 
+@Deprecated
 public class EstablishmentMeansParser extends EnumParser<EstablishmentMeans> {
 
   private static EstablishmentMeansParser singletonObject = null;

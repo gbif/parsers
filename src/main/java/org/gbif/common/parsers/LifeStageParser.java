@@ -19,6 +19,7 @@ import org.gbif.common.parsers.core.EnumParser;
 /**
  * Singleton implementation of the dictionary that uses the file /dictionaries/parse/life_stage.txt.
  */
+@Deprecated
 public class LifeStageParser extends EnumParser<LifeStage> {
 
   private static LifeStageParser singletonObject = null;

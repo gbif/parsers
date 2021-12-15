@@ -13,6 +13,8 @@
  */
 package org.gbif.common.parsers.core;
 
+import java.util.Objects;
+
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -46,6 +48,11 @@ public class KeyValue<K, V> {
       return new EqualsBuilder().append(key, t.getKey()).append(value, t.getValue()).isEquals();
     }
     return false;
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(key, value);
   }
 
   @Override

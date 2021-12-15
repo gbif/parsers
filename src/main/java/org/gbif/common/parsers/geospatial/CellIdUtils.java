@@ -66,14 +66,14 @@ public class CellIdUtils {
    * Get mod 360 cell id.
    */
   public static int getMod360CellIdFor(double longitude) {
-    return new Double(Math.floor(longitude + MAX_LONGITUDE)).intValue();
+    return Double.valueOf(Math.floor(longitude + MAX_LONGITUDE)).intValue();
   }
 
   /**
    * Get cell id.
    */
   public static int getCellIdFor(double latitude) {
-    return new Double(Math.floor(latitude + MAX_LATITUDE)).intValue() * 360;
+    return Double.valueOf(Math.floor(latitude + MAX_LATITUDE)).intValue() * 360;
   }
 
   /**
@@ -127,7 +127,7 @@ public class CellIdUtils {
     int longitude = (cellId % 360) - MAX_LONGITUDE;
     int latitude = MIN_LATITUDE;
     if (cellId > 0) {
-      latitude = new Double(Math.floor(cellId / 360)).intValue() - MAX_LATITUDE;
+      latitude = Double.valueOf(Math.floor(cellId / 360)).intValue() - MAX_LATITUDE;
     }
     return new LatLngBoundingBox(longitude, latitude, longitude + 1, latitude + 1);
   }
@@ -145,7 +145,7 @@ public class CellIdUtils {
     int longitudeX10 = 10 * ((cellId % 360) - MAX_LONGITUDE);
     int latitudeX10 = -900;
     if (cellId > 0) {
-      latitudeX10 = 10 * (new Double(Math.floor(cellId / 360)).intValue() - MAX_LATITUDE);
+      latitudeX10 = 10 * (Double.valueOf(Math.floor(cellId / 360)).intValue() - MAX_LATITUDE);
     }
 
     double longOffset = (centiCellId % 10);
@@ -157,8 +157,8 @@ public class CellIdUtils {
     double minLatitude = (latitudeX10 + latOffset) / 10;
     double minLongitude = (longitudeX10 + longOffset) / 10;
     double maxLatitude = (latitudeX10 + latOffset + 1) / 10;
-    double maxlongitude = (longitudeX10 + longOffset + 1) / 10;
-    return new LatLngBoundingBox(minLongitude, minLatitude, maxlongitude, maxLatitude);
+    double maxLongitude = (longitudeX10 + longOffset + 1) / 10;
+    return new LatLngBoundingBox(minLongitude, minLatitude, maxLongitude, maxLatitude);
   }
 
   /**
@@ -282,7 +282,7 @@ public class CellIdUtils {
     //if(maxMinCellIds==null || (maxMinCellIds[0]!=maxMinCellIds[1]))
     //	return null;
 
-    //Integer cellid = maxMinCellIds[0];
+    //Integer cellId = maxMinCellIds[0];
 
     //int[] maxMinCellIds = getMinMaxCellIdsForBoundingBox(minLongitude, minLatitude, maxLongitude, maxLatitude);
 
@@ -294,7 +294,7 @@ public class CellIdUtils {
     //if(isBoundingBoxCentiCell(minLongitude, minLatitude, maxLongitude, maxLatitude)){
 
     int[] maxMinCellIds = getMinMaxCellIdsForBoundingBox(minLongitude, minLatitude, maxLongitude, maxLatitude);
-    Integer cellid = maxMinCellIds[0];
+    Integer cellId = maxMinCellIds[0];
 
     int minCentiCell = toCentiCellId(minLatitude, minLongitude);
     int maxCentiCell = toCentiCellId(maxLatitude, maxLongitude);
@@ -317,10 +317,10 @@ public class CellIdUtils {
     }
 
     //if(maxCentiCell==minCentiCell){
-    return new Integer[] {cellid, minCentiCell};
+    return new Integer[] {cellId, minCentiCell};
     //}
     //}
-    //return new Integer[]{cellid};
+    //return new Integer[]{cellId};
   }
 
   private static boolean isBoundingBoxCentiCell(double minLongitude, double minLatitude, double maxLongitude,
@@ -349,10 +349,8 @@ public class CellIdUtils {
       } else {
         System.out.println("Provide either a 'cell id' or 'Lat Long' params!");
       }
-    } catch (NumberFormatException e) {
-      e.printStackTrace();
-    } catch (UnableToGenerateCellIdException e) {
-      e.printStackTrace();
+    } catch (NumberFormatException | UnableToGenerateCellIdException e) {
+      LOGGER.error("Error converting bounding box", e);
     }
   }
 }

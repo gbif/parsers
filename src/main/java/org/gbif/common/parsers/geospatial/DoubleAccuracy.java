@@ -48,8 +48,12 @@ public class DoubleAccuracy {
 
   @Override
   public boolean equals(Object o) {
-    if (this == o) return true;
-    if (o == null || getClass() != o.getClass()) return false;
+    if (this == o) {
+      return true;
+    }
+    if (!(o instanceof DoubleAccuracy)) {
+      return false;
+    }
     DoubleAccuracy that = (DoubleAccuracy) o;
     return Objects.equals(value, that.value) && Objects.equals(accuracy, that.accuracy);
   }
