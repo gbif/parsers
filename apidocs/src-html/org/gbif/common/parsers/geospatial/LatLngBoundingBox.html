@@ -7,21 +7,21 @@
 <body>
 <div class="sourceContainer">
 <pre><span class="sourceLineNo">001</span>/*<a name="line.1"></a>
-<span class="sourceLineNo">002</span> * Copyright 2021 Global Biodiversity Information Facility (GBIF)<a name="line.2"></a>
-<span class="sourceLineNo">003</span> *<a name="line.3"></a>
-<span class="sourceLineNo">004</span> * Licensed under the Apache License, Version 2.0 (the "License");<a name="line.4"></a>
-<span class="sourceLineNo">005</span> * you may not use this file except in compliance with the License.<a name="line.5"></a>
-<span class="sourceLineNo">006</span> * You may obtain a copy of the License at<a name="line.6"></a>
+<span class="sourceLineNo">002</span> * Licensed under the Apache License, Version 2.0 (the "License");<a name="line.2"></a>
+<span class="sourceLineNo">003</span> * you may not use this file except in compliance with the License.<a name="line.3"></a>
+<span class="sourceLineNo">004</span> * You may obtain a copy of the License at<a name="line.4"></a>
+<span class="sourceLineNo">005</span> *<a name="line.5"></a>
+<span class="sourceLineNo">006</span> *     http://www.apache.org/licenses/LICENSE-2.0<a name="line.6"></a>
 <span class="sourceLineNo">007</span> *<a name="line.7"></a>
-<span class="sourceLineNo">008</span> *     http://www.apache.org/licenses/LICENSE-2.0<a name="line.8"></a>
-<span class="sourceLineNo">009</span> *<a name="line.9"></a>
-<span class="sourceLineNo">010</span> * Unless required by applicable law or agreed to in writing, software<a name="line.10"></a>
-<span class="sourceLineNo">011</span> * distributed under the License is distributed on an "AS IS" BASIS,<a name="line.11"></a>
-<span class="sourceLineNo">012</span> * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.<a name="line.12"></a>
-<span class="sourceLineNo">013</span> * See the License for the specific language governing permissions and<a name="line.13"></a>
-<span class="sourceLineNo">014</span> * limitations under the License.<a name="line.14"></a>
-<span class="sourceLineNo">015</span> */<a name="line.15"></a>
-<span class="sourceLineNo">016</span>package org.gbif.common.parsers.geospatial;<a name="line.16"></a>
+<span class="sourceLineNo">008</span> * Unless required by applicable law or agreed to in writing, software<a name="line.8"></a>
+<span class="sourceLineNo">009</span> * distributed under the License is distributed on an "AS IS" BASIS,<a name="line.9"></a>
+<span class="sourceLineNo">010</span> * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.<a name="line.10"></a>
+<span class="sourceLineNo">011</span> * See the License for the specific language governing permissions and<a name="line.11"></a>
+<span class="sourceLineNo">012</span> * limitations under the License.<a name="line.12"></a>
+<span class="sourceLineNo">013</span> */<a name="line.13"></a>
+<span class="sourceLineNo">014</span>package org.gbif.common.parsers.geospatial;<a name="line.14"></a>
+<span class="sourceLineNo">015</span><a name="line.15"></a>
+<span class="sourceLineNo">016</span>import java.util.Objects;<a name="line.16"></a>
 <span class="sourceLineNo">017</span><a name="line.17"></a>
 <span class="sourceLineNo">018</span>/**<a name="line.18"></a>
 <span class="sourceLineNo">019</span> * A bounding box for lat long.<a name="line.19"></a>
@@ -47,77 +47,83 @@
 <span class="sourceLineNo">039</span><a name="line.39"></a>
 <span class="sourceLineNo">040</span>  @Override<a name="line.40"></a>
 <span class="sourceLineNo">041</span>  public boolean equals(Object t) {<a name="line.41"></a>
-<span class="sourceLineNo">042</span>    if (t instanceof LatLngBoundingBox) {<a name="line.42"></a>
-<span class="sourceLineNo">043</span>      LatLngBoundingBox target = (LatLngBoundingBox) t;<a name="line.43"></a>
-<span class="sourceLineNo">044</span>      if (minLat == target.getMinLat() &amp;&amp; minLong == target.getMinLong() &amp;&amp; maxLat == target.getMaxLat()<a name="line.44"></a>
-<span class="sourceLineNo">045</span>          &amp;&amp; maxLong == target.getMaxLong()) {<a name="line.45"></a>
-<span class="sourceLineNo">046</span>        return true;<a name="line.46"></a>
-<span class="sourceLineNo">047</span>      }<a name="line.47"></a>
-<span class="sourceLineNo">048</span>    }<a name="line.48"></a>
-<span class="sourceLineNo">049</span>    return super.equals(t);<a name="line.49"></a>
-<span class="sourceLineNo">050</span>  }<a name="line.50"></a>
-<span class="sourceLineNo">051</span><a name="line.51"></a>
-<span class="sourceLineNo">052</span>  @Override<a name="line.52"></a>
-<span class="sourceLineNo">053</span>  public String toString() {<a name="line.53"></a>
-<span class="sourceLineNo">054</span>    return "minLong[" + minLong + "] minLat[" + minLat + "] maxLong[" + maxLong + "] maxLat[" + maxLat + "] ";<a name="line.54"></a>
-<span class="sourceLineNo">055</span>  }<a name="line.55"></a>
-<span class="sourceLineNo">056</span><a name="line.56"></a>
-<span class="sourceLineNo">057</span>  /**<a name="line.57"></a>
-<span class="sourceLineNo">058</span>   * @return the maxLat<a name="line.58"></a>
-<span class="sourceLineNo">059</span>   */<a name="line.59"></a>
-<span class="sourceLineNo">060</span>  public double getMaxLat() {<a name="line.60"></a>
-<span class="sourceLineNo">061</span>    return maxLat;<a name="line.61"></a>
-<span class="sourceLineNo">062</span>  }<a name="line.62"></a>
-<span class="sourceLineNo">063</span><a name="line.63"></a>
-<span class="sourceLineNo">064</span>  /**<a name="line.64"></a>
-<span class="sourceLineNo">065</span>   * @param maxLat the maxLat to set<a name="line.65"></a>
-<span class="sourceLineNo">066</span>   */<a name="line.66"></a>
-<span class="sourceLineNo">067</span>  public void setMaxLat(double maxLat) {<a name="line.67"></a>
-<span class="sourceLineNo">068</span>    this.maxLat = maxLat;<a name="line.68"></a>
-<span class="sourceLineNo">069</span>  }<a name="line.69"></a>
-<span class="sourceLineNo">070</span><a name="line.70"></a>
-<span class="sourceLineNo">071</span>  /**<a name="line.71"></a>
-<span class="sourceLineNo">072</span>   * @return the maxLong<a name="line.72"></a>
-<span class="sourceLineNo">073</span>   */<a name="line.73"></a>
-<span class="sourceLineNo">074</span>  public double getMaxLong() {<a name="line.74"></a>
-<span class="sourceLineNo">075</span>    return maxLong;<a name="line.75"></a>
-<span class="sourceLineNo">076</span>  }<a name="line.76"></a>
-<span class="sourceLineNo">077</span><a name="line.77"></a>
-<span class="sourceLineNo">078</span>  /**<a name="line.78"></a>
-<span class="sourceLineNo">079</span>   * @param maxLong the maxLong to set<a name="line.79"></a>
-<span class="sourceLineNo">080</span>   */<a name="line.80"></a>
-<span class="sourceLineNo">081</span>  public void setMaxLong(double maxLong) {<a name="line.81"></a>
-<span class="sourceLineNo">082</span>    this.maxLong = maxLong;<a name="line.82"></a>
-<span class="sourceLineNo">083</span>  }<a name="line.83"></a>
-<span class="sourceLineNo">084</span><a name="line.84"></a>
-<span class="sourceLineNo">085</span>  /**<a name="line.85"></a>
-<span class="sourceLineNo">086</span>   * @return the minLat<a name="line.86"></a>
-<span class="sourceLineNo">087</span>   */<a name="line.87"></a>
-<span class="sourceLineNo">088</span>  public double getMinLat() {<a name="line.88"></a>
-<span class="sourceLineNo">089</span>    return minLat;<a name="line.89"></a>
-<span class="sourceLineNo">090</span>  }<a name="line.90"></a>
-<span class="sourceLineNo">091</span><a name="line.91"></a>
-<span class="sourceLineNo">092</span>  /**<a name="line.92"></a>
-<span class="sourceLineNo">093</span>   * @param minLat the minLat to set<a name="line.93"></a>
-<span class="sourceLineNo">094</span>   */<a name="line.94"></a>
-<span class="sourceLineNo">095</span>  public void setMinLat(double minLat) {<a name="line.95"></a>
-<span class="sourceLineNo">096</span>    this.minLat = minLat;<a name="line.96"></a>
-<span class="sourceLineNo">097</span>  }<a name="line.97"></a>
-<span class="sourceLineNo">098</span><a name="line.98"></a>
-<span class="sourceLineNo">099</span>  /**<a name="line.99"></a>
-<span class="sourceLineNo">100</span>   * @return the minLong<a name="line.100"></a>
-<span class="sourceLineNo">101</span>   */<a name="line.101"></a>
-<span class="sourceLineNo">102</span>  public double getMinLong() {<a name="line.102"></a>
-<span class="sourceLineNo">103</span>    return minLong;<a name="line.103"></a>
-<span class="sourceLineNo">104</span>  }<a name="line.104"></a>
-<span class="sourceLineNo">105</span><a name="line.105"></a>
-<span class="sourceLineNo">106</span>  /**<a name="line.106"></a>
-<span class="sourceLineNo">107</span>   * @param minLong the minLong to set<a name="line.107"></a>
-<span class="sourceLineNo">108</span>   */<a name="line.108"></a>
-<span class="sourceLineNo">109</span>  public void setMinLong(double minLong) {<a name="line.109"></a>
-<span class="sourceLineNo">110</span>    this.minLong = minLong;<a name="line.110"></a>
-<span class="sourceLineNo">111</span>  }<a name="line.111"></a>
-<span class="sourceLineNo">112</span>}<a name="line.112"></a>
+<span class="sourceLineNo">042</span>    if (this == t) {<a name="line.42"></a>
+<span class="sourceLineNo">043</span>      return true;<a name="line.43"></a>
+<span class="sourceLineNo">044</span>    }<a name="line.44"></a>
+<span class="sourceLineNo">045</span>    if (!(t instanceof LatLngBoundingBox)) {<a name="line.45"></a>
+<span class="sourceLineNo">046</span>      return false;<a name="line.46"></a>
+<span class="sourceLineNo">047</span>    }<a name="line.47"></a>
+<span class="sourceLineNo">048</span>    LatLngBoundingBox target = (LatLngBoundingBox) t;<a name="line.48"></a>
+<span class="sourceLineNo">049</span>    return minLat == target.getMinLat() &amp;&amp; minLong == target.getMinLong() &amp;&amp; maxLat == target.getMaxLat()<a name="line.49"></a>
+<span class="sourceLineNo">050</span>           &amp;&amp; maxLong == target.getMaxLong();<a name="line.50"></a>
+<span class="sourceLineNo">051</span>  }<a name="line.51"></a>
+<span class="sourceLineNo">052</span><a name="line.52"></a>
+<span class="sourceLineNo">053</span>  @Override<a name="line.53"></a>
+<span class="sourceLineNo">054</span>  public int hashCode() {<a name="line.54"></a>
+<span class="sourceLineNo">055</span>    return Objects.hash(minLong, minLat, maxLong, maxLat);<a name="line.55"></a>
+<span class="sourceLineNo">056</span>  }<a name="line.56"></a>
+<span class="sourceLineNo">057</span><a name="line.57"></a>
+<span class="sourceLineNo">058</span>  @Override<a name="line.58"></a>
+<span class="sourceLineNo">059</span>  public String toString() {<a name="line.59"></a>
+<span class="sourceLineNo">060</span>    return "minLong[" + minLong + "] minLat[" + minLat + "] maxLong[" + maxLong + "] maxLat[" + maxLat + "] ";<a name="line.60"></a>
+<span class="sourceLineNo">061</span>  }<a name="line.61"></a>
+<span class="sourceLineNo">062</span><a name="line.62"></a>
+<span class="sourceLineNo">063</span>  /**<a name="line.63"></a>
+<span class="sourceLineNo">064</span>   * @return the maxLat<a name="line.64"></a>
+<span class="sourceLineNo">065</span>   */<a name="line.65"></a>
+<span class="sourceLineNo">066</span>  public double getMaxLat() {<a name="line.66"></a>
+<span class="sourceLineNo">067</span>    return maxLat;<a name="line.67"></a>
+<span class="sourceLineNo">068</span>  }<a name="line.68"></a>
+<span class="sourceLineNo">069</span><a name="line.69"></a>
+<span class="sourceLineNo">070</span>  /**<a name="line.70"></a>
+<span class="sourceLineNo">071</span>   * @param maxLat the maxLat to set<a name="line.71"></a>
+<span class="sourceLineNo">072</span>   */<a name="line.72"></a>
+<span class="sourceLineNo">073</span>  public void setMaxLat(double maxLat) {<a name="line.73"></a>
+<span class="sourceLineNo">074</span>    this.maxLat = maxLat;<a name="line.74"></a>
+<span class="sourceLineNo">075</span>  }<a name="line.75"></a>
+<span class="sourceLineNo">076</span><a name="line.76"></a>
+<span class="sourceLineNo">077</span>  /**<a name="line.77"></a>
+<span class="sourceLineNo">078</span>   * @return the maxLong<a name="line.78"></a>
+<span class="sourceLineNo">079</span>   */<a name="line.79"></a>
+<span class="sourceLineNo">080</span>  public double getMaxLong() {<a name="line.80"></a>
+<span class="sourceLineNo">081</span>    return maxLong;<a name="line.81"></a>
+<span class="sourceLineNo">082</span>  }<a name="line.82"></a>
+<span class="sourceLineNo">083</span><a name="line.83"></a>
+<span class="sourceLineNo">084</span>  /**<a name="line.84"></a>
+<span class="sourceLineNo">085</span>   * @param maxLong the maxLong to set<a name="line.85"></a>
+<span class="sourceLineNo">086</span>   */<a name="line.86"></a>
+<span class="sourceLineNo">087</span>  public void setMaxLong(double maxLong) {<a name="line.87"></a>
+<span class="sourceLineNo">088</span>    this.maxLong = maxLong;<a name="line.88"></a>
+<span class="sourceLineNo">089</span>  }<a name="line.89"></a>
+<span class="sourceLineNo">090</span><a name="line.90"></a>
+<span class="sourceLineNo">091</span>  /**<a name="line.91"></a>
+<span class="sourceLineNo">092</span>   * @return the minLat<a name="line.92"></a>
+<span class="sourceLineNo">093</span>   */<a name="line.93"></a>
+<span class="sourceLineNo">094</span>  public double getMinLat() {<a name="line.94"></a>
+<span class="sourceLineNo">095</span>    return minLat;<a name="line.95"></a>
+<span class="sourceLineNo">096</span>  }<a name="line.96"></a>
+<span class="sourceLineNo">097</span><a name="line.97"></a>
+<span class="sourceLineNo">098</span>  /**<a name="line.98"></a>
+<span class="sourceLineNo">099</span>   * @param minLat the minLat to set<a name="line.99"></a>
+<span class="sourceLineNo">100</span>   */<a name="line.100"></a>
+<span class="sourceLineNo">101</span>  public void setMinLat(double minLat) {<a name="line.101"></a>
+<span class="sourceLineNo">102</span>    this.minLat = minLat;<a name="line.102"></a>
+<span class="sourceLineNo">103</span>  }<a name="line.103"></a>
+<span class="sourceLineNo">104</span><a name="line.104"></a>
+<span class="sourceLineNo">105</span>  /**<a name="line.105"></a>
+<span class="sourceLineNo">106</span>   * @return the minLong<a name="line.106"></a>
+<span class="sourceLineNo">107</span>   */<a name="line.107"></a>
+<span class="sourceLineNo">108</span>  public double getMinLong() {<a name="line.108"></a>
+<span class="sourceLineNo">109</span>    return minLong;<a name="line.109"></a>
+<span class="sourceLineNo">110</span>  }<a name="line.110"></a>
+<span class="sourceLineNo">111</span><a name="line.111"></a>
+<span class="sourceLineNo">112</span>  /**<a name="line.112"></a>
+<span class="sourceLineNo">113</span>   * @param minLong the minLong to set<a name="line.113"></a>
+<span class="sourceLineNo">114</span>   */<a name="line.114"></a>
+<span class="sourceLineNo">115</span>  public void setMinLong(double minLong) {<a name="line.115"></a>
+<span class="sourceLineNo">116</span>    this.minLong = minLong;<a name="line.116"></a>
+<span class="sourceLineNo">117</span>  }<a name="line.117"></a>
+<span class="sourceLineNo">118</span>}<a name="line.118"></a>
 
 
 
