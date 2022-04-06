@@ -34,7 +34,11 @@ public class BasisOfRecordParserTest extends ParserTestBase<BasisOfRecord> {
   }
 
   private static BasisOfRecord getValue(BasisOfRecord basisOfRecord) {
-    return BasisOfRecord.LITERATURE == basisOfRecord || BasisOfRecord.UNKNOWN == basisOfRecord? BasisOfRecord.OCCURRENCE  : basisOfRecord;
+    return
+      // Literature is replaced with Material Citation
+      (BasisOfRecord.LITERATURE == basisOfRecord ? BasisOfRecord.MATERIAL_CITATION :
+        // Unknown is replaced with Occurrence
+        (BasisOfRecord.UNKNOWN == basisOfRecord? BasisOfRecord.OCCURRENCE  : basisOfRecord));
   }
 
   /**
@@ -74,7 +78,6 @@ public class BasisOfRecordParserTest extends ParserTestBase<BasisOfRecord> {
     assertParseSuccess(BasisOfRecord.LIVING_SPECIMEN, "living");
     assertParseSuccess(BasisOfRecord.LIVING_SPECIMEN, "germplasm");
     assertParseSuccess(BasisOfRecord.FOSSIL_SPECIMEN, "fossil");
-    assertParseSuccess(BasisOfRecord.OCCURRENCE, "literature");
 
     assertParseSuccess(BasisOfRecord.PRESERVED_SPECIMEN, "50 specimens");
     assertParseSuccess(BasisOfRecord.PRESERVED_SPECIMEN, "1250 specimens");
@@ -84,6 +87,11 @@ public class BasisOfRecordParserTest extends ParserTestBase<BasisOfRecord> {
     assertParseSuccess(BasisOfRecord.LIVING_SPECIMEN, "germplasm");
     assertParseSuccess(BasisOfRecord.PRESERVED_SPECIMEN, "Alcohol / Microscope");
     assertParseSuccess(BasisOfRecord.PRESERVED_SPECIMEN, "preservé 179600");
+    assertParseSuccess(BasisOfRecord.PRESERVED_SPECIMEN, "Pinned specimen");
+
+    // Deprecated bases
+    assertParseSuccess(BasisOfRecord.MATERIAL_CITATION, "Literature");
+    assertParseSuccess(BasisOfRecord.OCCURRENCE, "Unknown");
   }
 
   /**

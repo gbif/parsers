@@ -35,7 +35,11 @@ public class BasisOfRecordParser extends EnumParser<BasisOfRecord> {
    * Handles deprecations.
    */
   private static BasisOfRecord getMappedValue(BasisOfRecord basisOfRecord) {
-    return BasisOfRecord.LITERATURE == basisOfRecord || BasisOfRecord.UNKNOWN == basisOfRecord? BasisOfRecord.OCCURRENCE  : null;
+    return
+      // Literature is replaced with Material Citation
+      (BasisOfRecord.LITERATURE == basisOfRecord ? BasisOfRecord.MATERIAL_CITATION :
+        // Unknown is replaced with Occurrence
+        (BasisOfRecord.UNKNOWN == basisOfRecord? BasisOfRecord.OCCURRENCE  : null));
   }
 
   public static BasisOfRecordParser getInstance()
