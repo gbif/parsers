@@ -263,56 +263,66 @@
 <span class="sourceLineNo">255</span>      case SUBDIVISION: return Rank.SUBPHYLUM;<a name="line.255"></a>
 <span class="sourceLineNo">256</span>      case INFRADIVISION: return Rank.INFRAPHYLUM;<a name="line.256"></a>
 <span class="sourceLineNo">257</span><a name="line.257"></a>
-<span class="sourceLineNo">258</span>      case SUPERSECTION: return Rank.INFRAGENERIC_NAME;<a name="line.258"></a>
-<span class="sourceLineNo">259</span>      case SUPERSERIES: return Rank.INFRAGENERIC_NAME;<a name="line.259"></a>
-<span class="sourceLineNo">260</span>      <a name="line.260"></a>
-<span class="sourceLineNo">261</span>      case MEGAFAMILY: return Rank.SUPRAGENERIC_NAME;<a name="line.261"></a>
-<span class="sourceLineNo">262</span>      case GRANDFAMILY: return Rank.SUPRAGENERIC_NAME;<a name="line.262"></a>
-<span class="sourceLineNo">263</span>      case EPIFAMILY: return Rank.SUPRAGENERIC_NAME;<a name="line.263"></a>
-<span class="sourceLineNo">264</span><a name="line.264"></a>
-<span class="sourceLineNo">265</span>      case GIGAORDER: return Rank.SUPRAGENERIC_NAME;<a name="line.265"></a>
-<span class="sourceLineNo">266</span>      case MIRORDER: return Rank.SUPRAGENERIC_NAME;<a name="line.266"></a>
-<span class="sourceLineNo">267</span>      case NANORDER: return Rank.SUPRAGENERIC_NAME;<a name="line.267"></a>
-<span class="sourceLineNo">268</span>      case HYPOORDER: return Rank.SUPRAGENERIC_NAME;<a name="line.268"></a>
-<span class="sourceLineNo">269</span>      case MINORDER: return Rank.SUPRAGENERIC_NAME;<a name="line.269"></a>
-<span class="sourceLineNo">270</span><a name="line.270"></a>
-<span class="sourceLineNo">271</span>      case SUBTERCLASS: return Rank.SUPRAGENERIC_NAME;<a name="line.271"></a>
-<span class="sourceLineNo">272</span><a name="line.272"></a>
-<span class="sourceLineNo">273</span>      case REALM: return Rank.SUPRAGENERIC_NAME;<a name="line.273"></a>
-<span class="sourceLineNo">274</span>      case SUBREALM: return Rank.SUPRAGENERIC_NAME;<a name="line.274"></a>
-<span class="sourceLineNo">275</span><a name="line.275"></a>
-<span class="sourceLineNo">276</span>      default: return convertEnum(Rank.class, rank);<a name="line.276"></a>
-<span class="sourceLineNo">277</span>    }<a name="line.277"></a>
-<span class="sourceLineNo">278</span>  }<a name="line.278"></a>
-<span class="sourceLineNo">279</span><a name="line.279"></a>
-<span class="sourceLineNo">280</span><a name="line.280"></a>
-<span class="sourceLineNo">281</span>  public static org.gbif.nameparser.api.Rank fromGbif(Rank rank) {<a name="line.281"></a>
-<span class="sourceLineNo">282</span>    if (rank == null) {<a name="line.282"></a>
-<span class="sourceLineNo">283</span>      return null;<a name="line.283"></a>
-<span class="sourceLineNo">284</span>    }<a name="line.284"></a>
-<span class="sourceLineNo">285</span>    if (Rank.RACE == rank) {<a name="line.285"></a>
-<span class="sourceLineNo">286</span>      return org.gbif.nameparser.api.Rank.PROLES;<a name="line.286"></a>
+<span class="sourceLineNo">258</span>      case SUPERSECTION:<a name="line.258"></a>
+<span class="sourceLineNo">259</span>      case SUPERSERIES:<a name="line.259"></a>
+<span class="sourceLineNo">260</span>        return Rank.INFRAGENERIC_NAME;<a name="line.260"></a>
+<span class="sourceLineNo">261</span>      <a name="line.261"></a>
+<span class="sourceLineNo">262</span>      case MEGAFAMILY:<a name="line.262"></a>
+<span class="sourceLineNo">263</span>      case GRANDFAMILY:<a name="line.263"></a>
+<span class="sourceLineNo">264</span>      case EPIFAMILY:<a name="line.264"></a>
+<span class="sourceLineNo">265</span><a name="line.265"></a>
+<span class="sourceLineNo">266</span>      case GIGAORDER:<a name="line.266"></a>
+<span class="sourceLineNo">267</span>      case MIRORDER:<a name="line.267"></a>
+<span class="sourceLineNo">268</span>      case NANORDER:<a name="line.268"></a>
+<span class="sourceLineNo">269</span>      case HYPOORDER:<a name="line.269"></a>
+<span class="sourceLineNo">270</span>      case MINORDER:<a name="line.270"></a>
+<span class="sourceLineNo">271</span><a name="line.271"></a>
+<span class="sourceLineNo">272</span>      case MEGACOHORT:<a name="line.272"></a>
+<span class="sourceLineNo">273</span><a name="line.273"></a>
+<span class="sourceLineNo">274</span>      case GIGACLASS:<a name="line.274"></a>
+<span class="sourceLineNo">275</span>      case MEGACLASS:<a name="line.275"></a>
+<span class="sourceLineNo">276</span>      case SUBTERCLASS:<a name="line.276"></a>
+<span class="sourceLineNo">277</span><a name="line.277"></a>
+<span class="sourceLineNo">278</span>      case PARVPHYLUM:<a name="line.278"></a>
+<span class="sourceLineNo">279</span>      case MICROPHYLUM:<a name="line.279"></a>
+<span class="sourceLineNo">280</span>      case NANOPHYLUM:<a name="line.280"></a>
+<span class="sourceLineNo">281</span><a name="line.281"></a>
+<span class="sourceLineNo">282</span>      case REALM:<a name="line.282"></a>
+<span class="sourceLineNo">283</span>      case SUBREALM:<a name="line.283"></a>
+<span class="sourceLineNo">284</span>        return Rank.SUPRAGENERIC_NAME;<a name="line.284"></a>
+<span class="sourceLineNo">285</span><a name="line.285"></a>
+<span class="sourceLineNo">286</span>      default: return convertEnum(Rank.class, rank);<a name="line.286"></a>
 <span class="sourceLineNo">287</span>    }<a name="line.287"></a>
-<span class="sourceLineNo">288</span>    return convertEnum(org.gbif.nameparser.api.Rank.class, rank);<a name="line.288"></a>
-<span class="sourceLineNo">289</span>  }<a name="line.289"></a>
+<span class="sourceLineNo">288</span>  }<a name="line.288"></a>
+<span class="sourceLineNo">289</span><a name="line.289"></a>
 <span class="sourceLineNo">290</span><a name="line.290"></a>
-<span class="sourceLineNo">291</span>  /**<a name="line.291"></a>
-<span class="sourceLineNo">292</span>   * Converts an enumeration value into a constant with the exact same name from a different enumeration class.<a name="line.292"></a>
-<span class="sourceLineNo">293</span>   * In case the enumeration constant name does not exist an error is thrown.<a name="line.293"></a>
-<span class="sourceLineNo">294</span>   *<a name="line.294"></a>
-<span class="sourceLineNo">295</span>   * @param targetClass class of the target enumeration<a name="line.295"></a>
-<span class="sourceLineNo">296</span>   * @param value<a name="line.296"></a>
-<span class="sourceLineNo">297</span>   * @throws IllegalArgumentException in case the enumeration name does not exist in the target class<a name="line.297"></a>
-<span class="sourceLineNo">298</span>   */<a name="line.298"></a>
-<span class="sourceLineNo">299</span>  private static &lt;G extends Enum&lt;G&gt;&gt; G convertEnum(Class&lt;G&gt; targetClass, Enum&lt;?&gt; value) {<a name="line.299"></a>
-<span class="sourceLineNo">300</span>    try {<a name="line.300"></a>
-<span class="sourceLineNo">301</span>      return value == null ? null : Enum.valueOf(targetClass, value.name());<a name="line.301"></a>
-<span class="sourceLineNo">302</span>    } catch (IllegalArgumentException e) {<a name="line.302"></a>
-<span class="sourceLineNo">303</span>      LOG.warn("Unable to convert {} into {}", value, targetClass);<a name="line.303"></a>
-<span class="sourceLineNo">304</span>      return null;<a name="line.304"></a>
-<span class="sourceLineNo">305</span>    }<a name="line.305"></a>
-<span class="sourceLineNo">306</span>  }<a name="line.306"></a>
-<span class="sourceLineNo">307</span>}<a name="line.307"></a>
+<span class="sourceLineNo">291</span>  public static org.gbif.nameparser.api.Rank fromGbif(Rank rank) {<a name="line.291"></a>
+<span class="sourceLineNo">292</span>    if (rank == null) {<a name="line.292"></a>
+<span class="sourceLineNo">293</span>      return null;<a name="line.293"></a>
+<span class="sourceLineNo">294</span>    }<a name="line.294"></a>
+<span class="sourceLineNo">295</span>    if (Rank.RACE == rank) {<a name="line.295"></a>
+<span class="sourceLineNo">296</span>      return org.gbif.nameparser.api.Rank.PROLES;<a name="line.296"></a>
+<span class="sourceLineNo">297</span>    }<a name="line.297"></a>
+<span class="sourceLineNo">298</span>    return convertEnum(org.gbif.nameparser.api.Rank.class, rank);<a name="line.298"></a>
+<span class="sourceLineNo">299</span>  }<a name="line.299"></a>
+<span class="sourceLineNo">300</span><a name="line.300"></a>
+<span class="sourceLineNo">301</span>  /**<a name="line.301"></a>
+<span class="sourceLineNo">302</span>   * Converts an enumeration value into a constant with the exact same name from a different enumeration class.<a name="line.302"></a>
+<span class="sourceLineNo">303</span>   * In case the enumeration constant name does not exist an error is thrown.<a name="line.303"></a>
+<span class="sourceLineNo">304</span>   *<a name="line.304"></a>
+<span class="sourceLineNo">305</span>   * @param targetClass class of the target enumeration<a name="line.305"></a>
+<span class="sourceLineNo">306</span>   * @param value<a name="line.306"></a>
+<span class="sourceLineNo">307</span>   * @throws IllegalArgumentException in case the enumeration name does not exist in the target class<a name="line.307"></a>
+<span class="sourceLineNo">308</span>   */<a name="line.308"></a>
+<span class="sourceLineNo">309</span>  private static &lt;G extends Enum&lt;G&gt;&gt; G convertEnum(Class&lt;G&gt; targetClass, Enum&lt;?&gt; value) {<a name="line.309"></a>
+<span class="sourceLineNo">310</span>    try {<a name="line.310"></a>
+<span class="sourceLineNo">311</span>      return value == null ? null : Enum.valueOf(targetClass, value.name());<a name="line.311"></a>
+<span class="sourceLineNo">312</span>    } catch (IllegalArgumentException e) {<a name="line.312"></a>
+<span class="sourceLineNo">313</span>      LOG.warn("Unable to convert {} into {}", value, targetClass);<a name="line.313"></a>
+<span class="sourceLineNo">314</span>      return null;<a name="line.314"></a>
+<span class="sourceLineNo">315</span>    }<a name="line.315"></a>
+<span class="sourceLineNo">316</span>  }<a name="line.316"></a>
+<span class="sourceLineNo">317</span>}<a name="line.317"></a>
 
 
 
