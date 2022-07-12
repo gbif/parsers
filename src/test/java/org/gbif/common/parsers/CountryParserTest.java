@@ -164,6 +164,13 @@ public class CountryParserTest extends ParserTestBase<Country> {
     assertParseSuccess(Country.UNITED_KINGDOM, "United Kingdom");
     assertParseSuccess(Country.UNITED_STATES, "United States of Ameirca");
     assertParseSuccess(Country.KOREA_NORTH, "Korea, Democratic People's Republic");
+    assertParseSuccess(Country.TURKEY, "Turkey");
+    assertParseSuccess(Country.TURKEY, "Türkiye");
+    assertParseSuccess(Country.TURKEY, "Turkiye");
+    assertParseSuccess(Country.TURKEY, "Turkıye");
+    assertParseSuccess(Country.TURKEY, "Republic of Türkiye");
+    assertParseSuccess(Country.TURKEY, "REPUBLIC OF TÜRKİYE");
+    assertParseSuccess(Country.TURKEY, "Republic of Turkey");
 
     assertParseSuccess(Country.KOSOVO, "XK");
   }
