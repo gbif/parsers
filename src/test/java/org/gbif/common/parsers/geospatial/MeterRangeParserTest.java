@@ -38,7 +38,7 @@ public class MeterRangeParserTest {
     assertResult(MeterRangeParser.parseElevation("10", "10", "1"), true, 10d, 1d);
     assertResult(MeterRangeParser.parseElevation("10", null, null), true, 10d, null);
     assertResult(MeterRangeParser.parseElevation(null, "10", null), true, 10d, null);
-    assertResult(MeterRangeParser.parseElevation("-800", null, null), true, -800d, null);
+    assertResult(MeterRangeParser.parseElevation("-400", null, null), true, -400d, null);
     assertResult(MeterRangeParser.parseElevation("-100", "-50", null), true, -75d, 25d);
     assertResult(MeterRangeParser.parseElevation("110", "115", null), true, 112.5d, 2.5d);
     assertResult(MeterRangeParser.parseElevation("10", "10", "1"), true, 10d, 1d);
@@ -71,6 +71,12 @@ public class MeterRangeParserTest {
     // check out of range
     assertResult(
         MeterRangeParser.parseElevation("100000000000", null, "1"),
+        false,
+        null,
+        1d,
+        OccurrenceIssue.ELEVATION_UNLIKELY);
+    assertResult(
+        MeterRangeParser.parseElevation("-1000", null, "1"),
         false,
         null,
         1d,

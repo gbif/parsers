@@ -118,10 +118,11 @@ public class MeterRangeParser {
   private static final float CM_TO_METRES = 0.1f;
 
   /**
-   * The lowest elevation value recognised as valid:
-   * 10,971 m (35,994 ft) Challenger Deep, Mariana Trench[32]
+   * The lowest elevation value recognised as valid: -430m
+   *
+   * @See <a href="https://github.com/tdwg/bdq/issues/112">TG2-VALIDATION_MAXELEVATION_INRANGE</a>
    */
-  private static final int MIN_ELEVATION = -11000;
+  private static final int MIN_ELEVATION = -430;
 
   /**
    * The highest elevation value recognised as valid, Mount Everest 8,848 m (29,029 ft).
@@ -138,7 +139,7 @@ public class MeterRangeParser {
    * The lowest elevation value recognised as valid:
    * 10,971 m (35,994 ft) Challenger Deep, Mariana Trench[32]
    */
-  private static final int MAX_DEPTH = Math.abs(MIN_ELEVATION);
+  private static final int MAX_DEPTH = 11000;
 
   /**
    * Largest holes dug into the earth are ~4km.
@@ -278,17 +279,17 @@ public class MeterRangeParser {
     MeasurementWrapper<DoubleAccuracy> elevation = parseMeterRange(min, max, precision);
 
     Set<OccurrenceIssue> issues = new HashSet<>();
-    if(elevation.containsNonNumeric) {
+    if (elevation.containsNonNumeric) {
       issues.add(OccurrenceIssue.ELEVATION_NON_NUMERIC);
     }
-    if(elevation.isInNauticalMiles || elevation.isInFathoms
+    if (elevation.isInNauticalMiles || elevation.isInFathoms
       || elevation.isInFeet || elevation.isInInches) {
       issues.add(OccurrenceIssue.ELEVATION_NOT_METRIC);
     }
-    if(elevation.minMaxSwapped) {
+    if (elevation.minMaxSwapped) {
       issues.add(OccurrenceIssue.ELEVATION_MIN_MAX_SWAPPED);
     }
-    if(elevation.tooLarge) {
+    if (elevation.tooLarge) {
       issues.add(OccurrenceIssue.ELEVATION_UNLIKELY);
     }
 
