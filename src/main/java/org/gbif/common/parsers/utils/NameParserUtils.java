@@ -21,5 +21,5 @@ import org.gbif.nameparser.NameParserGbifV1;
  * The name parser uses a background thread so avoid creating new parsers unless needed.
  */
 public class NameParserUtils {
-  public static final NameParser PARSER = new NameParserGbifV1(1000);
+  public static final NameParser PARSER = new NameParserGbifV1(20000);
 }
