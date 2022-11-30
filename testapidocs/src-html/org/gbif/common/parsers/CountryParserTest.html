@@ -172,18 +172,25 @@
 <span class="sourceLineNo">164</span>    assertParseSuccess(Country.UNITED_KINGDOM, "United Kingdom");<a name="line.164"></a>
 <span class="sourceLineNo">165</span>    assertParseSuccess(Country.UNITED_STATES, "United States of Ameirca");<a name="line.165"></a>
 <span class="sourceLineNo">166</span>    assertParseSuccess(Country.KOREA_NORTH, "Korea, Democratic People's Republic");<a name="line.166"></a>
-<span class="sourceLineNo">167</span><a name="line.167"></a>
-<span class="sourceLineNo">168</span>    assertParseSuccess(Country.KOSOVO, "XK");<a name="line.168"></a>
-<span class="sourceLineNo">169</span>  }<a name="line.169"></a>
-<span class="sourceLineNo">170</span><a name="line.170"></a>
-<span class="sourceLineNo">171</span>  @Test<a name="line.171"></a>
-<span class="sourceLineNo">172</span>  public void testParseNa() {<a name="line.172"></a>
-<span class="sourceLineNo">173</span>    assertParseSuccess(Country.NAMIBIA, "NA");<a name="line.173"></a>
-<span class="sourceLineNo">174</span>    assertParseFailure("N/A");<a name="line.174"></a>
-<span class="sourceLineNo">175</span>    assertParseFailure("n/a");<a name="line.175"></a>
-<span class="sourceLineNo">176</span>    assertParseFailure("n/k");<a name="line.176"></a>
-<span class="sourceLineNo">177</span>  }<a name="line.177"></a>
-<span class="sourceLineNo">178</span>}<a name="line.178"></a>
+<span class="sourceLineNo">167</span>    assertParseSuccess(Country.TURKEY, "Turkey");<a name="line.167"></a>
+<span class="sourceLineNo">168</span>    assertParseSuccess(Country.TURKEY, "Türkiye");<a name="line.168"></a>
+<span class="sourceLineNo">169</span>    assertParseSuccess(Country.TURKEY, "Turkiye");<a name="line.169"></a>
+<span class="sourceLineNo">170</span>    assertParseSuccess(Country.TURKEY, "Turkıye");<a name="line.170"></a>
+<span class="sourceLineNo">171</span>    assertParseSuccess(Country.TURKEY, "Republic of Türkiye");<a name="line.171"></a>
+<span class="sourceLineNo">172</span>    assertParseSuccess(Country.TURKEY, "REPUBLIC OF TÜRKİYE");<a name="line.172"></a>
+<span class="sourceLineNo">173</span>    assertParseSuccess(Country.TURKEY, "Republic of Turkey");<a name="line.173"></a>
+<span class="sourceLineNo">174</span><a name="line.174"></a>
+<span class="sourceLineNo">175</span>    assertParseSuccess(Country.KOSOVO, "XK");<a name="line.175"></a>
+<span class="sourceLineNo">176</span>  }<a name="line.176"></a>
+<span class="sourceLineNo">177</span><a name="line.177"></a>
+<span class="sourceLineNo">178</span>  @Test<a name="line.178"></a>
+<span class="sourceLineNo">179</span>  public void testParseNa() {<a name="line.179"></a>
+<span class="sourceLineNo">180</span>    assertParseSuccess(Country.NAMIBIA, "NA");<a name="line.180"></a>
+<span class="sourceLineNo">181</span>    assertParseFailure("N/A");<a name="line.181"></a>
+<span class="sourceLineNo">182</span>    assertParseFailure("n/a");<a name="line.182"></a>
+<span class="sourceLineNo">183</span>    assertParseFailure("n/k");<a name="line.183"></a>
+<span class="sourceLineNo">184</span>  }<a name="line.184"></a>
+<span class="sourceLineNo">185</span>}<a name="line.185"></a>
 
 
 

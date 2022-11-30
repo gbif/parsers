@@ -172,18 +172,25 @@
 <a class="jxr_linenumber" name="L164" href="#L164">164</a>     assertParseSuccess(Country.UNITED_KINGDOM, <span class="jxr_string">"United Kingdom"</span>);
 <a class="jxr_linenumber" name="L165" href="#L165">165</a>     assertParseSuccess(Country.UNITED_STATES, <span class="jxr_string">"United States of Ameirca"</span>);
 <a class="jxr_linenumber" name="L166" href="#L166">166</a>     assertParseSuccess(Country.KOREA_NORTH, <span class="jxr_string">"Korea, Democratic People's Republic"</span>);
-<a class="jxr_linenumber" name="L167" href="#L167">167</a> 
-<a class="jxr_linenumber" name="L168" href="#L168">168</a>     assertParseSuccess(Country.KOSOVO, <span class="jxr_string">"XK"</span>);
-<a class="jxr_linenumber" name="L169" href="#L169">169</a>   }
-<a class="jxr_linenumber" name="L170" href="#L170">170</a> 
-<a class="jxr_linenumber" name="L171" href="#L171">171</a>   @Test
-<a class="jxr_linenumber" name="L172" href="#L172">172</a>   <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testParseNa() {
-<a class="jxr_linenumber" name="L173" href="#L173">173</a>     assertParseSuccess(Country.NAMIBIA, <span class="jxr_string">"NA"</span>);
-<a class="jxr_linenumber" name="L174" href="#L174">174</a>     assertParseFailure(<span class="jxr_string">"N/A"</span>);
-<a class="jxr_linenumber" name="L175" href="#L175">175</a>     assertParseFailure(<span class="jxr_string">"n/a"</span>);
-<a class="jxr_linenumber" name="L176" href="#L176">176</a>     assertParseFailure(<span class="jxr_string">"n/k"</span>);
-<a class="jxr_linenumber" name="L177" href="#L177">177</a>   }
-<a class="jxr_linenumber" name="L178" href="#L178">178</a> }
+<a class="jxr_linenumber" name="L167" href="#L167">167</a>     assertParseSuccess(Country.TURKEY, <span class="jxr_string">"Turkey"</span>);
+<a class="jxr_linenumber" name="L168" href="#L168">168</a>     assertParseSuccess(Country.TURKEY, <span class="jxr_string">"Türkiye"</span>);
+<a class="jxr_linenumber" name="L169" href="#L169">169</a>     assertParseSuccess(Country.TURKEY, <span class="jxr_string">"Turkiye"</span>);
+<a class="jxr_linenumber" name="L170" href="#L170">170</a>     assertParseSuccess(Country.TURKEY, <span class="jxr_string">"Turkıye"</span>);
+<a class="jxr_linenumber" name="L171" href="#L171">171</a>     assertParseSuccess(Country.TURKEY, <span class="jxr_string">"Republic of Türkiye"</span>);
+<a class="jxr_linenumber" name="L172" href="#L172">172</a>     assertParseSuccess(Country.TURKEY, <span class="jxr_string">"REPUBLIC OF TÜRKİYE"</span>);
+<a class="jxr_linenumber" name="L173" href="#L173">173</a>     assertParseSuccess(Country.TURKEY, <span class="jxr_string">"Republic of Turkey"</span>);
+<a class="jxr_linenumber" name="L174" href="#L174">174</a> 
+<a class="jxr_linenumber" name="L175" href="#L175">175</a>     assertParseSuccess(Country.KOSOVO, <span class="jxr_string">"XK"</span>);
+<a class="jxr_linenumber" name="L176" href="#L176">176</a>   }
+<a class="jxr_linenumber" name="L177" href="#L177">177</a> 
+<a class="jxr_linenumber" name="L178" href="#L178">178</a>   @Test
+<a class="jxr_linenumber" name="L179" href="#L179">179</a>   <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testParseNa() {
+<a class="jxr_linenumber" name="L180" href="#L180">180</a>     assertParseSuccess(Country.NAMIBIA, <span class="jxr_string">"NA"</span>);
+<a class="jxr_linenumber" name="L181" href="#L181">181</a>     assertParseFailure(<span class="jxr_string">"N/A"</span>);
+<a class="jxr_linenumber" name="L182" href="#L182">182</a>     assertParseFailure(<span class="jxr_string">"n/a"</span>);
+<a class="jxr_linenumber" name="L183" href="#L183">183</a>     assertParseFailure(<span class="jxr_string">"n/k"</span>);
+<a class="jxr_linenumber" name="L184" href="#L184">184</a>   }
+<a class="jxr_linenumber" name="L185" href="#L185">185</a> }
 </pre>
 <hr/>
 <div id="footer">Copyright &#169; 2022 <a href="https://www.gbif.org">Global Biodiversity Information Facility (GBIF)</a>. All rights reserved.</div>
