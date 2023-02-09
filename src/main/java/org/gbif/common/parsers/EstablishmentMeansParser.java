@@ -16,6 +16,9 @@ package org.gbif.common.parsers;
 import org.gbif.api.vocabulary.EstablishmentMeans;
 import org.gbif.common.parsers.core.EnumParser;
 
+/**
+ * @deprecated replaced by the vocabulary server <a href="https://github.com/gbif/vocabulary">https://github.com/gbif/vocabulary</a>.
+ */
 @Deprecated
 public class EstablishmentMeansParser extends EnumParser<EstablishmentMeans> {
 

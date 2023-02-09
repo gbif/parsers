@@ -18,6 +18,8 @@ import org.gbif.common.parsers.core.EnumParser;
 
 /**
  * Singleton implementation of the dictionary that uses the file /dictionaries/parse/life_stage.txt.
+ *
+ * @deprecated replaced by the vocabulary server <a href="https://github.com/gbif/vocabulary">https://github.com/gbif/vocabulary</a>.
  */
 @Deprecated
 public class LifeStageParser extends EnumParser<LifeStage> {
