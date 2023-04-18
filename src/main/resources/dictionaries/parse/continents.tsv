@@ -12,12 +12,8 @@ Asia-Tropical	ASIA
 Asie	ASIA
 Asien	ASIA
 Indian	ASIA
-Japan	ASIA
 New Guinea	ASIA
 Oriental	ASIA
-Adriatic Sea	EUROPE
-Baltic Sea	EUROPE
-English Channel	EUROPE
 EU	EUROPE
 Europa	EUROPE
 América Central	NORTH_AMERICA
@@ -29,8 +25,8 @@ Amérique du Nord	NORTH_AMERICA
 C America	NORTH_AMERICA
 Caribbean Islands	NORTH_AMERICA
 Caribbean	NORTH_AMERICA
-Caribbean Sea	NORTH_AMERICA
 Central America & Caribbean	NORTH_AMERICA
+Central America - Neotropics	NORTH_AMERICA
 Central America	NORTH_AMERICA
 Mesoamerica	NORTH_AMERICA
 Middle America	NORTH_AMERICA
@@ -50,7 +46,6 @@ Australia	OCEANIA
 Australia & Oceania	OCEANIA
 Hawaiian Islands	OCEANIA
 Océanie	OCEANIA
-Pacific	OCEANIA
 América del Sur	SOUTH_AMERICA
 América do Sul	SOUTH_AMERICA
 Amérique du Sud	SOUTH_AMERICA
