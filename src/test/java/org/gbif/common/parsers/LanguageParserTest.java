@@ -50,7 +50,15 @@ public class LanguageParserTest extends ParserTestBase<Language> {
     assertParseSuccess(Language.ENGLISH, "eng_US");
     assertParseSuccess(Language.ENGLISH, "english");
     assertParseSuccess(Language.PORTUGUESE, "PORTUGUES");
-
+    assertParseSuccess(Language.SPANISH, "es-419");
+    assertParseSuccess(Language.SWEDISH, "sv");
+    assertParseSuccess(Language.SWEDISH, "sv_FI");
+    assertParseSuccess(Language.SWEDISH, "sv_fi");
+    assertParseSuccess(Language.SWEDISH, "swe");
+    assertParseSuccess(Language.SWEDISH, "swe_FI");
+    assertParseSuccess(Language.SWEDISH, "swe_fi");
+    assertParseSuccess(Language.SWEDISH, "sv-FI");
+    assertParseSuccess(Language.SWEDISH, "sv-fi");
   }
 
 }

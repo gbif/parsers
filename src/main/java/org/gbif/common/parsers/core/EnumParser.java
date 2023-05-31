@@ -38,7 +38,8 @@ public class EnumParser<T extends Enum<T>> extends FileBasedDictionaryParser<T> 
       Arrays.asList(
           "N/A", "N/a", "n/a", "n/A", "n.a.", // Not available
           "N/K", "N/k", "n/k", "n/K", "n.k.", // Not known
-          "UNK.", "Unk.", "unk.", "UNK", "Unk", "unk" // Unknown
+          "UNK.", "Unk.", "unk.", "UNK", "Unk", "unk", // Unknown
+          "No data", "Not provided"
       ));
 
   protected EnumParser(Class<T> clazz, boolean allowDigits, final InputStream... inputs) {

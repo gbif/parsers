@@ -37,7 +37,7 @@ import org.apache.commons.lang3.StringUtils;
 public class LanguageParser extends EnumParser<Language> {
 
   private static LanguageParser singletonObject = null;
-  private static final Pattern LOCALE = Pattern.compile("^[a-zA-Z]{2,3}_[a-zA-Z]");
+  private static final Pattern LOCALE = Pattern.compile("^[a-zA-Z]{2,3}[_-][a-zA-Z0-9]");
   private static final List<Pattern> REMOVE_FROM_NAME_PATTERNS = Arrays.asList(
       // remove brackets
       Pattern.compile("\\(.\\)"),
@@ -165,12 +165,19 @@ public class LanguageParser extends EnumParser<Language> {
   protected String normalize(String value) {
     if (value != null) {
       /**
-       * A language string could come in as a locale like "en_US" or if it was constructed improperly "eng_US", so
-       * extract only the part before the underscore. Only if it contains an "_" is parsing attempted.
+       * A language string could come in as a locale like "en-US", "eng-US" or "es-419", or "en_US" in some systems, so
+       * extract only the part before the hyphen/underscore. Only if it contains "-" or "_" is parsing attempted.
        * Whether it actually represents an ISO 369 language code is left for the language parser to determine.
+       *
+       * https://en.wikipedia.org/wiki/IETF_language_tag
+       *
+       * (Note the form en_US is used by Java and many Unix systems.)
        */
       if (LOCALE.matcher(value).find()) {
-        int index = value.indexOf("_");
+        int index = value.indexOf("-");
+        if (index == -1) {
+          index = value.indexOf("_");
+        }
         // only allow underscore
         if (index > 1 && index < 4 ) {
           return super.normalize(value.substring(0, index));
