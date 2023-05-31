@@ -45,7 +45,7 @@
 <span class="sourceLineNo">037</span>public class LanguageParser extends EnumParser&lt;Language&gt; {<a name="line.37"></a>
 <span class="sourceLineNo">038</span><a name="line.38"></a>
 <span class="sourceLineNo">039</span>  private static LanguageParser singletonObject = null;<a name="line.39"></a>
-<span class="sourceLineNo">040</span>  private static final Pattern LOCALE = Pattern.compile("^[a-zA-Z]{2,3}_[a-zA-Z]");<a name="line.40"></a>
+<span class="sourceLineNo">040</span>  private static final Pattern LOCALE = Pattern.compile("^[a-zA-Z]{2,3}[_-][a-zA-Z0-9]");<a name="line.40"></a>
 <span class="sourceLineNo">041</span>  private static final List&lt;Pattern&gt; REMOVE_FROM_NAME_PATTERNS = Arrays.asList(<a name="line.41"></a>
 <span class="sourceLineNo">042</span>      // remove brackets<a name="line.42"></a>
 <span class="sourceLineNo">043</span>      Pattern.compile("\\(.\\)"),<a name="line.43"></a>
@@ -173,31 +173,38 @@
 <span class="sourceLineNo">165</span>  protected String normalize(String value) {<a name="line.165"></a>
 <span class="sourceLineNo">166</span>    if (value != null) {<a name="line.166"></a>
 <span class="sourceLineNo">167</span>      /**<a name="line.167"></a>
-<span class="sourceLineNo">168</span>       * A language string could come in as a locale like "en_US" or if it was constructed improperly "eng_US", so<a name="line.168"></a>
-<span class="sourceLineNo">169</span>       * extract only the part before the underscore. Only if it contains an "_" is parsing attempted.<a name="line.169"></a>
+<span class="sourceLineNo">168</span>       * A language string could come in as a locale like "en-US", "eng-US" or "es-419", or "en_US" in some systems, so<a name="line.168"></a>
+<span class="sourceLineNo">169</span>       * extract only the part before the hyphen/underscore. Only if it contains "-" or "_" is parsing attempted.<a name="line.169"></a>
 <span class="sourceLineNo">170</span>       * Whether it actually represents an ISO 369 language code is left for the language parser to determine.<a name="line.170"></a>
-<span class="sourceLineNo">171</span>       */<a name="line.171"></a>
-<span class="sourceLineNo">172</span>      if (LOCALE.matcher(value).find()) {<a name="line.172"></a>
-<span class="sourceLineNo">173</span>        int index = value.indexOf("_");<a name="line.173"></a>
-<span class="sourceLineNo">174</span>        // only allow underscore<a name="line.174"></a>
-<span class="sourceLineNo">175</span>        if (index &gt; 1 &amp;&amp; index &lt; 4 ) {<a name="line.175"></a>
-<span class="sourceLineNo">176</span>          return super.normalize(value.substring(0, index));<a name="line.176"></a>
-<span class="sourceLineNo">177</span>        }<a name="line.177"></a>
-<span class="sourceLineNo">178</span>      }<a name="line.178"></a>
-<span class="sourceLineNo">179</span>      return super.normalize(value);<a name="line.179"></a>
-<span class="sourceLineNo">180</span>    }<a name="line.180"></a>
-<span class="sourceLineNo">181</span>    return null;<a name="line.181"></a>
-<span class="sourceLineNo">182</span>  }<a name="line.182"></a>
-<span class="sourceLineNo">183</span><a name="line.183"></a>
-<span class="sourceLineNo">184</span>  public static LanguageParser getInstance() {<a name="line.184"></a>
-<span class="sourceLineNo">185</span>    synchronized (LanguageParser.class) {<a name="line.185"></a>
-<span class="sourceLineNo">186</span>      if (singletonObject == null) {<a name="line.186"></a>
-<span class="sourceLineNo">187</span>        singletonObject = new LanguageParser();<a name="line.187"></a>
-<span class="sourceLineNo">188</span>      }<a name="line.188"></a>
-<span class="sourceLineNo">189</span>    }<a name="line.189"></a>
-<span class="sourceLineNo">190</span>    return singletonObject;<a name="line.190"></a>
-<span class="sourceLineNo">191</span>  }<a name="line.191"></a>
-<span class="sourceLineNo">192</span>}<a name="line.192"></a>
+<span class="sourceLineNo">171</span>       *<a name="line.171"></a>
+<span class="sourceLineNo">172</span>       * https://en.wikipedia.org/wiki/IETF_language_tag<a name="line.172"></a>
+<span class="sourceLineNo">173</span>       *<a name="line.173"></a>
+<span class="sourceLineNo">174</span>       * (Note the form en_US is used by Java and many Unix systems.)<a name="line.174"></a>
+<span class="sourceLineNo">175</span>       */<a name="line.175"></a>
+<span class="sourceLineNo">176</span>      if (LOCALE.matcher(value).find()) {<a name="line.176"></a>
+<span class="sourceLineNo">177</span>        int index = value.indexOf("-");<a name="line.177"></a>
+<span class="sourceLineNo">178</span>        if (index == -1) {<a name="line.178"></a>
+<span class="sourceLineNo">179</span>          index = value.indexOf("_");<a name="line.179"></a>
+<span class="sourceLineNo">180</span>        }<a name="line.180"></a>
+<span class="sourceLineNo">181</span>        // only allow underscore<a name="line.181"></a>
+<span class="sourceLineNo">182</span>        if (index &gt; 1 &amp;&amp; index &lt; 4 ) {<a name="line.182"></a>
+<span class="sourceLineNo">183</span>          return super.normalize(value.substring(0, index));<a name="line.183"></a>
+<span class="sourceLineNo">184</span>        }<a name="line.184"></a>
+<span class="sourceLineNo">185</span>      }<a name="line.185"></a>
+<span class="sourceLineNo">186</span>      return super.normalize(value);<a name="line.186"></a>
+<span class="sourceLineNo">187</span>    }<a name="line.187"></a>
+<span class="sourceLineNo">188</span>    return null;<a name="line.188"></a>
+<span class="sourceLineNo">189</span>  }<a name="line.189"></a>
+<span class="sourceLineNo">190</span><a name="line.190"></a>
+<span class="sourceLineNo">191</span>  public static LanguageParser getInstance() {<a name="line.191"></a>
+<span class="sourceLineNo">192</span>    synchronized (LanguageParser.class) {<a name="line.192"></a>
+<span class="sourceLineNo">193</span>      if (singletonObject == null) {<a name="line.193"></a>
+<span class="sourceLineNo">194</span>        singletonObject = new LanguageParser();<a name="line.194"></a>
+<span class="sourceLineNo">195</span>      }<a name="line.195"></a>
+<span class="sourceLineNo">196</span>    }<a name="line.196"></a>
+<span class="sourceLineNo">197</span>    return singletonObject;<a name="line.197"></a>
+<span class="sourceLineNo">198</span>  }<a name="line.198"></a>
+<span class="sourceLineNo">199</span>}<a name="line.199"></a>
 
 
 

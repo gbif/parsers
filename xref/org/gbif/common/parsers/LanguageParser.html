@@ -45,7 +45,7 @@
 <a class="jxr_linenumber" name="L37" href="#L37">37</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a name="LanguageParser" href="../../../../org/gbif/common/parsers/LanguageParser.html#LanguageParser">LanguageParser</a> <strong class="jxr_keyword">extends</strong> EnumParser&lt;Language&gt; {
 <a class="jxr_linenumber" name="L38" href="#L38">38</a>  
 <a class="jxr_linenumber" name="L39" href="#L39">39</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <a name="LanguageParser" href="../../../../org/gbif/common/parsers/LanguageParser.html#LanguageParser">LanguageParser</a> singletonObject = <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L40" href="#L40">40</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Pattern LOCALE = Pattern.compile(<span class="jxr_string">"^[a-zA-Z]{2,3}_[a-zA-Z]"</span>);
+<a class="jxr_linenumber" name="L40" href="#L40">40</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Pattern LOCALE = Pattern.compile(<span class="jxr_string">"^[a-zA-Z]{2,3}[_-][a-zA-Z0-9]"</span>);
 <a class="jxr_linenumber" name="L41" href="#L41">41</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> List&lt;Pattern&gt; REMOVE_FROM_NAME_PATTERNS = Arrays.asList(
 <a class="jxr_linenumber" name="L42" href="#L42">42</a>        <em class="jxr_comment">// remove brackets</em>
 <a class="jxr_linenumber" name="L43" href="#L43">43</a>        Pattern.compile(<span class="jxr_string">"&#92;&#92;(.&#92;&#92;)"</span>),
@@ -173,31 +173,38 @@
 <a class="jxr_linenumber" name="L165" href="#L165">165</a>   <strong class="jxr_keyword">protected</strong> String normalize(String value) {
 <a class="jxr_linenumber" name="L166" href="#L166">166</a>     <strong class="jxr_keyword">if</strong> (value != <strong class="jxr_keyword">null</strong>) {
 <a class="jxr_linenumber" name="L167" href="#L167">167</a>       <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L168" href="#L168">168</a> <em class="jxr_javadoccomment">       * A language string could come in as a locale like "en_US" or if it was constructed improperly "eng_US", so</em>
-<a class="jxr_linenumber" name="L169" href="#L169">169</a> <em class="jxr_javadoccomment">       * extract only the part before the underscore. Only if it contains an "_" is parsing attempted.</em>
+<a class="jxr_linenumber" name="L168" href="#L168">168</a> <em class="jxr_javadoccomment">       * A language string could come in as a locale like "en-US", "eng-US" or "es-419", or "en_US" in some systems, so</em>
+<a class="jxr_linenumber" name="L169" href="#L169">169</a> <em class="jxr_javadoccomment">       * extract only the part before the hyphen/underscore. Only if it contains "-" or "_" is parsing attempted.</em>
 <a class="jxr_linenumber" name="L170" href="#L170">170</a> <em class="jxr_javadoccomment">       * Whether it actually represents an ISO 369 language code is left for the language parser to determine.</em>
-<a class="jxr_linenumber" name="L171" href="#L171">171</a> <em class="jxr_javadoccomment">       */</em>
-<a class="jxr_linenumber" name="L172" href="#L172">172</a>       <strong class="jxr_keyword">if</strong> (LOCALE.matcher(value).find()) {
-<a class="jxr_linenumber" name="L173" href="#L173">173</a>         <strong class="jxr_keyword">int</strong> index = value.indexOf(<span class="jxr_string">"_"</span>);
-<a class="jxr_linenumber" name="L174" href="#L174">174</a>         <em class="jxr_comment">// only allow underscore</em>
-<a class="jxr_linenumber" name="L175" href="#L175">175</a>         <strong class="jxr_keyword">if</strong> (index &gt; 1 &amp;&amp; index &lt; 4 ) {
-<a class="jxr_linenumber" name="L176" href="#L176">176</a>           <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">super</strong>.normalize(value.substring(0, index));
-<a class="jxr_linenumber" name="L177" href="#L177">177</a>         }
-<a class="jxr_linenumber" name="L178" href="#L178">178</a>       }
-<a class="jxr_linenumber" name="L179" href="#L179">179</a>       <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">super</strong>.normalize(value);
-<a class="jxr_linenumber" name="L180" href="#L180">180</a>     }
-<a class="jxr_linenumber" name="L181" href="#L181">181</a>     <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L182" href="#L182">182</a>   }
-<a class="jxr_linenumber" name="L183" href="#L183">183</a> 
-<a class="jxr_linenumber" name="L184" href="#L184">184</a>   <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <a name="LanguageParser" href="../../../../org/gbif/common/parsers/LanguageParser.html#LanguageParser">LanguageParser</a> getInstance() {
-<a class="jxr_linenumber" name="L185" href="#L185">185</a>     <strong class="jxr_keyword">synchronized</strong> (LanguageParser.<strong class="jxr_keyword">class</strong>) {
-<a class="jxr_linenumber" name="L186" href="#L186">186</a>       <strong class="jxr_keyword">if</strong> (singletonObject == <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L187" href="#L187">187</a>         singletonObject = <strong class="jxr_keyword">new</strong> <a name="LanguageParser" href="../../../../org/gbif/common/parsers/LanguageParser.html#LanguageParser">LanguageParser</a>();
-<a class="jxr_linenumber" name="L188" href="#L188">188</a>       }
-<a class="jxr_linenumber" name="L189" href="#L189">189</a>     }
-<a class="jxr_linenumber" name="L190" href="#L190">190</a>     <strong class="jxr_keyword">return</strong> singletonObject;
-<a class="jxr_linenumber" name="L191" href="#L191">191</a>   }
-<a class="jxr_linenumber" name="L192" href="#L192">192</a> }
+<a class="jxr_linenumber" name="L171" href="#L171">171</a> <em class="jxr_javadoccomment">       *</em>
+<a class="jxr_linenumber" name="L172" href="#L172">172</a> <em class="jxr_javadoccomment">       * <a href="https://en.wikipedia.org/wiki/IETF_language_tag" target="alexandria_uri">https://en.wikipedia.org/wiki/IETF_language_tag</a></em>
+<a class="jxr_linenumber" name="L173" href="#L173">173</a> <em class="jxr_javadoccomment">       *</em>
+<a class="jxr_linenumber" name="L174" href="#L174">174</a> <em class="jxr_javadoccomment">       * (Note the form en_US is used by Java and many Unix systems.)</em>
+<a class="jxr_linenumber" name="L175" href="#L175">175</a> <em class="jxr_javadoccomment">       */</em>
+<a class="jxr_linenumber" name="L176" href="#L176">176</a>       <strong class="jxr_keyword">if</strong> (LOCALE.matcher(value).find()) {
+<a class="jxr_linenumber" name="L177" href="#L177">177</a>         <strong class="jxr_keyword">int</strong> index = value.indexOf(<span class="jxr_string">"-"</span>);
+<a class="jxr_linenumber" name="L178" href="#L178">178</a>         <strong class="jxr_keyword">if</strong> (index == -1) {
+<a class="jxr_linenumber" name="L179" href="#L179">179</a>           index = value.indexOf(<span class="jxr_string">"_"</span>);
+<a class="jxr_linenumber" name="L180" href="#L180">180</a>         }
+<a class="jxr_linenumber" name="L181" href="#L181">181</a>         <em class="jxr_comment">// only allow underscore</em>
+<a class="jxr_linenumber" name="L182" href="#L182">182</a>         <strong class="jxr_keyword">if</strong> (index &gt; 1 &amp;&amp; index &lt; 4 ) {
+<a class="jxr_linenumber" name="L183" href="#L183">183</a>           <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">super</strong>.normalize(value.substring(0, index));
+<a class="jxr_linenumber" name="L184" href="#L184">184</a>         }
+<a class="jxr_linenumber" name="L185" href="#L185">185</a>       }
+<a class="jxr_linenumber" name="L186" href="#L186">186</a>       <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">super</strong>.normalize(value);
+<a class="jxr_linenumber" name="L187" href="#L187">187</a>     }
+<a class="jxr_linenumber" name="L188" href="#L188">188</a>     <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L189" href="#L189">189</a>   }
+<a class="jxr_linenumber" name="L190" href="#L190">190</a> 
+<a class="jxr_linenumber" name="L191" href="#L191">191</a>   <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <a name="LanguageParser" href="../../../../org/gbif/common/parsers/LanguageParser.html#LanguageParser">LanguageParser</a> getInstance() {
+<a class="jxr_linenumber" name="L192" href="#L192">192</a>     <strong class="jxr_keyword">synchronized</strong> (LanguageParser.<strong class="jxr_keyword">class</strong>) {
+<a class="jxr_linenumber" name="L193" href="#L193">193</a>       <strong class="jxr_keyword">if</strong> (singletonObject == <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L194" href="#L194">194</a>         singletonObject = <strong class="jxr_keyword">new</strong> <a name="LanguageParser" href="../../../../org/gbif/common/parsers/LanguageParser.html#LanguageParser">LanguageParser</a>();
+<a class="jxr_linenumber" name="L195" href="#L195">195</a>       }
+<a class="jxr_linenumber" name="L196" href="#L196">196</a>     }
+<a class="jxr_linenumber" name="L197" href="#L197">197</a>     <strong class="jxr_keyword">return</strong> singletonObject;
+<a class="jxr_linenumber" name="L198" href="#L198">198</a>   }
+<a class="jxr_linenumber" name="L199" href="#L199">199</a> }
 </pre>
 <hr/>
 <div id="footer">Copyright &#169; 2023 <a href="https://www.gbif.org">Global Biodiversity Information Facility (GBIF)</a>. All rights reserved.</div>
