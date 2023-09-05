@@ -100,6 +100,13 @@ class ThreeTenNumericalDateParser implements TemporalParser {
     .optionalEnd()
     .toFormatter().withResolverStyle(ResolverStyle.STRICT);
 
+  private static final DateTimeFormatter ISO_ORDINAL_PARSER = new DateTimeFormatterBuilder()
+    .appendValue(ChronoField.YEAR, 2, 4, SignStyle.NEVER)
+    .optionalStart().appendLiteral('-')
+    .appendValue(ChronoField.DAY_OF_YEAR, 1, 3, SignStyle.NEVER)
+    .optionalEnd()
+    .toFormatter().withResolverStyle(ResolverStyle.STRICT);
+
   /*
    * Brackets [] represent optional sections of the pattern. (And subsequent patters don't make parts optional, if an earlier pattern already matched that.)
    * Unfortunately, it's not possible to specify an arbitrary decimal for seconds in one pattern.
@@ -391,7 +398,10 @@ class ThreeTenNumericalDateParser implements TemporalParser {
   public ParseResult<TemporalAccessor> parse(
     @Nullable String year, @Nullable String month, @Nullable String day) {
 
-    // avoid possible misinterpretation when month is not provided (but day is)
+    // avoid possible misinterpretation when parts is not provided
+    if (StringUtils.isBlank(year) && (StringUtils.isNotBlank(month) || StringUtils.isNotBlank(day))) {
+      return ParseResult.fail();
+    }
     if (StringUtils.isBlank(month) && StringUtils.isNotBlank(day)) {
       return ParseResult.fail();
     }
@@ -411,7 +421,10 @@ class ThreeTenNumericalDateParser implements TemporalParser {
   @Override
   public ParseResult<TemporalAccessor> parse(@Nullable Integer year, @Nullable Integer month, @Nullable Integer day) {
 
-    // avoid possible misinterpretation when month is not provided (but day is)
+    // avoid possible misinterpretation when parts are not provided
+    if (year == null && (month != null || day != null)) {
+      return ParseResult.fail();
+    }
     if (month == null && day != null) {
       return ParseResult.fail();
     }
@@ -422,6 +435,38 @@ class ThreeTenNumericalDateParser implements TemporalParser {
         .collect(Collectors.joining(String.valueOf(CHAR_HYPHEN)));
 
     TemporalAccessor tp = tryParse(date, ISO_PARSER, null);
+
+    if (tp != null) {
+      return ParseResult.success(ParseResult.CONFIDENCE.DEFINITE, tp);
+    }
+    return ParseResult.fail();
+  }
+
+  @Override
+  public ParseResult<TemporalAccessor> parse(@Nullable String year, @Nullable String dayOfYear) {
+    dayOfYear = StringUtils.trimToNull(dayOfYear);
+    if (dayOfYear.length() == 1) {
+      dayOfYear = "00" + dayOfYear;
+    } else if (dayOfYear.length() == 2) {
+      dayOfYear = "0" + dayOfYear;
+    }
+
+    String date = StringUtils.trimToNull(year) + '-' + dayOfYear;
+
+    TemporalAccessor tp = tryParse(date, ISO_ORDINAL_PARSER, null);
+
+    if (tp != null) {
+      return ParseResult.success(ParseResult.CONFIDENCE.DEFINITE, tp);
+    }
+    return ParseResult.fail();
+  }
+
+  @Override
+  public ParseResult<TemporalAccessor> parse(@Nullable Integer year, @Nullable Integer dayOfYear) {
+
+    String date = year + "-" + dayOfYear;
+
+    TemporalAccessor tp = tryParse(date, ISO_ORDINAL_PARSER, null);
 
     if (tp != null) {
       return ParseResult.success(ParseResult.CONFIDENCE.DEFINITE, tp);

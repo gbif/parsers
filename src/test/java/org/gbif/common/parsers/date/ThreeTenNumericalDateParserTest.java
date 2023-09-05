@@ -177,6 +177,17 @@ public class ThreeTenNumericalDateParserTest {
     // year alone
     assertEquals(Year.of(1978), Year.from(parser.parse("1978").getPayload()));
     // assertEquals(Year.of(1978), Year.from(parser.parse("78").getPayload()));
+
+    // year and dayOfYear
+    assertEquals(LocalDate.of(1978, Month.DECEMBER, 21), LocalDate.from(parser.parse(1978, 355).getPayload()));
+    assertEquals(LocalDate.of(1978, Month.DECEMBER, 21), LocalDate.from(parser.parse("1978", "355").getPayload()));
+    assertEquals(LocalDate.of(1986, Month.MARCH, 13), LocalDate.from(parser.parse(1986, 72).getPayload()));
+    assertEquals(LocalDate.of(1986, Month.MARCH, 13), LocalDate.from(parser.parse("1986", "72").getPayload()));
+
+    // missing pieces
+    assertEquals(ParseResult.STATUS.FAIL, PARSER.parse(null, 12, 21).getStatus());
+    assertEquals(ParseResult.STATUS.FAIL, PARSER.parse(null, 12, null).getStatus());
+    assertEquals(ParseResult.STATUS.FAIL, PARSER.parse(2001, null, 21).getStatus());
   }
 
   @Test

@@ -76,4 +76,18 @@ public class CustomizedTextDateParser implements TemporalParser, Serializable {
     @Nullable Integer day) {
     return parser.parse(year, month, day);
   }
+
+  @Override
+  public ParseResult<TemporalAccessor> parse(
+    @Nullable String year,
+    @Nullable String dayOfYear) {
+    return parser.parse(year, dayOfYear);
+  }
+
+  @Override
+  public ParseResult<TemporalAccessor> parse(
+    @Nullable Integer year,
+    @Nullable Integer dayOfYear) {
+    return parser.parse(year, dayOfYear);
+  }
 }

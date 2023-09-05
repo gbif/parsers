@@ -155,4 +155,29 @@ class TextDateParser implements TemporalParser, Serializable {
   public ParseResult<TemporalAccessor> parse(@Nullable Integer year, @Nullable Integer month, @Nullable Integer day) {
     return NUMERICAL_DATE_PARSER.parse(year, month, day);
   }
+
+  /**
+   * Parse date parts into a TemporalAccessor.
+   * The {@link DatePartsNormalizer} will be applied on raw data.
+   */
+  @Override
+  public ParseResult<TemporalAccessor> parse(String year, String dayOfYear) {
+    DatePartsNormalizer.NormalizedYearDayOfYear normalizedYearDayOfYear = DATE_PARTS_NORMALIZER.normalize(
+      year, dayOfYear);
+
+    ParseResult<TemporalAccessor> parseResult = NUMERICAL_DATE_PARSER.parse(normalizedYearDayOfYear.getYear(),
+      normalizedYearDayOfYear.getDayOfYear());
+
+    // If we got a successful parsing BUT a part of the date was discarded we reduce confidence.
+    if (parseResult.isSuccessful() && normalizedYearDayOfYear.containsDiscardedPart()) {
+      return ParseResult.success(ParseResult.CONFIDENCE.PROBABLE, parseResult.getPayload());
+    }
+
+    return parseResult;
+  }
+
+  @Override
+  public ParseResult<TemporalAccessor> parse(@Nullable Integer year, @Nullable Integer dayOfYear) {
+    return NUMERICAL_DATE_PARSER.parse(year, dayOfYear);
+  }
 }

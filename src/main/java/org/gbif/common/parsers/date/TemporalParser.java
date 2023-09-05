@@ -81,4 +81,22 @@ public interface TemporalParser extends Parsable<TemporalAccessor> {
    * @return result, never null
    */
   ParseResult<TemporalAccessor> parse(@Nullable Integer year, @Nullable Integer month, @Nullable Integer day);
+
+  /**
+   * Parse year, dayOfYear strings as a TemporalAccessor.
+   *
+   * @param year numerical value of a year
+   * @param dayOfYear numerical value of a day of the year
+   * @return result, never null
+   */
+  ParseResult<TemporalAccessor> parse(@Nullable String year, @Nullable String dayOfYear);
+
+  /**
+   * Parse year, dayOfYear integers as a TemporalAccessor.
+   *
+   * @param year numerical value of a year
+   * @param dayOfYear numerical value of a day of the year
+   * @return result, never null
+   */
+  ParseResult<TemporalAccessor> parse(@Nullable Integer year, @Nullable Integer dayOfYear);
 }

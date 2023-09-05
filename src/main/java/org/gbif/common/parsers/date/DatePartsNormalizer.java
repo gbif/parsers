@@ -121,7 +121,7 @@ public class DatePartsNormalizer {
    * @param day
    * @return result of normalization as NormalizedYearMonthDay
    */
-  public NormalizedYearMonthDay normalize(String year, String month, String day){
+  public NormalizedYearMonthDay normalize(String year, String month, String day) {
     year = normalizeFloat(year);
     month = normalizeFloat(month);
     day = normalizeFloat(day);
@@ -140,6 +140,26 @@ public class DatePartsNormalizer {
     boolean dayDiscarded = wasDiscarded(day, iDay);
 
     return new NormalizedYearMonthDay(iYear, iMonth, iDay, yearDiscarded, monthDiscarded, dayDiscarded);
+  }
+
+  /**
+   * Normalize date parts value.
+   *
+   * @param year
+   * @param dayOfYear
+   * @return result of normalization as NormalizedYearMonthDay
+   */
+  public NormalizedYearDayOfYear normalize(String year, String dayOfYear) {
+    year = normalizeFloat(year);
+    dayOfYear = normalizeFloat(dayOfYear);
+
+    Integer iYear = parseOrNull(year);
+    Integer iDayOfYear = parseOrNull(dayOfYear);
+
+    boolean yearDiscarded = wasDiscarded(year, iYear);
+    boolean dayOfYearDiscarded = wasDiscarded(dayOfYear, iDayOfYear);
+
+    return new NormalizedYearDayOfYear(iYear, iDayOfYear, yearDiscarded, dayOfYearDiscarded);
   }
 
   /**
@@ -211,8 +231,8 @@ public class DatePartsNormalizer {
    * @param intValue
    * @return the value should be considered discarded or not
    */
-  private boolean wasDiscarded(String strValue, Integer intValue){
-    if(StringUtils.isBlank(strValue) || STRING_NULL.equals(strValue)){
+  private boolean wasDiscarded(String strValue, Integer intValue) {
+    if (StringUtils.isBlank(strValue) || STRING_NULL.equals(strValue)) {
       return false;
     }
     return intValue == null;
@@ -284,6 +304,60 @@ public class DatePartsNormalizer {
               .append("mDiscarded", mDiscarded)
               .append("dDiscarded", dDiscarded)
               .toString();
+    }
+  }
+
+  /**
+   * Hold result of the normalization process.
+   */
+  public static class NormalizedYearDayOfYear {
+
+    private Integer year;
+    private Integer dayOfYear;
+
+    private boolean yDiscarded;
+    private boolean dDiscarded;
+
+    NormalizedYearDayOfYear(Integer year, Integer dayOfYear, boolean yDiscarded, boolean dDiscarded){
+      this.year = year;
+      this.dayOfYear = dayOfYear;
+
+      this.yDiscarded = yDiscarded;
+      this.dDiscarded = dDiscarded;
+    }
+
+    public Integer getYear() {
+      return year;
+    }
+
+    public Integer getDayOfYear() {
+      return dayOfYear;
+    }
+
+    public boolean yDiscarded() {
+      return yDiscarded;
+    }
+
+    public boolean dDiscarded() {
+      return dDiscarded;
+    }
+
+    /**
+     * The NormalizedYearDayOfYEar contains at least one discarded part.
+     * @return
+     */
+    public boolean containsDiscardedPart(){
+      return yDiscarded || dDiscarded;
+    }
+
+    @Override
+    public String toString() {
+      return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+        .append("year", year)
+        .append("dayOfYear", dayOfYear)
+        .append("yDiscarded", yDiscarded)
+        .append("dDiscarded", dDiscarded)
+        .toString();
     }
   }
 }
