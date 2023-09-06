@@ -23,7 +23,9 @@ import java.time.ZoneOffset;
 import java.time.temporal.ChronoField;
 import java.time.temporal.TemporalAccessor;
 import java.time.temporal.TemporalQueries;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 import javax.annotation.Nullable;
@@ -222,127 +224,70 @@ public class TemporalAccessorUtils {
 
   /**
    * The idea of "non-conflicting date parts" TemporalAccessor is to get as much of year, then month, then day as possible,
-   * ignoring null and stopping once there is a contradiction.
-   * e.g. 2005-02 and 2005-02-03 will return 2005-02-03.
+   * ignoring null and stopping once there is a contradiction.  Times are ignored for comparison, but the argument with
+   * the highest resolution is returned.
    *
-   * Note that if one of the 2 parameters is null the other one will be considered having the best resolution
+   * e.g. 2005-02, 2005-02-03, 2005-02-03T04:05:06 will return 2005-02-03T04:05:06.
+   *
+   * Null arguments are ignored.
    *
    * @param ta1
    * @param ta2
+   * @param ta3
    * @return TemporalAccessor representing the best resolution
    */
-  public static Optional<TemporalAccessor> nonConflictingDateParts(@Nullable TemporalAccessor ta1, @Nullable TemporalAccessor ta2) {
+  public static Optional<TemporalAccessor> nonConflictingDateParts(
+    @Nullable TemporalAccessor ta1, @Nullable TemporalAccessor ta2, @Nullable TemporalAccessor ta3) {
     // handle nulls combinations
-    if (ta1 == null && ta2 == null) {
+    if (ta1 == null && ta2 == null && ta3 == null) {
       return Optional.empty();
     }
-    if (ta1 == null) {
+    if (ta2 == null && ta3 == null) {
+      return Optional.of(ta1);
+    }
+    if (ta3 == null && ta1 == null) {
       return Optional.of(ta2);
     }
-    if (ta2 == null) {
-      return Optional.of(ta1);
+    if (ta1 == null && ta2 == null) {
+      return Optional.of(ta3);
     }
 
     AtomizedLocalDateTime ymd1 = AtomizedLocalDateTime.fromTemporalAccessor(ta1);
     AtomizedLocalDateTime ymd2 = AtomizedLocalDateTime.fromTemporalAccessor(ta2);
+    AtomizedLocalDateTime ymd3 = AtomizedLocalDateTime.fromTemporalAccessor(ta3);
 
-    final Integer year, month, day, hour, minute, second, millisecond;
+    List<AtomizedLocalDateTime> ymd = new ArrayList<>();
+    if (ymd1 != null) ymd.add(ymd1);
+    if (ymd2 != null) ymd.add(ymd2);
+    if (ymd3 != null) ymd.add(ymd3);
+
+    final Integer year, month;
+
     // If they both provide the year, it must match
-    if (ymd1.getYear() != null) {
-      if (ymd2.getYear() == null || ymd1.getYear().equals(ymd2.getYear())) {
-        year = ymd1.getYear();
-      } else {
-        return Optional.empty();
-      }
-    } else if (ymd2.getYear() != null) {
-      year = ymd2.getYear();
+    if (ymd.stream().map(m -> m.getYear()).distinct().count() == 1) {
+      year = ymd.stream().filter(m -> m.getYear() != null).findFirst().map(AtomizedLocalDateTime::getYear).orElse(null);
     } else {
       return Optional.empty();
     }
 
     // If they both provide the month, it must match
-    if (ymd1.getMonth() != null) {
-      if (ymd2.getMonth() == null || ymd1.getMonth().equals(ymd2.getMonth())) {
-        month = ymd1.getMonth();
-      } else {
-        return Optional.of(Year.of(year));
-      }
-    } else if (ymd2.getMonth() != null) {
-      month = ymd2.getMonth();
+    if (ymd.stream().map(m -> m.getMonth()).distinct().count() == 1) {
+      month = ymd.stream().filter(m -> m.getMonth() != null).findFirst().map(AtomizedLocalDateTime::getMonth).orElse(null);
     } else {
       return Optional.of(Year.of(year));
     }
 
     // If they both provide the day, it must match
-    if (ymd1.getDay() != null) {
-      if (ymd2.getDay() == null || ymd1.getDay().equals(ymd2.getDay())) {
-        day = ymd1.getDay();
+    if (ymd.stream().map(m -> m.getDay()).distinct().count() == 1) {
+      // Then return the one with the best resolution
+      return bestResolution(ta1, bestResolution(ta2, ta3).orElse(null));
+    } else {
+      if (month == null) {
+        return Optional.of(Year.of(year));
       } else {
         return Optional.of(YearMonth.of(year, month));
       }
-    } else if (ymd2.getDay() != null) {
-      day = ymd2.getDay();
-    } else {
-      return Optional.of(YearMonth.of(year, month));
     }
-
-    // If they both provide the hour, it must match
-    if (ymd1.getHour() != null) {
-      if (ymd2.getHour() == null) {
-        if (ymd1.getHour().equals(ymd2.getHour())) {
-          hour = ymd1.getHour();
-        } else {
-          // Only ta1/ymd1 has a time
-          return Optional.of(ta1);
-        }
-      } else {
-        return Optional.of(LocalDate.of(year, month, day));
-      }
-    } else if (ymd2.getHour() != null) {
-      // Only ta2/ymd2 has a time
-      return Optional.of(ta2);
-    } else {
-      return Optional.of(LocalDate.of(year, month, day));
-    }
-
-    // If they both provide the minute, it must match
-    if (ymd1.getMinute() != null) {
-      if (ymd2.getMinute() == null || ymd1.getMinute().equals(ymd2.getMinute())) {
-      } else {
-        return Optional.of(LocalDate.of(year, month, day));
-      }
-    } else if (ymd2.getMinute() != null) {
-    } else {
-      return Optional.of(LocalDate.of(year, month, day));
-    }
-
-    // If they both provide the second, it must match
-    if (ymd1.getSecond() != null) {
-      if (ymd2.getSecond() == null || ymd1.getSecond().equals(ymd2.getSecond())) {
-      } else {
-        return Optional.of(LocalDate.of(year, month, day));
-      }
-    } else if (ymd2.getSecond() != null) {
-    } else {
-      return Optional.of(LocalDate.of(year, month, day));
-    }
-
-    // If they both provide the millisecond, it must match
-    if (ymd1.getMillisecond() != null) {
-      if (ymd2.getMillisecond() == null || ymd1.getMillisecond().equals(ymd2.getMillisecond())) {
-      } else {
-        return Optional.of(LocalDate.of(year, month, day));
-      }
-    } else if (ymd2.getMillisecond() != null) {
-    } else {
-      return Optional.of(LocalDate.of(year, month, day));
-    }
-
-    if (ymd1.getResolution() > ymd2.getResolution()) {
-      return Optional.of(ta1);
-    }
-
-    return Optional.of(ta2);
   }
 
   /**
@@ -398,5 +343,39 @@ public class TemporalAccessorUtils {
     }
 
     return sameOrContained(ta1, ta2);
+  }
+
+  /**
+   * Given two TemporalAccessor with at least date resolution, this method checks if they represent the same
+   * date.
+   *
+   * If a null is provided, false will be returned.
+   */
+  public static boolean sameDate(@Nullable TemporalAccessor ta1, @Nullable TemporalAccessor ta2) {
+    // handle nulls combinations
+    if (ta1 == null || ta2 == null) {
+      return false;
+    }
+
+    AtomizedLocalDate ymd1 = AtomizedLocalDate.fromTemporalAccessor(ta1);
+    AtomizedLocalDate ymd2 = AtomizedLocalDate.fromTemporalAccessor(ta2);
+
+    // we only deal with complete Local Date
+    if (ymd1.isComplete() && ymd2.isComplete()) {
+      return ymd1.equals(ymd2);
+    }
+
+    return false;
+  }
+
+  public static Optional<TemporalAccessor> resolveAmbiguousDates(TemporalAccessor reliableTa, List<TemporalAccessor> dodgyTas) {
+    // A DD-MM-YYYY or MM/DD/YYYY date could be disambiguated by another date.
+    for (TemporalAccessor possibleTa : dodgyTas) {
+      if (TemporalAccessorUtils.sameDate(reliableTa, possibleTa)) {
+        return Optional.of(possibleTa);
+      }
+    }
+
+    return Optional.empty();
   }
 }
