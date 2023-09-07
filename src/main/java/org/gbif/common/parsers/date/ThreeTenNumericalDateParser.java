@@ -69,8 +69,8 @@ import static org.gbif.common.parsers.date.DateComponentOrdering.YW;
  *
  * <p>Note that LocalDateTime and LocalDate are TimeZone agnostic.
  *
- * <p>Be aware that LocalDate and LocalDateTime doesn't map correctly to Date object for all dates
- * before the Gregorian cut-off date (1582-10-15). To transform a such date use GregorianCalendar by
+ * <p>Be aware that LocalDate and LocalDateTime don't map correctly to Date object for all dates
+ * before the Gregorian cut-off date (1582-10-15). To transform such a date use GregorianCalendar by
  * setting the date according to the TemporalAccessor you got back from that class.
  *
  * <p>Thread-Safe after creation.
