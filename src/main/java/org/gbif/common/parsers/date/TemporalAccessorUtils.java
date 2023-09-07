@@ -42,7 +42,6 @@ public class TemporalAccessorUtils {
    * If the provided {@link TemporalAccessor} contains offset(timezone) information it will be used.
    * See {@link #toDate(TemporalAccessor, boolean)} for more details.
    *
-   * @param temporalAccessor
    * @return  the Date object or null if a Date object can not be created
    */
   public static Date toDate(TemporalAccessor temporalAccessor) {
@@ -58,13 +57,32 @@ public class TemporalAccessorUtils {
    *
    * Remember that a {@link Date} object will always display the date in the current timezone.
    *
-   * @param temporalAccessor
    * @param ignoreOffset in case offset information is available in the provided {@link TemporalAccessor}, should it
    *                     be used ?
    * @return the Date object or null if a Date object can not be created
    */
   public static Date toDate(TemporalAccessor temporalAccessor, boolean ignoreOffset) {
     return Date.from(toEarliestLocalDateTime(temporalAccessor, ignoreOffset).toInstant(ZoneOffset.UTC));
+  }
+
+  /**
+   * Removes any time zone, optionally adjusting the time using the zone offset first.
+   */
+  public static TemporalAccessor stripOffsetOrZone(TemporalAccessor temporalAccessor, boolean ignoreOffset) {
+    if (temporalAccessor == null) {
+      return null;
+    }
+
+    // Use offset if present
+    if (!ignoreOffset && temporalAccessor.isSupported(ChronoField.OFFSET_SECONDS)) {
+      return temporalAccessor.query(OffsetDateTime::from).atZoneSameInstant(UTC_ZONE_ID).toLocalDateTime();
+    }
+
+    if (temporalAccessor.isSupported(ChronoField.SECOND_OF_DAY)) {
+      return temporalAccessor.query(LocalDateTime::from);
+    }
+
+    return temporalAccessor;
   }
 
   /**
@@ -167,8 +185,6 @@ public class TemporalAccessorUtils {
    *
    * Note that if one of the 2 parameters is null the other one will be considered having the best resolution
    *
-   * @param ta1
-   * @param ta2
    * @return TemporalAccessor representing the best resolution
    */
   public static Optional<TemporalAccessor> bestResolution(@Nullable TemporalAccessor ta1, @Nullable TemporalAccessor ta2) {
@@ -231,9 +247,6 @@ public class TemporalAccessorUtils {
    *
    * Null arguments are ignored.
    *
-   * @param ta1
-   * @param ta2
-   * @param ta3
    * @return TemporalAccessor representing the best resolution
    */
   public static Optional<TemporalAccessor> nonConflictingDateParts(
@@ -368,6 +381,9 @@ public class TemporalAccessorUtils {
     return false;
   }
 
+  /**
+   * Returns a date from the list of dodgyTas which matches the reliableTa
+   */
   public static Optional<TemporalAccessor> resolveAmbiguousDates(TemporalAccessor reliableTa, List<TemporalAccessor> dodgyTas) {
     // A DD-MM-YYYY or MM/DD/YYYY date could be disambiguated by another date.
     for (TemporalAccessor possibleTa : dodgyTas) {
@@ -377,5 +393,18 @@ public class TemporalAccessorUtils {
     }
 
     return Optional.empty();
+  }
+
+  /**
+   * Returns the resolution of the TemporalAccessor: 1, 2, 3 for day, month year.  0 for null/empty.
+   */
+  public static int resolution(TemporalAccessor ta) {
+    if (ta == null) {
+      return 0;
+    }
+
+    AtomizedLocalDate ymd = AtomizedLocalDate.fromTemporalAccessor(ta);
+
+    return ymd.getResolution();
   }
 }

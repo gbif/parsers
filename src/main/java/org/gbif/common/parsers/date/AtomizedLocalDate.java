@@ -13,7 +13,6 @@
  */
 package org.gbif.common.parsers.date;
 
-
 import java.time.temporal.ChronoField;
 import java.time.temporal.TemporalAccessor;
 import java.util.Objects;
@@ -27,7 +26,6 @@ import org.apache.commons.lang3.builder.ToStringStyle;
  * {@link TemporalAccessor}.
  *
  * Thread-Safe, immutable class.
- *
  */
 public class AtomizedLocalDate {
 
@@ -40,19 +38,19 @@ public class AtomizedLocalDate {
 
   private final int resolution;
 
-  private AtomizedLocalDate(Integer year, Integer month, Integer day){
+  private AtomizedLocalDate(Integer year, Integer month, Integer day) {
     this.year = year;
     this.month = month;
     this.day = day;
 
     int res = 0;
-    if(year != null){
+    if (year != null) {
       res++;
     }
-    if(month != null){
+    if (month != null) {
       res++;
     }
-    if(day != null){
+    if (day != null) {
       res++;
     }
     resolution = res;
@@ -64,21 +62,21 @@ public class AtomizedLocalDate {
    * @param temporalAccessor
    * @return
    */
-  public static AtomizedLocalDate fromTemporalAccessor(TemporalAccessor temporalAccessor){
-    if(temporalAccessor == null){
+  public static AtomizedLocalDate fromTemporalAccessor(TemporalAccessor temporalAccessor) {
+    if (temporalAccessor == null) {
       return null;
     }
 
     Integer y = null, m = null, d = null;
-    if(temporalAccessor.isSupported(ChronoField.YEAR)){
+    if (temporalAccessor.isSupported(ChronoField.YEAR)) {
       y = temporalAccessor.get(ChronoField.YEAR);
     }
 
-    if(temporalAccessor.isSupported(ChronoField.MONTH_OF_YEAR)){
+    if (temporalAccessor.isSupported(ChronoField.MONTH_OF_YEAR)) {
       m = temporalAccessor.get(ChronoField.MONTH_OF_YEAR);
     }
 
-    if(temporalAccessor.isSupported(ChronoField.DAY_OF_MONTH)){
+    if (temporalAccessor.isSupported(ChronoField.DAY_OF_MONTH)) {
       d = temporalAccessor.get(ChronoField.DAY_OF_MONTH);
     }
 
@@ -97,7 +95,7 @@ public class AtomizedLocalDate {
     return day;
   }
 
-  public int getResolution(){
+  public int getResolution() {
     return resolution;
   }
 
