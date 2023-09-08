@@ -50,7 +50,7 @@ public class TemporalAccessorUtilsTest {
   private long YEAR2000_1JAN_0H_0M_0S_EPOCH_UTC = 946684800000l;
 
   @Test
-  public void testToDate(){
+  public void testToDate() {
     TemporalAccessor ta = LocalDate.of(2000, 1,1);
     Date date = TemporalAccessorUtils.toDate(ta, false);
     assertEquals(YEAR2000_1JAN_EPOCH_UTC, date.getTime());
@@ -72,7 +72,7 @@ public class TemporalAccessorUtilsTest {
   }
 
   @Test
-  public void testToDateWithTimeZone(){
+  public void testToDateWithTimeZone() {
 
     // Test with ZonedDateTime
     ZonedDateTime testZonedDateTime = ZonedDateTime.of(2000, 1, 1, 4 , 20, 0, 0, EUROPE_CENTRAL_TIME);
@@ -94,7 +94,7 @@ public class TemporalAccessorUtilsTest {
   }
 
   @Test
-  public void testBestResolution(){
+  public void testBestResolution() {
     TemporalAccessor ta1 = Year.of(2005);
     TemporalAccessor ta2 = YearMonth.of(2005, 1);
     TemporalAccessor result = TemporalAccessorUtils.bestResolution(ta1, ta2).get();
@@ -136,7 +136,7 @@ public class TemporalAccessorUtilsTest {
   }
 
   @Test
-  public void testLastDay(){
+  public void testLastDay() {
     TemporalAccessor year = Year.of(1996);
     assertEquals("1996-12-31T23:59:59", TemporalAccessorUtils.toLatestLocalDateTime(year,true).toString());
 
@@ -151,5 +151,25 @@ public class TemporalAccessorUtilsTest {
 
     TemporalAccessor ymdt = LocalDateTime.of(1996,2,3,1,20);
     assertEquals("1996-02-03T01:20", TemporalAccessorUtils.toLatestLocalDateTime(ymdt,true).toString());
+  }
+
+  @Test
+  public void testWithinRange() {
+    TemporalAccessor ymd = LocalDate.of(1996,2,3);
+    TemporalAccessor begin = LocalDateTime.of(1996,2,3,1,20);
+    TemporalAccessor end = LocalDateTime.of(1996,2,3,1,20);
+    assertTrue(TemporalAccessorUtils.withinRange(begin, end, ymd));
+
+    begin = LocalDateTime.of(1996,2,3,0,0);
+    assertTrue(TemporalAccessorUtils.withinRange(begin, end, ymd));
+
+    begin = LocalDateTime.of(1996,2,2,1,20);
+    assertTrue(TemporalAccessorUtils.withinRange(begin, end, ymd));
+
+    end = LocalDateTime.of(1999,12,4,1,20);
+    assertTrue(TemporalAccessorUtils.withinRange(begin, end, ymd));
+
+    ymd = LocalDate.of(1990,2,3);
+    assertFalse(TemporalAccessorUtils.withinRange(begin, end, ymd));
   }
 }

@@ -382,6 +382,25 @@ public class TemporalAccessorUtils {
   }
 
   /**
+   * Given two TemporalAccessor with at least day resolution (representing the bounds), and another TemporalAccessor
+   * of day resolution, this method checks if the bounds contain the third argument.
+   *
+   * If a null is provided, false will be returned.
+   */
+  public static boolean withinRange(@Nullable TemporalAccessor lowerBound, @Nullable TemporalAccessor upperBound, @Nullable TemporalAccessor queryTa) {
+    // handle nulls combinations
+    if (lowerBound == null || upperBound == null || queryTa == null) {
+      return false;
+    }
+
+    LocalDate earliest = toEarliestLocalDateTime(lowerBound, true).toLocalDate();
+    LocalDate latest = toLatestLocalDateTime(upperBound, true).toLocalDate();
+    LocalDate query = toEarliestLocalDateTime(queryTa, true).toLocalDate();
+
+    return earliest.compareTo(query) <= 0 && 0 <= latest.compareTo(query);
+  }
+
+  /**
    * Returns a date from the list of dodgyTas which matches the reliableTa
    */
   public static Optional<TemporalAccessor> resolveAmbiguousDates(TemporalAccessor reliableTa, List<TemporalAccessor> dodgyTas) {

@@ -307,6 +307,17 @@ public class MultiinputTemporalParserTest {
     assertResult(y, m, d, MultiinputTemporalParser.create().parseRecordedDate(null, null, null, input));
   }
 
+  @Test
+  public void testDateTimeStrings() {
+    testEventDateTime(LocalDateTime.of(1999, 7, 19, 12, 13, 14), "1999-07-19 12:13:14");
+    testEventDateTime(LocalDateTime.of(1999, 7, 19, 12, 13, 00), "1999-07-19 12:13:00");
+    testEventDateTime(LocalDateTime.of(1999, 7, 19, 12, 00, 00), "1999-07-19 12:00:00");
+  }
+
+  private void testEventDateTime(TemporalAccessor expectedTa, String input) {
+    assertEquals(expectedTa, MultiinputTemporalParser.create().parseRecordedDate(null, null, null, input).getPayload());
+  }
+
   /**
    * Tests that a date representing 'now' is interpreted with CONFIDENCE.DEFINITE even after
    * v1TemporalInterpreter was instantiated. See POR-2860.

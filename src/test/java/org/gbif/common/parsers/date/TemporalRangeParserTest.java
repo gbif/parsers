@@ -65,7 +65,7 @@ public class TemporalRangeParserTest {
   }
 
   @Test
-  public void ambigousDateTest() {
+  public void ambiguousDateTest() {
     // Use a default parser, which cannot understand like: 01/02/2020
     TemporalRangeParser trp = TemporalRangeParser.builder().create();
 
@@ -111,7 +111,7 @@ public class TemporalRangeParserTest {
   }
 
   @Test
-  public void teatYMDT() {
+  public void testYMDT() {
     TemporalRangeParser trp =
         TemporalRangeParser.builder()
             .temporalParser(MultiinputTemporalParser.create(Collections.singletonList(DMY)))
@@ -127,5 +127,38 @@ public class TemporalRangeParserTest {
     range = trp.parse("01/03/1930T12:01");
 
     assertEquals("1930-03-01T12:01", range.getFrom().get().toString());
+  }
+
+  @Test
+  public void testYMDWithinRange() {
+    TemporalRangeParser trp = TemporalRangeParser.builder().create();
+
+    EventRange result = trp.parse("2000", "05", "06", "2000-04-01T01:02:03/2000-06-01T22:23:24", "92", "153");
+    assertEquals("2000-04-01T01:02:03", result.getFrom().get().toString());
+    assertEquals("2000-06-01T22:23:24", result.getTo().get().toString());
+    assertEquals(0, result.getIssues().size());
+
+    result = trp.parse("2000", "05", "06", "2000-04-01T01:02:03/2000-06-01T22:23:24", null, null);
+    assertEquals("2000-04-01T01:02:03", result.getFrom().get().toString());
+    assertEquals("2000-06-01T22:23:24", result.getTo().get().toString());
+    assertEquals(0, result.getIssues().size());
+
+    result = trp.parse("2000", "06", "06", "2000-04-01T01:02:03/2000-06-01T22:23:24", "92", "153");
+    assertEquals("2000", result.getFrom().get().toString());
+    assertEquals("2000", result.getTo().get().toString());
+    assertEquals(1, result.getIssues().size());
+    assertEquals(OccurrenceIssue.RECORDED_DATE_MISMATCH, result.getIssues().iterator().next());
+  }
+
+  @Test
+  public void testEqualResolution() {
+    TemporalRangeParser trp = TemporalRangeParser.builder().create();
+
+    // Beginning of range will be parsed as 2000, but end of range as 2000-06.  We must have 2000/2000, not 2000/2000-06.
+    EventRange result = trp.parse("2000", "06", "06", "2000-04-01T01:02:03/2000-06-01T22:23:24", null, null);
+    assertEquals("2000", result.getFrom().get().toString());
+    assertEquals("2000", result.getTo().get().toString());
+    assertEquals(1, result.getIssues().size());
+    assertEquals(OccurrenceIssue.RECORDED_DATE_MISMATCH, result.getIssues().iterator().next());
   }
 }
