@@ -151,6 +151,67 @@ public class TemporalRangeParserTest {
   }
 
   @Test
+  public void someTest() {
+    TemporalRangeParser trp = TemporalRangeParser.builder().create();
+    EventRange result;
+
+    result = trp.parse("2000", "06", "06", "", "9", null);
+    assertEquals("2000", result.getFrom().get().toString());
+    assertEquals("2000", result.getTo().get().toString());
+    assertEquals(1, result.getIssues().size());
+    assertEquals(OccurrenceIssue.RECORDED_DATE_MISMATCH, result.getIssues().iterator().next());
+
+    result = trp.parse("2000", "06", "06", "", "-9", null);
+    assertEquals("2000-06-06", result.getFrom().get().toString());
+    assertEquals("2000-06-06", result.getTo().get().toString());
+    assertEquals(1, result.getIssues().size());
+    assertEquals(OccurrenceIssue.RECORDED_DATE_INVALID, result.getIssues().iterator().next());
+
+    result = trp.parse("2000", "06", "06", "", "15.23", null);
+    assertEquals("2000-06-06", result.getFrom().get().toString());
+    assertEquals("2000-06-06", result.getTo().get().toString());
+    assertEquals(1, result.getIssues().size());
+    assertEquals(OccurrenceIssue.RECORDED_DATE_INVALID, result.getIssues().iterator().next());
+  }
+
+  @Test
+  public void alreadyPerfectTest() {
+    TemporalRangeParser trp = TemporalRangeParser.builder().create();
+    EventRange result;
+
+    // The fields are already provided in perfect form
+    result = trp.parse("2008", null, null, "2008-6-15/2008-07-20", null, null);
+    assertEquals("2008-06-15", result.getFrom().get().toString());
+    assertEquals("2008-07-20", result.getTo().get().toString());
+    assertEquals(0, result.getIssues().size());
+
+    result = trp.parse("2008", "7", null, "2008-7-15/2008-07-20", null, null);
+    assertEquals("2008-07-15", result.getFrom().get().toString());
+    assertEquals("2008-07-20", result.getTo().get().toString());
+    assertEquals(0, result.getIssues().size());
+
+    result = trp.parse("2008", "7", "15", "2008-7-15T12:34/2008-07-15T13:56", null, null);
+    assertEquals("2008-07-15T12:34", result.getFrom().get().toString());
+    assertEquals("2008-07-15T13:56", result.getTo().get().toString());
+    assertEquals(0, result.getIssues().size());
+
+    result = trp.parse("2008", null, null, "2008-6-15/2008-07-20", "197", "202");
+    assertEquals("2008-06-15", result.getFrom().get().toString());
+    assertEquals("2008-07-20", result.getTo().get().toString());
+    assertEquals(0, result.getIssues().size());
+
+    result = trp.parse("2008", null, null, "2008-6/2008-07", null, null);
+    assertEquals("2008-06", result.getFrom().get().toString());
+    assertEquals("2008-07", result.getTo().get().toString());
+    assertEquals(0, result.getIssues().size());
+
+    result = trp.parse("02008", "6", null, "2008-6/2008-06", null, null);
+    assertEquals("2008-06", result.getFrom().get().toString());
+    assertEquals("2008-06", result.getTo().get().toString());
+    assertEquals(0, result.getIssues().size());
+  }
+
+  @Test
   public void testEqualResolution() {
     TemporalRangeParser trp = TemporalRangeParser.builder().create();
 

@@ -91,6 +91,25 @@ public class TemporalRangeParser implements Serializable {
       }
     }
 
+    // If eventDate is a range, and at least year is set, we must test whether year+month+day are set according to the
+    // constant parts of eventDate.
+    if (StringUtils.isNotBlank(year) && StringUtils.isNotBlank(dateRange)) {
+      OccurrenceParseResult<TemporalAccessor> dateRangeOnlyStart = temporalParser.parseRecordedDate(null, null, null, rawPeriod[0], null);
+      OccurrenceParseResult<TemporalAccessor> dateRangeOnlyEnd = temporalParser.parseRecordedDate(null, null, null, rawPeriod[1], null);
+      OccurrenceParseResult<TemporalAccessor> ymdOnly = temporalParser.parseRecordedDate(year, month, day, null, null);
+
+      if (dateRangeOnlyStart.isSuccessful() && dateRangeOnlyEnd.isSuccessful() && ymdOnly.isSuccessful()) {
+        Optional<TemporalAccessor> dateRangeConstant = TemporalAccessorUtils.nonConflictingDateParts(dateRangeOnlyStart.getPayload(), dateRangeOnlyEnd.getPayload(), null);
+
+        if (ymdOnly.getPayload().equals(dateRangeConstant.get())) {
+          // Then we can just check the startDayOfYear and endDayOfYear fields match.
+          parseAndSet(eventRange, null, null, null, rawPeriod[0], startDayOfYear, eventRange::setFrom);
+          parseAndSet(eventRange, null, null, null, rawPeriod[1], endDayOfYear, eventRange::setTo);
+          return eventRange;
+        }
+      }
+    }
+
     // Otherwise, we will reduce the precision of the given dates until they all agree.
 
     // Year+month+day, first part of eventDate, and startDay of year to the best we can get.
