@@ -18,8 +18,6 @@ public class EventRange {
   private TemporalAccessor from;
   private TemporalAccessor to;
 
-  private boolean isReversed = false;
-
   private Set<OccurrenceIssue> issues = new HashSet<>();
 
   public Optional<TemporalAccessor> getFrom() {
@@ -46,7 +44,8 @@ public class EventRange {
     return !issues.isEmpty();
   }
 
-  public boolean isReversed() {
-    return isReversed;
+  @Override
+  public String toString() {
+    return "EventRange "+from+"/"+to+" ("+issues+")";
   }
 }

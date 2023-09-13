@@ -79,6 +79,8 @@ public class MultiinputTemporalParser implements Serializable {
     boolean dateStringProvided = StringUtils.isNotBlank(dateString);
     boolean yDoyProvided = StringUtils.isNotBlank(year) && StringUtils.isNotBlank(dayOfYear);
 
+    boolean twoOrMoreProvided = (ymdProvided ? 1 : 0) + (dateStringProvided ? 1 : 0) + (yDoyProvided ? 1 : 0) >= 2;
+
     if (!ymdProvided && !dateStringProvided && !yDoyProvided) {
       return OccurrenceParseResult.fail();
     }
@@ -214,7 +216,9 @@ public class MultiinputTemporalParser implements Serializable {
               ? PROBABLE
               : confidence;
     } else {
-      issues.add(OccurrenceIssue.RECORDED_DATE_MISMATCH);
+      if (twoOrMoreProvided) {
+        issues.add(OccurrenceIssue.RECORDED_DATE_MISMATCH);
+      }
       return OccurrenceParseResult.fail(issues);
     }
 

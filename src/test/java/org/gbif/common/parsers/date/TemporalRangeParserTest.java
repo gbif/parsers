@@ -15,6 +15,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class TemporalRangeParserTest {
 
+  // See https://www.esrl.noaa.gov/gmd/grad/neubrew/Calendar.jsp for day of years.
+
   @Test
   public void singleDateRangeTest() {
     TemporalRangeParser trp =
@@ -71,7 +73,7 @@ public class TemporalRangeParserTest {
 
     EventRange range = trp.parse("01/02/1999");
     assertTrue(range.hasIssues());
-    assertEquals(2, range.getIssues().size());
+    assertEquals(1, range.getIssues().size());
     assertTrue(range.getIssues().contains(OccurrenceIssue.RECORDED_DATE_INVALID));
 
     range = trp.parse("1999-01-02");
@@ -178,6 +180,12 @@ public class TemporalRangeParserTest {
     assertFalse(result.getTo().isPresent());
     assertEquals(1, result.getIssues().size());
     assertEquals(OccurrenceIssue.RECORDED_DATE_MISMATCH, result.getIssues().iterator().next());
+
+    result = trp.parse(null, null, null, "05/02/78", null, null);
+    assertFalse(result.getFrom().isPresent());
+    assertFalse(result.getTo().isPresent());
+    assertEquals(1, result.getIssues().size());
+    assertEquals(OccurrenceIssue.RECORDED_DATE_INVALID, result.getIssues().iterator().next());
   }
 
   @Test
