@@ -54,20 +54,6 @@ public class TemporalRangeParser implements Serializable {
     // Even a single date will be split to two
     String[] rawPeriod = DelimiterUtils.splitPeriod(dateRange);
 
-    System.out.println(
-        "Range parsing Y"
-            + year
-            + " M"
-            + month
-            + " D"
-            + day
-            + " ["
-            + dateRange
-            + "] s"
-            + startDayOfYear
-            + " e"
-            + endDayOfYear);
-
     EventRange eventRange = new EventRange();
 
     // If eventDate is a multi-day range, with at least day precision, and year+month+day are set, we must test
