@@ -172,7 +172,7 @@ public class TemporalAccessorUtils {
     }
 
     if (localDate != null) {
-      return LocalDateTime.from(localDate.atTime(23, 59, 59));
+      return LocalDateTime.from(localDate.atTime(23, 59, 59, 999_000_000));
     }
 
     return null;

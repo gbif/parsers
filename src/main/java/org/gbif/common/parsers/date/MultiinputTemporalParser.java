@@ -214,7 +214,7 @@ public class MultiinputTemporalParser implements Serializable {
               ? PROBABLE
               : confidence;
     } else {
-      issues.add(OccurrenceIssue.RECORDED_DATE_INVALID);
+      issues.add(OccurrenceIssue.RECORDED_DATE_MISMATCH);
       return OccurrenceParseResult.fail(issues);
     }
 

@@ -71,7 +71,7 @@ public class TemporalRangeParserTest {
 
     EventRange range = trp.parse("01/02/1999");
     assertTrue(range.hasIssues());
-    assertEquals(1, range.getIssues().size());
+    assertEquals(2, range.getIssues().size());
     assertTrue(range.getIssues().contains(OccurrenceIssue.RECORDED_DATE_INVALID));
 
     range = trp.parse("1999-01-02");
@@ -151,7 +151,7 @@ public class TemporalRangeParserTest {
   }
 
   @Test
-  public void someTest() {
+  public void mismatchingDatesTest() {
     TemporalRangeParser trp = TemporalRangeParser.builder().create();
     EventRange result;
 
@@ -172,6 +172,12 @@ public class TemporalRangeParserTest {
     assertEquals("2000-06-06", result.getTo().get().toString());
     assertEquals(1, result.getIssues().size());
     assertEquals(OccurrenceIssue.RECORDED_DATE_INVALID, result.getIssues().iterator().next());
+
+    result = trp.parse("2000", null, null, "2000-04-01/2001-06-01", null, null);
+    assertFalse(result.getFrom().isPresent());
+    assertFalse(result.getTo().isPresent());
+    assertEquals(1, result.getIssues().size());
+    assertEquals(OccurrenceIssue.RECORDED_DATE_MISMATCH, result.getIssues().iterator().next());
   }
 
   @Test

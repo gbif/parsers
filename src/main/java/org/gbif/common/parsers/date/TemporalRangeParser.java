@@ -87,7 +87,7 @@ public class TemporalRangeParser implements Serializable {
       if (dateRangeOnlyStart.isSuccessful() && dateRangeOnlyEnd.isSuccessful() && ymdOnly.isSuccessful()) {
         Optional<TemporalAccessor> dateRangeConstant = TemporalAccessorUtils.nonConflictingDateParts(dateRangeOnlyStart.getPayload(), dateRangeOnlyEnd.getPayload(), null);
 
-        if (ymdOnly.getPayload().equals(dateRangeConstant.get())) {
+        if (dateRangeConstant.isPresent() && ymdOnly.getPayload().equals(dateRangeConstant.get())) {
           // Then we can just check the startDayOfYear and endDayOfYear fields match.
           parseAndSet(eventRange, null, null, null, rawPeriod[0], startDayOfYear, eventRange::setFrom);
           parseAndSet(eventRange, null, null, null, rawPeriod[1], endDayOfYear, eventRange::setTo);
@@ -102,6 +102,15 @@ public class TemporalRangeParser implements Serializable {
     parseAndSet(eventRange, year, month, day, rawPeriod[0], startDayOfYear, eventRange::setFrom);
     // Year+month+day, second part of eventDate, and endDayOfYear of year to the best we can get.
     parseAndSet(eventRange, year, month, day, rawPeriod[1], endDayOfYear, eventRange::setTo);
+
+    // Return a failure, rather than a range with a missing start or end
+    if (eventRange.getFrom().isPresent() ^ eventRange.getTo().isPresent()) {
+      System.err.println("FAIL snth");
+      EventRange fail = new EventRange();
+      fail.setIssues(eventRange.getIssues());
+      fail.addIssue(OccurrenceIssue.RECORDED_DATE_MISMATCH);
+      return fail;
+    }
 
     // If the resolutions are not equal, truncate such that they are.
     if (eventRange.getFrom().isPresent() && eventRange.getTo().isPresent()) {

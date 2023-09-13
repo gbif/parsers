@@ -138,16 +138,16 @@ public class TemporalAccessorUtilsTest {
   @Test
   public void testLastDay() {
     TemporalAccessor year = Year.of(1996);
-    assertEquals("1996-12-31T23:59:59", TemporalAccessorUtils.toLatestLocalDateTime(year,true).toString());
+    assertEquals("1996-12-31T23:59:59.999", TemporalAccessorUtils.toLatestLocalDateTime(year,true).toString());
 
     TemporalAccessor ym = YearMonth.of(1996,1);
-    assertEquals("1996-01-31T23:59:59", TemporalAccessorUtils.toLatestLocalDateTime(ym,true).toString());
+    assertEquals("1996-01-31T23:59:59.999", TemporalAccessorUtils.toLatestLocalDateTime(ym,true).toString());
 
     ym = YearMonth.of(1996,2);
-    assertEquals("1996-02-29T23:59:59", TemporalAccessorUtils.toLatestLocalDateTime(ym,true).toString());
+    assertEquals("1996-02-29T23:59:59.999", TemporalAccessorUtils.toLatestLocalDateTime(ym,true).toString());
 
     TemporalAccessor ymd = LocalDate.of(1996,2,3);
-    assertEquals("1996-02-03T23:59:59", TemporalAccessorUtils.toLatestLocalDateTime(ymd,true).toString());
+    assertEquals("1996-02-03T23:59:59.999", TemporalAccessorUtils.toLatestLocalDateTime(ymd,true).toString());
 
     TemporalAccessor ymdt = LocalDateTime.of(1996,2,3,1,20);
     assertEquals("1996-02-03T01:20", TemporalAccessorUtils.toLatestLocalDateTime(ymdt,true).toString());
