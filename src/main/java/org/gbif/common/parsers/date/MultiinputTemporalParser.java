@@ -82,6 +82,7 @@ public class MultiinputTemporalParser implements Serializable {
     boolean twoOrMoreProvided = (ymdProvided ? 1 : 0) + (dateStringProvided ? 1 : 0) + (yDoyProvided ? 1 : 0) >= 2;
 
     if (!ymdProvided && !dateStringProvided && !yDoyProvided) {
+      log.trace("Date {}|{}|{}|{}|{} is all null", year, month, day, dateString, dayOfYear);
       return OccurrenceParseResult.fail();
     }
 
@@ -120,6 +121,8 @@ public class MultiinputTemporalParser implements Serializable {
       issues.add(OccurrenceIssue.RECORDED_DATE_INVALID);
     }
 
+    log.trace("Date {}|{}|{}|{}|{} parsed to {}—{}—{}", year, month, day, dateString, dayOfYear, parsedYMDResult, parsedDateResult, parsedYearDoyResult);
+
     // If a dateString is provided with something else, handle the case where it doesn't match.
     boolean ambiguityResolved = false;
     if (ymdProvided
@@ -134,19 +137,15 @@ public class MultiinputTemporalParser implements Serializable {
       if (resolved.isPresent()) {
         parsedDateTa = resolved.get();
         ambiguityResolved = true;
-        log.debug(
-            "Ambiguous date {} matches year-month-day date {}-{}-{} for {}",
-            dateString,
-            year,
-            month,
-            day,
-            parsedDateTa);
+        log.trace("Date {}|{}|{}|{}|{} ambiguous₁ y-m-d resolved {}", year, month, day, dateString, dayOfYear, parsedDateTa);
       }
       // still a conflict
       if (!ambiguityResolved) {
         if (parsedYmdTa == null || parsedDateTa == null) {
+          log.debug("Date {}|{}|{}|{}|{} ambiguous₁ invalid", year, month, day, dateString, dayOfYear);
           issues.add(OccurrenceIssue.RECORDED_DATE_INVALID);
         } else {
+          log.debug("Date {}|{}|{}|{}|{} ambiguous₁ mismatch", year, month, day, dateString, dayOfYear);
           issues.add(OccurrenceIssue.RECORDED_DATE_MISMATCH);
         }
       }
@@ -162,18 +161,15 @@ public class MultiinputTemporalParser implements Serializable {
       if (resolved.isPresent()) {
         parsedDateTa = resolved.get();
         ambiguityResolved = true;
-        log.debug(
-            "Ambiguous date {} matches year-dayOfYear date {}-{} for {}",
-            dateString,
-            year,
-            dayOfYear,
-            parsedDateTa);
+        log.trace("Date {}|{}|{}|{}|{} ambiguous₂ y-doy resolved {}", year, month, day, dateString, dayOfYear, parsedDateTa);
       }
       // still a conflict
       if (!ambiguityResolved) {
         if (parsedYmdTa == null || parsedYearDoyTa == null) {
+          log.debug("Date {}|{}|{}|{}|{} ambiguous₂ invalid", year, month, day, dateString, dayOfYear);
           issues.add(OccurrenceIssue.RECORDED_DATE_INVALID);
         } else {
+          log.debug("Date {}|{}|{}|{}|{} ambiguous₂ mismatch", year, month, day, dateString, dayOfYear);
           issues.add(OccurrenceIssue.RECORDED_DATE_MISMATCH);
         }
       }
@@ -190,6 +186,7 @@ public class MultiinputTemporalParser implements Serializable {
                   ? parsedYMDResult.getConfidence()
                   : parsedYearDoyResult.getConfidence());
     } else {
+      log.debug("Date {}|{}|{}|{}|{} mismatch (conflict)", year, month, day, dateString, dayOfYear);
       issues.add(OccurrenceIssue.RECORDED_DATE_MISMATCH);
       confidence = PROBABLE;
     }
@@ -197,6 +194,7 @@ public class MultiinputTemporalParser implements Serializable {
     // Add an issue if the resolution af ymd / date / yDoy is different
     if (ymdResolution > 0 && dateStringResolution > 0) {
       if (ymdResolution != dateStringResolution) {
+        log.debug("Date {}|{}|{}|{}|{} mismatch (resolution)", year, month, day, dateString, dayOfYear);
         issues.add(OccurrenceIssue.RECORDED_DATE_MISMATCH);
       }
     }
@@ -216,6 +214,7 @@ public class MultiinputTemporalParser implements Serializable {
               ? PROBABLE
               : confidence;
     } else {
+      log.debug("Date {}|{}|{}|{}|{} mismatch (conflicting)", year, month, day, dateString, dayOfYear);
       if (twoOrMoreProvided) {
         issues.add(OccurrenceIssue.RECORDED_DATE_MISMATCH);
       }
@@ -224,12 +223,13 @@ public class MultiinputTemporalParser implements Serializable {
 
     if (!isValidDate(parsedTemporalAccessor)) {
       if (parsedTemporalAccessor == null) {
+        log.debug("Date {}|{}|{}|{}|{} mismatch (invalid)", year, month, day, dateString, dayOfYear);
         issues.add(OccurrenceIssue.RECORDED_DATE_INVALID);
       } else {
+        log.debug("Date {}|{}|{}|{}|{} mismatch (unlikely)", year, month, day, dateString, dayOfYear);
         issues.add(OccurrenceIssue.RECORDED_DATE_UNLIKELY);
       }
 
-      log.debug("Invalid date: [{}]].", parsedTemporalAccessor);
       return OccurrenceParseResult.fail(issues);
     }
 

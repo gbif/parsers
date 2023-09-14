@@ -3,8 +3,10 @@ package org.gbif.common.parsers.date;
 import lombok.Builder;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.gbif.api.util.IsoDateInterval;
 import org.gbif.api.vocabulary.OccurrenceIssue;
 import org.gbif.common.parsers.core.OccurrenceParseResult;
+import org.gbif.common.parsers.core.ParseResult;
 import org.gbif.common.parsers.utils.DelimiterUtils;
 
 import java.io.Serializable;
@@ -19,8 +21,9 @@ import java.time.temporal.ChronoUnit;
 import java.time.temporal.Temporal;
 import java.time.temporal.TemporalAccessor;
 import java.time.temporal.TemporalUnit;
+import java.util.HashSet;
 import java.util.Optional;
-import java.util.function.Consumer;
+import java.util.Set;
 
 @Slf4j
 public class TemporalRangeParser implements Serializable {
@@ -36,15 +39,15 @@ public class TemporalRangeParser implements Serializable {
     }
   }
 
-  public EventRange parse(String dateRange) {
+  public OccurrenceParseResult<IsoDateInterval> parse(String dateRange) {
     return parse(null, null, null, dateRange, null, null);
   }
 
-  public EventRange parse(String year, String month, String day, String dateRange) {
+  public OccurrenceParseResult<IsoDateInterval> parse(String year, String month, String day, String dateRange) {
     return parse(year, month, day, dateRange, null, null);
   }
 
-  public EventRange parse(
+  public OccurrenceParseResult<IsoDateInterval> parse(
       String year,
       String month,
       String day,
@@ -54,7 +57,9 @@ public class TemporalRangeParser implements Serializable {
     // Even a single date will be split to two
     String[] rawPeriod = DelimiterUtils.splitPeriod(dateRange);
 
-    EventRange eventRange = new EventRange();
+    Temporal from;
+    Temporal to;
+    Set<OccurrenceIssue> issues = new HashSet<>();
 
     // If eventDate is a multi-day range, with at least day precision, and year+month+day are set, we must test
     // whether year+month+day falls within this range.
@@ -69,9 +74,10 @@ public class TemporalRangeParser implements Serializable {
           && ymdOnly.getPayload().isSupported(ChronoField.DAY_OF_YEAR)) {
           if (TemporalAccessorUtils.withinRange(dateRangeOnlyStart.getPayload(), dateRangeOnlyEnd.getPayload(), ymdOnly.getPayload())) {
             // Then we can just check the startDayOfYear and endDayOfYear fields match.
-            parseAndSet(eventRange, null, null, null, rawPeriod[0], startDayOfYear, eventRange::setFrom);
-            parseAndSet(eventRange, null, null, null, rawPeriod[1], endDayOfYear, eventRange::setTo);
-            return eventRange;
+            from = parseAndSet(null, null, null, rawPeriod[0], startDayOfYear, issues);
+            to = parseAndSet(null, null, null, rawPeriod[1], endDayOfYear, issues);
+            log.trace("Range {}|{}|{}|{}|{}|{} succeeds with ymd within range {}→{}", year, month, day, dateRange, startDayOfYear, endDayOfYear, from, to);
+            return OccurrenceParseResult.success(ParseResult.CONFIDENCE.DEFINITE, new IsoDateInterval(from, to), issues);
           }
         }
       }
@@ -89,9 +95,10 @@ public class TemporalRangeParser implements Serializable {
 
         if (dateRangeConstant.isPresent() && ymdOnly.getPayload().equals(dateRangeConstant.get())) {
           // Then we can just check the startDayOfYear and endDayOfYear fields match.
-          parseAndSet(eventRange, null, null, null, rawPeriod[0], startDayOfYear, eventRange::setFrom);
-          parseAndSet(eventRange, null, null, null, rawPeriod[1], endDayOfYear, eventRange::setTo);
-          return eventRange;
+          from = parseAndSet(null, null, null, rawPeriod[0], startDayOfYear, issues);
+          to = parseAndSet(null, null, null, rawPeriod[1], endDayOfYear, issues);
+          log.trace("Range {}|{}|{}|{}|{}|{} succeeds with correct ymd parts {}→{}", year, month, day, dateRange, startDayOfYear, endDayOfYear, from, to);
+          return OccurrenceParseResult.success(ParseResult.CONFIDENCE.DEFINITE, new IsoDateInterval(from, to), issues);
         }
       }
     }
@@ -99,72 +106,79 @@ public class TemporalRangeParser implements Serializable {
     // Otherwise, we will reduce the precision of the given dates until they all agree.
 
     // Year+month+day, first part of eventDate, and startDay of year to the best we can get.
-    parseAndSet(eventRange, year, month, day, rawPeriod[0], startDayOfYear, eventRange::setFrom);
+    from = parseAndSet(year, month, day, rawPeriod[0], startDayOfYear, issues);
     // Year+month+day, second part of eventDate, and endDayOfYear of year to the best we can get.
-    parseAndSet(eventRange, year, month, day, rawPeriod[1], endDayOfYear, eventRange::setTo);
+    to = parseAndSet(year, month, day, rawPeriod[1], endDayOfYear, issues);
+    log.trace("Range {}|{}|{}|{}|{}|{} parsed to {}→{}", year, month, day, dateRange, startDayOfYear, endDayOfYear, from, to);
 
     // Return a failure, rather than a range with a missing start or end
-    if (eventRange.getFrom().isPresent() ^ eventRange.getTo().isPresent()) {
-      System.err.println("FAIL snth");
-      EventRange fail = new EventRange();
-      fail.setIssues(eventRange.getIssues());
-      fail.addIssue(OccurrenceIssue.RECORDED_DATE_MISMATCH);
-      return fail;
+    if (from != null ^ to != null) {
+      log.debug("Range {}|{}|{}|{}|{}|{} fails due to missing start xor end {}→{}", year, month, day, dateRange, startDayOfYear, endDayOfYear, from, to);
+      issues.add(OccurrenceIssue.RECORDED_DATE_MISMATCH);
+      return OccurrenceParseResult.fail(issues);
     }
 
     // If the resolutions are not equal, truncate such that they are.
-    if (eventRange.getFrom().isPresent() && eventRange.getTo().isPresent()) {
-      if (TemporalAccessorUtils.resolution(eventRange.getFrom().get()) != TemporalAccessorUtils.resolution(eventRange.getTo().get())) {
-        int requiredResolution = Math.min(TemporalAccessorUtils.resolution(eventRange.getFrom().get()), TemporalAccessorUtils.resolution(eventRange.getTo().get()));
+    if (from != null && to != null) {
+      if (TemporalAccessorUtils.resolution(from) != TemporalAccessorUtils.resolution(to)) {
+        log.trace("Range {}|{}|{}|{}|{}|{} has different resolutions, will be truncated {}→{}", year, month, day, dateRange, startDayOfYear, endDayOfYear, from, to);
+        int requiredResolution = Math.min(TemporalAccessorUtils.resolution(from), TemporalAccessorUtils.resolution(to));
         if (requiredResolution == 3) {
-          eventRange.setFrom(eventRange.getFrom().get().query(LocalDate::from));
-          eventRange.setTo(eventRange.getTo().get().query(LocalDate::from));
+          from = from.query(LocalDate::from);
+          to = to.query(LocalDate::from);
         } else if (requiredResolution == 2) {
-          eventRange.setFrom(eventRange.getFrom().get().query(YearMonth::from));
-          eventRange.setTo(eventRange.getTo().get().query(YearMonth::from));
+          from = from.query(YearMonth::from);
+          to = to.query(YearMonth::from);
         } else {
-          eventRange.setFrom(eventRange.getFrom().get().query(Year::from));
-          eventRange.setTo(eventRange.getTo().get().query(Year::from));
+          from = from.query(Year::from);
+          to = to.query(Year::from);
         }
       }
     }
 
     // Reverse order if needed
-    if (eventRange.getFrom().isPresent() && eventRange.getTo().isPresent()) {
-      TemporalAccessor from = eventRange.getFrom().get();
-      TemporalAccessor to = eventRange.getTo().get();
+    if (from != null && to != null) {
       if (from.getClass() == to.getClass()) {
-        long rangeDiff = getRangeDiff((Temporal) from, (Temporal) to);
+        long rangeDiff = getRangeDiff(from, to);
         if (rangeDiff < 0) {
-          eventRange.addIssue(OccurrenceIssue.RECORDED_DATE_INVALID);
-          EventRange reversed = new EventRange();
-          reversed.setFrom(eventRange.getTo().get());
-          reversed.setTo(eventRange.getFrom().get());
-          reversed.setIssues(eventRange.getIssues());
-          return reversed;
+          log.trace("Range {}|{}|{}|{}|{}|{} will be reversed {}→{}", year, month, day, dateRange, startDayOfYear, endDayOfYear, from, to);
+          issues.add(OccurrenceIssue.RECORDED_DATE_INVALID);
+          return OccurrenceParseResult.success(ParseResult.CONFIDENCE.DEFINITE, new IsoDateInterval(to, from), issues);
         }
       } else {
-        eventRange.addIssue(OccurrenceIssue.RECORDED_DATE_UNLIKELY);
+        issues.add(OccurrenceIssue.RECORDED_DATE_UNLIKELY);
       }
     }
 
-    return eventRange;
+    if (from == null && to == null) {
+      log.debug("Range {}|{}|{}|{}|{}|{} could not be parsed", year, month, day, dateRange, startDayOfYear, endDayOfYear);
+      return OccurrenceParseResult.fail(issues);
+    } else if (from != null && to != null) {
+      log.trace("Range {}|{}|{}|{}|{}|{} succeeds {}→{}", year, month, day, dateRange, startDayOfYear, endDayOfYear, from, to);
+      return OccurrenceParseResult.success(ParseResult.CONFIDENCE.DEFINITE, new IsoDateInterval(from, to), issues);
+    } else {
+      log.error("From {} and to {} dates of range are unexpectedly not-null and null when parsing {}, {}, {}, {}, {}, {}",
+        from, to, year, month, day, dateRange, startDayOfYear, endDayOfYear);
+      issues.add(OccurrenceIssue.INTERPRETATION_ERROR);
+      return OccurrenceParseResult.fail(issues);
+    }
   }
 
-  private void parseAndSet(
-      EventRange range,
+  private Temporal parseAndSet(
       String year,
       String month,
       String day,
       String rawDate,
       String dayOfYear,
-      Consumer<TemporalAccessor> setFn) {
+      Set<OccurrenceIssue> issues) {
     OccurrenceParseResult<TemporalAccessor> result =
         temporalParser.parseRecordedDate(year, month, day, rawDate, dayOfYear);
+    issues.addAll(result.getIssues());
     if (result.isSuccessful()) {
-      Optional.ofNullable(result.getPayload()).ifPresent(setFn);
+      return (Temporal) result.getPayload();
+    } else {
+      return null;
     }
-    range.addIssues(result.getIssues());
   }
 
   /** Compare dates and returns difference between FROM and TO dates in milliseconds */
