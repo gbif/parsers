@@ -18,6 +18,7 @@ import org.gbif.api.util.VocabularyUtils;
 import java.io.InputStream;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.Locale;
 import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.StringUtils;
@@ -34,12 +35,13 @@ public class EnumParser<T extends Enum<T>> extends FileBasedDictionaryParser<T> 
   protected final ASCIIParser asciiParser = ASCIIParser.getInstance();
 
   // These become null, as after removing non-letters "N/A" might mean something like "Namibia".
+  // Only values that could conflict with an enum value need be included.
+  // Values are used in uppercase.
   private final HashSet<String> notAvailable = new HashSet<>(
       Arrays.asList(
-          "N/A", "N/a", "n/a", "n/A", "n.a.", // Not available
-          "N/K", "N/k", "n/k", "n/K", "n.k.", // Not known
-          "UNK.", "Unk.", "unk.", "UNK", "Unk", "unk", // Unknown
-          "No data", "Not provided"
+          "N/A", "N.A.", "N.A", "N / A", "#N/A", "[N/A]", "(N/A)", // Not available
+          "N/K", "N.K.", "N.K", "N / K", "#N/K", "[N/K]", "(N/K)", // Not known
+          "UNK.", "UNK" // Unknown
       ));
 
   protected EnumParser(Class<T> clazz, boolean allowDigits, final InputStream... inputs) {
@@ -84,7 +86,10 @@ public class EnumParser<T extends Enum<T>> extends FileBasedDictionaryParser<T> 
    * A separate method so it can be called before stripping slash characters etc.
    */
   protected String handleNotAvailable(String value) {
-    return notAvailable.contains(value) ? null : value;
+    if (value == null) {
+      return null;
+    }
+    return notAvailable.contains(value.toUpperCase(Locale.ENGLISH)) ? null : value;
   }
 
   @Override

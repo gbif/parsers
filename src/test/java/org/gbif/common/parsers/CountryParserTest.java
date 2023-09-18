@@ -171,15 +171,28 @@ public class CountryParserTest extends ParserTestBase<Country> {
     assertParseSuccess(Country.TURKEY, "Republic of Türkiye");
     assertParseSuccess(Country.TURKEY, "REPUBLIC OF TÜRKİYE");
     assertParseSuccess(Country.TURKEY, "Republic of Turkey");
+    assertParseSuccess(Country.BHUTAN, "ISO 3166-2:BT");
+    assertParseSuccess(Country.BHUTAN, "ISO_3166-2:BT");
+    assertParseSuccess(Country.BHUTAN, "ISO-3166-2:BT");
+    assertParseSuccess(Country.BHUTAN, "ISO-3166-2:BTN");
 
     assertParseSuccess(Country.KOSOVO, "XK");
   }
 
   @Test
-  public void testParseNa() {
+  public void testParseNamibiaOrNotAvailable() {
     assertParseSuccess(Country.NAMIBIA, "NA");
+    assertParseSuccess(Country.NAMIBIA, " NA ");
+    assertParseSuccess(Country.NAMIBIA, "NA.");
     assertParseFailure("N/A");
+    assertParseFailure("N/a");
     assertParseFailure("n/a");
     assertParseFailure("n/k");
+    assertParseFailure("N.A.");
+    assertParseFailure("N.A");
+    assertParseFailure("#N/A");
+    assertParseFailure("[n/a]");
+    assertParseFailure("(n/a)");
+    assertParseFailure("n / a");
   }
 }
