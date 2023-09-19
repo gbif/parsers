@@ -79,6 +79,11 @@ public class MultiinputTemporalParser implements Serializable {
     boolean dateStringProvided = StringUtils.isNotBlank(dateString);
     boolean yDoyProvided = StringUtils.isNotBlank(year) && StringUtils.isNotBlank(dayOfYear);
 
+    // If we have only a year and dayOfYear, don't parse the year alone (without the month and day)
+    if (yDoyProvided && (StringUtils.isBlank(month) && StringUtils.isBlank(day))) {
+      ymdProvided = false;
+    }
+
     boolean twoOrMoreProvided = (ymdProvided ? 1 : 0) + (dateStringProvided ? 1 : 0) + (yDoyProvided ? 1 : 0) >= 2;
 
     if (!ymdProvided && !dateStringProvided && !yDoyProvided) {

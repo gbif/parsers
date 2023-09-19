@@ -138,6 +138,21 @@ public class TemporalRangeParserTest {
   }
 
   @Test
+  public void testYearDayOfYear() {
+    TemporalRangeParser trp = TemporalRangeParser.builder().create();
+
+    OccurrenceParseResult<IsoDateInterval> result = trp.parse("2023", null, null, null, "12", "50");
+    assertEquals("2023-01-12", result.getPayload().getFrom().toString());
+    assertEquals("2023-02-19", result.getPayload().getTo().toString());
+    assertEquals(0, result.getIssues().size());
+
+    result = trp.parse("2023", null, null, "2023-01-12/2023-02-19", "12", "50");
+    assertEquals("2023-01-12", result.getPayload().getFrom().toString());
+    assertEquals("2023-02-19", result.getPayload().getTo().toString());
+    assertEquals(0, result.getIssues().size());
+  }
+
+  @Test
   public void testYMDWithinRange() {
     TemporalRangeParser trp = TemporalRangeParser.builder().create();
 
