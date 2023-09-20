@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.time.Year;
 import java.time.YearMonth;
 import java.time.ZoneId;
@@ -248,6 +249,46 @@ public class MultiinputTemporalParserTest {
 
     result = MultiinputTemporalParser.create().parseRecordedDate("1984", "05", "02", "1984-05-02T19:34");
     assertResult(LocalDateTime.of(1984, 5, 2, 19, 34, 0), result);
+    assertEquals(0, result.getIssues().size());
+
+    result = MultiinputTemporalParser.create().parseRecordedDate("1984", "05", "02", "1984-05-02T19:34:56");
+    assertResult(LocalDateTime.of(1984, 5, 2, 19, 34, 56), result);
+    assertEquals(0, result.getIssues().size());
+
+    result = MultiinputTemporalParser.create().parseRecordedDate("1984", "05", "02", "1984-05-02T19:34:56.987654321Z");
+    assertResult(ZonedDateTime.of(1984, 5, 2, 19, 34, 56, 987_654_321, ZoneOffset.UTC), result);
+    assertEquals(0, result.getIssues().size());
+
+    result = MultiinputTemporalParser.create().parseRecordedDate("1984", "05", "02", "1984-05-02T19:34:56.98765432Z");
+    assertResult(ZonedDateTime.of(1984, 5, 2, 19, 34, 56, 987_654_320, ZoneOffset.UTC), result);
+    assertEquals(0, result.getIssues().size());
+
+    result = MultiinputTemporalParser.create().parseRecordedDate("1984", "05", "02", "1984-05-02T19:34:56.9876543Z");
+    assertResult(ZonedDateTime.of(1984, 5, 2, 19, 34, 56, 987_654_300, ZoneOffset.UTC), result);
+    assertEquals(0, result.getIssues().size());
+
+    result = MultiinputTemporalParser.create().parseRecordedDate("1984", "05", "02", "1984-05-02T19:34:56.987654Z");
+    assertResult(ZonedDateTime.of(1984, 5, 2, 19, 34, 56, 987_654_000, ZoneOffset.UTC), result);
+    assertEquals(0, result.getIssues().size());
+
+    result = MultiinputTemporalParser.create().parseRecordedDate("1984", "05", "02", "1984-05-02T19:34:56.98765Z");
+    assertResult(ZonedDateTime.of(1984, 5, 2, 19, 34, 56, 987_650_000, ZoneOffset.UTC), result);
+    assertEquals(0, result.getIssues().size());
+
+    result = MultiinputTemporalParser.create().parseRecordedDate("1984", "05", "02", "1984-05-02T19:34:56.9876Z");
+    assertResult(ZonedDateTime.of(1984, 5, 2, 19, 34, 56, 987_600_000, ZoneOffset.UTC), result);
+    assertEquals(0, result.getIssues().size());
+
+    result = MultiinputTemporalParser.create().parseRecordedDate("1984", "05", "02", "1984-05-02T19:34:56.987Z");
+    assertResult(ZonedDateTime.of(1984, 5, 2, 19, 34, 56, 987_000_000, ZoneOffset.UTC), result);
+    assertEquals(0, result.getIssues().size());
+
+    result = MultiinputTemporalParser.create().parseRecordedDate("1984", "05", "02", "1984-05-02T19:34:56.98Z");
+    assertResult(ZonedDateTime.of(1984, 5, 2, 19, 34, 56, 980_000_000, ZoneOffset.UTC), result);
+    assertEquals(0, result.getIssues().size());
+
+    result = MultiinputTemporalParser.create().parseRecordedDate("1984", "05", "02", "1984-05-02T19:34:56.9Z");
+    assertResult(ZonedDateTime.of(1984, 5, 2, 19, 34, 56, 900_000_000, ZoneOffset.UTC), result);
     assertEquals(0, result.getIssues().size());
   }
 

@@ -109,7 +109,6 @@ class ThreeTenNumericalDateParser implements TemporalParser {
 
   /*
    * Brackets [] represent optional sections of the pattern. (And subsequent patters don't make parts optional, if an earlier pattern already matched that.)
-   * Unfortunately, it's not possible to specify an arbitrary decimal for seconds in one pattern.
    */
   // separator is a CHAR_HYPHEN
   private static final List<DateTimeParser> BASE_PARSER_LIST =
@@ -118,23 +117,18 @@ class ThreeTenNumericalDateParser implements TemporalParser {
               .appendDateTimeParser("uuuuMMdd", YMD, LocalDate::from)
               .appendDateTimeParser("uuuu-M-d", YMD, LocalDate::from, HYPHEN, MINUS + ".")
 
-              // Either no fractional seconds, milliseconds or microseconds. T or space.
+              // Either no fractional seconds, or up to 9 decimals. T or space.
+              // Hour, maybe minute, maybe second, maybe decasecond
               .appendDateTimeParser("uuuu-M-d' 'HH[[:]mm[[:]ss[.S]]]", YMDT, LocalDateTime::from, HYPHEN, MINUS + ".")
-              .appendDateTimeParser("uuuu-M-d' 'HH[:]mm[[:]ss.SS]", YMDT, LocalDateTime::from)
-              .appendDateTimeParser("uuuu-M-d' 'HH[:]mm[[:]ss.SSS]", YMDT, LocalDateTime::from)
-              .appendDateTimeParser("uuuu-M-d' 'HH[:]mm[[:]ss.SSSSSS]", YMDT, LocalDateTime::from)
-              .appendDateTimeParser("uuuu-M-d' 'HH[:]mm[[:]ss.SSSSSSS]", YMDT, LocalDateTime::from)
-              .appendDateTimeParser("uuuu-M-d' 'HH[:]mm[[:]ss[.SSS]]X", YMDTZ, ZonedDateTime::from, HYPHEN, MINUS)
-              .appendDateTimeParser("uuuu-M-d'T'HH[[:]mm[[:]ss[.S]]]", YMDT, LocalDateTime::from)
-              .appendDateTimeParser("uuuu-M-d'T'HH[:]mm[[:]ss.SS]", YMDT, LocalDateTime::from)
-              .appendDateTimeParser("uuuu-M-d'T'HH[:]mm[[:]ss.SSS]", YMDT, LocalDateTime::from)
-              .appendDateTimeParser("uuuu-M-d'T'HH[:]mm[[:]ss.SSSSSS]", YMDT, LocalDateTime::from)
-              .appendDateTimeParser("uuuu-M-d'T'HH[:]mm[[:]ss.SSSSSSS]", YMDT, LocalDateTime::from)
-              // T, but with a time zone, accepting Z, +00, +0000 and +00:00 for UTC and - or − for negative offsets.
-              .appendDateTimeParser("uuuu-M-d'T'HH[:]mm[[:]ss[.SSS]]X", YMDTZ, ZonedDateTime::from, HYPHEN, MINUS)
-              .appendDateTimeParser("uuuu-M-d'T'HH[:]mm[:]ss.SSSSSSX", YMDTZ, ZonedDateTime::from, HYPHEN, MINUS)
-              .appendDateTimeParser("uuuu-M-d'T'HH[:]mm[[:]ss[.SSS]]xxx", YMDTZ, ZonedDateTime::from, HYPHEN, MINUS)
-              .appendDateTimeParser("uuuu-M-d'T'HH[:]mm[:]ss.SSSSSSxxx", YMDTZ, ZonedDateTime::from, HYPHEN, MINUS)
+              .appendDateTimeParser("uuuu-M-d'T'HH[[:]mm[[:]ss[.S]]]", YMDT, LocalDateTime::from, HYPHEN, MINUS + ".")
+              // Hour, maybe minute, maybe second, maybe decimal, no alternative separators
+              .appendDateTimeParser("uuuu-M-d' 'HH[[:]mm[[:]ss[.SSSSSSSSS][.SSSSSSSS][.SSSSSSS][.SSSSSS][.SSSSS][.SSSS][.SSS][.SS][.S]]]", YMDT, LocalDateTime::from)
+              .appendDateTimeParser("uuuu-M-d'T'HH[[:]mm[[:]ss[.SSSSSSSSS][.SSSSSSSS][.SSSSSSS][.SSSSSS][.SSSSS][.SSSS][.SSS][.SS][.S]]]", YMDT, LocalDateTime::from)
+              // Same but with either type of time zone
+              .appendDateTimeParser("uuuu-M-d' 'HH[:]mm[[:]ss[.SSSSSSSSS][.SSSSSSSS][.SSSSSSS][.SSSSSS][.SSSSS][.SSSS][.SSS][.SS][.S]]X", YMDTZ, ZonedDateTime::from, HYPHEN, MINUS)
+              .appendDateTimeParser("uuuu-M-d'T'HH[:]mm[[:]ss[.SSSSSSSSS][.SSSSSSSS][.SSSSSSS][.SSSSSS][.SSSSS][.SSSS][.SSS][.SS][.S]]X", YMDTZ, ZonedDateTime::from, HYPHEN, MINUS)
+              .appendDateTimeParser("uuuu-M-d' 'HH[:]mm[[:]ss[.SSSSSSSSS][.SSSSSSSS][.SSSSSSS][.SSSSSS][.SSSSS][.SSSS][.SSS][.SS][.S]]xxx", YMDTZ, ZonedDateTime::from, HYPHEN, MINUS)
+              .appendDateTimeParser("uuuu-M-d'T'HH[:]mm[[:]ss[.SSSSSSSSS][.SSSSSSSS][.SSSSSSS][.SSSSSS][.SSSSS][.SSSS][.SSS][.SS][.S]]xxx", YMDTZ, ZonedDateTime::from, HYPHEN, MINUS)
 
               .appendDateTimeParser("uuuu-M", YM, YearMonth::from)
               .appendDateTimeParser("uuuu", Y, Year::from)
@@ -144,6 +138,10 @@ class ThreeTenNumericalDateParser implements TemporalParser {
               .appendDateTimeParser("uuuu年M月d日", HAN, LocalDate::from)
               .appendDateTimeParser("YYYY-'W'ww", YW, LocalDate::from) // ISO "week years", 2018-W43.
               .appendDateTimeParser("uuuu-DDD", YD, LocalDate::from) // Week days, 2018-296.
+              .appendDateTimeParser("uuuu [MMMM][MMM]", YM, YearMonth::from) // Year and text month, "2023 September", "2023 Sept"
+              .appendDateTimeParser("[MMMM][MMM] uuuu", YM, YearMonth::from) // Text month and year, "September 2023", "Sept 2023"
+              .appendDateTimeParser("E',' d MMM uuuu HH:mm:ss", YMDT, LocalDateTime::from) // RFC 1123, "Tue, 3 Jun 2008 11:05:30"
+              .appendDateTimeParser("E',' d MMM uuuu HH:mm:ss z", YMDTZ, ZonedDateTime::from) // RFC 1123, "Tue, 3 Jun 2008 11:05:30 GMT"
               .build()
       );
 

@@ -173,6 +173,10 @@ public class ThreeTenNumericalDateParserTest {
 
     // month/year alone
     assertEquals(YearMonth.of(1978, 12), YearMonth.from(parser.parse("1978-12").getPayload()));
+    assertEquals(YearMonth.of(1978, 12), YearMonth.from(parser.parse("December 1978").getPayload()));
+    assertEquals(YearMonth.of(1978, 12), YearMonth.from(parser.parse("1978 December").getPayload()));
+    assertEquals(YearMonth.of(1978, 12), YearMonth.from(parser.parse("Dec 1978").getPayload()));
+    assertEquals(YearMonth.of(1978, 12), YearMonth.from(parser.parse("1978 Dec").getPayload()));
 
     // year alone
     assertEquals(Year.of(1978), Year.from(parser.parse("1978").getPayload()));

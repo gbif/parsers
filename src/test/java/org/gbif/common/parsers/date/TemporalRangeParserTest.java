@@ -119,9 +119,9 @@ public class TemporalRangeParserTest {
   @Test
   public void testYMDT() {
     TemporalRangeParser trp =
-        TemporalRangeParser.builder()
-            .temporalParser(MultiinputTemporalParser.create(Collections.singletonList(DMY)))
-            .create();
+      TemporalRangeParser.builder()
+        .temporalParser(MultiinputTemporalParser.create(Collections.singletonList(DMY)))
+        .create();
     // Should fail
     OccurrenceParseResult<IsoDateInterval> result = trp.parse("01/03/1930T12:01");
     assertFalse(result.isSuccessful());
@@ -129,9 +129,9 @@ public class TemporalRangeParserTest {
     assertEquals(OccurrenceIssue.RECORDED_DATE_INVALID, result.getIssues().iterator().next());
 
     trp =
-        TemporalRangeParser.builder()
-            .temporalParser(MultiinputTemporalParser.create(Arrays.asList(DMY, DMYT)))
-            .create();
+      TemporalRangeParser.builder()
+        .temporalParser(MultiinputTemporalParser.create(Arrays.asList(DMY, DMYT)))
+        .create();
     result = trp.parse("01/03/1930T12:01");
 
     assertEquals("1930-03-01T12:01", result.getPayload().getFrom().toString());
