@@ -247,14 +247,22 @@ public class MultiinputTemporalParser implements Serializable {
 
   /** @return TemporalAccessor that represents a LocalDate or LocalDateTime */
   public OccurrenceParseResult<TemporalAccessor> parseLocalDate(
-      String dateString, Range<LocalDate> likelyRange, OccurrenceIssue unlikelyIssue) {
+    String dateString, Range<LocalDate> likelyRange, OccurrenceIssue unlikelyIssue) {
+    return parseLocalDate(dateString, likelyRange, unlikelyIssue, null);
+  }
+
+  /** @return TemporalAccessor that represents a LocalDate or LocalDateTime */
+  public OccurrenceParseResult<TemporalAccessor> parseLocalDate(
+      String dateString, Range<LocalDate> likelyRange, OccurrenceIssue unlikelyIssue, OccurrenceIssue failIssue) {
     if (!Strings.isNullOrEmpty(dateString)) {
       OccurrenceParseResult<TemporalAccessor> result =
           new OccurrenceParseResult<>(temporalParser.parse(dateString));
       // check year makes sense
       if (result.isSuccessful() && !isValidDate(result.getPayload(), likelyRange)) {
         log.debug("Unlikely date parsed, ignore [{}].", dateString);
-        result.addIssue(unlikelyIssue);
+        Optional.ofNullable(unlikelyIssue).ifPresent(result::addIssue);
+      } else if (!result.isSuccessful()) {
+        Optional.ofNullable(failIssue).ifPresent(result::addIssue);
       }
       return result;
     }
