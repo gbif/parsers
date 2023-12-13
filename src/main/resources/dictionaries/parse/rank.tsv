@@ -211,6 +211,7 @@ species agg	SPECIES_AGGREGATE
 species aggr	SPECIES_AGGREGATE
 species complex	SPECIES_AGGREGATE
 species group	SPECIES_AGGREGATE
+species hypothesis	UNRANKED
 species subgroup	SPECIES_AGGREGATE
 speciesaggregate	SPECIES_AGGREGATE
 speciescomplex	SPECIES_AGGREGATE
