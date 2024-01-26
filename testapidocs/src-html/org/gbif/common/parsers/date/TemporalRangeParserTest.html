@@ -349,60 +349,72 @@
 <span class="sourceLineNo">341</span>    assertFalse(result.isSuccessful());<a name="line.341"></a>
 <span class="sourceLineNo">342</span>    assertEquals(1, result.getIssues().size());<a name="line.342"></a>
 <span class="sourceLineNo">343</span>    assertEquals(OccurrenceIssue.RECORDED_DATE_MISMATCH, result.getIssues().iterator().next());<a name="line.343"></a>
-<span class="sourceLineNo">344</span>  }<a name="line.344"></a>
-<span class="sourceLineNo">345</span><a name="line.345"></a>
-<span class="sourceLineNo">346</span>  @Test<a name="line.346"></a>
-<span class="sourceLineNo">347</span>  public void testInvertedRange() {<a name="line.347"></a>
-<span class="sourceLineNo">348</span>    TemporalRangeParser trp = TemporalRangeParser.builder().create();<a name="line.348"></a>
-<span class="sourceLineNo">349</span><a name="line.349"></a>
-<span class="sourceLineNo">350</span>    // Plain inverted date range<a name="line.350"></a>
-<span class="sourceLineNo">351</span>    OccurrenceParseResult&lt;IsoDateInterval&gt; result = trp.parse("2000", "04", null, "2000-04-05/2000-04-01", null, null);<a name="line.351"></a>
-<span class="sourceLineNo">352</span>    assertEquals("2000-04-01", result.getPayload().getFrom().toString());<a name="line.352"></a>
-<span class="sourceLineNo">353</span>    assertEquals("2000-04-05", result.getPayload().getTo().toString());<a name="line.353"></a>
-<span class="sourceLineNo">354</span>    assertEquals(1, result.getIssues().size());<a name="line.354"></a>
-<span class="sourceLineNo">355</span>    assertEquals(OccurrenceIssue.RECORDED_DATE_INVALID, result.getIssues().iterator().next());<a name="line.355"></a>
-<span class="sourceLineNo">356</span><a name="line.356"></a>
-<span class="sourceLineNo">357</span>    // Inverted with a day<a name="line.357"></a>
-<span class="sourceLineNo">358</span>    result = trp.parse("1985", "05", "19", "1985-05-20/19", null, null);<a name="line.358"></a>
-<span class="sourceLineNo">359</span>    assertEquals("1985-05-19", result.getPayload().getFrom().toString());<a name="line.359"></a>
-<span class="sourceLineNo">360</span>    assertEquals("1985-05-20", result.getPayload().getTo().toString());<a name="line.360"></a>
-<span class="sourceLineNo">361</span>    assertEquals(1, result.getIssues().size());<a name="line.361"></a>
-<span class="sourceLineNo">362</span>    assertEquals(OccurrenceIssue.RECORDED_DATE_INVALID, result.getIssues().iterator().next());<a name="line.362"></a>
-<span class="sourceLineNo">363</span><a name="line.363"></a>
-<span class="sourceLineNo">364</span>    // Inverted date range with time<a name="line.364"></a>
-<span class="sourceLineNo">365</span>    result = trp.parse("2022", "07", "04", "2022-07-04T15:44/2022-07-04T14:54", null, null);<a name="line.365"></a>
-<span class="sourceLineNo">366</span>    assertEquals("2022-07-04T14:54", result.getPayload().getFrom().toString());<a name="line.366"></a>
-<span class="sourceLineNo">367</span>    assertEquals("2022-07-04T15:44", result.getPayload().getTo().toString());<a name="line.367"></a>
-<span class="sourceLineNo">368</span>    assertEquals(1, result.getIssues().size());<a name="line.368"></a>
-<span class="sourceLineNo">369</span>    assertEquals(OccurrenceIssue.RECORDED_DATE_INVALID, result.getIssues().iterator().next());<a name="line.369"></a>
-<span class="sourceLineNo">370</span><a name="line.370"></a>
-<span class="sourceLineNo">371</span>    // Inverted date range with zoned time<a name="line.371"></a>
-<span class="sourceLineNo">372</span>    result = trp.parse("2014", "07", "15", "2014-07-15T13:00:00+02:00/2014-07-15T09:06:00+02:00", null, null);<a name="line.372"></a>
-<span class="sourceLineNo">373</span>    assertEquals("2014-07-15T09:06+02:00", result.getPayload().getFrom().toString());<a name="line.373"></a>
-<span class="sourceLineNo">374</span>    assertEquals("2014-07-15T13:00+02:00", result.getPayload().getTo().toString());<a name="line.374"></a>
-<span class="sourceLineNo">375</span>    assertEquals(1, result.getIssues().size());<a name="line.375"></a>
-<span class="sourceLineNo">376</span>    assertEquals(OccurrenceIssue.RECORDED_DATE_INVALID, result.getIssues().iterator().next());<a name="line.376"></a>
-<span class="sourceLineNo">377</span>  }<a name="line.377"></a>
-<span class="sourceLineNo">378</span><a name="line.378"></a>
-<span class="sourceLineNo">379</span>  @Test<a name="line.379"></a>
-<span class="sourceLineNo">380</span>  public void testRemeiningWeirdCases() {<a name="line.380"></a>
-<span class="sourceLineNo">381</span>    TemporalRangeParser trp = TemporalRangeParser.builder().create();<a name="line.381"></a>
+<span class="sourceLineNo">344</span><a name="line.344"></a>
+<span class="sourceLineNo">345</span>    // Empty strings and spaces<a name="line.345"></a>
+<span class="sourceLineNo">346</span>    result = trp.parse("", " ", "", "1980-2-2", null, null);<a name="line.346"></a>
+<span class="sourceLineNo">347</span>    assertEquals("1980-02-02", result.getPayload().getFrom().toString());<a name="line.347"></a>
+<span class="sourceLineNo">348</span>    assertEquals("1980-02-02", result.getPayload().getTo().toString());<a name="line.348"></a>
+<span class="sourceLineNo">349</span>    assertEquals(0, result.getIssues().size());<a name="line.349"></a>
+<span class="sourceLineNo">350</span><a name="line.350"></a>
+<span class="sourceLineNo">351</span>    // Empty strings and spaces<a name="line.351"></a>
+<span class="sourceLineNo">352</span>    result = trp.parse("", " ", "", "2/2/1980", null, null);<a name="line.352"></a>
+<span class="sourceLineNo">353</span>    assertEquals("1980-02-02", result.getPayload().getFrom().toString());<a name="line.353"></a>
+<span class="sourceLineNo">354</span>    assertEquals("1980-02-02", result.getPayload().getTo().toString());<a name="line.354"></a>
+<span class="sourceLineNo">355</span>    assertEquals(0, result.getIssues().size());<a name="line.355"></a>
+<span class="sourceLineNo">356</span>  }<a name="line.356"></a>
+<span class="sourceLineNo">357</span><a name="line.357"></a>
+<span class="sourceLineNo">358</span>  @Test<a name="line.358"></a>
+<span class="sourceLineNo">359</span>  public void testInvertedRange() {<a name="line.359"></a>
+<span class="sourceLineNo">360</span>    TemporalRangeParser trp = TemporalRangeParser.builder().create();<a name="line.360"></a>
+<span class="sourceLineNo">361</span><a name="line.361"></a>
+<span class="sourceLineNo">362</span>    // Plain inverted date range<a name="line.362"></a>
+<span class="sourceLineNo">363</span>    OccurrenceParseResult&lt;IsoDateInterval&gt; result = trp.parse("2000", "04", null, "2000-04-05/2000-04-01", null, null);<a name="line.363"></a>
+<span class="sourceLineNo">364</span>    assertEquals("2000-04-01", result.getPayload().getFrom().toString());<a name="line.364"></a>
+<span class="sourceLineNo">365</span>    assertEquals("2000-04-05", result.getPayload().getTo().toString());<a name="line.365"></a>
+<span class="sourceLineNo">366</span>    assertEquals(1, result.getIssues().size());<a name="line.366"></a>
+<span class="sourceLineNo">367</span>    assertEquals(OccurrenceIssue.RECORDED_DATE_INVALID, result.getIssues().iterator().next());<a name="line.367"></a>
+<span class="sourceLineNo">368</span><a name="line.368"></a>
+<span class="sourceLineNo">369</span>    // Inverted with a day<a name="line.369"></a>
+<span class="sourceLineNo">370</span>    result = trp.parse("1985", "05", "19", "1985-05-20/19", null, null);<a name="line.370"></a>
+<span class="sourceLineNo">371</span>    assertEquals("1985-05-19", result.getPayload().getFrom().toString());<a name="line.371"></a>
+<span class="sourceLineNo">372</span>    assertEquals("1985-05-20", result.getPayload().getTo().toString());<a name="line.372"></a>
+<span class="sourceLineNo">373</span>    assertEquals(1, result.getIssues().size());<a name="line.373"></a>
+<span class="sourceLineNo">374</span>    assertEquals(OccurrenceIssue.RECORDED_DATE_INVALID, result.getIssues().iterator().next());<a name="line.374"></a>
+<span class="sourceLineNo">375</span><a name="line.375"></a>
+<span class="sourceLineNo">376</span>    // Inverted date range with time<a name="line.376"></a>
+<span class="sourceLineNo">377</span>    result = trp.parse("2022", "07", "04", "2022-07-04T15:44/2022-07-04T14:54", null, null);<a name="line.377"></a>
+<span class="sourceLineNo">378</span>    assertEquals("2022-07-04T14:54", result.getPayload().getFrom().toString());<a name="line.378"></a>
+<span class="sourceLineNo">379</span>    assertEquals("2022-07-04T15:44", result.getPayload().getTo().toString());<a name="line.379"></a>
+<span class="sourceLineNo">380</span>    assertEquals(1, result.getIssues().size());<a name="line.380"></a>
+<span class="sourceLineNo">381</span>    assertEquals(OccurrenceIssue.RECORDED_DATE_INVALID, result.getIssues().iterator().next());<a name="line.381"></a>
 <span class="sourceLineNo">382</span><a name="line.382"></a>
-<span class="sourceLineNo">383</span>    // Cases found in production data that don't fit elsewhere.<a name="line.383"></a>
-<span class="sourceLineNo">384</span><a name="line.384"></a>
-<span class="sourceLineNo">385</span>    // Range in the day field, and inverted.<a name="line.385"></a>
-<span class="sourceLineNo">386</span>    OccurrenceParseResult&lt;IsoDateInterval&gt; result = trp.parse("2005", "04", "8/11", "2005-04-11/08", null, null);<a name="line.386"></a>
-<span class="sourceLineNo">387</span>    assertEquals("2005-04-08", result.getPayload().getFrom().toString());<a name="line.387"></a>
-<span class="sourceLineNo">388</span>    assertEquals("2005-04-11", result.getPayload().getTo().toString());<a name="line.388"></a>
-<span class="sourceLineNo">389</span>    assertEquals(1, result.getIssues().size());<a name="line.389"></a>
-<span class="sourceLineNo">390</span>    assertEquals(OccurrenceIssue.RECORDED_DATE_INVALID, result.getIssues().iterator().next());<a name="line.390"></a>
-<span class="sourceLineNo">391</span><a name="line.391"></a>
-<span class="sourceLineNo">392</span>    result = trp.parse(null, null, null, "2002-03-10 00:00:00.0", null, null);<a name="line.392"></a>
-<span class="sourceLineNo">393</span>    assertEquals("2002-03-10T00:00", result.getPayload().getFrom().toString());<a name="line.393"></a>
-<span class="sourceLineNo">394</span>    assertEquals("2002-03-10T00:00", result.getPayload().getTo().toString());<a name="line.394"></a>
-<span class="sourceLineNo">395</span>    assertEquals(0, result.getIssues().size());<a name="line.395"></a>
-<span class="sourceLineNo">396</span>  }<a name="line.396"></a>
-<span class="sourceLineNo">397</span>}<a name="line.397"></a>
+<span class="sourceLineNo">383</span>    // Inverted date range with zoned time<a name="line.383"></a>
+<span class="sourceLineNo">384</span>    result = trp.parse("2014", "07", "15", "2014-07-15T13:00:00+02:00/2014-07-15T09:06:00+02:00", null, null);<a name="line.384"></a>
+<span class="sourceLineNo">385</span>    assertEquals("2014-07-15T09:06+02:00", result.getPayload().getFrom().toString());<a name="line.385"></a>
+<span class="sourceLineNo">386</span>    assertEquals("2014-07-15T13:00+02:00", result.getPayload().getTo().toString());<a name="line.386"></a>
+<span class="sourceLineNo">387</span>    assertEquals(1, result.getIssues().size());<a name="line.387"></a>
+<span class="sourceLineNo">388</span>    assertEquals(OccurrenceIssue.RECORDED_DATE_INVALID, result.getIssues().iterator().next());<a name="line.388"></a>
+<span class="sourceLineNo">389</span>  }<a name="line.389"></a>
+<span class="sourceLineNo">390</span><a name="line.390"></a>
+<span class="sourceLineNo">391</span>  @Test<a name="line.391"></a>
+<span class="sourceLineNo">392</span>  public void testRemeiningWeirdCases() {<a name="line.392"></a>
+<span class="sourceLineNo">393</span>    TemporalRangeParser trp = TemporalRangeParser.builder().create();<a name="line.393"></a>
+<span class="sourceLineNo">394</span><a name="line.394"></a>
+<span class="sourceLineNo">395</span>    // Cases found in production data that don't fit elsewhere.<a name="line.395"></a>
+<span class="sourceLineNo">396</span><a name="line.396"></a>
+<span class="sourceLineNo">397</span>    // Range in the day field, and inverted.<a name="line.397"></a>
+<span class="sourceLineNo">398</span>    OccurrenceParseResult&lt;IsoDateInterval&gt; result = trp.parse("2005", "04", "8/11", "2005-04-11/08", null, null);<a name="line.398"></a>
+<span class="sourceLineNo">399</span>    assertEquals("2005-04-08", result.getPayload().getFrom().toString());<a name="line.399"></a>
+<span class="sourceLineNo">400</span>    assertEquals("2005-04-11", result.getPayload().getTo().toString());<a name="line.400"></a>
+<span class="sourceLineNo">401</span>    assertEquals(1, result.getIssues().size());<a name="line.401"></a>
+<span class="sourceLineNo">402</span>    assertEquals(OccurrenceIssue.RECORDED_DATE_INVALID, result.getIssues().iterator().next());<a name="line.402"></a>
+<span class="sourceLineNo">403</span><a name="line.403"></a>
+<span class="sourceLineNo">404</span>    result = trp.parse(null, null, null, "2002-03-10 00:00:00.0", null, null);<a name="line.404"></a>
+<span class="sourceLineNo">405</span>    assertEquals("2002-03-10T00:00", result.getPayload().getFrom().toString());<a name="line.405"></a>
+<span class="sourceLineNo">406</span>    assertEquals("2002-03-10T00:00", result.getPayload().getTo().toString());<a name="line.406"></a>
+<span class="sourceLineNo">407</span>    assertEquals(0, result.getIssues().size());<a name="line.407"></a>
+<span class="sourceLineNo">408</span>  }<a name="line.408"></a>
+<span class="sourceLineNo">409</span>}<a name="line.409"></a>
 
 
 
