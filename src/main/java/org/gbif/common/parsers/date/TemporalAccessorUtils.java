@@ -13,6 +13,7 @@
  */
 package org.gbif.common.parsers.date;
 
+import javax.annotation.Nullable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
@@ -28,8 +29,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
-
-import javax.annotation.Nullable;
 
 /**
  * Utility methods to work with {@link TemporalAccessor}
@@ -240,6 +239,10 @@ public class TemporalAccessorUtils {
   }
 
   public static TemporalAccessor limitToResolution(TemporalAccessor ta, int requiredResolution) {
+    if (ta == null) {
+      return null;
+    }
+
     if (requiredResolution > 3) {
       // TODO: Different minutes/seconds.
       return ta.query(LocalDateTime::from);
@@ -253,6 +256,10 @@ public class TemporalAccessorUtils {
   }
 
   public static Temporal limitToResolution(Temporal ta, int requiredResolution) {
+    if (ta == null) {
+      return null;
+    }
+
     if (requiredResolution > 3) {
       // TODO: Different minutes/seconds.
       return ta.query(LocalDateTime::from);

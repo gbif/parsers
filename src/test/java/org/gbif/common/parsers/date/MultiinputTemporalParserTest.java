@@ -8,7 +8,6 @@ import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.OffsetDateTime;
 import java.time.Year;
 import java.time.YearMonth;
 import java.time.ZoneId;
@@ -22,10 +21,10 @@ import java.util.concurrent.TimeUnit;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 public class MultiinputTemporalParserTest {
 
@@ -189,17 +188,18 @@ public class MultiinputTemporalParserTest {
     assertEquals(ParseResult.CONFIDENCE.PROBABLE, result.getConfidence());
     assertEquals(OccurrenceIssue.RECORDED_DATE_INVALID, result.getIssues().iterator().next());
 
-    result = MultiinputTemporalParser.create().parseRecordedDate(null, null, null, "1984");
-    assertEquals(ParseResult.CONFIDENCE.DEFINITE, result.getConfidence());
-    assertTrue(result.getIssues().isEmpty());
-
-    // This is not supported
     result = MultiinputTemporalParser.create().parseRecordedDate("1984", "0", "0", null);
-    assertNullPayload(result, OccurrenceIssue.RECORDED_DATE_INVALID);
+    assertResult(1984, result);
+    assertEquals(ParseResult.CONFIDENCE.PROBABLE, result.getConfidence());
+    assertEquals(OccurrenceIssue.RECORDED_DATE_INVALID, result.getIssues().iterator().next());
 
     result = MultiinputTemporalParser.create().parseRecordedDate(null, null, null, "0-0-1984");
     assertEquals(ParseResult.STATUS.FAIL, result.getStatus());
     assertNullPayload(result, OccurrenceIssue.RECORDED_DATE_INVALID);
+
+    result = MultiinputTemporalParser.create().parseRecordedDate(null, null, null, "1984");
+    assertEquals(ParseResult.CONFIDENCE.DEFINITE, result.getConfidence());
+    assertTrue(result.getIssues().isEmpty());
   }
 
   @Test

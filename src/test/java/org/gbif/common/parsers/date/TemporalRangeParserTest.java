@@ -80,6 +80,11 @@ public class TemporalRangeParserTest {
     assertEquals(1, result.getIssues().size());
     assertTrue(result.getIssues().contains(OccurrenceIssue.RECORDED_DATE_INVALID));
 
+    // Dots are reliably European order
+    result = trp.parse("01.02.1999");
+    assertEquals("1999-02-01", result.getPayload().getFrom().toString());
+    assertEquals("1999-02-01", result.getPayload().getTo().toString());
+
     result = trp.parse("1999-01-02");
     assertTrue(result.getIssues().isEmpty());
     assertEquals("1999-01-02", result.getPayload().getFrom().toString());
@@ -259,22 +264,129 @@ public class TemporalRangeParserTest {
     result = trp.parse(null, null, null, "2009-09/2009-10-05", null, null);
     assertEquals("2009-09", result.getPayload().getFrom().toString());
     assertEquals("2009-10", result.getPayload().getTo().toString());
-    // TODO: Could improve by adding an issue in this case.
-    //assertEquals(1, result.getIssues().size());
-    //assertEquals(OccurrenceIssue.RECORDED_DATE_INVALID, result.getIssues().iterator().next());
+    // TODO: A small improvement would assign INVALID rather than MISMATCH for this.
+    assertEquals(1, result.getIssues().size());
+    assertEquals(OccurrenceIssue.RECORDED_DATE_MISMATCH, result.getIssues().iterator().next());
 
     // Event date has different resolutions on each side of the range
     result = trp.parse(null, null, null, "2009-09-18/2009-10-05T17:36+0200", null, null);
     assertEquals("2009-09-18", result.getPayload().getFrom().toString());
     assertEquals("2009-10-05", result.getPayload().getTo().toString());
-    // TODO: Could improve by adding an issue in this case.
-    //assertEquals(1, result.getIssues().size());
-    //assertEquals(OccurrenceIssue.RECORDED_DATE_INVALID, result.getIssues().iterator().next());
+    assertEquals(1, result.getIssues().size());
+    assertEquals(OccurrenceIssue.RECORDED_DATE_MISMATCH, result.getIssues().iterator().next());
 
     // Event date has different resolutions on each side of the range
     result = trp.parse(null, null, null, "2019-10-07T13:42:25Z/2019-10-07", null, null);
     assertEquals("2019-10-07", result.getPayload().getFrom().toString());
     assertEquals("2019-10-07", result.getPayload().getTo().toString());
+    assertEquals(1, result.getIssues().size());
+    assertEquals(OccurrenceIssue.RECORDED_DATE_MISMATCH, result.getIssues().iterator().next());
 
+    // Another example
+    result = trp.parse(null, null, null, "1983-12-31 23:59:59/1983", null, null);
+    assertEquals("1983", result.getPayload().getFrom().toString());
+    assertEquals("1983", result.getPayload().getTo().toString());
+    assertEquals(1, result.getIssues().size());
+    assertEquals(OccurrenceIssue.RECORDED_DATE_MISMATCH, result.getIssues().iterator().next());
+
+    // One part of the range has a time zone
+    result = trp.parse(null, null, null, "2006-03-08T2005/2006-03-08T2015+12", null, null);
+    assertEquals("2006-03-08T20:05", result.getPayload().getFrom().toString());
+    assertEquals("2006-03-08T20:15", result.getPayload().getTo().toString());
+    assertEquals(0, result.getIssues().size());
+
+    // One part of the range has a UTC time zone
+    result = trp.parse(null, null, null, "2022-03-01T06:26:14/2022-03-01T06:47:58Z", null, null);
+    assertEquals("2022-03-01T06:26:14", result.getPayload().getFrom().toString());
+    assertEquals("2022-03-01T06:47:58", result.getPayload().getTo().toString());
+    assertEquals(0, result.getIssues().size());
+  }
+
+  @Test
+  public void testDatePartsOutsideRange() {
+    TemporalRangeParser trp = TemporalRangeParser.builder().create();
+
+    // Zero date parts
+    OccurrenceParseResult<IsoDateInterval> result = trp.parse("1864", "0", "0", "1864", null, null);
+    assertEquals("1864", result.getPayload().getFrom().toString());
+    assertEquals("1864", result.getPayload().getTo().toString());
+    assertEquals(0, result.getIssues().size());
+
+    result = trp.parse("0", "0", "0", "1864-10-11", null, null);
+    assertEquals("1864-10-11", result.getPayload().getFrom().toString());
+    assertEquals("1864-10-11", result.getPayload().getTo().toString());
+    assertEquals(1, result.getIssues().size());
+    assertEquals(OccurrenceIssue.RECORDED_DATE_INVALID, result.getIssues().iterator().next());
+
+    result = trp.parse("0", "10", "11", "2002-10-11", null, null);
+    assertEquals("2002-10-11", result.getPayload().getFrom().toString());
+    assertEquals("2002-10-11", result.getPayload().getTo().toString());
+    assertEquals(1, result.getIssues().size());
+    assertEquals(OccurrenceIssue.RECORDED_DATE_INVALID, result.getIssues().iterator().next());
+
+    // Not a number
+    result = trp.parse("07.09.1919", null, null, "07.09.1919", null, null);
+    assertEquals("1919-09-07", result.getPayload().getFrom().toString());
+    assertEquals("1919-09-07", result.getPayload().getTo().toString());
+
+    // Far outside reasonable range
+    result = trp.parse("12345", null, null, "16.09.2013", null, null);
+    assertEquals("2013-09-16", result.getPayload().getFrom().toString());
+    assertEquals("2013-09-16", result.getPayload().getTo().toString());
+    assertEquals(1, result.getIssues().size());
+    assertEquals(OccurrenceIssue.RECORDED_DATE_INVALID, result.getIssues().iterator().next());
+
+    // Well outside range
+    result = trp.parse("1071", "8", "10", "2000-01-01", null, null);
+    assertFalse(result.isSuccessful());
+    assertEquals(1, result.getIssues().size());
+    assertEquals(OccurrenceIssue.RECORDED_DATE_MISMATCH, result.getIssues().iterator().next());
+  }
+
+  @Test
+  public void testInvertedRange() {
+    TemporalRangeParser trp = TemporalRangeParser.builder().create();
+
+    // Plain inverted date range
+    OccurrenceParseResult<IsoDateInterval> result = trp.parse("2000", "04", null, "2000-04-05/2000-04-01", null, null);
+    assertEquals("2000-04-01", result.getPayload().getFrom().toString());
+    assertEquals("2000-04-05", result.getPayload().getTo().toString());
+    assertEquals(1, result.getIssues().size());
+    assertEquals(OccurrenceIssue.RECORDED_DATE_INVALID, result.getIssues().iterator().next());
+
+    // Inverted with a day
+    result = trp.parse("1985", "05", "19", "1985-05-20/19", null, null);
+    assertEquals("1985-05-19", result.getPayload().getFrom().toString());
+    assertEquals("1985-05-20", result.getPayload().getTo().toString());
+    assertEquals(1, result.getIssues().size());
+    assertEquals(OccurrenceIssue.RECORDED_DATE_INVALID, result.getIssues().iterator().next());
+
+    // Inverted date range with time
+    result = trp.parse("2022", "07", "04", "2022-07-04T15:44/2022-07-04T14:54", null, null);
+    assertEquals("2022-07-04T14:54", result.getPayload().getFrom().toString());
+    assertEquals("2022-07-04T15:44", result.getPayload().getTo().toString());
+    assertEquals(1, result.getIssues().size());
+    assertEquals(OccurrenceIssue.RECORDED_DATE_INVALID, result.getIssues().iterator().next());
+
+    // Inverted date range with zoned time
+    result = trp.parse("2014", "07", "15", "2014-07-15T13:00:00+02:00/2014-07-15T09:06:00+02:00", null, null);
+    assertEquals("2014-07-15T09:06+02:00", result.getPayload().getFrom().toString());
+    assertEquals("2014-07-15T13:00+02:00", result.getPayload().getTo().toString());
+    assertEquals(1, result.getIssues().size());
+    assertEquals(OccurrenceIssue.RECORDED_DATE_INVALID, result.getIssues().iterator().next());
+  }
+
+  @Test
+  public void testRemeiningWeirdCases() {
+    TemporalRangeParser trp = TemporalRangeParser.builder().create();
+
+    // Cases found in production data that don't fit elsewhere.
+
+    // Range in the day field, and inverted.
+    OccurrenceParseResult<IsoDateInterval> result = trp.parse("2005", "04", "8/11", "2005-04-11/08", null, null);
+    assertEquals("2005-04-08", result.getPayload().getFrom().toString());
+    assertEquals("2005-04-11", result.getPayload().getTo().toString());
+    assertEquals(1, result.getIssues().size());
+    assertEquals(OccurrenceIssue.RECORDED_DATE_INVALID, result.getIssues().iterator().next());
   }
 }

@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
+import static org.gbif.common.parsers.core.ParseResult.CONFIDENCE.DEFINITE;
 import static org.gbif.common.parsers.core.ParseResult.CONFIDENCE.PROBABLE;
 
 /**
@@ -72,6 +73,17 @@ public class MultiinputTemporalParser implements Serializable {
   public OccurrenceParseResult<TemporalAccessor> parseRecordedDate(
       String year, String month, String day, String dateString, String dayOfYear) {
 
+    ParseResult.CONFIDENCE[] confidence = new ParseResult.CONFIDENCE[1];
+    confidence[0] = DEFINITE;
+
+    Set<OccurrenceIssue> issues = EnumSet.noneOf(OccurrenceIssue.class);
+
+    // Clean up bad values from number-only fields.
+    year = cleanNumberString(year, confidence, issues);
+    month = cleanNumberString(month, confidence, issues);
+    day = cleanNumberString(day, confidence, issues);
+    dayOfYear = cleanNumberString(dayOfYear, confidence, issues);
+
     boolean ymdProvided =
         StringUtils.isNotBlank(year)
             || StringUtils.isNotBlank(month)
@@ -91,10 +103,7 @@ public class MultiinputTemporalParser implements Serializable {
       return OccurrenceParseResult.fail();
     }
 
-    Set<OccurrenceIssue> issues = EnumSet.noneOf(OccurrenceIssue.class);
-
     TemporalAccessor parsedTemporalAccessor;
-    ParseResult.CONFIDENCE confidence;
 
     // Parse all three possible dates
     ParseResult<TemporalAccessor> parsedYMDResult =
@@ -184,16 +193,17 @@ public class MultiinputTemporalParser implements Serializable {
     if (TemporalAccessorUtils.sameOrContainedOrNull(parsedYmdTa, parsedDateTa)
         && TemporalAccessorUtils.sameOrContainedOrNull(parsedYmdTa, parsedYearDoyTa)
         && TemporalAccessorUtils.sameOrContainedOrNull(parsedDateTa, parsedYearDoyTa)) {
-      confidence =
-          parsedDateTa != null
-              ? parsedDateResult.getConfidence()
-              : (parsedYmdTa != null
-                  ? parsedYMDResult.getConfidence()
-                  : parsedYearDoyResult.getConfidence());
+
+      confidence[0] = ParseResult.CONFIDENCE.lowerOf(confidence[0],
+        parsedDateTa != null
+          ? parsedDateResult.getConfidence()
+          : (parsedYmdTa != null
+          ? parsedYMDResult.getConfidence()
+          : parsedYearDoyResult.getConfidence()));
     } else {
       log.debug("Date {}|{}|{}|{}|{} mismatch (conflict)", year, month, day, dateString, dayOfYear);
       issues.add(OccurrenceIssue.RECORDED_DATE_MISMATCH);
-      confidence = PROBABLE;
+      confidence[0] = PROBABLE;
     }
 
     // Add an issue if the resolution af ymd / date / yDoy is different
@@ -212,12 +222,12 @@ public class MultiinputTemporalParser implements Serializable {
     if (nonConflictingTa.isPresent()) {
       parsedTemporalAccessor = nonConflictingTa.get();
       // if one of the parses failed we can not set the confidence to DEFINITE
-      confidence =
+      confidence[0] =
           ((ymdProvided && parsedYmdTa == null)
                   || (dateStringProvided && parsedDateTa == null)
                   || (yDoyProvided && parsedYearDoyTa == null))
               ? PROBABLE
-              : confidence;
+              : confidence[0];
     } else {
       log.debug("Date {}|{}|{}|{}|{} mismatch (conflicting)", year, month, day, dateString, dayOfYear);
       if (twoOrMoreProvided) {
@@ -238,7 +248,7 @@ public class MultiinputTemporalParser implements Serializable {
       return OccurrenceParseResult.fail(issues);
     }
 
-    return OccurrenceParseResult.success(confidence, parsedTemporalAccessor, issues);
+    return OccurrenceParseResult.success(confidence[0], parsedTemporalAccessor, issues);
   }
 
   public OccurrenceParseResult<TemporalAccessor> parseRecordedDate(String dateString) {
@@ -307,5 +317,29 @@ public class MultiinputTemporalParser implements Serializable {
     }
 
     return likelyRange.contains(LocalDate.of(year, month, day));
+  }
+
+  /**
+   * Removes a zero value if present.  If it was present, reduces the confidence
+   * and adds an issue.
+   */
+  private static String cleanNumberString(String number, ParseResult.CONFIDENCE[] confidence, Set<OccurrenceIssue> issues) {
+    if (number == null) {
+      return null;
+    }
+
+    number = number.trim();
+    try {
+      if (Integer.parseInt(number) == 0) {
+        confidence[0] = PROBABLE;
+        issues.add(OccurrenceIssue.RECORDED_DATE_INVALID);
+        return null;
+      }
+    } catch (NumberFormatException e) {
+      confidence[0] = PROBABLE;
+      issues.add(OccurrenceIssue.RECORDED_DATE_INVALID);
+    }
+
+    return StringUtils.trimToNull(number);
   }
 }

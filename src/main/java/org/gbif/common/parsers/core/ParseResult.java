@@ -30,7 +30,26 @@ public class ParseResult<T> {
 
   // the confidence of the result, applicable if status=SUCCESS
   public enum CONFIDENCE {
-    DEFINITE, PROBABLE, POSSIBLE
+    DEFINITE,
+    PROBABLE,
+    POSSIBLE;
+
+    public static CONFIDENCE lowerOf(CONFIDENCE c1, CONFIDENCE c2) {
+      if (c1 == null) {
+        return c2;
+      }
+
+      if (c2 == null) {
+        return c1;
+      }
+
+      if (c1.compareTo(c2) > 0) {
+        // Higher enum value is lower confidence
+        return c1;
+      } else {
+        return c2;
+      }
+    }
   }
 
   // the details of the response

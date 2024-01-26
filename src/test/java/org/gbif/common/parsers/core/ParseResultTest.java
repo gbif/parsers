@@ -77,4 +77,9 @@ public class ParseResultTest {
     assertEquals("Bingo", ParseResult.error(new RuntimeException("Bingo")).getError().getMessage());
     assertNull(ParseResult.error(new RuntimeException("Bingo")).getPayload());
   }
+
+  @Test
+  public void testConfidence() {
+    assertEquals(ParseResult.CONFIDENCE.POSSIBLE, ParseResult.CONFIDENCE.lowerOf(ParseResult.CONFIDENCE.PROBABLE, ParseResult.CONFIDENCE.POSSIBLE));
+  }
 }
