@@ -54,7 +54,6 @@ public class TemporalRangeParser implements Serializable {
       String dateRange,
       String startDayOfYear,
       String endDayOfYear) {
-    if (MultiinputTemporalParser.debug) System.out.println();
 
     Set<OccurrenceIssue> issues = new HashSet<>();
 
