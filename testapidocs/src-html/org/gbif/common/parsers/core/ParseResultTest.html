@@ -85,7 +85,12 @@
 <span class="sourceLineNo">077</span>    assertEquals("Bingo", ParseResult.error(new RuntimeException("Bingo")).getError().getMessage());<a name="line.77"></a>
 <span class="sourceLineNo">078</span>    assertNull(ParseResult.error(new RuntimeException("Bingo")).getPayload());<a name="line.78"></a>
 <span class="sourceLineNo">079</span>  }<a name="line.79"></a>
-<span class="sourceLineNo">080</span>}<a name="line.80"></a>
+<span class="sourceLineNo">080</span><a name="line.80"></a>
+<span class="sourceLineNo">081</span>  @Test<a name="line.81"></a>
+<span class="sourceLineNo">082</span>  public void testConfidence() {<a name="line.82"></a>
+<span class="sourceLineNo">083</span>    assertEquals(ParseResult.CONFIDENCE.POSSIBLE, ParseResult.CONFIDENCE.lowerOf(ParseResult.CONFIDENCE.PROBABLE, ParseResult.CONFIDENCE.POSSIBLE));<a name="line.83"></a>
+<span class="sourceLineNo">084</span>  }<a name="line.84"></a>
+<span class="sourceLineNo">085</span>}<a name="line.85"></a>
 
 
 
