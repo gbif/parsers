@@ -72,10 +72,17 @@ public class TemporalRangeParser implements Serializable {
         if (dateRangeOnlyStart.getPayload().isSupported(ChronoField.DAY_OF_YEAR)
           && dateRangeOnlyEnd.getPayload().isSupported(ChronoField.DAY_OF_YEAR)
           && ymdOnly.getPayload().isSupported(ChronoField.DAY_OF_YEAR)) {
-          if (TemporalAccessorUtils.withinRange(dateRangeOnlyStart.getPayload(), dateRangeOnlyEnd.getPayload(), ymdOnly.getPayload())) {
+            if (TemporalAccessorUtils.withinRange(dateRangeOnlyStart.getPayload(), dateRangeOnlyEnd.getPayload(), ymdOnly.getPayload())) {
             // Then we can just check the startDayOfYear and endDayOfYear fields match.
             from = parseAndSet(null, null, null, rawPeriod[0], startDayOfYear, issues);
             to = parseAndSet(null, null, null, rawPeriod[1], endDayOfYear, issues);
+            // If the dateRange has different resolutions on either side, truncate it.
+            if (TemporalAccessorUtils.resolutionToSeconds(from) != TemporalAccessorUtils.resolutionToSeconds(to)) {
+              int requiredResolution = Math.min(TemporalAccessorUtils.resolutionToSeconds(from), TemporalAccessorUtils.resolutionToSeconds(to));
+              from = TemporalAccessorUtils.limitToResolution(from, requiredResolution);
+              to = TemporalAccessorUtils.limitToResolution(to, requiredResolution);
+              issues.add(OccurrenceIssue.RECORDED_DATE_INVALID);
+            }
             log.trace("Range {}|{}|{}|{}|{}|{} succeeds with ymd within range {}→{}", year, month, day, dateRange, startDayOfYear, endDayOfYear, from, to);
             return OccurrenceParseResult.success(ParseResult.CONFIDENCE.DEFINITE, new IsoDateInterval(from, to), issues);
           }
@@ -97,6 +104,12 @@ public class TemporalRangeParser implements Serializable {
           // Then we can just check the startDayOfYear and endDayOfYear fields match.
           from = parseAndSet(null, null, null, rawPeriod[0], startDayOfYear, issues);
           to = parseAndSet(null, null, null, rawPeriod[1], endDayOfYear, issues);
+          if (TemporalAccessorUtils.resolutionToSeconds(from) != TemporalAccessorUtils.resolutionToSeconds(to)) {
+            int requiredResolution = Math.min(TemporalAccessorUtils.resolutionToSeconds(from), TemporalAccessorUtils.resolutionToSeconds(to));
+            from = TemporalAccessorUtils.limitToResolution(from, requiredResolution);
+            to = TemporalAccessorUtils.limitToResolution(to, requiredResolution);
+            issues.add(OccurrenceIssue.RECORDED_DATE_INVALID);
+          }
           log.trace("Range {}|{}|{}|{}|{}|{} succeeds with correct ymd parts {}→{}", year, month, day, dateRange, startDayOfYear, endDayOfYear, from, to);
           return OccurrenceParseResult.success(ParseResult.CONFIDENCE.DEFINITE, new IsoDateInterval(from, to), issues);
         }
@@ -120,19 +133,11 @@ public class TemporalRangeParser implements Serializable {
 
     // If the resolutions are not equal, truncate such that they are.
     if (from != null && to != null) {
-      if (TemporalAccessorUtils.resolution(from) != TemporalAccessorUtils.resolution(to)) {
+      if (TemporalAccessorUtils.resolutionToSeconds(from) != TemporalAccessorUtils.resolutionToSeconds(to)) {
         log.trace("Range {}|{}|{}|{}|{}|{} has different resolutions, will be truncated {}→{}", year, month, day, dateRange, startDayOfYear, endDayOfYear, from, to);
-        int requiredResolution = Math.min(TemporalAccessorUtils.resolution(from), TemporalAccessorUtils.resolution(to));
-        if (requiredResolution == 3) {
-          from = from.query(LocalDate::from);
-          to = to.query(LocalDate::from);
-        } else if (requiredResolution == 2) {
-          from = from.query(YearMonth::from);
-          to = to.query(YearMonth::from);
-        } else {
-          from = from.query(Year::from);
-          to = to.query(Year::from);
-        }
+        int requiredResolution = Math.min(TemporalAccessorUtils.resolutionToSeconds(from), TemporalAccessorUtils.resolutionToSeconds(to));
+        from = TemporalAccessorUtils.limitToResolution(from, requiredResolution);
+        to = TemporalAccessorUtils.limitToResolution(to, requiredResolution);
       }
     }
 
