@@ -270,5 +270,11 @@ public class TemporalRangeParserTest {
     // TODO: Could improve by adding an issue in this case.
     //assertEquals(1, result.getIssues().size());
     //assertEquals(OccurrenceIssue.RECORDED_DATE_INVALID, result.getIssues().iterator().next());
+
+    // Event date has different resolutions on each side of the range
+    result = trp.parse(null, null, null, "2019-10-07T13:42:25Z/2019-10-07", null, null);
+    assertEquals("2019-10-07", result.getPayload().getFrom().toString());
+    assertEquals("2019-10-07", result.getPayload().getTo().toString());
+
   }
 }

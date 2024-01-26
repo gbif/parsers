@@ -54,116 +54,127 @@ public class TemporalRangeParser implements Serializable {
       String dateRange,
       String startDayOfYear,
       String endDayOfYear) {
-    // Even a single date will be split to two
-    String[] rawPeriod = DelimiterUtils.splitPeriod(dateRange);
 
-    Temporal from;
-    Temporal to;
     Set<OccurrenceIssue> issues = new HashSet<>();
 
-    // If eventDate is a multi-day range, with at least day precision, and year+month+day are set, we must test
-    // whether year+month+day falls within this range.
-    if (StringUtils.isNotBlank(year) && StringUtils.isNotBlank(month) && StringUtils.isNotBlank(day) && StringUtils.isNotBlank(dateRange)) {
-      OccurrenceParseResult<TemporalAccessor> dateRangeOnlyStart = temporalParser.parseRecordedDate(null, null, null, rawPeriod[0], null);
-      OccurrenceParseResult<TemporalAccessor> dateRangeOnlyEnd = temporalParser.parseRecordedDate(null, null, null, rawPeriod[1], null);
-      OccurrenceParseResult<TemporalAccessor> ymdOnly = temporalParser.parseRecordedDate(year, month, day, null, null);
+    try {
+      // Even a single date will be split to two
+      String[] rawPeriod = DelimiterUtils.splitPeriod(dateRange);
 
-      if (dateRangeOnlyStart.isSuccessful() && dateRangeOnlyEnd.isSuccessful() && ymdOnly.isSuccessful()) {
-        if (dateRangeOnlyStart.getPayload().isSupported(ChronoField.DAY_OF_YEAR)
-          && dateRangeOnlyEnd.getPayload().isSupported(ChronoField.DAY_OF_YEAR)
-          && ymdOnly.getPayload().isSupported(ChronoField.DAY_OF_YEAR)) {
+      Temporal from;
+      Temporal to;
+
+      // If eventDate is a multi-day range, with at least day precision, and year+month+day are set, we must test
+      // whether year+month+day falls within this range.
+      if (StringUtils.isNotBlank(year) && StringUtils.isNotBlank(month) && StringUtils.isNotBlank(day) && StringUtils.isNotBlank(dateRange)) {
+        OccurrenceParseResult<TemporalAccessor> dateRangeOnlyStart = temporalParser.parseRecordedDate(null, null, null, rawPeriod[0], null);
+        OccurrenceParseResult<TemporalAccessor> dateRangeOnlyEnd = temporalParser.parseRecordedDate(null, null, null, rawPeriod[1], null);
+        OccurrenceParseResult<TemporalAccessor> ymdOnly = temporalParser.parseRecordedDate(year, month, day, null, null);
+
+        if (dateRangeOnlyStart.isSuccessful() && dateRangeOnlyEnd.isSuccessful() && ymdOnly.isSuccessful()) {
+          if (dateRangeOnlyStart.getPayload().isSupported(ChronoField.DAY_OF_YEAR)
+            && dateRangeOnlyEnd.getPayload().isSupported(ChronoField.DAY_OF_YEAR)
+            && ymdOnly.getPayload().isSupported(ChronoField.DAY_OF_YEAR)) {
             if (TemporalAccessorUtils.withinRange(dateRangeOnlyStart.getPayload(), dateRangeOnlyEnd.getPayload(), ymdOnly.getPayload())) {
+              // Then we can just check the startDayOfYear and endDayOfYear fields match.
+              from = parseAndSet(null, null, null, rawPeriod[0], startDayOfYear, issues);
+              to = parseAndSet(null, null, null, rawPeriod[1], endDayOfYear, issues);
+              // If the dateRange has different resolutions on either side, truncate it.
+              if (TemporalAccessorUtils.resolutionToSeconds(from) != TemporalAccessorUtils.resolutionToSeconds(to)) {
+                int requiredResolution = Math.min(TemporalAccessorUtils.resolutionToSeconds(from), TemporalAccessorUtils.resolutionToSeconds(to));
+                from = TemporalAccessorUtils.limitToResolution(from, requiredResolution);
+                to = TemporalAccessorUtils.limitToResolution(to, requiredResolution);
+                issues.add(OccurrenceIssue.RECORDED_DATE_INVALID);
+              }
+              log.trace("Range {}|{}|{}|{}|{}|{} succeeds with ymd within range {}→{}", year, month, day, dateRange, startDayOfYear, endDayOfYear, from, to);
+              return OccurrenceParseResult.success(ParseResult.CONFIDENCE.DEFINITE, new IsoDateInterval(from, to), issues);
+            }
+          }
+        }
+      }
+
+      // If eventDate is a range, and at least year is set, we must test whether year+month+day are set according to the
+      // constant parts of eventDate.
+      if (StringUtils.isNotBlank(year) && StringUtils.isNotBlank(dateRange)) {
+        OccurrenceParseResult<TemporalAccessor> dateRangeOnlyStart = temporalParser.parseRecordedDate(null, null, null, rawPeriod[0], null);
+        OccurrenceParseResult<TemporalAccessor> dateRangeOnlyEnd = temporalParser.parseRecordedDate(null, null, null, rawPeriod[1], null);
+        OccurrenceParseResult<TemporalAccessor> ymdOnly = temporalParser.parseRecordedDate(year, month, day, null, null);
+
+        if (dateRangeOnlyStart.isSuccessful() && dateRangeOnlyEnd.isSuccessful() && ymdOnly.isSuccessful()) {
+          Optional<TemporalAccessor> dateRangeConstant = TemporalAccessorUtils.nonConflictingDateParts(dateRangeOnlyStart.getPayload(), dateRangeOnlyEnd.getPayload(), null);
+
+          if (dateRangeConstant.isPresent() && ymdOnly.getPayload().equals(dateRangeConstant.get())) {
             // Then we can just check the startDayOfYear and endDayOfYear fields match.
             from = parseAndSet(null, null, null, rawPeriod[0], startDayOfYear, issues);
             to = parseAndSet(null, null, null, rawPeriod[1], endDayOfYear, issues);
-            // If the dateRange has different resolutions on either side, truncate it.
             if (TemporalAccessorUtils.resolutionToSeconds(from) != TemporalAccessorUtils.resolutionToSeconds(to)) {
               int requiredResolution = Math.min(TemporalAccessorUtils.resolutionToSeconds(from), TemporalAccessorUtils.resolutionToSeconds(to));
               from = TemporalAccessorUtils.limitToResolution(from, requiredResolution);
               to = TemporalAccessorUtils.limitToResolution(to, requiredResolution);
               issues.add(OccurrenceIssue.RECORDED_DATE_INVALID);
             }
-            log.trace("Range {}|{}|{}|{}|{}|{} succeeds with ymd within range {}→{}", year, month, day, dateRange, startDayOfYear, endDayOfYear, from, to);
+            log.trace("Range {}|{}|{}|{}|{}|{} succeeds with correct ymd parts {}→{}", year, month, day, dateRange, startDayOfYear, endDayOfYear, from, to);
             return OccurrenceParseResult.success(ParseResult.CONFIDENCE.DEFINITE, new IsoDateInterval(from, to), issues);
           }
         }
       }
-    }
 
-    // If eventDate is a range, and at least year is set, we must test whether year+month+day are set according to the
-    // constant parts of eventDate.
-    if (StringUtils.isNotBlank(year) && StringUtils.isNotBlank(dateRange)) {
-      OccurrenceParseResult<TemporalAccessor> dateRangeOnlyStart = temporalParser.parseRecordedDate(null, null, null, rawPeriod[0], null);
-      OccurrenceParseResult<TemporalAccessor> dateRangeOnlyEnd = temporalParser.parseRecordedDate(null, null, null, rawPeriod[1], null);
-      OccurrenceParseResult<TemporalAccessor> ymdOnly = temporalParser.parseRecordedDate(year, month, day, null, null);
+      // Otherwise, we will reduce the precision of the given dates until they all agree.
 
-      if (dateRangeOnlyStart.isSuccessful() && dateRangeOnlyEnd.isSuccessful() && ymdOnly.isSuccessful()) {
-        Optional<TemporalAccessor> dateRangeConstant = TemporalAccessorUtils.nonConflictingDateParts(dateRangeOnlyStart.getPayload(), dateRangeOnlyEnd.getPayload(), null);
+      // Year+month+day, first part of eventDate, and startDay of year to the best we can get.
+      from = parseAndSet(year, month, day, rawPeriod[0], startDayOfYear, issues);
+      // Year+month+day, second part of eventDate, and endDayOfYear of year to the best we can get.
+      to = parseAndSet(year, month, day, rawPeriod[1], endDayOfYear, issues);
+      log.trace("Range {}|{}|{}|{}|{}|{} parsed to {}→{}", year, month, day, dateRange, startDayOfYear, endDayOfYear, from, to);
 
-        if (dateRangeConstant.isPresent() && ymdOnly.getPayload().equals(dateRangeConstant.get())) {
-          // Then we can just check the startDayOfYear and endDayOfYear fields match.
-          from = parseAndSet(null, null, null, rawPeriod[0], startDayOfYear, issues);
-          to = parseAndSet(null, null, null, rawPeriod[1], endDayOfYear, issues);
-          if (TemporalAccessorUtils.resolutionToSeconds(from) != TemporalAccessorUtils.resolutionToSeconds(to)) {
-            int requiredResolution = Math.min(TemporalAccessorUtils.resolutionToSeconds(from), TemporalAccessorUtils.resolutionToSeconds(to));
-            from = TemporalAccessorUtils.limitToResolution(from, requiredResolution);
-            to = TemporalAccessorUtils.limitToResolution(to, requiredResolution);
+      // Return a failure, rather than a range with a missing start or end
+      if (from != null ^ to != null) {
+        log.debug("Range {}|{}|{}|{}|{}|{} fails due to missing start xor end {}→{}", year, month, day, dateRange, startDayOfYear, endDayOfYear, from, to);
+        issues.add(OccurrenceIssue.RECORDED_DATE_MISMATCH);
+        return OccurrenceParseResult.fail(issues);
+      }
+
+      // If the resolutions are not equal, truncate such that they are.
+      if (from != null && to != null) {
+        if (TemporalAccessorUtils.resolutionToSeconds(from) != TemporalAccessorUtils.resolutionToSeconds(to)) {
+          log.trace("Range {}|{}|{}|{}|{}|{} has different resolutions, will be truncated {}→{}", year, month, day, dateRange, startDayOfYear, endDayOfYear, from, to);
+          int requiredResolution = Math.min(TemporalAccessorUtils.resolutionToSeconds(from), TemporalAccessorUtils.resolutionToSeconds(to));
+          from = TemporalAccessorUtils.limitToResolution(from, requiredResolution);
+          to = TemporalAccessorUtils.limitToResolution(to, requiredResolution);
+        }
+      }
+
+      // Reverse order if needed
+      if (from != null && to != null) {
+        if (from.getClass() == to.getClass()) {
+          long rangeDiff = getRangeDiff(from, to);
+          if (rangeDiff < 0) {
+            log.trace("Range {}|{}|{}|{}|{}|{} will be reversed {}→{}", year, month, day, dateRange, startDayOfYear, endDayOfYear, from, to);
             issues.add(OccurrenceIssue.RECORDED_DATE_INVALID);
+            return OccurrenceParseResult.success(ParseResult.CONFIDENCE.DEFINITE, new IsoDateInterval(to, from), issues);
           }
-          log.trace("Range {}|{}|{}|{}|{}|{} succeeds with correct ymd parts {}→{}", year, month, day, dateRange, startDayOfYear, endDayOfYear, from, to);
-          return OccurrenceParseResult.success(ParseResult.CONFIDENCE.DEFINITE, new IsoDateInterval(from, to), issues);
+        } else {
+          issues.add(OccurrenceIssue.RECORDED_DATE_UNLIKELY);
         }
       }
-    }
 
-    // Otherwise, we will reduce the precision of the given dates until they all agree.
-
-    // Year+month+day, first part of eventDate, and startDay of year to the best we can get.
-    from = parseAndSet(year, month, day, rawPeriod[0], startDayOfYear, issues);
-    // Year+month+day, second part of eventDate, and endDayOfYear of year to the best we can get.
-    to = parseAndSet(year, month, day, rawPeriod[1], endDayOfYear, issues);
-    log.trace("Range {}|{}|{}|{}|{}|{} parsed to {}→{}", year, month, day, dateRange, startDayOfYear, endDayOfYear, from, to);
-
-    // Return a failure, rather than a range with a missing start or end
-    if (from != null ^ to != null) {
-      log.debug("Range {}|{}|{}|{}|{}|{} fails due to missing start xor end {}→{}", year, month, day, dateRange, startDayOfYear, endDayOfYear, from, to);
-      issues.add(OccurrenceIssue.RECORDED_DATE_MISMATCH);
-      return OccurrenceParseResult.fail(issues);
-    }
-
-    // If the resolutions are not equal, truncate such that they are.
-    if (from != null && to != null) {
-      if (TemporalAccessorUtils.resolutionToSeconds(from) != TemporalAccessorUtils.resolutionToSeconds(to)) {
-        log.trace("Range {}|{}|{}|{}|{}|{} has different resolutions, will be truncated {}→{}", year, month, day, dateRange, startDayOfYear, endDayOfYear, from, to);
-        int requiredResolution = Math.min(TemporalAccessorUtils.resolutionToSeconds(from), TemporalAccessorUtils.resolutionToSeconds(to));
-        from = TemporalAccessorUtils.limitToResolution(from, requiredResolution);
-        to = TemporalAccessorUtils.limitToResolution(to, requiredResolution);
-      }
-    }
-
-    // Reverse order if needed
-    if (from != null && to != null) {
-      if (from.getClass() == to.getClass()) {
-        long rangeDiff = getRangeDiff(from, to);
-        if (rangeDiff < 0) {
-          log.trace("Range {}|{}|{}|{}|{}|{} will be reversed {}→{}", year, month, day, dateRange, startDayOfYear, endDayOfYear, from, to);
-          issues.add(OccurrenceIssue.RECORDED_DATE_INVALID);
-          return OccurrenceParseResult.success(ParseResult.CONFIDENCE.DEFINITE, new IsoDateInterval(to, from), issues);
-        }
+      if (from == null && to == null) {
+        log.debug("Range {}|{}|{}|{}|{}|{} could not be parsed", year, month, day, dateRange, startDayOfYear, endDayOfYear);
+        return OccurrenceParseResult.fail(issues);
+      } else if (from != null && to != null) {
+        log.trace("Range {}|{}|{}|{}|{}|{} succeeds {}→{}", year, month, day, dateRange, startDayOfYear, endDayOfYear, from, to);
+        return OccurrenceParseResult.success(ParseResult.CONFIDENCE.DEFINITE, new IsoDateInterval(from, to), issues);
       } else {
-        issues.add(OccurrenceIssue.RECORDED_DATE_UNLIKELY);
+        log.error("From {} and to {} dates of range are unexpectedly not-null and null when parsing {}, {}, {}, {}, {}, {}",
+          from, to, year, month, day, dateRange, startDayOfYear, endDayOfYear);
+        issues.add(OccurrenceIssue.RECORDED_DATE_INVALID);
+        issues.add(OccurrenceIssue.INTERPRETATION_ERROR);
+        return OccurrenceParseResult.fail(issues);
       }
-    }
-
-    if (from == null && to == null) {
-      log.debug("Range {}|{}|{}|{}|{}|{} could not be parsed", year, month, day, dateRange, startDayOfYear, endDayOfYear);
-      return OccurrenceParseResult.fail(issues);
-    } else if (from != null && to != null) {
-      log.trace("Range {}|{}|{}|{}|{}|{} succeeds {}→{}", year, month, day, dateRange, startDayOfYear, endDayOfYear, from, to);
-      return OccurrenceParseResult.success(ParseResult.CONFIDENCE.DEFINITE, new IsoDateInterval(from, to), issues);
-    } else {
-      log.error("From {} and to {} dates of range are unexpectedly not-null and null when parsing {}, {}, {}, {}, {}, {}",
-        from, to, year, month, day, dateRange, startDayOfYear, endDayOfYear);
+    } catch (Exception e) {
+      log.error("Exception when parsing dates: {}, {}, {}, {}, {}, {}, {}", year, month, day, dateRange, startDayOfYear, endDayOfYear);
+      log.error("Exception is "+e.getMessage(), e);
+      issues.add(OccurrenceIssue.RECORDED_DATE_INVALID);
       issues.add(OccurrenceIssue.INTERPRETATION_ERROR);
       return OccurrenceParseResult.fail(issues);
     }
