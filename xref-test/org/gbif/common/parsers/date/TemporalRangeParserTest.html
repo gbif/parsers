@@ -278,8 +278,14 @@
 <a class="jxr_linenumber" name="L270" href="#L270">270</a>     <em class="jxr_comment">// TODO: Could improve by adding an issue in this case.</em>
 <a class="jxr_linenumber" name="L271" href="#L271">271</a>     <em class="jxr_comment">//assertEquals(1, result.getIssues().size());</em>
 <a class="jxr_linenumber" name="L272" href="#L272">272</a>     <em class="jxr_comment">//assertEquals(OccurrenceIssue.RECORDED_DATE_INVALID, result.getIssues().iterator().next());</em>
-<a class="jxr_linenumber" name="L273" href="#L273">273</a>   }
-<a class="jxr_linenumber" name="L274" href="#L274">274</a> }
+<a class="jxr_linenumber" name="L273" href="#L273">273</a> 
+<a class="jxr_linenumber" name="L274" href="#L274">274</a>     <em class="jxr_comment">// Event date has different resolutions on each side of the range</em>
+<a class="jxr_linenumber" name="L275" href="#L275">275</a>     result = trp.parse(<strong class="jxr_keyword">null</strong>, <strong class="jxr_keyword">null</strong>, <strong class="jxr_keyword">null</strong>, <span class="jxr_string">"2019-10-07T13:42:25Z/2019-10-07"</span>, <strong class="jxr_keyword">null</strong>, <strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L276" href="#L276">276</a>     assertEquals(<span class="jxr_string">"2019-10-07"</span>, result.getPayload().getFrom().toString());
+<a class="jxr_linenumber" name="L277" href="#L277">277</a>     assertEquals(<span class="jxr_string">"2019-10-07"</span>, result.getPayload().getTo().toString());
+<a class="jxr_linenumber" name="L278" href="#L278">278</a> 
+<a class="jxr_linenumber" name="L279" href="#L279">279</a>   }
+<a class="jxr_linenumber" name="L280" href="#L280">280</a> }
 </pre>
 <hr/>
 <div id="footer">Copyright &#169; 2024 <a href="https://www.gbif.org">Global Biodiversity Information Facility (GBIF)</a>. All rights reserved.</div>
