@@ -262,8 +262,24 @@
 <span class="sourceLineNo">254</span>    assertEquals("2000", result.getPayload().getTo().toString());<a name="line.254"></a>
 <span class="sourceLineNo">255</span>    assertEquals(1, result.getIssues().size());<a name="line.255"></a>
 <span class="sourceLineNo">256</span>    assertEquals(OccurrenceIssue.RECORDED_DATE_MISMATCH, result.getIssues().iterator().next());<a name="line.256"></a>
-<span class="sourceLineNo">257</span>  }<a name="line.257"></a>
-<span class="sourceLineNo">258</span>}<a name="line.258"></a>
+<span class="sourceLineNo">257</span><a name="line.257"></a>
+<span class="sourceLineNo">258</span>    // Event date has different resolutions on each side of the range<a name="line.258"></a>
+<span class="sourceLineNo">259</span>    result = trp.parse(null, null, null, "2009-09/2009-10-05", null, null);<a name="line.259"></a>
+<span class="sourceLineNo">260</span>    assertEquals("2009-09", result.getPayload().getFrom().toString());<a name="line.260"></a>
+<span class="sourceLineNo">261</span>    assertEquals("2009-10", result.getPayload().getTo().toString());<a name="line.261"></a>
+<span class="sourceLineNo">262</span>    // TODO: Could improve by adding an issue in this case.<a name="line.262"></a>
+<span class="sourceLineNo">263</span>    //assertEquals(1, result.getIssues().size());<a name="line.263"></a>
+<span class="sourceLineNo">264</span>    //assertEquals(OccurrenceIssue.RECORDED_DATE_INVALID, result.getIssues().iterator().next());<a name="line.264"></a>
+<span class="sourceLineNo">265</span><a name="line.265"></a>
+<span class="sourceLineNo">266</span>    // Event date has different resolutions on each side of the range<a name="line.266"></a>
+<span class="sourceLineNo">267</span>    result = trp.parse(null, null, null, "2009-09-18/2009-10-05T17:36+0200", null, null);<a name="line.267"></a>
+<span class="sourceLineNo">268</span>    assertEquals("2009-09-18", result.getPayload().getFrom().toString());<a name="line.268"></a>
+<span class="sourceLineNo">269</span>    assertEquals("2009-10-05", result.getPayload().getTo().toString());<a name="line.269"></a>
+<span class="sourceLineNo">270</span>    // TODO: Could improve by adding an issue in this case.<a name="line.270"></a>
+<span class="sourceLineNo">271</span>    //assertEquals(1, result.getIssues().size());<a name="line.271"></a>
+<span class="sourceLineNo">272</span>    //assertEquals(OccurrenceIssue.RECORDED_DATE_INVALID, result.getIssues().iterator().next());<a name="line.272"></a>
+<span class="sourceLineNo">273</span>  }<a name="line.273"></a>
+<span class="sourceLineNo">274</span>}<a name="line.274"></a>
 
 
 
