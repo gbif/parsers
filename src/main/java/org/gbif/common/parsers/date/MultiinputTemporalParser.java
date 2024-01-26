@@ -324,7 +324,7 @@ public class MultiinputTemporalParser implements Serializable {
    * and adds an issue.
    */
   private static String cleanNumberString(String number, ParseResult.CONFIDENCE[] confidence, Set<OccurrenceIssue> issues) {
-    if (number == null) {
+    if (StringUtils.trimToNull(number) == null) {
       return null;
     }
 

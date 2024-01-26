@@ -341,6 +341,18 @@ public class TemporalRangeParserTest {
     assertFalse(result.isSuccessful());
     assertEquals(1, result.getIssues().size());
     assertEquals(OccurrenceIssue.RECORDED_DATE_MISMATCH, result.getIssues().iterator().next());
+
+    // Empty strings and spaces
+    result = trp.parse("", " ", "", "1980-2-2", null, null);
+    assertEquals("1980-02-02", result.getPayload().getFrom().toString());
+    assertEquals("1980-02-02", result.getPayload().getTo().toString());
+    assertEquals(0, result.getIssues().size());
+
+    // Empty strings and spaces
+    result = trp.parse("", " ", "", "2/2/1980", null, null);
+    assertEquals("1980-02-02", result.getPayload().getFrom().toString());
+    assertEquals("1980-02-02", result.getPayload().getTo().toString());
+    assertEquals(0, result.getIssues().size());
   }
 
   @Test
