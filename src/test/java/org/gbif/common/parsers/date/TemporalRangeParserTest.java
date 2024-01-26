@@ -388,5 +388,10 @@ public class TemporalRangeParserTest {
     assertEquals("2005-04-11", result.getPayload().getTo().toString());
     assertEquals(1, result.getIssues().size());
     assertEquals(OccurrenceIssue.RECORDED_DATE_INVALID, result.getIssues().iterator().next());
+
+    result = trp.parse(null, null, null, "2002-03-10 00:00:00.0", null, null);
+    assertEquals("2002-03-10T00:00", result.getPayload().getFrom().toString());
+    assertEquals("2002-03-10T00:00", result.getPayload().getTo().toString());
+    assertEquals(0, result.getIssues().size());
   }
 }
