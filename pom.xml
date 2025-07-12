@@ -31,7 +31,7 @@
   </distributionManagement>
 
   <properties>
-    <commons-lang.version>3.12.0</commons-lang.version>
+    <commons-lang.version>3.18.0</commons-lang.version>
     <commons-math.version>3.6.1</commons-math.version>
     <validation-api.version>2.0.1.Final</validation-api.version>
     <tika.version>2.6.0</tika.version>
