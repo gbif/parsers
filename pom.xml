@@ -5,7 +5,7 @@
   <parent>
     <groupId>org.gbif</groupId>
     <artifactId>motherpom</artifactId>
-    <version>56</version>
+    <version>59</version>
   </parent>
 
   <artifactId>gbif-parsers</artifactId>
@@ -39,9 +39,9 @@
     <logback.version>1.2.13</logback.version>
     <slf4j.version>1.7.36</slf4j.version>
     <junit.version>5.9.1</junit.version>
-    <gbif-api.version>1.13.0</gbif-api.version>
-    <gbif-common.version>0.58</gbif-common.version>
-    <name-parser.version>3.8.3</name-parser.version>
+    <gbif-api.version>2.1.15</gbif-api.version>
+    <gbif-common.version>0.60</gbif-common.version>
+    <name-parser.version>3.8.5</name-parser.version>
   </properties>
 
   <repositories>
