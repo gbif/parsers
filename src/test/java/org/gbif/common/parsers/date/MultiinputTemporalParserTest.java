@@ -392,8 +392,7 @@ public class MultiinputTemporalParserTest {
   }
 
   /**
-   * Tests that a date representing 'now' is interpreted with CONFIDENCE.DEFINITE even after
-   * v1TemporalInterpreter was instantiated. See POR-2860.
+   * Tests a future date with a plus marker is marked as IDENTIFIED_DATE_INVALID. See https://github.com/gbif/pipelines/issues/1494
    */
   @Test
   public void testParseLocalDateOutOfRangeWithPlus() {
@@ -419,8 +418,7 @@ public class MultiinputTemporalParserTest {
   }
 
   /**
-   * Tests that a date representing 'now' is interpreted with CONFIDENCE.DEFINITE even after
-   * v1TemporalInterpreter was instantiated. See POR-2860.
+   * Tests a future date is marked as invalid. See https://github.com/gbif/pipelines/issues/1494
    */
   @Test
   public void testParseLocalDateOutOfRange() {
