@@ -273,12 +273,9 @@ public class MultiinputTemporalParser implements Serializable {
       if (result.isSuccessful() && validation == DateValidationResult.PAST_DATE) {
         log.debug("Unlikely date parsed, ignore [{}].", dateString);
         Optional.ofNullable(unlikelyIssue).ifPresent(result::addIssue);
-      } else if (result.isSuccessful() && validation == DateValidationResult.FUTURE_DATE && markFutureDatesAsInvalid) {
-        log.debug("Future date parsed, ignore [{}].", dateString);
-        Optional.ofNullable(failIssue).ifPresent(result::addIssue);
       } else if (result.isSuccessful() && validation == DateValidationResult.FUTURE_DATE) {
         log.debug("Future date parsed, ignore [{}].", dateString);
-        Optional.ofNullable(unlikelyIssue).ifPresent(result::addIssue);
+        Optional.ofNullable(markFutureDatesAsInvalid ? failIssue : unlikelyIssue) .ifPresent(result::addIssue);
       } else if (!result.isSuccessful()) {
         Optional.ofNullable(failIssue).ifPresent(result::addIssue);
       }
