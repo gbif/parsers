@@ -321,11 +321,12 @@ public class MultiinputTemporalParser implements Serializable {
       day = temporalAccessor.get(ChronoField.DAY_OF_MONTH);
     }
 
-    if (likelyRange.contains(LocalDate.of(year, month, day))) {
+    LocalDate date = LocalDate.of(year, month, day);
+    if (likelyRange.contains(date)) {
       return DateValidationResult.IN_RANGE;
     }
 
-    if (LocalDate.of(year, month, day).isAfter(likelyRange.upperEndpoint())) {
+    if (likelyRange.hasUpperBound() && date.isAfter(likelyRange.upperEndpoint())) {
       return DateValidationResult.FUTURE_DATE;
     }
 
