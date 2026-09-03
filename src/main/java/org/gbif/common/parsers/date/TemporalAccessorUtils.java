@@ -13,6 +13,7 @@
  */
 package org.gbif.common.parsers.date;
 
+import javax.annotation.Nullable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
@@ -21,14 +22,13 @@ import java.time.YearMonth;
 import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.time.temporal.ChronoField;
+import java.time.temporal.Temporal;
 import java.time.temporal.TemporalAccessor;
 import java.time.temporal.TemporalQueries;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
-
-import javax.annotation.Nullable;
 
 /**
  * Utility methods to work with {@link TemporalAccessor}
@@ -238,6 +238,40 @@ public class TemporalAccessorUtils {
     return Optional.of(ta2);
   }
 
+  public static TemporalAccessor limitToResolution(TemporalAccessor ta, int requiredResolution) {
+    if (ta == null) {
+      return null;
+    }
+
+    if (requiredResolution > 3) {
+      // TODO: Different minutes/seconds.
+      return ta.query(LocalDateTime::from);
+    } else if (requiredResolution == 3) {
+      return ta.query(LocalDate::from);
+    } else if (requiredResolution == 2) {
+      return ta.query(YearMonth::from);
+    } else {
+      return ta.query(Year::from);
+    }
+  }
+
+  public static Temporal limitToResolution(Temporal ta, int requiredResolution) {
+    if (ta == null) {
+      return null;
+    }
+
+    if (requiredResolution > 3) {
+      // TODO: Different minutes/seconds.
+      return ta.query(LocalDateTime::from);
+    } else if (requiredResolution == 3) {
+      return ta.query(LocalDate::from);
+    } else if (requiredResolution == 2) {
+      return ta.query(YearMonth::from);
+    } else {
+      return ta.query(Year::from);
+    }
+  }
+
   /**
    * The idea of "non-conflicting date parts" TemporalAccessor is to get as much of year, then month, then day as possible,
    * ignoring null and stopping once there is a contradiction.  Times are ignored for comparison, but the argument with
@@ -415,11 +449,34 @@ public class TemporalAccessorUtils {
   }
 
   /**
-   * Returns the resolution of the TemporalAccessor: 1, 2, 3 for day, month year.  0 for null/empty.
+   * Returns the resolution of the TemporalAccessor: year=1, month=2, day=3.  0 for null/empty.
    */
   public static int resolution(TemporalAccessor ta) {
     if (ta == null) {
       return 0;
+    }
+
+    AtomizedLocalDate ymd = AtomizedLocalDate.fromTemporalAccessor(ta);
+
+    return ymd.getResolution();
+  }
+
+  /**
+   * Returns the resolution of the TemporalAccessor: year=1, month=2, day=3, hour=4, minutes=5, seconds=6.  0 for null/empty.
+   */
+  public static int resolutionToSeconds(TemporalAccessor ta) {
+    if (ta == null) {
+      return 0;
+    }
+
+    if (ta.isSupported(ChronoField.SECOND_OF_MINUTE)) {
+      return 6;
+    }
+    if (ta.isSupported(ChronoField.MINUTE_OF_HOUR)) {
+      return 5;
+    }
+    if (ta.isSupported(ChronoField.HOUR_OF_DAY)) {
+      return 4;
     }
 
     AtomizedLocalDate ymd = AtomizedLocalDate.fromTemporalAccessor(ta);

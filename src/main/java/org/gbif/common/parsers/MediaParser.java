@@ -60,6 +60,7 @@ public class MediaParser {
     knownUrlPatterns.put(Pattern.compile("http://procyon\\.acadiau\\.ca/ecsmith/cgi-bin/image\\.cgi\\?[0-9A-Z]+,jpeg"), "image/jpeg");
     knownUrlPatterns.put(Pattern.compile("http://www\\.biologie\\.uni-ulm\\.de/cgi-bin/perl/sound\\.pl\\?sid=T&objid=\\d+"), "audio/vnd.wave");
     knownUrlPatterns.put(Pattern.compile("https://dofbasen\\.dk/sound_proxy\\.php\\?referer=gbif&mode=o&snd=[0-9_]+.mp3&raw=1"), "audio/mpeg");
+    knownUrlPatterns.put(Pattern.compile("https?://collections\\.nmnh\\.si\\.edu/media/\\?i=[0-9]+"), "image/jpeg");
 
     MediaTypeRegistry mediaTypeRegistry = MIME_TYPES.getMediaTypeRegistry();
     mediaTypeRegistry.addAlias(org.apache.tika.mime.MediaType.audio("mpeg"), org.apache.tika.mime.MediaType.audio("mp3"));

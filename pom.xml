@@ -9,7 +9,7 @@
   </parent>
 
   <artifactId>gbif-parsers</artifactId>
-  <version>0.64-SNAPSHOT</version>
+  <version>0.69-SNAPSHOT</version>
   <packaging>jar</packaging>
 
   <name>GBIF Parsers</name>
@@ -39,7 +39,7 @@
     <logback.version>1.2.13</logback.version>
     <slf4j.version>1.7.36</slf4j.version>
     <junit.version>5.9.1</junit.version>
-    <gbif-api.version>2.1.15</gbif-api.version>
+    <gbif-api.version>1.16.18</gbif-api.version>
     <gbif-common.version>0.60</gbif-common.version>
     <name-parser.version>3.8.5</name-parser.version>
   </properties>
