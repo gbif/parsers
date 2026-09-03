@@ -1,5 +1,6 @@
 package org.gbif.common.parsers.date;
 
+import com.google.common.collect.Range;
 import org.apache.commons.lang3.time.DateFormatUtils;
 import org.gbif.api.vocabulary.OccurrenceIssue;
 import org.gbif.common.parsers.core.OccurrenceParseResult;
@@ -30,18 +31,18 @@ public class MultiinputTemporalParserTest {
 
   @Test
   public void testIsValidDate() {
-    assertTrue(MultiinputTemporalParser.isValidDate(Year.of(2005)));
-    assertTrue(MultiinputTemporalParser.isValidDate(YearMonth.of(2005, 1)));
-    assertTrue(MultiinputTemporalParser.isValidDate(LocalDate.of(2005, 1, 1)));
-    assertTrue(MultiinputTemporalParser.isValidDate(LocalDateTime.of(2005, 1, 1, 2, 3, 4)));
-    assertTrue(MultiinputTemporalParser.isValidDate(LocalDate.now()));
-    assertTrue(MultiinputTemporalParser.isValidDate(LocalDateTime.now().plus(23, ChronoUnit.HOURS)));
+    assertEquals(MultiinputTemporalParser.DateValidationResult.IN_RANGE, MultiinputTemporalParser.isValidDate(Year.of(2005)));
+    assertEquals(MultiinputTemporalParser.DateValidationResult.IN_RANGE, MultiinputTemporalParser.isValidDate(YearMonth.of(2005, 1)));
+    assertEquals(MultiinputTemporalParser.DateValidationResult.IN_RANGE, MultiinputTemporalParser.isValidDate(LocalDate.of(2005, 1, 1)));
+    assertEquals(MultiinputTemporalParser.DateValidationResult.IN_RANGE, MultiinputTemporalParser.isValidDate(LocalDateTime.of(2005, 1, 1, 2, 3, 4)));
+    assertEquals(MultiinputTemporalParser.DateValidationResult.IN_RANGE, MultiinputTemporalParser.isValidDate(LocalDate.now()));
+    assertEquals(MultiinputTemporalParser.DateValidationResult.IN_RANGE, MultiinputTemporalParser.isValidDate(LocalDateTime.now().plus(23, ChronoUnit.HOURS)));
 
     // Dates out of bounds
-    assertFalse(MultiinputTemporalParser.isValidDate(YearMonth.of(1499, 12)));
+    assertEquals(MultiinputTemporalParser.DateValidationResult.PAST_DATE,MultiinputTemporalParser.isValidDate(YearMonth.of(1499, 12)));
 
     // we tolerate an offset of 1 day
-    assertFalse(MultiinputTemporalParser.isValidDate(LocalDate.now().plusDays(2)));
+    assertEquals(MultiinputTemporalParser.DateValidationResult.FUTURE_DATE,MultiinputTemporalParser.isValidDate(LocalDate.now().plusDays(2)));
   }
 
   @Test
@@ -390,6 +391,61 @@ public class MultiinputTemporalParserTest {
     assertEquals(ParseResult.CONFIDENCE.DEFINITE, result.getConfidence());
   }
 
+  /**
+   * Tests that a date representing 'now' is interpreted with CONFIDENCE.DEFINITE even after
+   * v1TemporalInterpreter was instantiated. See POR-2860.
+   */
+  @Test
+  public void testParseLocalDateOutOfRangeWithPlus() {
+
+    MultiinputTemporalParser temporalParser = MultiinputTemporalParser.create();
+
+    LocalDate upperBound = LocalDate.now().plusDays(1);
+    LocalDate EARLIEST_DATE_IDENTIFIED = LocalDate.of(1753, 1, 1);
+    Range<LocalDate> validRecordedDateRange = Range.closed(EARLIEST_DATE_IDENTIFIED, upperBound);
+
+    // Makes sure the static content is loaded
+    OccurrenceParseResult<TemporalAccessor> result =
+      temporalParser.parseLocalDate(
+        "+19634-02-24",
+        validRecordedDateRange,
+        OccurrenceIssue.IDENTIFIED_DATE_UNLIKELY,
+        OccurrenceIssue.IDENTIFIED_DATE_INVALID,
+        true
+        );
+
+    assertTrue(result.isSuccessful());
+    assertTrue(result.getIssues().contains(OccurrenceIssue.IDENTIFIED_DATE_INVALID));
+  }
+
+  /**
+   * Tests that a date representing 'now' is interpreted with CONFIDENCE.DEFINITE even after
+   * v1TemporalInterpreter was instantiated. See POR-2860.
+   */
+  @Test
+  public void testParseLocalDateOutOfRange() {
+
+    MultiinputTemporalParser temporalParser = MultiinputTemporalParser.create();
+
+    LocalDate upperBound = LocalDate.now().plusDays(1);
+    LocalDate EARLIEST_DATE_IDENTIFIED = LocalDate.of(1753, 1, 1);
+    Range<LocalDate> validRecordedDateRange = Range.closed(EARLIEST_DATE_IDENTIFIED, upperBound);
+
+    // Makes sure the static content is loaded
+    OccurrenceParseResult<TemporalAccessor> result =
+      temporalParser.parseLocalDate(
+        "19634-02-24",
+        validRecordedDateRange,
+        OccurrenceIssue.IDENTIFIED_DATE_UNLIKELY,
+        OccurrenceIssue.IDENTIFIED_DATE_INVALID,
+        true
+      );
+
+    assertFalse(result.isSuccessful());
+    assertTrue(result.getIssues().contains(OccurrenceIssue.IDENTIFIED_DATE_INVALID));
+  }
+
+
   @Test
   public void testDateRanges() {
     MultiinputTemporalParser temporalParser = MultiinputTemporalParser.create();
@@ -468,4 +524,6 @@ public class MultiinputTemporalParserTest {
       assertTrue(result.getIssues().contains(expectedIssue));
     }
   }
+
+
 }
