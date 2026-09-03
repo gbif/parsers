@@ -8,7 +8,7 @@
 '/var/lib/jenkins/jobs/parsers/workspace/src/main/java:/var/lib/jenkins/jobs/parsers/workspace/target/generated-sources/annotations:/var/lib/jenkins/jobs/parsers/workspace/target/distro-javadoc-sources/gbif-api-1.16.18-sources:/var/lib/jenkins/jobs/parsers/workspace/target/distro-javadoc-sources/name-parser-v1-3.8.5-sources:/var/lib/jenkins/jobs/parsers/workspace/target/distro-javadoc-sources/gbif-common-0.60-sources'
 -author
 -bottom
-'Copyright &#169; 2025 <a href="https://www.gbif.org">Global Biodiversity Information Facility (GBIF)</a>. All rights reserved.'
+'Copyright &#169; 2026 <a href="https://www.gbif.org">Global Biodiversity Information Facility (GBIF)</a>. All rights reserved.'
 -charset
 'UTF-8'
 -d
@@ -18,9 +18,9 @@
 -docfilessubdirs
 -Xdoclint:none
 -doctitle
-'GBIF Parsers 0.68-SNAPSHOT API'
+'GBIF Parsers 0.69-SNAPSHOT API'
 -linksource
 -use
 -version
 -windowtitle
-'GBIF Parsers 0.68-SNAPSHOT API'
+'GBIF Parsers 0.69-SNAPSHOT API'
