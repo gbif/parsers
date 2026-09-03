@@ -236,7 +236,7 @@ public class MultiinputTemporalParser implements Serializable {
       return OccurrenceParseResult.fail(issues);
     }
 
-    if (!isValidDate(parsedTemporalAccessor)) {
+    if (isValidDate(parsedTemporalAccessor) != DateValidationResult.IN_RANGE) {
       if (parsedTemporalAccessor == null) {
         log.debug("Date {}|{}|{}|{}|{} mismatch (invalid)", year, month, day, dateString, dayOfYear);
         issues.add(OccurrenceIssue.RECORDED_DATE_INVALID);
@@ -257,20 +257,25 @@ public class MultiinputTemporalParser implements Serializable {
 
   /** @return TemporalAccessor that represents a LocalDate or LocalDateTime */
   public OccurrenceParseResult<TemporalAccessor> parseLocalDate(
-    String dateString, Range<LocalDate> likelyRange, OccurrenceIssue unlikelyIssue) {
-    return parseLocalDate(dateString, likelyRange, unlikelyIssue, null);
+    String dateString, Range<LocalDate> likelyRange, OccurrenceIssue unlikelyIssue, OccurrenceIssue failIssue) {
+    return parseLocalDate(dateString, likelyRange, unlikelyIssue, failIssue, false);
   }
 
   /** @return TemporalAccessor that represents a LocalDate or LocalDateTime */
   public OccurrenceParseResult<TemporalAccessor> parseLocalDate(
-      String dateString, Range<LocalDate> likelyRange, OccurrenceIssue unlikelyIssue, OccurrenceIssue failIssue) {
+      String dateString, Range<LocalDate> likelyRange, OccurrenceIssue unlikelyIssue, OccurrenceIssue failIssue,
+      boolean markFutureDatesAsInvalid) {
     if (!Strings.isNullOrEmpty(dateString)) {
       OccurrenceParseResult<TemporalAccessor> result =
           new OccurrenceParseResult<>(temporalParser.parse(dateString));
       // check year makes sense
-      if (result.isSuccessful() && !isValidDate(result.getPayload(), likelyRange)) {
+      DateValidationResult validation = isValidDate(result.getPayload(), likelyRange);
+      if (result.isSuccessful() && validation == DateValidationResult.PAST_DATE) {
         log.debug("Unlikely date parsed, ignore [{}].", dateString);
         Optional.ofNullable(unlikelyIssue).ifPresent(result::addIssue);
+      } else if (result.isSuccessful() && validation == DateValidationResult.FUTURE_DATE) {
+        log.debug("Future date parsed, ignore [{}].", dateString);
+        Optional.ofNullable(markFutureDatesAsInvalid ? failIssue : unlikelyIssue) .ifPresent(result::addIssue);
       } else if (!result.isSuccessful()) {
         Optional.ofNullable(failIssue).ifPresent(result::addIssue);
       }
@@ -285,17 +290,17 @@ public class MultiinputTemporalParser implements Serializable {
    *
    * @return valid or not according to the predefined range.
    */
-  protected static boolean isValidDate(TemporalAccessor temporalAccessor) {
+  protected static DateValidationResult isValidDate(TemporalAccessor temporalAccessor) {
     LocalDate upperBound = LocalDate.now().plusDays(1);
     return isValidDate(temporalAccessor, Range.closed(MIN_LOCAL_DATE, upperBound));
   }
 
   /** Check if a date express as TemporalAccessor falls between the provided range. */
-  protected static boolean isValidDate(
+  protected static DateValidationResult isValidDate(
       TemporalAccessor temporalAccessor, Range<LocalDate> likelyRange) {
 
     if (temporalAccessor == null) {
-      return false;
+      return DateValidationResult.NOT_VALID;
     }
 
     // if partial dates should be considered valid
@@ -305,7 +310,7 @@ public class MultiinputTemporalParser implements Serializable {
     if (temporalAccessor.isSupported(ChronoField.YEAR)) {
       year = temporalAccessor.get(ChronoField.YEAR);
     } else {
-      return false;
+      return DateValidationResult.NOT_VALID;
     }
 
     if (temporalAccessor.isSupported(ChronoField.MONTH_OF_YEAR)) {
@@ -316,7 +321,23 @@ public class MultiinputTemporalParser implements Serializable {
       day = temporalAccessor.get(ChronoField.DAY_OF_MONTH);
     }
 
-    return likelyRange.contains(LocalDate.of(year, month, day));
+    LocalDate date = LocalDate.of(year, month, day);
+    if (likelyRange.contains(date)) {
+      return DateValidationResult.IN_RANGE;
+    }
+
+    if (likelyRange.hasUpperBound() && date.isAfter(likelyRange.upperEndpoint())) {
+      return DateValidationResult.FUTURE_DATE;
+    }
+
+    return DateValidationResult.PAST_DATE;
+  }
+
+  protected enum DateValidationResult {
+    IN_RANGE,
+    FUTURE_DATE,
+    PAST_DATE,
+    NOT_VALID
   }
 
   /**
