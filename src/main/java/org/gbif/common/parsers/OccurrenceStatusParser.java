@@ -15,6 +15,7 @@ package org.gbif.common.parsers;
 
 import org.gbif.api.vocabulary.OccurrenceStatus;
 import org.gbif.common.parsers.core.EnumParser;
+import org.gbif.common.parsers.core.ParseResult;
 
 public class OccurrenceStatusParser extends EnumParser<OccurrenceStatus> {
 
@@ -28,6 +29,21 @@ public class OccurrenceStatusParser extends EnumParser<OccurrenceStatus> {
     }
     // use dict file last
     init(OccurrenceStatusParser.class.getResourceAsStream("/dictionaries/parse/occurrence_status.tsv"));
+  }
+
+  /**
+   * Maps deprecated {@link OccurrenceStatus#PRESENT}/{@link OccurrenceStatus#ABSENT} hits to
+   * {@link OccurrenceStatus#DETECTED}/{@link OccurrenceStatus#NOT_DETECTED}. Enum names are
+   * registered before the TSV, so verbatim "Present"/"Absent" would otherwise stick on the
+   * deprecated constants.
+   */
+  @Override
+  public ParseResult<OccurrenceStatus> parse(String input) {
+    ParseResult<OccurrenceStatus> result = super.parse(input);
+    if (result.isSuccessful()) {
+      return ParseResult.success(result.getConfidence(), result.getPayload().normalize());
+    }
+    return result;
   }
 
   public static OccurrenceStatusParser getInstance() {
